@@ -1,0 +1,2320 @@
+<?php if($this->id2){
+    error_reporting(0);
+    date_default_timezone_set('America/Bogota');
+
+    include_once('vendor/tbs/tbs_class.php'); // Load the TinyButStrong template engine
+    include_once('vendor/tbs/plugins/tbs_plugin_opentbs.php'); // Load the OpenTBS plugin
+    include 'vendor/DocxMerge/DocxMerge.php';
+    //include_once('vendor/DocxMerge/DocxMerge.php');
+    
+    // prevent from a PHP configuration problem when using mktime() and date()
+    if (version_compare(PHP_VERSION,'5.1.0')>=0) {
+        if (ini_get('date.timezone')=='') {
+            date_default_timezone_set('UTC');
+        }
+    }
+
+    // Initialize the TBS instance
+    $TBS = new clsTinyButStrong; // new instance of TBS
+    $TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN); // load the OpenTBS plugin
+    
+
+    // ------------------------------
+    // Prepare some data for the demo
+    // ------------------------------
+
+
+    // Retrieve the user name to display
+    global $id_convocatoria;
+    $id_convocatoria =  str_ireplace("^011","^013",trim($datos[0]["id_convocatoria"]) == "" ? " " : trim($datos[0]["id_convocatoria"]));
+
+    global $fecha_reporte;
+    $fecha_reporte =  date("d-m-Y");
+
+    global $id_propuesta;
+    $id_propuesta =  $this->id;
+
+
+    global $nombre_proy;
+    $nombre_proy = str_ireplace("^011","^013",trim($datos[0]["nombre_proy"]) == "" ? " " : trim($datos[0]["nombre_proy"]));
+
+    global $area_tematica;
+    $area_tematica = str_ireplace("^011","^013",trim($datos[0]["area_tematica"]) == "" ? "No aplica" : trim($datos[0]["area_tematica"]));
+
+    global $resumen_ejecutivo;
+    $resumen_ejecutivo = str_ireplace("^011","^013",trim($datos[0]["resumen_ejecutivo"]) == "" ? " " : trim($datos[0]["resumen_ejecutivo"]));
+
+    global $descriptores;
+    $descriptores = str_ireplace("^011","^013",trim($datos[0]["descriptores"]) == "" ? " " : trim($datos[0]["descriptores"]));
+
+    global $antecedentes;
+    $antecedentes = str_ireplace("^011","^013",trim($datos[0]["antecedentes"]) == "" ? " " : trim($datos[0]["antecedentes"]));
+
+    global $planteamiento_problema;
+    $planteamiento_problema = str_ireplace("^011","^013",trim($datos[0]["planteamiento_problema"]) == "" ? " " : trim($datos[0]["planteamiento_problema"]));
+
+    global $periodos;
+    $periodos = str_ireplace("^011","^013",trim($datos[0]["semestresano"]) == "" ? " " : trim($datos[0]["semestresano"]));
+
+    global $objetivo_general;
+    $objetivo_general = str_ireplace("^011","^013",trim($datos[0]["objetivo_general"]) == "" ? " " : trim($datos[0]["objetivo_general"]));
+
+    global $marco_teorico;
+    $marco_teorico = str_ireplace("^011","^013",trim($datos[0]["marco_teorico"]) == "" ? " " : trim($datos[0]["marco_teorico"]));
+
+    global $estado_arte;
+    $estado_arte = str_ireplace("^011","^013",trim($datos[0]["estado_arte"]) == "" ? " " : trim($datos[0]["estado_arte"]));
+
+    global $bibliografia;
+    $bibliografia = str_ireplace("^011","^013",trim($datos[0]["bibliografia"]) == "" ? " " : trim($datos[0]["bibliografia"]));
+
+    global $metodologia;
+    $metodologia = str_ireplace("^011","^013",trim($datos[0]["metodologia"]) == "" ? " " : trim($datos[0]["metodologia"]));
+
+    global $momentos;
+    $momentos =  str_ireplace("^011","^013",trim($datos[0]["momentos_proyecto"]) == "" ? " " : trim($datos[0]["momentos_proyecto"]));
+
+    global $nombre_semillero;
+    global $ano_semillero;
+
+    $nombre_semillero = "Sin registro";
+    $ano_semillero = "Sin registro";
+    
+    if($datos[0]["id_semillero"] != ""){
+        foreach ($this->semilleros as $semillero) {
+            if($semillero["id"] == $datos[0]["id_semillero"]){
+                $nombre_semillero = $semillero["nombre"];
+                $ano_semillero = substr($semillero["fecha_creacion"], 0, 4);
+            }
+        }
+    }
+
+    global $compromisos_conocimiento;
+    $compromisos_conocimiento = str_ireplace("^011","^013",trim($datos[0]["compromisos_conocimiento"]) == "" ? "No aplica" : trim($datos[0]["compromisos_conocimiento"]));
+
+    global $ano;
+    $ano = "";
+
+    foreach ($this->convo as $convocatoria) {
+        if($convocatoria["id_convocatoria"] == trim($datos[0]["id_convocatoria"])){
+            $ano = substr(trim($convocatoria["fecha_apertura"]), 0, 4);
+        }
+    }
+
+    global $grupos_investigacion;
+    $grupos_investigacion = "";
+
+    global $estado_grupos;
+    $estado_grupos = "";
+    
+    $contadorGrupos = 0;
+
+    foreach ($this->Gruposaplicari as $int) {
+        foreach ($this->grupostotal as $grupo) {
+            if($int["id_grupo"]==$grupo["id_grupo_inv"]){
+
+                $contadorGrupos += 1;
+                $grupos_investigacion .= $contadorGrupos.". ".$grupo["nombre_grupo"]."\n";
+                foreach ($this->clasificaciongrupo as $clgrupo) {
+                    if($clgrupo["id_valor_flexible"]==$grupo["id_clasificacion"]){
+                        $estado_grupos .= "Grupo ".$contadorGrupos.": ".$clgrupo["descripcion_valor"]."\n";    
+                    }
+                }
+            }
+        }
+    }
+
+    if($estado_grupos != ""){
+        $estado_grupos = substr($estado_grupos, 0, -1);
+    }else{
+        $estado_grupos = "Sin grupos de investigación";
+    }
+
+    if($grupos_investigacion != ""){
+        $grupos_investigacion = substr($grupos_investigacion, 0, -1);
+    }else{
+        $grupos_investigacion = "Sin grupos de investigación";
+    }
+
+    global $modalidad;
+    $modalidad = $this->nombreModalidad;
+    
+    global $linea_investigacion;
+    $linea_investigacion = "";
+
+    foreach ($this->valflex as $linea){
+        if($linea["id_valor_flexible"] == $datos[0]["id_linea_inv"]){
+            $linea_investigacion = $linea["descripcion_valor"];
+            break;
+        }
+    }
+
+    if($linea_investigacion == ""){
+        $linea_investigacion = "No aplica para esta convocatoría";
+    }
+
+    global $unidad_academica;
+    $unidad_academica = "";
+
+    foreach ($this->valflex as $linea){
+        if($linea["id_valor_flexible"] == $datos[0]["id_unidad_academica"]){
+            $unidad_academica = $linea["descripcion_valor"];
+            break;
+        }
+    }
+
+    if($unidad_academica == ""){
+        $unidad_academica = "No aplica para esta convocatoría";
+    }
+
+
+
+    global $duracion;
+    $periodo = trim($datos[0]["periodo"]) == "M" ? "Meses" : "Semestres";
+    $duracion = trim($datos[0]["duracion"])." ".$periodo;
+    if($duracion == " "){
+        $duracion = "No aplica para esta convocatoría";
+    }
+
+    global $coofinanciacion;
+    if($this->modalidad == 902 || $this->modalidad == 903 || $this->modalidad == 4 || $this->modalidad == 6){
+        $coofinanciacion = "No aplica para esta modalidad";
+    }else{
+        foreach ($this->valflex as $linea){
+            if($linea["id_valor_flexible"] == $datos[0]["instituciones_coofinanciacion"]){
+                $coofinanciacion = $linea["descripcion_valor"];
+                break;
+            }
+        }
+
+        if($coofinanciacion == ""){
+            $coofinanciacion = "Sin registro";
+        }
+    }
+
+    global $recursos_funcionamiento;
+    $datos[0]["recursos_funcion"] = $datos[0]["recursos_funcion"] == "" ? 0 : $datos[0]["recursos_funcion"];
+    $recursos_funcionamiento = number_format(trim($datos[0]["recursos_funcion"]));
+
+    global $recursos_inversion;
+    $datos[0]["recursos_inversion"] = $datos[0]["recursos_inversion"] == "" ? 0 : $datos[0]["recursos_inversion"];
+    $recursos_inversion = number_format(trim($datos[0]["recursos_inversion"]));
+
+    global $total_cofinanciacion;
+    $datos[0]["total_financia"] = $datos[0]["total_financia"] == "" ? 0 : $datos[0]["total_financia"];
+    $total_cofinanciacion = number_format(trim($datos[0]["total_financia"]));
+
+    global $total_recursos;
+    $datos[0]["total_proy"] = $datos[0]["total_proy"] == "" ? 0 : $datos[0]["total_proy"];
+    $total_recursos = number_format(trim($datos[0]["total_proy"]));
+    
+    global $nombre_investigador;
+    $nombre_investigador = $usuario[0]["primer_nombre"]." ".$usuario[0]["segundo_nombre"]." ".$usuario[0]["primer_apellido"]." ".$usuario[0]["segundo_apellido"];
+
+    global $tipo_documento;
+    $tipo_documento = "";
+    foreach ($this->valflex as $linea){
+        if($linea["id_valor_flexible"] == $usuario[0]["id_tipo_documento"]){
+            $tipo_documento = $linea["descripcion_valor"];
+            break;
+        }
+    }
+    if($tipo_documento == ""){
+        $tipo_documento = "Sin registro";
+    }
+
+    global $documento;
+    $documento = $usuario[0]["documento"];
+    if($documento == ""){
+        $documento = "Sin registro";
+    }
+
+    global $tipo_vinculacion_usuario;
+    $tipo_vinculacion_usuario = "";
+    foreach ($this->valflex as $linea){
+        if($linea["id_valor_flexible"] == $usuario[0]["id_tipo_vinculacion"]){
+            $tipo_vinculacion_usuario = $linea["descripcion_valor"];
+            break;
+        }
+    }
+    if($tipo_vinculacion_usuario == ""){
+        $tipo_vinculacion_usuario = "Sin registro";
+    }
+
+    // -----------------
+    // Load the template
+    // -----------------
+
+    if($this->modalidad == 901 || $this->modalidad == 2){
+        $template = 'vendor/tbs/template_propuesta_investigacion_modalidad2.docx';
+    }else{
+        if($this->modalidad == 902 || $this->modalidad == 4){
+            $template = 'vendor/tbs/template_propuesta_investigacion_modalidad4.docx';
+        }else{
+            if($this->modalidad == 903 || $this->modalidad == 6){
+                $template = 'vendor/tbs/template_propuesta_investigacion_modalidad5.docx';
+            }else{
+                $template = 'vendor/tbs/template_propuesta_investigacion.docx';
+            }
+        }
+        
+    }
+    
+    //$template = 'vendor/tbs/template.docx';
+    $TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8); // Also merge some [onload] automatic fields (depends of the type of document).
+
+    $data = array();
+    foreach ($this->objetivosespecificos as $objetivo) {
+        foreach ($this->objetivosmetas as $meta) {
+            if($meta["id_objetivo"]==$objetivo["id"]){
+                $data[] = array('objetivo'=> $objetivo["objetivo"], 'meta'=>$meta["meta"]);
+            }
+        }
+    }
+    $TBS->MergeBlock('a', $data);
+
+    $data = array();
+    $consecutivo_tablas = 1;
+    foreach ($this->tablae as $tablae) {
+        foreach ($this->usuarios as $us) {
+            if ($us["id_usuario"] == $tablae["id_integrante"]) {
+                $r = $us["documento"] == "" ? "Sin documento" : $us["documento"];
+                $nom = $us["primer_nombre"] .' '. $us["segundo_nombre"] . ' ' . $us["primer_apellido"] .' '.$us["segundo_apellido"];
+                $uni = $us["id_unidad_academica"];
+                $tipv = $us["id_tipo_vinculacion"];
+                $unidad = "";
+                foreach ($this->valflex as $vf) {
+                    if ($uni == $vf["id_valor_flexible"]) {
+                        $unidad = $vf["descripcion_valor"];
+                        break;
+                    }
+                }
+
+                $rol = "";
+                foreach ($this->valflex as $vf) {
+                    if ($tablae["id_rol"] == $vf["id_valor_flexible"]) {
+                        $rol = $vf["descripcion_valor"];
+                        break;
+                    }
+                }
+
+                $vinculacion = "";
+                foreach ($this->valflex as $vf) {
+                    if ($tablae["id_tipo_dedicacion"] == $vf["id_valor_flexible"]) {
+                        $vinculacion = $vf["descripcion_valor"];
+                        break;
+                    }
+                }
+                
+                $data[] = array('consecutivo' => $consecutivo_tablas, 'identificacion' => $r, 'nombres' => $nom, 'facultad' => $unidad, 'tipo_vinculacion' => $vinculacion, 'horas' => $tablae["horas_sol"], 'rol' => $rol, 'email' => $us["email"] );
+                $consecutivo_tablas++;
+            }
+        }
+    }
+    $TBS->MergeBlock('b', $data);
+
+    $data = array();
+    $consecutivo_tablas = 1;
+    foreach ($this->Coinvestigadores as $coinves) {
+        $data[] = array('consecutivo' => $consecutivo_tablas, 'identificacion' => $coinves["documento"], 'nombres' => $coinves["nombres"]." ".$coinves["apellidos"], 'profesion' => $coinves["profesion"], 'institucion' => $coinves["intitucion"], 'horas' => $coinves["horas"], 'telefono' => $coinves["telefono"], 'email' => $coinves["email"]);
+        $consecutivo_tablas++;
+    }
+    $TBS->MergeBlock('c', $data);
+
+    $data = array();
+    $consecutivo_tablas = 1;
+    foreach ($this->cronogramaap as $crono) {
+        $objt="";
+        foreach ($this->objetivosespecificos as $objetivo) {
+            if($crono["id_meta"]==$objetivo["id"]){
+                $objt = $objetivo["objetivo"];
+            }
+        }
+        if($objt == ""){
+            $objt = $crono["objetivo"];
+        }
+
+        $responsables = "";
+        foreach ($this->valflex as $vf) {
+            if ($vf["id_valor_flexible"] == $crono["id_rolresponsable"]) {
+                $responsables = $vf["descripcion_valor"].", ";
+                break;
+            }
+        }
+        foreach ($this->Agregarresponsable as $responsable) {
+            if($crono["id_cronograma"]==$responsable["id_padre"] && $responsable["tipo"]=="cronograma"){
+                foreach ($this->valflex as $vf) {
+                    if ($vf["id_valor_flexible"] == $responsable["id_rol"]) {
+                        $responsables .= $vf["descripcion_valor"].", ";
+                    }
+                }
+            }
+        } 
+
+        $data[] = array('nombre' => $crono["nombre_actividad"], 'descripcion' => $crono["descripcion"], 'objetivo' => $objt, 'responsables' => $responsables, 'fecha_inicio' => $crono["fecha_inicio"], 'fecha_final' => $crono["fecha_cierre"]);
+    }
+    $TBS->MergeBlock('d', $data);
+
+    $data = array();
+    $total_contrato=0;
+    $cantidad_solicitada=0;
+    foreach ($this->Contratacionpersonal as $contper) {
+        $tipo_vinculacion="";
+        foreach ($this->valflex as $vf) {
+            if ($contper["tipo_vinculacion"] == $vf["id_valor_flexible"]) {
+                $tipo_vinculacion = $vf["descripcion_valor"];
+            }
+        }
+        $total_contrato+=(int)$contper["valor"];
+        $cantidad_solicitada+=(int)$contper["personas"];
+        $data[] = array('tipo_vinculacion' => $tipo_vinculacion, 'numero' => $contper["personas"], 'objeto' => $contper["objeto"], 'justificacion' => $contper["justificacion"], 'valor' => $contper["valor"]);
+    }
+    $TBS->MergeBlock('e', $data);
+
+    global $num_personas;
+    $num_personas = number_format($cantidad_solicitada);
+
+    global $num_valor;
+    $num_valor = number_format($total_contrato);
+
+    global $inves1_nombres;
+    global $inves1_apellido1;
+    global $inves1_apellido2;
+    global $inves1_email;
+    global $inves1_celular;
+    global $inves1_facultad;
+    global $inves1_departamento;
+    global $inves1_area;
+    global $inves1_academica;
+    global $inves1_unidad_academica;
+    global $inves1_dependencia_academica;
+
+    global $inves2_nombres;
+    global $inves2_apellido1;
+    global $inves2_apellido2;
+    global $inves2_email;
+    global $inves2_celular;
+    global $inves2_facultad;
+    global $inves2_departamento;
+    global $inves2_area;
+    global $inves2_academica;
+    global $inves2_unidad_academica;
+    global $inves2_dependencia_academica;
+
+    global $inves3_nombres;
+    global $inves3_apellido1;
+    global $inves3_apellido2;
+    global $inves3_email;
+    global $inves3_celular;
+    global $inves3_institucion;
+    global $inves3_area;
+    global $inves3_academica;
+    global $inves3_unidad_academica;
+    global $inves3_dependencia_academica;
+
+    global $inves4_nombres;
+    global $inves4_apellido1;
+    global $inves4_apellido2;
+    global $inves4_email;
+    global $inves4_celular;
+    global $inves4_institucion;
+    global $inves4_area;
+    global $inves4_academica;
+    global $inves4_unidad_academica;
+    global $inves4_dependencia_academica;
+
+    $inves1_nombres = "Sin registro";
+    $inves1_apellido1 = "Sin registro";
+    $inves1_apellido2 = "Sin registro";
+    $inves1_email = "Sin registro";
+    $inves1_celular = "Sin registro";
+    $inves1_facultad = "Sin registro";
+    $inves1_departamento = "Sin registro";
+    $inves1_area = "";
+    $inves1_academica = "";
+    $inves1_unidad_academica = "";
+    $inves1_dependencia_academica = "";
+
+    $inves2_nombres = "Sin registro";
+    $inves2_apellido1 = "Sin registro";
+    $inves2_apellido2 = "Sin registro";
+    $inves2_email = "Sin registro";
+    $inves2_celular = "Sin registro";
+    $inves2_facultad = "Sin registro";
+    $inves2_departamento = "Sin registro";
+    $inves2_area = "";
+    $inves2_academica = "";
+    $inves2_unidad_academica = "";
+    $inves2_dependencia_academica = "";
+
+    $inves3_nombres = "Sin registro";
+    $inves3_apellido1 = "Sin registro";
+    $inves3_apellido2 = "Sin registro";
+    $inves3_email = "Sin registro";
+    $inves3_celular = "Sin registro";
+    $inves3_institucion = "Sin registro";
+    $inves3_area = "";
+    $inves3_academica = "";
+    $inves3_unidad_academica = "";
+    $inves3_dependencia_academica = "";
+
+    $inves4_nombres = "Sin registro";
+    $inves4_apellido1 = "Sin registro";
+    $inves4_apellido2 = "Sin registro";
+    $inves4_email = "Sin registro";
+    $inves4_celular = "Sin registro";
+    $inves4_institucion = "Sin registro";
+    $inves4_area = "";
+    $inves4_academica = "";
+    $inves4_unidad_academica = "";
+    $inves4_dependencia_academica = "";
+
+    $cant_interno = 0;
+    $cant_externo = 0;
+    foreach ($this->Paresevaluadores as $pares) {
+        foreach ($this->usuarios as $us) {
+            if ($us["id_usuario"] == $pares["id_usuario"]) {
+                if($us["tipo_evaluador"] == "Interno"){
+                    if($cant_interno == 0){
+                        $inves1_nombres = $us["primer_nombre"].' '.$us["segundo_nombre"];
+                        $inves1_apellido1 = $us["primer_apellido"];
+                        $inves1_apellido2 = $us["segundo_apellido"] == null ? " " : $us["segundo_apellido"];
+                        $inves1_email = $us["email"];
+                        $inves1_celular = $us["celular"] == null ? " " : $us["celular"];
+                        $inves1_facultad = "Sin registro";
+                        $inves1_departamento = "Sin registro";
+                        foreach ($this->area as $ar) {
+                            if($ar["id_usuario"] == $us["id_usuario"]){
+                                foreach ($this->valflex as $vl) {
+                                    if ($vl["id_valor_flexible"] == $ar["nombre_area"]) {
+                                       $inves1_area .= $vl["descripcion_valor"] . " - ";
+                                    }
+                                }
+                                
+                            }
+                        }
+                        foreach ($this->formaca as $formaca) {
+                            if($formaca["id_usuario"] == $us["id_usuario"]){
+                                $inves1_academica .= $formaca["titulo_obtenido"] . " - ";
+                            }
+                        }
+                        foreach ($this->valflex as $linea){
+                            if($linea["id_valor_flexible"] == $us["id_unidad_academica"]){
+                                $inves1_unidad_academica = $linea["descripcion_valor"];
+                                break;
+                            }
+                        }
+                        foreach ($this->valflex as $linea){
+                            if($linea["id_valor_flexible"] == $us["id_dependencia_academica"]){
+                                $inves1_dependencia_academica = $linea["descripcion_valor"];
+                                break;
+                            }
+                        }
+                        $cant_interno++;
+                    }else if($cant_interno == 1){
+                        $inves2_nombres = $us["primer_nombre"].' '.$us["segundo_nombre"];
+                        $inves2_apellido1 = $us["primer_apellido"];
+                        $inves2_apellido2 = $us["segundo_apellido"] == null ? " " : $us["segundo_apellido"];
+                        $inves2_email = $us["email"];
+                        $inves2_celular = $us["celular"] == null ? " " : $us["celular"];
+                        $inves2_facultad = "Sin registro";
+                        $inves2_departamento = "Sin registro";
+                        foreach ($this->area as $ar) {
+                            if($ar["id_usuario"] == $us["id_usuario"]){
+                                foreach ($this->valflex as $vl) {
+                                    if ($vl["id_valor_flexible"] == $ar["nombre_area"]) {
+                                       $inves2_area .= $vl["descripcion_valor"] . " - ";
+                                    }
+                                }
+                                
+                            }
+                        }
+                        foreach ($this->formaca as $formaca) {
+                            if($formaca["id_usuario"] == $us["id_usuario"]){
+                                $inves2_academica .= $formaca["titulo_obtenido"] . " - ";
+                            }
+                        }
+                        foreach ($this->valflex as $linea){
+                            if($linea["id_valor_flexible"] == $us["id_unidad_academica"]){
+                                $inves2_unidad_academica = $linea["descripcion_valor"];
+                                break;
+                            }
+                        }
+                        foreach ($this->valflex as $linea){
+                            if($linea["id_valor_flexible"] == $us["id_dependencia_academica"]){
+                                $inves2_dependencia_academica = $linea["descripcion_valor"];
+                                break;
+                            }
+                        }
+                        $cant_interno++;
+                    }
+                }else{
+                    if($cant_externo == 0){
+                        $inves3_nombres = $us["primer_nombre"].' '.$us["segundo_nombre"];
+                        $inves3_apellido1 = $us["primer_apellido"];
+                        $inves3_apellido2 = $us["segundo_apellido"] == null ? " " : $us["segundo_apellido"];
+                        $inves3_email = $us["email"];
+                        $inves3_celular = $us["celular"] == null ? " " : $us["celular"];
+                        foreach ($this->area as $ar) {
+                            if($ar["id_usuario"] == $us["id_usuario"]){
+                                foreach ($this->valflex as $vl) {
+                                    if ($vl["id_valor_flexible"] == $ar["nombre_area"]) {
+                                       $inves3_area .= $vl["descripcion_valor"] . " - ";
+                                    }
+                                }
+                                
+                            }
+                        }
+                        foreach ($this->formaca as $formaca) {
+                            if($formaca["id_usuario"] == $us["id_usuario"]){
+                                $inves3_academica .= $formaca["titulo_obtenido"] . " - ";
+                            }
+                        }
+                        foreach ($this->valflex as $vl) {
+                            if ($vl["id_valor_flexible"] == $us["institucion"]) {
+                               $inves3_institucion = $vl["descripcion_valor"] . " - ";
+                            }
+                        }
+                        $cant_externo++;
+                    }else if($cant_externo == 1){
+                        $inves4_nombres = $us["primer_nombre"].' '.$us["segundo_nombre"];
+                        $inves4_apellido1 = $us["primer_apellido"];
+                        $inves4_apellido2 = $us["segundo_apellido"] == null ? " " : $us["segundo_apellido"];
+                        $inves4_email = $us["email"];
+                        $inves4_celular = $us["celular"] == null ? " " : $us["celular"];
+                        foreach ($this->area as $ar) {
+                            if($ar["id_usuario"] == $us["id_usuario"]){
+                                foreach ($this->valflex as $vl) {
+                                    if ($vl["id_valor_flexible"] == $ar["nombre_area"]) {
+                                       $inves4_area .= $vl["descripcion_valor"] . " - ";
+                                    }
+                                }
+                                
+                            }
+                        }
+                        foreach ($this->formaca as $formaca) {
+                            if($formaca["id_usuario"] == $us["id_usuario"]){
+                                $inves4_academica .= $formaca["titulo_obtenido"] . " - ";
+                            }
+                        }
+                        foreach ($this->valflex as $vl) {
+                            if ($vl["id_valor_flexible"] == $us["institucion"]) {
+                               $inves4_institucion = $vl["descripcion_valor"] . " - ";
+                            }
+                        }
+                        $cant_externo++;
+                    }
+                }
+            }
+        }
+    }
+
+    if($inves1_area == ""){
+        $inves1_area = "Sin registro";
+    }
+    if($inves2_area == ""){
+        $inves2_area = "Sin registro";
+    }
+    if($inves3_area == ""){
+        $inves3_area = "Sin registro";
+    }
+    if($inves4_area == ""){
+        $inves4_area = "Sin registro";
+    }
+
+
+    if($inves1_academica == ""){
+        $inves1_academica = "Sin registro";
+    }
+    if($inves2_academica == ""){
+        $inves2_academica = "Sin registro";
+    }
+    if($inves3_academica == ""){
+        $inves3_academica = "Sin registro";
+    }
+    if($inves4_academica == ""){
+        $inves4_academica = "Sin registro";
+    }
+
+    if($inves1_unidad_academica == ""){
+        $inves1_unidad_academica = "Sin registro";
+    }
+    if($inves2_unidad_academica == ""){
+        $inves2_unidad_academica = "Sin registro";
+    }
+    if($inves3_unidad_academica == ""){
+        $inves3_unidad_academica = "Sin registro";
+    }
+    if($inves4_unidad_academica == ""){
+        $inves4_unidad_academica = "Sin registro";
+    }
+
+    if($inves1_dependencia_academica == ""){
+        $inves1_dependencia_academica = "Sin registro";
+    }
+    if($inves2_dependencia_academica == ""){
+        $inves2_dependencia_academica = "Sin registro";
+    }
+    
+    $data_inversi = array();
+    $data_funcion = array();
+    $data_cofinan = array();
+    $sum_data = array();
+
+    $per = 0;
+    foreach ($this->Tablafinper as $tbper) {
+        $per = $tbper["periodo"];
+    }
+
+    foreach ($this->pr as $prueba) {
+        if(!in_array($prueba["id_rubro"], $sum_data, true)){
+            $sum_data[] = $prueba["id_rubro"];
+        }
+    }
+
+    $total_recursos_funcion = 0;
+    $total_recursos_inversi = 0; 
+    $total_recursos_cofifan = 0;
+
+    foreach ($sum_data as $sum_d) {
+        $recursos_funcion = 0;
+        $recursos_inversi = 0; 
+        $recursos_cofifan = 0;
+        foreach ($this->pr as $prueba) {
+            if($prueba["id_rubro"] == $sum_d){
+                $recursos_funcion += $prueba["recursos_funcionamiento"];
+                $recursos_inversi += $prueba["recursos_inversion"]; 
+                $recursos_cofifan += $prueba["recursos_cofinanciacion"];
+            }
+        }
+        $item = "item";
+        foreach ($this->valflex as $vf) {
+            if ($vf["id_valor_flexible"] == $sum_d) {
+                $item = $vf["descripcion_valor"];
+            }
+        }
+        $data_inversi[] = array('clase' => $item, 'valor' => number_format($recursos_inversi));
+        $data_funcion[] = array('clase' => $item, 'valor' => number_format($recursos_funcion));
+        $data_cofinan[] = array('clase' => $item, 'valor' => number_format($recursos_cofifan));
+        $total_recursos_funcion += $recursos_funcion;
+        $total_recursos_inversi += $recursos_inversi; 
+        $total_recursos_cofifan += $recursos_cofifan;
+    }
+
+    
+
+    $TBS->MergeBlock('f', $data_inversi);
+    $TBS->MergeBlock('g', $data_funcion);
+    $TBS->MergeBlock('h', $data_cofinan);
+   
+    global $total_invesi;
+    global $total_func;
+    global $total_cofinan;
+    global $total_recursos;
+
+    $total_invesi = number_format($total_recursos_inversi);
+    $total_func = number_format($total_recursos_funcion);
+    $total_cofinan = number_format($total_recursos_cofifan);
+    $total_recursos = number_format($total_recursos_inversi + $total_recursos_funcion + $total_recursos_cofifan);
+
+    $data = array();
+    foreach ($this->sesionesformacion as $sesionformacion) {
+        $descripcion="";
+        foreach ($this->valflex as $vf) {
+            if ($vf["id_valor_flexible"] == $sesionformacion["id_tipo"]) {
+                $descripcion = $vf["descripcion_valor"];
+            }
+        }
+        $data[] = array('tipo_espacio' => $descripcion, 'fecha_inicio' => $sesionformacion["fecha"], 'fecha_fin' => $sesionformacion["fecha_fin"]);     
+    }
+    $TBS->MergeBlock('i', $data);
+
+    $data = array();
+    foreach ($this->sesionesestudiantes as $sesionestudiantes) {
+        $rol = "";
+        foreach ($this->valflex as $vf) {
+            if ($vf["id_valor_flexible"] == $sesionestudiantes["id_rol"]) {
+                $rol = $vf["descripcion_valor"];
+            }
+        }
+        $data[] = array('sesion' => $sesionestudiantes["sesion"], 'fecha_inicio' => $sesionestudiantes["fecha"], 'fecha_fin' => $sesionestudiantes["fecha_fin"], "responsable" => $rol);
+        //$data[] = array('sesion' => "deee", 'fecha_inicio' => "deeeee", 'fecha_fin' => "dede", "responsable" => "deede");
+    }
+    $TBS->MergeBlock('l', $data);
+
+    $data = array();
+    $cont = 0; 
+    foreach ($this->Propuestainv as $arch) {
+        $cont+=1;
+        $file_path = "http://primeciup.pedagogica.edu.co" . "/application/propuestainv/bajar/" . $arch["id_archivo"]."/".$this->id;
+        $data[] = array('consecutivo' => $cont, 'nombre' => $arch["nombre"], 'descripcion' => $arch["descripcion"], 'direccion' => $file_path);
+    }
+    $TBS->MergeBlock('z', $data);
+
+
+    // ----------------------
+    // Debug mode of the demo
+    // ----------------------
+    //$TBS->Plugin(OPENTBS_DEBUG_XML_SHOW);
+
+    // Delete comments
+    //$TBS->PlugIn(OPENTBS_DELETE_COMMENTS);
+
+    // -----------------
+    // Output the result
+    // -----------------
+
+    $data = array();
+    $data[] = 'public/images/temp/'.$this->id.'.docx';
+
+    foreach ($this->Propuestainv as $arch) {
+        if(strpos($arch["archivo"], ".docx")){
+             $data[] = "public/images/uploads/pi_api_".$this->id."_".trim($arch["archivo"]);   
+        }
+    }
+    $output_file_name = "Propuesta de investigación #".$this->id.".docx";
+    if(count($data) > 1){
+        try {
+            $TBS->Show(OPENTBS_FILE, 'public/images/temp/'.$this->id.'.docx');
+            
+            $dm = new DocxMerge();
+            $dm->merge( $data, "public/images/temp/new".$this->id.".docx" );
+
+            @header("Content-type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+            @header("Content-Disposition: attachment; filename=$output_file_name");
+            @header("Content-Language: es-CO");
+            echo file_get_contents("public/images/temp/new".$this->id.".docx");
+        } catch (Throwable $t) {
+            @header("Content-type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+            @header("Content-Disposition: attachment; filename=$output_file_name");
+            @header("Content-Language: es-CO");
+            echo file_get_contents("public/images/temp/".$this->id.".docx");
+        }
+    }else{
+        $TBS->Show(OPENTBS_DOWNLOAD, $output_file_name);
+    }
+    exit();
+}else{
+?>
+<style>
+    textarea {
+        height: 100px;
+        width: 100%;
+        max-width: 100%;
+    }
+    select {
+        width: 64%;
+        max-width: 100%;
+    }
+    label {
+        display: table-cell; 
+    }
+</style> 
+<script type="text/javascript"> 
+
+    function modelo() {
+        var categoria = document.getElementById("id_categoria").value;
+        var idCategoria = categoria.split("-");
+        if(idCategoria[1] == 901 || idCategoria[1] == 2){
+            document.getElementById("momentos_proyecto").disabled = false;
+            document.getElementById("planteamiento_problema").disabled = true;
+            document.getElementById("total_financia").disabled = false;
+            document.getElementById("area_tematica").disabled = false;
+            document.getElementById("instituciones_coofinanciacion").disabled = false;
+            document.getElementById("estado_arte").disabled = false;
+            document.getElementById("metodologia").disabled = true;
+            document.getElementById("id_semillero").disabled = true;
+
+            document.getElementById("coinvestigadores").style.display = "none";
+            document.getElementById("txt_coinvestigadores").style.display = "none";
+            document.getElementById("contratacion_servicios").style.display = "block";
+            document.getElementById("paresevaluadores_").style.display = "block";
+
+            document.getElementById("total_financia").placeholder = "Ingrese el total de cofinanciación";
+            document.getElementById("area_tematica").placeholder = "En este apartado presente una breve descripción sobre el aporte que se hará con esta investigación al eje y/o línea de investigación en el cual se inscribe la propuesta. Revise términos de referencia.";
+
+            document.getElementById("planteamiento_problema").placeholder = "No aplica para la modalidad escogida.";
+            
+        }else if(idCategoria[1] == 902 || idCategoria[1] == 903 || idCategoria[1] == 4 || idCategoria[1] == 6){
+            document.getElementById("momentos_proyecto").disabled = true;
+            document.getElementById("total_financia").disabled = true;
+            document.getElementById("area_tematica").disabled = true;
+            document.getElementById("instituciones_coofinanciacion").disabled = true;
+            document.getElementById("planteamiento_problema").disabled = false;
+            document.getElementById("estado_arte").disabled = true;
+            document.getElementById("metodologia").disabled = true;
+            document.getElementById("id_semillero").disabled = false;
+
+            document.getElementById("coinvestigadores").style.display = "none";
+            document.getElementById("txt_coinvestigadores").style.display = "none";
+            document.getElementById("contratacion_servicios").style.display = "none";
+            document.getElementById("paresevaluadores_").style.display = "none";
+
+
+            document.getElementById("total_financia").placeholder = "No aplica para la modalidad escogida.";
+            document.getElementById("area_tematica").placeholder = "No aplica para la modalidad escogida.";
+            document.getElementById("planteamiento_problema").placeholder = "Formular de forma explícita el problema u objeto que se propone abordar o responder y, si es el caso, las preguntas que lo delimitan, mostrando la pertinencia en el contexto del área del conocimiento del grupo y de las líneas declaradas por el mismo, en la cual se ubican y en relación directa con la problematización construida. En este apartado, los proponentes deberán enunciar la o las hipótesis de investigación que han elaborado (sólo si son pertinentes dentro de la estrategia de investigación seleccionada), y la justificación de la problemática.";
+        }else{
+            document.getElementById("momentos_proyecto").disabled = true;
+            document.getElementById("planteamiento_problema").disabled = false;
+            document.getElementById("total_financia").disabled = false;
+            document.getElementById("area_tematica").disabled = false;
+            document.getElementById("instituciones_coofinanciacion").disabled = false;
+            document.getElementById("metodologia").disabled = false;
+            document.getElementById("estado_arte").disabled = false;
+            document.getElementById("id_semillero").disabled = true;
+
+            document.getElementById("coinvestigadores").style.display = "block";
+            document.getElementById("txt_coinvestigadores").style.display = "block";
+            document.getElementById("contratacion_servicios").style.display = "block";
+            document.getElementById("paresevaluadores_").style.display = "block";
+
+            document.getElementById("planteamiento_problema").placeholder = "Formular de forma explícita el problema u objeto que se propone abordar o responder y, si es el caso, las preguntas que lo delimitan, mostrando la pertinencia en el contexto del área del conocimiento del grupo y de las líneas declaradas por el mismo, en la cual se ubican y en relación directa con la problematización construida. En este apartado, los proponentes deberán enunciar la o las hipótesis de investigación que han elaborado (sólo si son pertinentes dentro de la estrategia de investigación seleccionada), y la justificación de la problemática.";
+            document.getElementById("total_financia").placeholder = "Ingrese el total de cofinanciación";
+            document.getElementById("area_tematica").placeholder = "En este apartado presente una breve descripción sobre el aporte que se hará con esta investigación al eje y/o línea de investigación en el cual se inscribe la propuesta. Revise términos de referencia.";
+            
+        }
+    }
+    window.addEventListener("load", modelo);
+</script>
+
+<script type="text/javascript">
+    window.onload = function(){
+        if(location.hash!=""){
+            location.href = location.hash;    
+        }
+    };
+
+    $( document ).ready(function() {
+       
+        var formatter = new Intl.NumberFormat('en-us', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0
+        });
+
+        var lineaInv = document.getElementById("id_linea_inv");
+        for (i = 0; i < lineaInv.length; i++) {
+            if(lineaInv.options[i].value != ''){
+                var option = lineaInv.options[i]; // item
+                var id = lineaInv.options[i].value.split(/-/); // extrae el id del                    
+                var idPadreValorFlexible = id[1];
+                if(idPadreValorFlexible == document.getElementById('id_campo').value){
+                    option.style.display = "block";
+                }else{
+                    option.style.display = "none";
+                }
+                if(option.text == "Seleccione"){
+                    option.selected = true;
+                }
+            }
+        }
+        if(document.getElementById('id_campo').value == ''){
+            document.getElementById("id_linea_inv").disabled = true;
+        }else{
+            document.getElementById("id_linea_inv").disabled = false;
+        }
+        $('#lb_recursos_funcion').text(formatter.format($("input[name='recursos_funcion']").val()));
+        $('#lb_recursos_inversion').text(formatter.format($("input[name='recursos_inversion']").val()));
+        $('#lb_total_financia').text(formatter.format($("input[name='total_financia']").val()));
+        $('#lb_total_proy').text(formatter.format($("input[name='total_proy']").val()));
+    });
+    
+    function myFunction(id_campo) {
+        var lineaInv = document.getElementById("id_linea_inv");
+        for (i = 0; i < lineaInv.length; i++) {
+            if(lineaInv.options[i].value != ''){
+                var option = lineaInv.options[i]; // item
+                var id = lineaInv.options[i].value.split(/-/); 
+                var idPadreValorFlexible = id[1];
+                if(idPadreValorFlexible == document.getElementById(id_campo).value){
+                    option.style.display = "block";
+                }else{
+                    option.style.display = "none";
+                }
+                if(option.text == "Seleccione"){
+                    option.selected = true;
+                }
+            }
+        }
+        if(document.getElementById(id_campo).value == ''){
+            document.getElementById("id_linea_inv").disabled = true;
+        }else{
+            document.getElementById("id_linea_inv").disabled = false;
+        }
+    }
+
+    function sumValores() {
+        var valRecursosContrapartida=0;
+        var valRecursosInversion=0;
+        var valRecursosCofinanciacion=0;
+
+        var formatter = new Intl.NumberFormat('en-us', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0
+        });
+
+        if($("input[name='recursos_funcion']").val()!=""){
+            valRecursosContrapartida = parseInt($("input[name='recursos_funcion']").val());
+        }
+         if($("input[name='recursos_inversion']").val()!=""){
+            valRecursosInversion = parseInt($("input[name='recursos_inversion']").val());
+        }
+         if($("input[name='total_financia']").val()!=""){
+            valRecursosCofinanciacion = parseInt($("input[name='total_financia']").val());
+        }
+        $("input[name='total_proy']").val(valRecursosContrapartida+valRecursosInversion+valRecursosCofinanciacion);
+        $('#lb_recursos_funcion').text(formatter.format($("input[name='recursos_funcion']").val()));
+        $('#lb_recursos_inversion').text(formatter.format($("input[name='recursos_inversion']").val()));
+        $('#lb_total_financia').text(formatter.format($("input[name='total_financia']").val()));
+        $('#lb_total_proy').text(formatter.format($("input[name='total_proy']").val()));
+    }
+
+    function myFunction2() {
+        var dependenciasAca = document.getElementById("id_dependencia_academica");
+        for (i = 0; i < dependenciasAca.length; i++) {
+          if(dependenciasAca.options[i].value != ''){
+                var option = dependenciasAca.options[i]; // item
+                var idPadreValorFlexible = dependenciasAca.options[i].value.split(/-/)[1];
+                //valida que el item de la iteracion es del padre seleccionado
+                if(idPadreValorFlexible == document.getElementById("id_unidad_academica").value.split(/-/)[0]){
+                    option.style.display = "block";
+                }else{
+                    option.style.display = "none";
+                }
+                // Selecciona el placeholder por defecto en linea
+                if(option.text == ""){
+                    option.selected = true;
+                }
+            }                                                                      
+        }
+    }
+    
+    function myFunction3() {
+        var programaAca = document.getElementById("id_programa_academico");                               
+        for (i = 0; i < programaAca.length; i++) {
+            if(programaAca.options[i].value != ''){
+                var option = programaAca.options[i]; // item
+                var idPadreValorFlexible = programaAca.options[i].value.split(/-/)[1];
+                //valida que el item de la iteracion es del padre seleccionado
+                if(idPadreValorFlexible == document.getElementById("id_dependencia_academica").value.split(/-/)[0]){
+                    option.style.display = "block";
+                }else{
+                    option.style.display = "none";
+                }
+                // Selecciona el placeholder por defecto en linea
+                if(option.text == ""){
+                    option.selected = true;
+                }
+            }                                                                       
+        }
+        
+    }
+</script>
+
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+    <div id="container_1">
+        <div class="row2">
+            <div class="nine3 columns">
+                <div id="centersectiontitle">
+                    <div class="twelve columns">
+                        <div class="sidebartitle">
+                            <h3>
+                <?php
+    echo $this->titulo."/PROPUESTA DE INVESTIGACIÓN";
+    ?>
+                </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="twelve columns">
+                <?php
+    $form = $this->form;
+    $form->prepare();
+    
+    $form->setAttributes(array(
+        'action' => $this->url . '/application/editaraplicari/index/' . $this->id,
+        'method' => 'post'
+    ));
+    echo $this->form()->openTag($form);
+    ?>
+        <a href="<?php echo $this->basePath() ?>/application/consulconvocatoria/index"><i class="icon-arrow-left"></i> Regresar</a><br><br>
+    <?php
+    echo '<div class="six columns">';
+    echo "<h3>";
+    echo "IDENTIFICACIÓN DEL PROYECTO";
+    echo "</h3>";
+    echo '</div>';
+    echo '<div class="six columns">';
+    ?>
+        <a class="btn" style="max-width:240px;" href="<?php echo $this->basePath() ?>/application/editaraplicari/index/<?php echo $id;?>/1">Comprobante aplicación - propuesta</a>
+    <?php
+    echo '</div>';
+    echo '</div>';
+
+    echo '<div class="twelve columns">';
+    echo '<p>';
+    echo $this->formlabel($form->get('nombre_proy'));
+    echo $this->formelement($form->get('nombre_proy'));
+    echo '</div>';
+
+    echo '<div class="six columns">';
+    echo '<p>';
+    echo $this->formlabel($form->get('id_categoria'));
+    if($this->estado_convo == "B" || $this->estado_convo == "P"){
+        echo $this->formelement($form->get('id_categoria'));
+    }else{
+        echo $this->formelement($form->get('nombre_modalidad'));
+    }
+    echo '<p>';
+    echo $this->formlabel($form->get('id_campo'));
+    echo $this->formelement($form->get('id_campo'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_linea_inv'));
+    echo $this->formelement($form->get('id_linea_inv'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_area_tematica'));
+    echo $this->formelement($form->get('id_area_tematica'));
+    echo '<p>';
+    echo $this->formlabel($form->get('recursos_funcion')); echo '<label id="lb_recursos_funcion"></label>';
+    echo $this->formelement($form->get('recursos_funcion'));
+    echo '<p>';
+    echo $this->formlabel($form->get('recursos_inversion')); echo '<label id="lb_recursos_inversion"></label>';
+    echo $this->formelement($form->get('recursos_inversion'));
+    echo '<p>';
+    echo $this->formlabel($form->get('total_financia')); echo '<label id="lb_total_financia"></label>';
+    echo $this->formelement($form->get('total_financia'));
+    echo '<p>';
+    echo $this->formlabel($form->get('total_proy')); echo '<label id="lb_total_proy"></label>';
+    echo $this->formelement($form->get('total_proy'));
+    echo '<p>';
+    echo $this->formlabel($form->get('semestresano'));
+    echo $this->formelement($form->get('semestresano'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_semillero'));
+    echo $this->formelement($form->get('id_semillero'));
+    echo '</div>';
+    echo '<div class="six columns">';
+    echo '<p>';
+    echo $this->formlabel($form->get('investigador_principal'));
+    echo $this->formelement($form->get('investigador_principal'));
+    echo '<p>';
+    echo $this->formlabel($form->get('tipo_documento'));
+    echo $this->formelement($form->get('tipo_documento'));
+    echo '<p>';
+    echo $this->formlabel($form->get('numero_documento'));
+    echo $this->formelement($form->get('numero_documento'));
+    echo '<p>';
+    echo $this->formlabel($form->get('tipo_vinculacion'));
+    echo $this->formelement($form->get('tipo_vinculacion'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_unidad_academica'));
+    echo $this->formelement($form->get('id_unidad_academica'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_dependencia_academica'));
+    echo $this->formelement($form->get('id_dependencia_academica'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_programa_academico'));
+    echo $this->formelement($form->get('id_programa_academico'));
+    echo '<p>';
+    echo $this->formlabel($form->get('instituciones_coofinanciacion'));
+    echo $this->formelement($form->get('instituciones_coofinanciacion'));
+    echo '<p>';
+    echo $this->formlabel($form->get('duracion'));
+    echo $this->formelement($form->get('duracion'));
+    echo '<p>';
+    echo $this->formelement($form->get('periodo'));
+    echo "</div>";
+    echo '<div class="twelve columns">';    
+    echo "<h3>";
+    echo "CONTENIDO DE LA PROPUESTA";
+    echo "</h3>";
+    echo $this->formlabel($form->get('area_tematica'));
+    echo $this->formelement($form->get('area_tematica'));
+    echo '<p>';
+    echo '<center>';
+    echo "<h3>";
+    echo "MÓDULO I";
+    echo "</h3>";
+    echo '</center>';
+    echo $this->formlabel($form->get('resumen_ejecutivo'));
+    echo $this->formelement($form->get('resumen_ejecutivo'));
+    echo '<p>';
+    echo $this->formlabel($form->get('descriptores'));
+    echo $this->formelement($form->get('descriptores'));
+    echo '<p>';
+    echo $this->formlabel($form->get('antecedentes'));
+    echo $this->formelement($form->get('antecedentes'));
+    echo "(Puntaje máximo en la evaluación: 10 puntos de 100)";
+    echo '<p>';
+    echo '<center>';
+    echo "<h3>";
+    echo "MÓDULO II";
+    echo "</h3>";
+    echo '</center>';
+    echo "<h3>";
+    echo "PROBLEMAS, OBJETIVOS Y METAS";
+    echo "</h3>";
+    echo $this->formlabel($form->get('planteamiento_problema'));
+    echo $this->formelement($form->get('planteamiento_problema'));
+    echo '<p>';
+    echo $this->formlabel($form->get('objetivo_general'));
+    echo $this->formelement($form->get('objetivo_general'));
+    echo '<p>';
+    echo '<center>';
+    echo "<h3>";
+    echo "MÓDULO III";
+    echo "</h3>";
+    echo '</center>';
+    echo "<h3>";
+    echo "MARCO TEÓRICO Y BIBLIOGRAFÍA";
+    echo "</h3>";
+    echo $this->formlabel($form->get('marco_teorico'));
+    echo $this->formelement($form->get('marco_teorico'));
+    echo '<p>';
+    echo $this->formlabel($form->get('estado_arte'));
+    echo $this->formelement($form->get('estado_arte'));
+    echo '<p>';
+    echo $this->formlabel($form->get('bibliografia'));
+    echo $this->formelement($form->get('bibliografia'));
+    echo "(Puntaje máximo en la evaluación: 20 puntos de 100)";
+    echo '<p>';
+    echo '<center>';
+    echo "<h3>";
+    echo "MÓDULO IV";
+    echo "</h3>";
+    echo '</center>';
+    echo $this->formlabel($form->get('metodologia'));
+    echo $this->formelement($form->get('metodologia'));
+    echo '<p>';
+    echo $this->formlabel($form->get('momentos_proyecto'));
+    echo $this->formelement($form->get('momentos_proyecto'));
+    echo "(Puntaje máximo en la evaluación: 20 puntos de 100)";
+    echo '<p>';
+    echo '<center>';
+    echo "<h3>";
+    echo "MÓDULO V";
+    echo "</h3>";
+    echo '</center>';
+    echo $this->formlabel($form->get('compromisos_conocimiento'));
+    echo $this->formelement($form->get('compromisos_conocimiento'));
+    echo "Una vez aplique a la convocatoria acepta los terminos y condiciones estipuladas.";
+    echo '</br>';
+    echo '</br>';
+    echo '<p>';
+    if($this->editar_aplicar=="Si"){
+        echo $this->formelement($form->get('submit'));    
+    }
+    echo $this->form()->closeTag($form);
+    ?>
+    </br>
+    <h5>Actualizar antes de continuar, para que la información ingresada se guarde. Los cambios en las siguientes secciones no requieren la acción de actualizar el formulario. Se guardan automáticamente.</h5>   
+    </br>
+    </br>
+    <fieldset>
+        <legend style="margin-bottom:0px;">Objetivos especificos y metas</legend>
+        <div id="objetivo"></div>
+        <?php
+        if($this->editar_aplicar=="Si"){ ?>
+            <a class="btn" href="<?php echo $this->basePath() ?>/application/objetivosespecificos/index/<?php echo $id;?>/0">Agregar objetivo</a>
+        <?php } ?>
+        </br></br>
+        <?php
+        
+        echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+            echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                echo '<thead>';
+                    echo '<th style="width: 3%;">No.</th>';
+                    echo '<th style="width: 40%;">Objetivo</th>';
+                    echo '<th style="width: 40%;">Metas</th>';
+                    echo '<th style="width: 7%;">Agregar meta</th>';
+                    echo '<th style="width: 5%;">Editar objetivo</th>';
+                    echo '<th style="width: 5%;">Eliminar objetivo</th>';
+                echo '</thead>';
+                $cont=1;
+                $cont2=1;
+                echo '<tbody>';
+                    foreach ($this->objetivosespecificos as $objetivo) {
+                        echo '<tr>';
+                            echo '<td>';
+                            echo $cont;
+                            echo '</td>';
+                            echo '<td>';
+                            echo $objetivo["objetivo"];
+                            echo '</td>';
+                            $cont+=1;
+                            echo '<td>';
+                            $cont2=1;
+                            foreach ($this->objetivosmetas as $meta) {
+                                if($meta["id_objetivo"]==$objetivo["id"]){
+                                    if($this->editar_aplicar=="Si"){
+                                        echo $cont2.".- ".$meta["meta"]." <a href=".$this->basePath()."/application/objetivosmetas/index/".$id."/0/".$meta["id"]." >Editar</a>"." - <a href=".$this->basePath()."/application/objetivosmetas/eliminar/".$id."/0/".$meta["id"]." >Eliminar</a>"."<p>";
+                                    }else{
+                                        echo $cont2.".- ".$meta["meta"]."<p>";
+                                    }
+                                    $cont2+=1;
+                                }
+
+                            }
+                            echo '</td>';
+                            echo '<td>';
+                            if($this->editar_aplicar=="Si"){
+                                ?>
+                                    <a class="btn" href="<?php echo $this->basePath() ?>/application/objetivosmetas/index/<?php echo $id;?>/<?php echo $objetivo["id"];?>">Agregar</a>
+                                <?php
+                            }
+                            echo '</td>'; 
+                            echo '<td>';
+                            if($this->editar_aplicar=="Si"){
+                                ?>
+                                    <a class="btn" href="<?php echo $this->basePath() ?>/application/objetivosespecificos/index/<?php echo $id;?>/<?php echo $objetivo["id"];?>">Editar</a>
+                                <?php
+                            }
+                            echo '</td>'; 
+                            echo '<td>';
+                            if($this->editar_aplicar=="Si" && $cont2 == 1 ){
+                                ?>
+                                    <a class="btn" href="<?php echo $this->basePath() ?>/application/objetivosespecificos/del/<?php echo $objetivosespecificos[0]["id"];?>/<?php echo $id;?>">Eliminar</a>
+                                <?php
+                            }else{
+                                if($cont2 > 1){
+                                    echo "Primero debe eliminar las metas asociadas a este objetivo.";
+                                }
+                            }
+                            echo '</td>';  
+                        echo '</tr>';
+                    }
+                    echo '</tbody>';
+            echo '</table>';
+        echo '</div>';
+    ?>
+    </fieldset>
+    </br>
+
+    <?php if($this->modalidad == 902  || $this->modalidad == 4){ ?>
+    <label>En la siguiente sección se deben indicar los espacios de formación: seminarios, coloquios, conferencias, talleres, entre otros, que se desarrollarán en la propuesta.</label>
+    <fieldset>
+    <legend>A. Programación de sesiones periódicas de formación en investigación</legend>
+    <?php
+        if($this->editar_aplicar=="Si"){ ?>
+            <a class="btn" href="<?php echo $this->basePath() ?>/application/sesionesperiodicasformacion/index/<?php echo $id;?>">Agregar</a>
+    <?php } ?>
+    <br> <br>
+    <?php
+        echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+        echo '<table class="table" style="width: 100%; max-width: 100%;">';
+        echo '<thead>';
+        echo '<th style="width:40%;">Tipo de espacio</th>';
+        echo '<th style="width:20%;">Fecha inicio</th>';
+        echo '<th style="width:20%;">Fecha fin</th>';
+        echo '<th style="width:10%;">Ver/Editar</th>';
+        echo '<th style="width:10%;">Eliminar</th>';
+        echo '</thead>';
+        echo '<tbody>';
+        foreach ($this->sesionesformacion as $sesionformacion) {
+            echo '<tr>';
+            echo '<td>';
+                foreach ($this->valflex as $vf) {
+                    if ($vf["id_valor_flexible"] == $sesionformacion["id_tipo"]) {
+                        echo $vf["descripcion_valor"]."</br>";
+                    }
+                }
+            echo '</td>';
+            echo '<td>';
+            echo $sesionformacion["fecha"];           
+            echo '</td>';
+             echo '<td>';
+            echo $sesionformacion["fecha_fin"];           
+            echo '</td>';
+            echo '<td>';
+            echo '<center>';
+            if($this->editar_aplicar=="Si"){
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/sesionesperiodicasformacion/index/<?php echo $sesionformacion["id_aplicari"];?>/<?php echo $sesionformacion["id"];?>">Ver/Editar</a>
+            <?php
+            }
+            echo '</center>';
+            echo '</td>';
+            echo '<td>';
+            echo '<center>';
+            if($this->editar_aplicar=="Si"){
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/sesionesperiodicasformacion/del/<?php echo $sesionformacion["id"];?>/<?php echo $sesionformacion["id_aplicari"];?>">Eliminar</a>
+            <?php
+            }
+            echo '</center>';
+            echo '</td>';
+            echo '</tr>';
+        }
+        echo '</tbody>';
+        echo '</table>';
+        echo '</div>';
+        
+    ?>
+    </fieldset>
+    </br>
+    <label>En la siguiente sección se deben indicar los espacios de formación dedicados a la socialización de los avances de los estudiantes monitores del semillero: Aquí se contemplan los avances en el proyecto semillero de investigación, anteproyectos
+de grado de pregrado o posgrado o ejercicios de sistematización de la práctica pedagógica, según la modalidad exigida en cada programa académico.</label>
+    <fieldset>
+    <legend>B. Programación de sesiones periódicas en las cuales los estudiantes participantes, presenten sus avances de investigación</legend>
+    <?php
+        if($this->editar_aplicar=="Si"){ ?>
+            <a class="btn" href="<?php echo $this->basePath() ?>/application/sesionesperiodicasestudiantes/index/<?php echo $id;?>">Agregar</a>
+    <?php } ?>
+    <br> <br>
+    <?php
+        echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+        echo '<table class="table" style="width: 100%; max-width: 100%;">';
+        echo '<thead>';
+        echo '<th style="width:20%;">Sesión No.</th>';
+        echo '<th style="width:15%;">Fecha inicio</th>';
+        echo '<th style="width:15%;">Fecha fin</th>';
+        echo '<th style="width:20%;">Rol responsable</th>';
+        echo '<th style="width:10%;">Agregar responsable</th>';
+        echo '<th style="width:10%;">Ver/Editar</th>';
+        echo '<th style="width:10%;">Eliminar</th>';
+        echo '</thead>';
+        echo '<tbody>';
+        foreach ($this->sesionesestudiantes as $sesionestudiantes) {
+            echo '<tr>';
+            echo '<td>';
+            echo $sesionestudiantes["sesion"];               
+            echo '</td>';
+            echo '<td>';
+            echo $sesionestudiantes["fecha"];           
+            echo '</td>';
+            echo '<td>';
+            echo $sesionestudiantes["fecha_fin"];           
+            echo '</td>';
+            echo '<td>';
+                foreach ($this->valflex as $vf) {
+                    if ($vf["id_valor_flexible"] == $sesionestudiantes["id_rol"]) {
+                        echo $vf["descripcion_valor"]."</br>";
+                    }
+                }
+                foreach ($this->Agregarresponsable as $responsable) {
+                    if($sesionestudiantes["id"]==$responsable["id_padre"] && $responsable["tipo"]=="sesion"){
+                        foreach ($this->valflex as $vf) {
+                            if ($vf["id_valor_flexible"] == $responsable["id_rol"]) {
+                                if($this->editar_aplicar=="Si"){
+                                        echo $vf["descripcion_valor"]." <a href=".$this->basePath()."/application/agregarresponsable/index/".$id."/".$sesionestudiantes["id"]."/sesion/".$responsable["id"].">Editar</a>"."<p>";
+                                }else{
+                                    echo $vf["descripcion_valor"]."</br>";
+                                }
+                            }
+                        }
+                    }
+                }       
+            echo '</td>';
+            echo '<td>';
+            echo '<center>';
+                if($this->editar_aplicar=="Si"){
+                ?>
+                    <a class="btn" href="<?php echo $this->basePath() ?>/application/agregarresponsable/index/<?php echo $sesionestudiantes["id_aplicari"];?>/<?php echo $sesionestudiantes["id"];?>/sesion/0">Agregar</a>
+                <?php
+                }
+            echo '</center>';
+            echo '</td>';
+            echo '<td>';
+            echo '<center>';
+            if($this->editar_aplicar=="Si"){
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/sesionesperiodicasestudiantes/index/<?php echo $sesionestudiantes["id_aplicari"];?>/<?php echo $sesionestudiantes["id"];?>">Ver/Editar</a>
+            <?php
+            }
+            echo '</center>';
+            echo '</td>';
+            echo '<td>';
+            echo '<center>';
+            if($this->editar_aplicar=="Si"){
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/sesionesperiodicasestudiantes/del/<?php echo $sesionestudiantes["id"];?>/<?php echo $sesionestudiantes["id_aplicari"];?>">Eliminar</a>
+            <?php
+            }
+            echo '</center>';
+            echo '</td>';
+            echo '</tr>';
+        }
+        echo '</tbody>';
+        echo '</table>';
+        echo '</div>';
+        
+    ?>
+    </fieldset>
+    <?php } ?>
+    <?php
+        echo '<br>';
+        echo '<p>';
+        echo '<center>';
+        echo "<h3>";
+        echo "MÓDULO VI";
+        echo "</h3>";
+        echo '</center>';
+        echo "<h3>";
+        echo "EJECUCIÓN DEL PROYECTO";
+        echo "</h3>";
+    ?>
+    <fieldset>
+    <a name='CronogramaProyecto'></a>
+    <legend>Cronograma del proyecto</legend>
+    <?php
+        if($this->editar_aplicar=="Si"){ ?>
+            <a class="btn" href="<?php echo $this->basePath() ?>/application/cronogramaap/index/<?php echo $id;?>/0/1">Agregar actividad</a>
+    <?php } ?>
+    <br> <br>
+    <?php
+
+    foreach ($this->objetivosespecificos as $objetivo) {
+        echo "<br />";
+        echo "<b><label style='font-size: 17px;font-weight: bold;'>Objetivo: ".$objetivo["objetivo"]."</label></b>";
+        echo "<br />";
+        echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+        echo '<table class="table" style="width: 100%; max-width: 100%;">';
+        echo '<thead>';
+        echo '<th style="width:20%;">Nombre actividad</th>';
+        echo '<th style="width:20%;">Descripción actividad</th>';
+        echo '<th style="width:15%;">Responsables</th>';
+        echo '<th style="width:10%;">Fecha inicio</th>';
+        echo '<th style="width:10%;">Fecha fin</th>';
+        echo '<th style="width:10%;">Agregar responsable</th>';
+        echo '<th style="width:5%;">Ver/Editar</th>';
+        echo '<th style="width:5%;">Eliminar</th>';
+        echo '</thead>';
+        echo '<tbody>';
+        foreach ($this->cronogramaap as $crono) {
+            if($crono["id_meta"] == $objetivo["id"]){
+                echo '<tr>';
+                echo '<td>';
+                echo $crono["nombre_actividad"];
+                echo '</td>';
+                echo '<td>';
+                echo $crono["descripcion"];
+                echo '</td>';
+                echo '<td>';
+                    foreach ($this->valflex as $vf) {
+                        if ($vf["id_valor_flexible"] == $crono["id_rolresponsable"]) {
+                            echo $vf["descripcion_valor"]."</br>";
+                        }
+                    }
+                    foreach ($this->Agregarresponsable as $responsable) {
+                        if($crono["id_cronograma"]==$responsable["id_padre"] && $responsable["tipo"]=="cronograma"){
+                            foreach ($this->valflex as $vf) {
+                                if ($vf["id_valor_flexible"] == $responsable["id_rol"]) {
+                                    if($this->editar_aplicar=="Si"){
+                                            echo $vf["descripcion_valor"]." <a href=".$this->basePath()."/application/agregarresponsable/index/".$id."/".$crono["id_cronograma"]."/cronograma/".$responsable["id"].">Editar</a>"."<p>";
+                                    }else{
+                                        echo $vf["descripcion_valor"]."</br>";
+                                    }
+                                }
+                            }
+                        }
+                    }       
+                echo '</td>';
+                echo '<td>';
+                echo $crono["fecha_inicio"];           
+                echo '</td>';
+                echo '<td>';
+                echo $crono["fecha_cierre"];
+                echo '</td>';
+                echo '<td>';
+                echo '<center>';
+                if($this->editar_aplicar=="Si"){
+                ?>
+                    <a class="btn" href="<?php echo $this->basePath() ?>/application/agregarresponsable/index/<?php echo $crono["id_aplicar"];?>/<?php echo $crono["id_cronograma"];?>/cronograma/0">Agregar</a>
+                <?php
+                }
+                echo '</center>';
+                echo '</td>';
+                echo '<td>';
+                if($this->editar_aplicar=="Si"){
+                ?>
+                    <a class="btn" href="<?php echo $this->basePath() ?>/application/cronogramaap/index/<?php echo $crono["id_aplicar"];?>/<?php echo $crono["id_cronograma"];?>/1">Ver/Editar</a>
+                <?php
+                }
+                echo '</td>';
+                echo '<td>';
+                if($this->editar_aplicar=="Si"){
+                ?>
+                    <a class="btn" href="<?php echo $this->basePath() ?>/application/cronogramaap/del/<?php echo $crono["id_cronograma"];?>/<?php echo $crono["id_aplicar"];?>/1">Eliminar</a>
+                <?php
+                }
+                echo '</td>';
+                echo '</tr>';
+            }
+            
+        }
+        echo '</tbody>';
+        echo '</table>';
+        echo '</div>';
+    }
+
+
+
+
+
+
+
+
+
+
+        
+        
+    ?>
+    </fieldset>
+    </br>
+    <?php
+        echo "(Puntaje máximo en la evaluación: 10 puntos de 100)";
+    ?>
+    </br>
+
+    <?php
+        
+    
+    $per = 0;
+    
+    setlocale(LC_MONETARY, 'en_US');
+    ?>
+    <fieldset>
+
+                <legend>Tabla financiación</legend>
+                <?php
+    
+    foreach ($this->Tablafinper as $tbper) {
+        $per = $tbper["periodo"];
+    }
+    
+    for ($x = 1; $x <= $per; $x ++) {
+        echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+        echo '<table class="table" style="width: 100%; max-width: 100%;">';
+        echo '<thead>';
+        echo '<th colspan="6">TABLA FINANCIACIóN (VIGENCIA ' . $x . ')</th>';
+        echo '<tr align="center" valign="middle">';
+        echo '<th rowspan="2">RUBROS</th>';
+        echo '<th colspan="3">FUENTES</th>';
+        echo '<th rowspan="2">TOTAL</th>';
+        echo '</tr>';
+        echo '<tr align="center" valign="middle">';
+        echo '<th>RECURSOS DE FUNCIONAMIENTO</th>';
+        echo '<th>RECURSOS DE INVERSIÓN Y/O OTRO UPN</th>';
+        echo '<th>RECURSOS DE COOFINANCIACIóN</th>';
+        echo '</tr>';
+        echo '</thead>';
+        echo '<tbody>';
+        $sum_78 = 0;
+        $sum_79 = 0;
+        $sum_80 = 0;
+        
+        foreach ($this->pr as $prueba) {
+            if ($prueba["periodo"] == $x) {
+                echo '<tr align="center" valign="middle">';
+                echo '<td>';
+                foreach ($this->valflex as $vf) {
+                    if ($vf["id_valor_flexible"] == $prueba["id_rubro"]) {
+                        echo $vf["descripcion_valor"];
+                    }
+                }
+                echo '</td>';
+                echo '<td>';
+                $sum_78 = $sum_78 + $prueba["recursos_funcionamiento"];
+                //echo '<center>'.money_format('%.0n',floor($prueba["recursos_funcionamiento"]));
+                echo '<center>' .number_format(floor($prueba["recursos_funcionamiento"]),2); // JLOPEZ
+                echo '<br>';
+                //if ($prueba["id_funcionamiento"] != '0') {
+                        if($this->editar_aplicar=="Si"){
+                        ?>
+                    <a class="btn"
+                            href="<?php echo $this->basePath() ?>/application/editartablafin/index/<?php echo $prueba["id_funcionamiento"];?>/<?php echo $prueba["id_aplicar"];?>">Editar
+                            Valor</a>
+
+                <?php
+                //    }
+                }
+                echo '</td>';
+                echo '<td>';
+                $sum_79 = $sum_79 + $prueba["recursos_inversion"];
+                // ORIGINAL//echo '<center>'.money_format('%.0n',floor($prueba["recursos_inversion"]));
+                echo '<center>' . number_format(floor($prueba["recursos_inversion"]),2); // JLOPEZ
+                echo '<br>';
+                if ($prueba["id_inversion"] != '0') {
+                    if($this->editar_aplicar=="Si"){
+                        ?>
+                    <a class="btn"
+                            href="<?php echo $this->basePath() ?>/application/editartablafin/index/<?php echo $prueba["id_inversion"];?>/<?php echo $prueba["id_aplicar"];?>">Editar
+                            Valor</a>
+
+                <?php
+                    }
+                }
+                echo '</td>';
+                echo '<td>';
+                $sum_80 = $sum_80 + $prueba["recursos_cofinanciacion"];
+                // ORIGINAL//echo '<center>'.money_format('%.0n',floor($prueba["recursos_cofinanciacion"]));
+                echo '<center>' . number_format(floor($prueba["recursos_cofinanciacion"]),2);// JLOPEZ
+                echo '<br>';
+                if ($prueba["id_cofinanciacion"] != '0') {
+                    if($this->editar_aplicar=="Si"){
+                        ?>
+                    <a class="btn"
+                            href="<?php echo $this->basePath() ?>/application/editartablafin/index/<?php echo $prueba["id_cofinanciacion"];?>/<?php echo $prueba["id_aplicar"];?>">Editar
+                            valor</a>
+
+                <?php
+                    }
+                }
+                echo '</td>';
+                echo '<td>';
+                // ORIGINAL//echo money_format('%.0n',floor($prueba["total"]));
+                echo number_format(floor($prueba["total"]),2);// JLOPEZ
+                echo '</td>';
+                echo '</tr>';
+            }
+        }
+        
+        echo '<tr>';
+        echo '<th><p style="color:white;">TOTAL</p></th>';
+        echo '<th>';
+        // ORIGINAL//echo money_format('%.0n',floor($sum_78));
+        echo '<p style="color:white;">'.number_format(floor($sum_78),2).'</p>';// JLOPEZ
+        echo '</th>';
+        echo '<th>';
+        // ORIGINAL//echo money_format('%.0n',floor($sum_79));
+        echo '<p style="color:white;">'.number_format(floor($sum_79),2).'</p>';// JLOPEZ
+        echo '</th>';
+        echo '<th>';
+        // ORIGINAL//echo money_format('%.0n',floor($sum_80));
+        echo '<p style="color:white;">'.number_format(floor($sum_80),2).'</p>'; // JLOPEZ
+        echo '</th>';
+        echo '<th>';
+        // ORIGINAL//echo money_format('%.0n',floor($sum_78+$sum_80+$sum_79));
+        echo '<p style="color:white;">'.number_format(floor($sum_78 + $sum_80 + $sum_79),2).'</p>'; // JLOPEZ
+        echo '</th>';
+        echo '</tr>';
+        echo '</tbody>';
+        echo '</table>';
+        echo '</div>';
+        echo '<br>';
+    }
+    
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    echo '<TH>Descripción</TH>';
+    echo '<TH>Valores total</TH>';
+    echo '</thead>';
+    echo '<tbody>';
+    foreach ($this->sumfuente as $fu) {
+        echo '<tr align="center" valign="middle">';
+        echo '<td>';
+        foreach ($this->valflex as $vf) {
+            if ($vf["id_valor_flexible"] == $fu["id_fuente"]) {
+                echo $vf["descripcion_valor"];
+            }
+        }
+        echo '</td>';
+        
+        echo '<td>';
+        // ORIGINAL//echo money_format('%.0n',floor($fu["total"]));
+        echo number_format(floor($fu["total"]),2); // JLOPEZ
+        echo '</td>';
+        echo '</tr>';
+    }
+    
+    foreach ($this->sumrubro as $ru) {
+        echo '<tr align="center" valign="middle">';
+        echo '<td>';
+        foreach ($this->valflex as $vf) {
+            if ($vf["id_valor_flexible"] == $ru["id_rubro"]) {
+                echo $vf["descripcion_valor"];
+            }
+        }
+        echo '</td>';
+        
+        echo '<td>';
+        // ORIGINAL//echo money_format('%.0n',floor($ru["total"]));
+        echo number_format(floor($ru["total"]),2); // JLOPEZ
+        echo '</td>';
+        echo '</tr>';
+    }
+    echo '<tr>';
+    echo '<th><p style="color:white;">TOTAL DEL PROYECTO</p></th>';
+    echo '<th>';
+    foreach ($this->sumtotal as $to) {
+        // ORIGINAL//echo money_format('%.0n',floor($to["total"]));
+        echo '<p style="color:white;">'.number_format(floor($to["total"]),2).'</p>'; // JLOPEZ
+    }
+    
+    echo '</th>';
+    echo '</tr>';
+    
+    echo '</tbody>';
+    echo '</table>';
+    echo '</div>';
+
+    ?>
+    </fieldset>
+    </br>
+    <fieldset>
+        <a name='Grupos'></a>
+        <legend>Grupos de investigación participantes</legend>
+        <?php
+        if($this->editar_aplicar=="Si"){ ?>
+            <a class="btn" href="<?php echo $this->basePath() ?>/application/gruposaplicari/index/<?php echo $id;?>">Agregar</a>
+        <?php } ?>
+        <br> <br>
+        <?php
+        echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+        echo '<table class="table" style="width: 100%; max-width: 100%;">';
+        echo '<thead>';
+        echo "<th style='width: 30%;'>Nombre del grupo</th>";
+        echo "<th style='width: 15%;'>Código</th>";
+        echo "<th style='width: 15%;'>Líder</th>";
+        echo "<th style='width: 30%;'>Clasificación</th>";
+        echo "<th style='width: 5%;'>Ver/Editar</th>";
+        echo "<th style='width: 5%;'>Eliminar</th>";
+        echo '<tr>';
+
+        foreach ($this->Gruposaplicari as $int) {
+            foreach ($this->grupostotal as $grupo) {
+                if($int["id_grupo"]==$grupo["id_grupo_inv"]){
+                     echo '<tr>';
+                        echo '<td>';
+                        echo $grupo["nombre_grupo"];
+                        echo '</td>';
+
+                        echo '<td>';
+                        echo $grupo["cod_grupo"];
+                        echo '</td>';
+
+                        echo '<td>';
+                        foreach ($this->usuarios as $usuario) {
+                            if($usuario["id_usuario"]==$grupo["id_lider"]){
+                                echo $usuario["primer_nombre"] ." ". $usuario["segundo_nombre"] ." ". $usuario["primer_apellido"] ." ". $usuario["segundo_apellido"];    
+                            }
+                            
+                        }
+                        echo '</td>';
+
+                        echo '<td>';
+                        foreach ($this->clasificaciongrupo as $clgrupo) {
+                            if($clgrupo["id_valor_flexible"]==$grupo["id_clasificacion"]){
+                                echo $clgrupo["descripcion_valor"];    
+                            }
+                        }
+                        echo '</td>';
+                        echo '<td style="text-align:center;">';
+                        if($this->editar_aplicar=="Si"){
+                        ?>
+                            <a class="btn" href="<?php echo $this->basePath() ?>/application/gruposaplicari/index/<?php echo $id;?>/<?php echo $int["id"];?>">Ver/Editar</a>
+                        <?php
+                        }
+                        echo '</td>';
+                        echo '<td style="text-align:center;">';
+                        if($this->editar_aplicar=="Si"){
+                        ?>
+                            <a class="btn" href="<?php echo $this->basePath() ?>/application/gruposaplicari/del/<?php echo $int["id"];?>/<?php echo $id;?>">Eliminar</a>
+                        <?php
+                        }
+                        echo '</td>';
+                     echo '</tr>';
+                }
+            }
+        }
+        echo '</tr>';
+        echo '</table>';
+        echo '</div>';
+    ?>
+    </fieldset>
+
+     </br>
+    <fieldset>
+        <legend>Tabla equipo de trabajo</legend>
+        <?php
+        if($this->editar_aplicar=="Si"){ ?>
+            <a class="btn" href="<?php echo $this->basePath() ?>/application/tablaequipo/index/<?php echo $id;?>/0/1">Agregar</a>
+        <?php } ?>
+        <br> <br>
+        <?php
+        echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+        echo '<table class="table" style="width: 100%; max-width: 100%;">';
+        echo '<thead>';
+        echo '<th>Nombre completo</th>';
+        echo '<th>Documento de identidad</th>';
+        echo '<th>Unidad académica</th>';
+        echo '<th>Dependencia académica</th>';
+        echo '<th>Rol en el proyecto</th>';
+        echo '<th>Tipo de vinculación</th>';
+        echo '<th>Tipo de dedicación</th>';
+        echo '<th>Horas solicitadas</th>';
+        echo '<th>Asignar Rol-Horas</th>';
+        echo '<th>Eliminar integrante</th>';
+        echo '<tr>';
+
+        foreach ($this->tablae as $tablae) {
+            foreach ($this->usuarios as $us) {
+                if ($us["id_usuario"] == $tablae["id_integrante"]) {
+                    $r = $us["documento"];
+                    $nom = $us["primer_nombre"] . ' ' . $us["segundo_nombre"]. ' ' . $us["primer_apellido"]. ' ' . $us["segundo_apellido"];
+                    $uni = $us["id_unidad_academica"];
+                    $dep = $us["id_dependencia_academica"];
+                    $tipv = $us["id_tipo_vinculacion"];
+                }
+            }
+            echo '<tr>';
+            echo '<td>';
+            echo $nom;
+            echo '</td>';
+            echo '<td>';
+            echo $r;
+            echo '</td>';
+            echo '<td>';
+            foreach ($this->valflex as $vf) {
+                if ($uni == $vf["id_valor_flexible"]) {
+                    echo $vf["descripcion_valor"];
+                }
+            }
+            echo '</td>';
+            echo '<td>';
+            foreach ($this->valflex as $vf) {
+                if ($dep == $vf["id_valor_flexible"]) {
+                    echo $vf["descripcion_valor"];
+                }
+            }
+            echo '</td>';
+            echo '<td>';
+            foreach ($this->valflex as $vf) {
+                if ($tablae["id_rol"] == $vf["id_valor_flexible"]) {
+                    echo $vf["descripcion_valor"];
+                }
+            }
+            echo '</td>';
+            echo '<td>';
+            foreach ($this->valflex as $vf) {
+                if ($tipv == $vf["id_valor_flexible"]) {
+                    echo $vf["descripcion_valor"];
+                }
+            }
+            echo '</td>';
+            echo '<td>';
+            foreach ($this->valflex as $vf) {
+                if ($tablae["id_tipo_dedicacion"] == $vf["id_valor_flexible"]) {
+                    echo $vf["descripcion_valor"];
+                }
+            }
+            
+            echo '</td>';
+            echo '<td>';
+            echo $tablae["horas_sol"];
+            echo '</td>';
+            
+            echo '<td>';
+            if($this->editar_aplicar=="Si"){
+            ?>
+                <a class="btn"
+                                href="<?php echo $this->basePath() ?>/application/editartablae/index/<?php echo $tablae["id_integrantes"];?>/<?php echo $tablae["id_aplicar"];?>/1">Asignar Rol-Horas</a>
+            <?php
+            }
+            echo '</td>';
+            echo '<td>';
+            if($this->editar_aplicar=="Si"){
+            ?>
+                    <a class="btn"  href="<?php echo $this->basePath() ?>/application/tablaequipo/del/<?php echo $tablae["id_integrantes"];?>/<?php echo $tablae["id_aplicar"];?>/1">Eliminar
+                            integrante</a>
+
+            <?php
+            }
+            echo '</td>';
+            echo '</tr>';
+        }
+        echo '</tr>';
+        echo '</table>';
+        echo '</div>';
+    ?>
+    </fieldset>
+    </br>
+    
+    <?php if (($this->modalidad!=901 && $this->modalidad!=902 && $this->modalidad!=903)  && ($this->modalidad!=2 && $this->modalidad!=4 && $this->modalidad!=6)) { ?>
+        
+    <label id="txt_coinvestigadores">Si el proyecto es cofinanciado, registre los investigadores de otras instituciones que se vincularán al desarrollo de la investigación; conforme a la información solicitada en la siguiente tabla.</label>
+    </br>
+    <fieldset id="coinvestigadores">
+        <legend>Coinvestigadores - Solo si el proyecto es cofinanciado</legend>
+        <?php
+        if($this->editar_aplicar=="Si"){ ?>
+            <a class="btn" href="<?php echo $this->basePath() ?>/application/coinvestigadores/index/<?php echo $id;?>">Agregar</a>
+        <?php } ?>
+        <br> <br>
+        <?php
+        echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+        echo '<table class="table" style="width: 100%; max-width: 100%;">';
+        echo '<thead>';
+        echo '<th>Tipo de documento</th>';
+        echo '<th>Documento de identidad</th>';
+        echo '<th>Apellidos</th>';
+        echo '<th>Nombres</th>';
+        echo '<th>Profesión</th>';
+        echo '<th>Nombre de la institución</th>';
+        echo '<th>Teléfono o celular de contacto</th>';
+        echo '<th>Correo eléctronico</th>';
+        echo '<th>Número de horas semanales dedicadas al proyecto</th>';
+        echo '<th>Ver/Editar</th>';
+        echo '<th>Eliminar</th>';
+        echo '<tr>';
+
+        foreach ($this->Coinvestigadores as $coinves) {
+            echo '<tr>';
+            echo '<td>';
+            foreach ($this->valflex as $vf) {
+                if ($coinves["id_tipodocumento"] == $vf["id_valor_flexible"]) {
+                    echo $vf["descripcion_valor"];
+                }
+            }
+            echo '</td>';
+            echo '<td>';
+            echo $coinves["documento"];
+            echo '</td>';
+            echo '<td>';
+            echo $coinves["apellidos"];
+            echo '</td>';
+            echo '<td>';
+            echo $coinves["nombres"];
+            echo '</td>';
+            echo '<td>';
+            echo $coinves["profesion"];
+            echo '</td>';
+            echo '<td>';
+            echo $coinves["intitucion"];
+            echo '</td>';
+            echo '<td>';
+            echo $coinves["telefono"];
+            echo '</td>';
+            echo '<td>';
+            echo $coinves["email"];
+            echo '</td>';
+            echo '<td>';
+            echo $coinves["horas"];
+            echo '</td>';
+
+            echo '<td>';
+            if($this->editar_aplicar=="Si"){
+            ?>
+                <a class="btn"
+                                href="<?php echo $this->basePath() ?>/application/coinvestigadores/index/<?php echo $id;?>/<?php echo $coinves["id"];?>">Ver/Editar</a>
+            <?php
+            }
+            echo '</td>';
+            echo '<td>';
+            if($this->editar_aplicar=="Si"){
+            ?>
+                    <a class="btn"  href="<?php echo $this->basePath() ?>/application/coinvestigadores/del/<?php echo $coinves["id"];?>/<?php echo $id;?>">Eliminar</a>
+
+            <?php
+            }
+            echo '</td>';
+            echo '</tr>';
+        }
+        echo '</tr>';
+        echo '</table>';
+        echo '</div>';
+    ?>
+    </fieldset>
+    </br>
+    <?php } ?>
+    <?php if ($this->modalidad!=902 && $this->modalidad!=903 && $this->modalidad != 4 && $this->modalidad != 6) { 
+        $total_contrato=0;
+        $cantidad_solicitada=0;
+    ?>
+    <fieldset id="contratacion_servicios">
+        <legend>Contratación de servicios profesionales o personal técnico de apoyo</legend>
+        <?php
+        if($this->editar_aplicar=="Si"){ ?>
+            <a class="btn" href="<?php echo $this->basePath() ?>/application/contratacionpersonal/index/<?php echo $id;?>">Agregar</a>
+        <?php } ?>
+        <br> <br>
+        <?php
+        echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+        echo '<table class="table" style="width: 100%; max-width: 100%;">';
+        echo '<thead>';
+        echo '<th style="width:10%;">Tipo de vinculación</th>';
+        echo '<th style="width:5%;">Número de personas</th>';
+        echo '<th style="width:30%;">Objeto del contrato</th>';
+        echo '<th style="width:30%;">Justificación</th>';
+        echo '<th style="width:15%;">Valor solicitado para el contrato</th>';
+        echo '<th style="width:5%;">Ver/Editar</th>';
+        echo '<th style="width:5%;">Eliminar</th>';
+        echo '<tr>';
+
+        foreach ($this->Contratacionpersonal as $contper) {
+            echo '<tr>';
+            echo '<td>';
+            foreach ($this->valflex as $vf) {
+                if ($contper["tipo_vinculacion"] == $vf["id_valor_flexible"]) {
+                    echo $vf["descripcion_valor"];
+                }
+            }
+            echo '</td>';
+            echo '<td>';
+            echo $contper["personas"];
+            echo '</td>';
+            echo '<td>';
+            echo $contper["objeto"];
+            echo '</td>';
+            echo '<td>';
+            echo $contper["justificacion"];
+            echo '</td>';
+            echo '<td>';
+            echo '$'.number_format($contper["valor"], 0);
+            $total_contrato+=(int)$contper["valor"];
+            $cantidad_solicitada+=(int)$contper["personas"];
+            echo '</td>';
+            echo '<td>';
+            if($this->editar_aplicar=="Si"){
+            ?>
+                <a class="btn"
+                                href="<?php echo $this->basePath() ?>/application/contratacionpersonal/index/<?php echo $id;?>/<?php echo $contper["id"];?>">Ver/Editar</a>
+            <?php
+            }
+            echo '</td>';
+            echo '<td>';
+            if($this->editar_aplicar=="Si"){
+            ?>
+                    <a class="btn"  href="<?php echo $this->basePath() ?>/application/contratacionpersonal/del/<?php echo $contper["id"];?>/<?php echo $id;?>">Eliminar</a>
+
+            <?php
+            }
+            echo '</td>';
+            echo '</tr>';
+        }
+        echo '</tr>';
+
+        echo '<tr>';
+            echo '<td>';
+            echo "Total:";
+            echo '</td>';
+            echo '<td>';
+            echo $cantidad_solicitada;
+            echo '</td>';
+            echo '<td>';
+            echo '</td>';
+            echo '<td>';
+            echo '</td>';
+            echo '<td>';
+            echo '$'.number_format($total_contrato, 0);
+            echo '</td>';
+        echo '</tr>';
+        echo '</table>';
+        echo '</div>';
+    ?>
+    </fieldset>
+    <?php } ?>
+
+    </br>
+    <fieldset style="display: none;">
+        <legend>Campos adicionales</legend>
+        <?php
+        echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+        echo '<table class="table" style="width: 100%; max-width: 100%;">';
+        echo '<thead>';
+        echo '<th>Título campo</th>';
+        echo '<th>Valor y/o descripción del campo</th>';
+        echo '<th>Editar</th>';
+        foreach ($this->Camposaddproy as $caproy) {
+            echo '<tr>';
+            echo '<td>';
+            echo $caproy["titulo"];
+            echo '</td>';
+            echo '<td>';
+            echo $caproy["valor"];
+            echo '</td>';
+            echo '<td>';
+            if($this->editar_aplicar=="Si"){
+            ?>
+                <a class="btn"
+                        href="<?php echo $this->basePath() ?>/application/camposaddproy/index/<?php echo $caproy["id_campo_add"];?>/<?php echo $this->id; ?>/1">Editar campo</a>
+
+            <?php
+            }
+            echo '</td>';
+            echo '</tr>';
+        }
+        echo '</table>';
+        echo '</div>';
+    ?>
+    </fieldset>
+
+     </br>
+    <fieldset>
+        <legend>Documentos requeridos del proyecto</legend>
+        <?php
+        echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+        echo '<table class="table" style="width: 100%; max-width: 100%;">';
+        echo '<thead>';
+        echo '<th>Título del documento</th>';
+        echo '<th>Archivo</th>';
+        echo '<th>Fecha límite</th>';
+        echo '<th>Adjuntar/editar archivo</th>';
+        foreach ($this->Requisitosapdoc as $dreq) {
+            echo '<tr>';
+            echo '<td>';
+            echo $dreq["descripcion"];
+            echo '</td>';
+            
+            echo '<td>';
+            if ($dreq["archivo"] != null) {
+                ?>
+                    <a
+                                href="<?php echo $this->basePath()?>/application/requisitosapdoc/bajar/<?php echo $dreq["id_requisitoap_doc"];?>">Bajar
+                                archivo : </a><?php echo $dreq["archivo"]; ?> 
+                    <?php
+            }
+            echo '</td>';
+            echo '<td>';
+            echo $dreq["fecha_limite"];
+            echo '</td>';
+            echo '<td>';
+            if($this->editar_aplicar=="Si"){
+                $fecha = date("Y") . '-' . date("m") . '-' . date("d");
+                
+                if ($fecha <= $dreq["fecha_limite"]) {
+                    ?>
+                        <a class="btn"
+                                href="<?php echo $this->basePath() ?>/application/requisitosapdoc/index/<?php echo $dreq["id_requisitoap_doc"];?>/<?php echo $dreq["id_aplicar"];?>/0/0/conv">Adjuntar/Editar
+                                archivo</a>
+
+                    <?php
+                } else {
+                    echo 'La fecha limite termino.';
+                }
+            }
+            echo '</td>';
+            echo '</tr>';
+        }
+        echo '</table>';
+        echo '</div>';
+    ?>
+    </fieldset>
+    <?php if ($this->modalidad!=902 && $this->modalidad!=903 && $this->modalidad != 4 && $this->modalidad != 6) { ?>
+    </br>
+    <fieldset id="paresevaluadores_">
+        <legend>Pares evaluadores</legend>
+        <?php
+        if($this->editar_aplicar=="Si"){ ?>
+            <a class="btn" href="<?php echo $this->basePath() ?>/application/paresevaluadores/index/<?php echo $id;?>">Agregar</a>
+        <?php } ?>
+        <br> <br>
+        <?php
+        echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+        echo '<table class="table" style="width: 100%; max-width: 100%;">';
+        echo '<thead>';
+        echo '<th>Tipo</th>';
+        echo '<th>Nombre</th>';
+        echo '<th>Datos del evaluador</th>';
+        echo '<th>Eliminar</th>';
+        echo '<tr>';
+
+        foreach ($this->Paresevaluadores as $pares) {
+            foreach ($this->usuarios as $us) {
+                if ($us["id_usuario"] == $pares["id_usuario"]) {
+                    echo '<tr>';
+                    echo '<td>';
+                    echo $us["tipo_evaluador"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $us["primer_nombre"].' '.$us["segundo_nombre"] ." ". $us["primer_apellido"]." ". $us["segundo_apellido"];
+                    echo '</td>';
+
+                    echo '<td style="text-align:center;">';
+                    ?>
+                        <a class="btn" arget="_blank"
+                                        href="<?php echo $this->basePath() ?>/application/hvinvestigador/index/<?php echo $pares["id_usuario"];?>/2/<?php echo $id;?>">Ver</a>
+                    <?php
+                    echo '</td>';
+                    echo '<td style="text-align:center;">';
+                    if($this->editar_aplicar=="Si"){
+                    ?>
+                            <a class="btn"  href="<?php echo $this->basePath() ?>/application/paresevaluadores/del/<?php echo $pares["id"];?>/<?php echo $id;?>">Eliminar</a>
+
+                    <?php
+                    }
+                    echo '</td>';
+                    echo '</tr>';
+                }
+            }
+        }
+        echo '</tr>';
+        echo '</table>';
+        echo '</div>';
+    ?>
+    </fieldset>
+    <?php } ?>
+
+    </br>
+    <fieldset>
+        <legend>Anexos</legend>
+        <?php
+        if($this->editar_aplicar=="Si"){ ?>
+            <a class="btn" href="<?php echo $this->basePath() ?>/application/propuestainv/index/<?php echo $id;?>/1">Agregar</a>
+        <?php } ?>
+        <br>
+        <br>
+        <?php
+        echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+        echo '<table class="table" style="width: 100%; max-width: 100%;">';
+        echo '<thead>';
+        echo '<th style="width: 5%;">No.</th>';
+        echo '<th style="width: 35%;">Nombre del archivo</th>';
+        echo '<th style="width: 35%;">Descripción</th>';
+        echo '<th style="width: 15%;">Bajar</th>';
+        echo '<th style="width: 5%;">Ver/Editar</th>';
+        echo '<th style="width: 5%;">Eliminar</th>';
+        echo '<tr>';
+        $cont = 0; 
+        foreach ($this->Propuestainv as $arch) {
+            $cont+=1; 
+            echo '<tr>';
+                    echo '<td style="text-align:center;">';
+                    echo $cont;
+                    echo '</td>';
+                    echo '<td>';
+                    echo $arch["nombre"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $arch["descripcion"];
+                    echo '</td>';
+                    echo '<td>';
+                    ?>
+                        <a href="<?php echo $this->basePath()?>/application/propuestainv/bajar/<?php echo $arch["id_archivo"];?>/<?php echo $id;?>">Bajar archivo: </a><?php echo $arch["archivo"]; ?> 
+                    <?php
+                    echo '</td>';
+
+                    echo '<td style="text-align:center;">';
+                    if($this->editar_aplicar=="Si"){
+                    ?>
+                        <a class="btn" href="<?php echo $this->basePath() ?>/application/propuestainv/index/<?php echo $id;?>/1/<?php echo $arch["id_archivo"];?>">Ver/Editar</a>
+                    <?php
+                    }
+                    echo '</td>';
+
+                    echo '<td style="text-align:center;">';
+                    if($this->editar_aplicar=="Si"){
+                    ?>
+                        <a class="btn" href="<?php echo $this->basePath() ?>/application/propuestainv/del/<?php echo $arch["id_archivo"];?>/<?php echo $id;?>/1">Eliminar</a>
+                    <?php
+                    }
+                    echo '</td>';
+            echo '</tr>';
+        }
+        echo '</tr>';
+        echo '</table>';
+        echo '</div>';
+    ?>
+    </fieldset>
+
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+}
+?>

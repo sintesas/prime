@@ -1,0 +1,61 @@
+<style>
+	select {
+		width: 280px !important;
+	}
+</style>
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+<div class="row2">
+	<div class="nine3 columns">
+		<div id="centersectiontitle">
+			<div class="twelve columns">
+				<div class="sidebartitle"><h3>
+				<?php
+					echo $this->titulo;
+				?>
+				</h3>
+			</div>
+		</div>
+	</div>
+<div class="twelve columns">
+	<?php
+		$form = $this->form;
+		$form->prepare();
+		$form->setAttributes(array('action'=> $this->url.'/application/editarforo/index/'.$this->id,
+								'method'=>'post'));
+		echo $this->form()->openTag($form);
+//echo '<h6>';
+echo $this->flashMessenger()->render();
+
+echo '<p>';
+
+?>
+<a href="<?php echo $this->basePath() ?>/application/foro/index"><i class="icon-arrow-left"></i> Regresar</a><br><br>
+<?php
+
+echo '</h6>';
+		echo '<p>';
+		echo $this->formlabel($form->get('titulo'));
+		echo $this->formelement($form->get('titulo'));
+		echo '<p>'; 
+		echo $this->formlabel($form->get('mensaje'));
+		echo $this->formelement($form->get('mensaje'));
+		echo '<p>';
+if($this->menu==1){ 
+				echo $this->formlabel($form->get('estado'));
+				echo $this->formelement($form->get('estadoOp'));
+				echo $this->formelement($form->get('estado'));
+}
+		echo '<br>';
+		echo '<br>';		
+		
+		echo $this->formelement($form->get('submit'));
+?>
+<a class="btn" style="width: 280px !important;margin-left: 8px;" href="<?php echo $this->basePath() ?>/application/foro/index">Cancelar</a>
+<?php
+		echo '<br>';
+		
+		echo $this->form()->closeTag($form);
+		?>
+	</div></div></div>

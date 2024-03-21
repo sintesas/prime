@@ -1,0 +1,154 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+    echo $this->titulo;
+    ?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<div class="twelve columns">
+
+
+								<?php
+        
+        $form = $this->form;
+        $form->prepare();
+        $form->setAttributes(array(
+            'action' => 'index',
+            'method' => 'post'
+        ));
+        echo $this->form()->openTag($form);
+        
+        echo $this->form()->closeTag($form);
+        ?>
+
+				<?php
+    
+    $conteo_sin = 0;
+    $conteo_pen = 0;
+    foreach ($this->asignar as $as) {
+        if ($as["id_usuario"] == $id_user || $id_user == 1) {
+            $conteo = 0;
+            $conteo_as = 0;
+            foreach ($this->eval as $ev) {
+                if ($ev["id_aplicar"] == $as["id_aplicar"]) {
+                    $conteo_as = $conteo_as + 1;
+                    if ($ev["id_ponderacion2"] != null) {
+                        $conteo = $conteo + 1;
+                    }
+                }
+            }
+            if ($conteo == 0) {
+                $conteo_sin = $conteo_sin + 1;
+            } elseif ($conteo < $conteo_as) {
+                $conteo_pen = $conteo_pen + 1;
+            }
+        }
+    }
+    echo '<h5>Usted tiene ' . $conteo_sin . ' propuestas sin evaluar y ' . $conteo_pen . ' propuestas con aspectos pendientes por evaluar.</h5>';
+    echo '<br>';
+    echo "<div style='overflow-x:auto; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead style="vertical-align:middle;">';
+    echo '<th style="width:20%; vertical-align: middle;">Nombre de la propuesta</th>';
+    echo '<th style="width:15%; vertical-align: middle;">Estado de la evaluación</th>';
+    echo '<th style="width:30%; vertical-align: middle;">Concepto global</th>';
+    echo '<th style="width:10%; vertical-align: middle;">Ver propuesta</th>';
+    echo '<th style="width:15%; vertical-align: middle;">Concepto global / Recomendación de aprobación general de la propuesta</th>';
+    echo '<th style="width:10%; vertical-align: middle;">Evaluar propuesta</th>';
+    echo '</thead>';
+    echo '<tbody>';
+    $conteo_sin = 0;
+    foreach ($this->asignar as $as) {
+        if ($as["id_usuario"] == $id_user || $id_user == 1) {
+            echo '<tr>';
+            echo '<td>';
+            $id_convo="";
+            foreach ($this->aplicar as $ap) {
+                if ($ap["id_aplicar"] == $as["id_aplicar"]) {
+                    echo $ap["nombre_proy"];
+                    $id_convo = $ap["id_convocatoria"];
+                }
+            }
+            echo '</td>';
+            echo '<td>';
+            $conteo = 0;
+            $conteo_as = 0;
+            foreach ($this->eval as $ev) {
+                if ($ev["id_aplicar"] == $as["id_aplicar"]) {
+                    $conteo_as = $conteo_as + 1;
+                    if ($ev["id_ponderacion2"] != null) {
+                        $conteo = $conteo + 1;
+                    }
+                }
+            }
+            if ($conteo == 0) {
+                echo 'No tiene evaluación';
+            } elseif ($conteo < $conteo_as) {
+                echo 'Tiene pendientes por evaluar';
+            } elseif ($conteo == $conteo_as) {
+                echo 'Evaluación completa';
+            }
+            echo '</td>';
+            echo '<td>';
+            echo $as["descripcion"];
+            echo '</td>';
+            echo '<td>';
+            $tipoconvo="";
+            foreach ($this->convo as $conv) {
+                if($conv["id_convocatoria"]==$id_convo){
+                    if(trim($conv["tipo_conv"])=="i"){
+                        $tipoconvo="i";
+                    }
+                }
+            }
+
+            ?>
+					<a class="btn"
+						href="<?php echo $this->basePath() ?>/application/editaraplicar<?php echo $tipoconvo;?>/index/<?php echo $as["id_aplicar"];?>/ver"
+						target="_blank">Ver propuesta</a>
+			<?php
+            echo '</td>';
+            $fecha_actual = strtotime(date("d-m-Y H:i:00",time()));
+            $fecha_entrada = strtotime($as["fecha_maxima"]."00:00:00");
+                
+            if($fecha_actual <= $fecha_entrada){
+                echo '<td>';
+                ?>
+                    <a class="btn"
+                        href="<?php echo $this->basePath() ?>/application/editareval/index/<?php echo $as["id_evaluador"];?>/concepto">Concepto global</a>
+                <?php
+                echo '</td>';
+                echo '<td>';
+                ?>
+                    <a class="btn" href="<?php echo $this->basePath() ?>/application/evaluar/index/<?php echo $as["id_aplicar"];?>">Evaluar
+                        propuesta</a>
+                <?php
+                echo '</td>';
+            }else{
+                echo '<td>';
+                echo '</td>';
+                echo '<td>';
+                echo '</td>';
+            }
+            
+            echo '</tr>';
+        }
+    }
+				echo '</tr>';
+				echo '</table>';
+                echo "</div>";
+                echo "</br>";
+                echo "</br>";
+				?>
+</div>
+			</div>
+		</div>

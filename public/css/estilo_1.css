@@ -1,0 +1,480 @@
+﻿@charset "UTF-8";
+@import url("normalize.css");
+#botones_red_quejas{
+	float:right;
+	width:auto;
+	height:auto;	
+	position:fixed;
+	top:300px;
+	right:0px;
+	z-index:1000;
+}
+.twitter{
+	background-image:url(/UPN/public/img/twitter.png);
+	background-position:left;
+	background-repeat:no-repeat;
+	background-color:rgba(105, 105, 105, 0.8);
+	width:25px;
+	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+	margin-top:1px;
+	height:25px;
+	float:right;
+	clear:both;
+}
+.twitter:hover{
+	background-color:#09F;
+	color:#FFF;
+	width:75px;
+	transition: all 0.2s ease-in-out;
+	-webkit-transition: all 0.2s ease-in-out;
+	-o-transition: all 0.2s ease-in-out;
+	-moz-transition: all 0.2s ease-in-out;
+	-ms-transition: all 0.2s ease-in-out;
+}
+.twitter p{
+	display:none;
+	font-size:0px;
+	text-decoration:none;
+}
+.twitter:hover p{
+	display:block;
+	font-size:11px;
+	line-height:24px;
+	margin-left:30px;
+}
+.fb{
+	background-image:url(/UPN/public/img/facebook.png);
+	background-position:left;
+	background-repeat:no-repeat;
+	background-color:rgba(105, 105, 105, 0.8);
+	width:25px;
+	height:25px;
+	margin-top:1px;
+	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+	float:right;
+	clear:both;
+}
+.fb p{
+	display:none;
+	font-size:0px;
+
+	text-decoration:none;
+}
+.fb:hover p{
+	display:block;
+	font-size:11px;
+	line-height:24px;
+	margin-left:30px;
+}
+.fb:hover{
+	color:#FFF;
+	width:105px;
+	height:25px;
+	background-color:#3B5998;
+	transition: all 0.2s ease-in-out;
+	-webkit-transition: all 0.2s ease-in-out;
+	-o-transition: all 0.2s ease-in-out;
+	-moz-transition: all 0.2s ease-in-out;
+	-ms-transition: all 0.2s ease-in-out;
+}
+.youtube{
+	background-image:url(../img/youtube.png);
+	background-position:left;
+	background-repeat:no-repeat;
+	background-color:rgba(105, 105, 105, 0.8);
+	width:25px;
+	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+	margin-top:1px;
+	height:25px;
+	float:right;
+	clear:both;
+}
+.youtube:hover{
+	background-color:#cd332d;
+	color:#FFF;
+	width:75px;
+	transition: all 0.2s ease-in-out;
+	-webkit-transition: all 0.2s ease-in-out;
+	-o-transition: all 0.2s ease-in-out;
+	-moz-transition: all 0.2s ease-in-out;
+	-ms-transition: all 0.2s ease-in-out;
+}
+.youtube p{
+	display:none;
+	font-size:0px;
+	text-decoration:none;
+}
+.youtube:hover p{
+	display:block;
+	font-size:11px;
+	line-height:24px;
+	margin-left:30px;
+}
+.boton_quejas{
+	width:25px;
+	height:25px;
+	background-color:rgba(105, 105, 105, 0.8);
+	background-image:url(../img/pqr.png);
+	background-repeat:no-repeat;
+	background-position:left;
+	margin-top:1px;
+	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size:12px;
+	text-align:center;
+	line-height:4px;
+	color:#686969;
+	float:right;
+	clear:both;
+}
+.boton_quejas p{
+	display:none;
+	font-size:0px;
+	color:#FFF;
+	text-decoration:none;
+	margin-left:25px;
+}
+.boton_quejas:hover{
+	background-color:#d55a5a;
+	color:#FFF;
+	width:100px;
+	transition: all 0.2s ease-in-out;
+	-webkit-transition: all 0.2s ease-in-out;
+	-o-transition: all 0.2s ease-in-out;
+	-moz-transition: all 0.2s ease-in-out;
+	-ms-transition: all 0.2s ease-in-out;
+}
+.boton_quejas:hover p{
+	display:block;
+	font-size:11px;
+	line-height:24px;
+}
+
+
+header{
+	width:100%;
+	background-color:rgba(255, 255, 255, 0.9);
+	height:90px;
+	box-shadow: 3px 3px 2px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 3px 3px 2px rgba(0, 0, 0, 0.2);
+	-ms-box-shadow: 3px 3px 2px rgba(0, 0, 0, 0.2);
+	-o-box-shadow: 3px 3px 2px rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 3px 3px 2px rgba(0, 0, 0, 0.2);
+	z-index:10000;
+	position:absolute;
+}
+@font-face{
+        font-family : "todayshop";
+        src:
+		    url(../fonts/todayshop-regular-webfont.eot) format("eot"),
+			url(../fonts/todayshop-regular-webfont.svg) format("svg"),
+			url(../fonts/todayshop-regular-webfont.ttf) format("ttf"),
+			url(../fonts/todayshop-regular-webfont.woff) format("woff") ;
+		font-weight:normal;
+		font-style:normal;
+}
+#logos_header{
+	width:100%;
+	margin:auto;
+	height:90px;
+}
+.logo_upn{
+	background-image:url(/UPN/public/img/logo_upn.png);
+	width:189px;
+	height:50px;
+	background-repeat:no-repeat;
+	float:left;
+	margin-top:18px;
+	margin-left:10px;
+}
+.escudo{
+	background-image:url(/UPN/public/img/escudo_colombia.png);
+	width:72px;
+	height:62px;
+	background-repeat:no-repeat;
+	float:right;
+	margin-top:13px;
+	margin-right:10px;
+}
+/*atributos para modificar el color del texto cuando es seleccionado*/
+::-moz-selection {background:#747474; color:#FFF}
+::selection {background:#747474; color:#FFF}
+
+body {
+	overflow:auto;
+	overflow-x:hidden;
+	background-color:#CCC;ƒ
+	background-repeat:repeat-x;
+	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+*{
+	margin: 0;
+	padding: 0;
+}
+img{
+    border-width: 0;
+}
+h1{
+	margin:0px;
+	padding:0px;
+}
+input{
+	border-style:solid;
+	border-color:#CCC;
+	border-width:1px;
+	padding:1px;
+	margin:5px;
+	color:#3E98C8;
+	border-radius:3px;
+	width:90%;
+	color:#2C343F;
+	text-align:left;
+	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+	-ms-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+	-o-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+	padding:5px;
+	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+	color:#333;
+}
+textarea{
+	border-style:solid;
+	resize:none;
+	border-color:#CCC;
+	border-width:1px;
+	padding:1px;
+	margin:5px;
+	color:#2C343F;
+	border-radius:3px;
+	max-width:96%;
+	width:96%;
+	font-family:Arial, Helvetica, sans-serif;
+	font-style:italic;
+	font-size:14px;
+
+}
+
+/*estilos footer*/
+
+/*estilosfooter*/
+footer{
+	/*background-color:#666;*/
+	background-color: #004991 !important;
+	width:100%;
+	height:64px;
+	position:relative;
+	float:left;
+	background-image:url(/UPN/public/img/texture.png);
+	background-repeat:repeat;
+}
+.contenido_footer{
+	width:1200px;
+	margin:auto;
+	position:relative;
+	/*padding-left:120px;*/
+}
+.columnas_footer{
+	width:135px;
+	text-align:left;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:14px;
+	color: #FFF;
+	float:left;
+	margin-right:25px;
+}
+.columnas_footer h2{
+	color: #FFF;
+	margin-top: 15px;
+	font-weight:lighter;
+	font-size: 16px;
+	position: relative;
+	font-family:"todayshop";
+	margin-bottom:5px;
+}
+.columnas_footer a{
+	color:#FFF;
+	text-decoration:none;
+	margin-top:15px;
+	font-size:12px;
+	position:relative;
+}
+.columnas_footer a:hover{
+	padding-left:4px;
+	color:#F90;
+	font-style:italic;
+	background-image:url(/UPN/public/img/pick_footer.png);
+	background-repeat:no-repeat;
+	background-position:left;
+	font-size:12px;
+	transition: all 0.1s ease-in-out;
+	-webkit-transition: all 0.1s ease-in-out;
+	-o-transition: all 0.1s ease-in-out;
+	-moz-transition: all 0.1s ease-in-out;
+	-ms-transition: all 0.1s ease-in-out;
+}
+.linea_footer{
+	width:1px;
+	min-height:320px;
+	height:100%;
+	background-color:#FFF;
+	float:left;
+	margin-left:20px;
+}
+.columna_upn_footer{
+	width:50px;
+	height:320px;
+	float:left;
+}
+.columna_upn_footer p{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:9px;
+	text-align:center;
+	margin-top:30px;
+	color:#FFF;
+}
+.logo_upn_footer{
+	background-image:url(/UPN/public/img/logo_upn_footer.png);
+	width:95px;
+	height:69px;
+	background-repeat:no-repeat;
+	margin-top:30px;
+	margin-left:35px;
+}
+.logos_certificacion_footer{
+	background-image: url(/UPN/public/img/logos_certificacion_iso_footer.png);
+	margin-left: 28px;
+	width: 122px;
+	background-repeat: no-repeat;
+	margin-top: 130px;
+	height: 65px;
+	float: left;
+}
+.info_universidad_footer{
+	width: 330px;
+	height: 320px;
+	position: relative;
+	/*background-color: #E6E6E6;*/
+	float: left;
+	z-index: 201;
+	padding-left: 15px;
+	padding-right: 15px;
+	/*color:#565656;*/
+	color:#fff;
+	font-family:"todayshop", "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-style:normal;
+	font-size: 12px;
+	line-height:11px;
+}
+.info_universidad_footer p{
+	padding-right: 100px;
+	/*color:#2D343F;*/
+	color:#fff;
+	line-height: 12px;
+}
+.info_universidad_footer a{
+	text-decoration:none;
+	color:inherit;
+}
+.info_universidad_footer a:hover{
+	font-style:italic;
+	color:#043A98;
+
+}
+.info_universidad_footer h1{
+	font-size: 16px;
+	font-weight: normal;
+	margin-top: 15px;
+	line-height: 17px;
+	/*color: #666666;*/
+	color: #fff;
+	font-family: todayshop;
+}
+.logos_foot_normativos_1{
+	width: 440px;
+	float: left;
+	position: absolute;
+	margin-top: 320px;
+	clear:both;
+}
+.logos_foot_normativos_2{
+	width: 300px;
+	float: left;
+	position: absolute;
+	clear: both;
+	margin-top: 0px;
+}
+
+.logos_foot_normativos_1 {margin-top: 275px;}
+.logos_certificacion_footer {margin-top: 155px;}
+
+/*fin estilos footer*/
+
+/*estilos cuerpo pagina*/
+#contenedor_gnrl{
+	width:1000px;
+	height:auto;
+	background-color:#FFF;
+	margin:auto;
+	z-index:-2;
+	box-shadow: 0px 20px 10px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0px 20px 10px rgba(0, 0, 0, 0.2);
+	-ms-box-shadow: 0px 20px 10px rgba(0, 0, 0, 0.2);
+	-o-box-shadow: 0px 20px 10px rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0px 20px 10px rgba(0, 0, 0, 0.2);
+}
+#contenedor_img_evento{
+	width:950px;
+	background-image:url(/UPN/public/img/img_ejemplo_superior.png);
+	background-position:bottom;
+	background-repeat:no-repeat;
+	height:330px;
+	background-color:#CCC;
+	position:relative;
+	z-index:1;
+	padding-top:90px;
+}
+
+#contenido{
+	width:1000px;
+	height:auto;
+	padding:15px;
+	padding-bottom:60px;
+	padding-top:40px;
+	position:relative;
+}
+/*menu*/
+
+/*fin menu*/
+.img_ejemplo{
+	width:296px;
+	height:222px;
+	background-image:url(/UPN/public/img/img_1.jpg);
+	background-repeat:no-repeat;
+	float:left;
+	margin-right:15px;
+	margin-bottom:10px;
+	margin-left:30px;
+	position:relative;
+}
+.texto{
+	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size:13px;
+	color:#333;
+	padding-left:30px;
+	padding-right:30px;
+	text-align:left;
+}
+.texto h1{
+	color: #fb8434;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	margin-top: 10px;
+}
+.texto h2{
+	color: #FBBD34;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-weight: lighter;
+}
+.pick_menu{
+	background:url(/UPN/public/img/pich_menu.png) left no-repeat;
+	padding-left:10px;
+}

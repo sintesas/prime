@@ -1,0 +1,62 @@
+<style>
+    textarea {
+        height: 100px;
+        width: 100%;
+        max-width: 100%;
+
+    }
+</style> 
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+<div class="row2">
+	<div class="nine3 columns">
+		<div id="centersectiontitle">
+			<div class="twelve columns">
+				<div class="sidebartitle"><h3>
+				<?php
+					echo $this->titulo;
+				?>
+				</h3>
+			</div>
+		</div>
+	</div>
+<br>
+<a href="<?php echo $this->basePath() ?>/application/editarconvocatoriai/index/<?php echo $this->id; ?>">
+	<i class="icon-arrow-left"></i>
+	 Regresar</a>
+<br>
+<div class="twelve columns">
+<br>
+				<?php
+				$form = $this->form;
+				$form->prepare();
+
+				$form->setAttributes(array('action'=> $this->url.'/application/requisitos/index/'.$this->id,
+										'method'=>'post'));
+				echo $this->form()->openTag($form);
+				echo '<p>';
+				echo $this->formlabel($form->get('id_tipo_requisito'));
+				echo $this->formelement($form->get('id_tipo_requisito'));
+				?>
+				<a href="<?php echo $this->basePath()?>/application/agregarvalflex/index/26" target="_blank">Insertar nuevo requisito</a>
+				<?php
+				echo '<p>';
+				echo $this->formlabel($form->get('descripcion'));
+				echo $this->formelement($form->get('descripcion'));
+				echo '<p>';
+				echo $this->formlabel($form->get('observaciones'));
+				echo $this->formelement($form->get('observaciones'));
+				echo '<p>';
+				echo $this->formelement($form->get('submit'));
+				echo '<br>';
+				
+				echo $this->form()->closeTag($form);
+				?>
+				<br>
+
+				<?php
+				
+
+				?>
+</div></div></div>

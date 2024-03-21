@@ -1,0 +1,242 @@
+<?php
+$output = fopen('php://output', 'w');
+
+// output the column headings
+header('Content-Type: application/csv; charset=utf-8');
+header('Content-Disposition: attachment; filename=convocatorias.csv');
+
+fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
+fputcsv($output, array("Reporte de convocatorias y propuestas"));
+fputcsv($output, array(""));
+fputcsv($output, array(""));
+
+if(count($this->datosConvo)<=0){
+	fputcsv($output, array("No se encontraron resultados que coincidan con sus parámetros de búsqueda."),';');
+}else{
+	$count=0;
+	foreach($this->datosConvo as $dConvo){
+		$count+=1;
+		$dEncabezado = array();
+		$dEncabezado["id_conv"]="ID de la convocatoria";
+		$dEncabezado["nombre"]="Nombre de la convocatoria";
+		fputcsv($output, array("Convocatoria número: ".$count),';');
+		fputcsv($output, $dEncabezado,';');
+		$dEncabezado["nombre"]=$dConvo["titulo"];
+		$dEncabezado["id_conv"]=$dConvo["id_convocatoria"];
+		fputcsv($output, $dEncabezado,';');
+
+		fputcsv($output, array(""));
+
+		$dSeleccionados = array();
+		$dSeleccionados["id_propuesta"]="ID propuesta";
+		
+		if($this->datosBusqueda["codigo"]==1){
+			$dSeleccionados["codigo"]="Código proyecto";
+		}
+
+		if($this->datosBusqueda["titulo_conv"]==1){
+			$dSeleccionados["titulo_conv"]="Nombre propuesta/proyecto";
+		}
+
+		if($this->datosBusqueda["resumen"]==1){
+			$dSeleccionados["resumen"]="Resumen ejecutivo";
+		}
+
+		if($this->datosBusqueda["investigador"]==1){
+			$dSeleccionados["investigador"]="Investigador principal propuesta/proyecto";
+		}
+
+		if($this->datosBusqueda["categoria"]==1){
+			$dSeleccionados["categoria"]="Categoría";
+		}
+
+		if($this->datosBusqueda["elider"]==1){
+			$dSeleccionados["titulo_eliderconv"]="Email del lider";
+		}
+
+		if($this->datosBusqueda["evaluador"]==1){
+			$dSeleccionados["evaluador"]="Evaluador principal";
+		}
+
+		if($this->datosBusqueda["objetivo"]==1){
+			$dSeleccionados["objetivo"]="Objetivo principal";
+		}
+
+		if($this->datosBusqueda["unideppro"]==1){
+			$dSeleccionados["id_unidad"]="Unidad acádemica";
+			$dSeleccionados["id_dependencia"]="Dependencia acádemica";
+			$dSeleccionados["id_programa"]="Programa acádemico";
+		}
+		
+		if($this->datosBusqueda["solicitado"]==1){
+			$dSeleccionados["recursos_funcion"]="Recursos funcionamiento";
+			$dSeleccionados["recursos_inversion"]="Recursos de inversión";
+			$dSeleccionados["total_financia"]="Total coofinanciación";
+			$dSeleccionados["total_proy"]="Total proyecto";
+		}
+
+		if($this->datosBusqueda["duracion"]==1){
+			$dSeleccionados["duracion"]="Duración";
+		}
+
+		if($this->datosBusqueda["campo"]==1){
+			$dSeleccionados["campo"]="Campo de investigación";
+			$dSeleccionados["linea"]="Línea de investigación";
+
+		}
+
+		fputcsv($output, $dSeleccionados,';');
+		$conPropuestas=0;
+		if(count($this->datosPropuestas)>0)
+		foreach ($this->datosPropuestas as $dPropu){
+			if($dPropu["id_convocatoria"]==$dConvo["id_convocatoria"]){
+				$conPropuestas+=1;
+				$dSeleccionados = array();
+				
+				$dSeleccionados["id_propuesta"]=$dPropu["id_aplicar"];
+
+				if($this->datosBusqueda["codigo"]==1){
+					$nom="";
+					foreach ($this->proyectos as $proy) {
+						if($proy["id_aplicar"]==$dPropu["id_aplicar"]){
+							$nom=$proy["codigo_proy"];
+						}
+					}					
+					$dSeleccionados["codigo"]=$nom;
+				}
+				
+				if($this->datosBusqueda["titulo_conv"]==1){
+					$dSeleccionados["titulo_conv"]=$dPropu["nombre_proy"];
+				}
+
+				if($this->datosBusqueda["resumen"]==1){
+					$dSeleccionados["resumen"]=$dPropu["resumen_ejecutivo"];
+				}
+
+				if($this->datosBusqueda["investigador"]==1){
+					foreach ($this->usua as $us) {
+			            if ($us["id_usuario"] == $dPropu["id_investigador"]) {
+			                $nom = trim($us["primer_nombre"]).' '.trim($us["segundo_nombre"]).' '.trim($us["primer_apellido"]).' '.trim($us["segundo_apellido"]);
+			                $dSeleccionados["investigador"]=$nom;
+			            }
+			        }
+				}
+
+				if($this->datosBusqueda["categoria"]==1){
+					foreach ($this->valflex as $vf) {
+						if ($dPropu["id_categoria"] == $vf["id_valor_flexible"]) {
+			                 $dSeleccionados["categoria"] = $vf["descripcion_valor"];
+			            }
+					}
+				}
+
+				if($this->datosBusqueda["elider"]==1){
+					foreach ($this->usua as $us) {
+			            if ($us["id_usuario"] == $dPropu["id_investigador"]) {
+			                $dSeleccionados["email"]=trim($us["email"]);
+			            }
+			        }
+				}
+
+				if($this->datosBusqueda["evaluador"]==1){
+					$nom="";
+					foreach ($this->evaluador as $eval) {
+						if($eval["id_aplicar"]==$dPropu["id_aplicar"]){
+							foreach ($this->usua as $us) {
+					            if ($us["id_usuario"] == $eval["id_usuario"]) {
+					            	$nom = trim($us["primer_nombre"]).' '.trim($us["primer_apellido"]);
+						            $dSeleccionados["evaluador"]=$nom;
+						        }
+						   	}
+						}
+					}
+					if($nom==""){
+						 $dSeleccionados["evaluador"]="";
+					}
+				}
+
+				if($this->datosBusqueda["objetivo"]==1){
+					$dSeleccionados["objetivo"]=$dPropu["objetivo_general"];
+				}
+
+				if($this->datosBusqueda["unideppro"]==1){
+					$nomUni="";
+					$nomDep="";
+					$nomPro="";
+					$dSeleccionados["id_unidad"]="";
+					$dSeleccionados["id_dependencia"]="";
+					$dSeleccionados["id_programa"]="";
+					
+					foreach ($this->valflex as $vf) {
+						if ($dPropu["id_unidad_academica"] == $vf["id_valor_flexible"]) {
+			                 $dSeleccionados["id_unidad"] = $vf["descripcion_valor"];
+			                 $nomUni=$vf["descripcion_valor"];
+			            }
+					}
+					foreach ($this->valflex as $vf) {
+			            if ($dPropu["id_dependencia_academica"] == $vf["id_valor_flexible"]) {
+			                 $dSeleccionados["id_dependencia"] = $vf["descripcion_valor"];
+			                 $nomDep=$vf["descripcion_valor"];
+			            }
+					}
+					foreach ($this->valflex as $vf) {
+						if ($dPropu["id_programa_academico"] == $vf["id_valor_flexible"]) {
+			                 $dSeleccionados["id_programa"] = $vf["descripcion_valor"];
+			                 $nomPro=$vf["descripcion_valor"];
+			            }
+					}
+					if($nomPro==""){
+						$dSeleccionados["id_programa"]="";
+					}
+					if($nomDep==""){
+						$dSeleccionados["id_dependencia"]="";
+					}
+					if($nomUni==""){
+						$dSeleccionados["id_unidad"]="";
+					}
+				}
+
+				if($this->datosBusqueda["solicitado"]==1){
+					$dSeleccionados["recursos_funcion"]=$dPropu["recursos_funcion"];
+					$dSeleccionados["recursos_inversion"]=$dPropu["recursos_inversion"];
+					$dSeleccionados["total_financia"]=$dPropu["total_financia"];
+					$dSeleccionados["total_proy"]=$dPropu["total_proy"];
+				}
+
+				if($this->datosBusqueda["duracion"]==1){
+					$duracion="";
+					if($dPropu["periodo"]=="S"){
+						$duracion="semestres";
+					}else{
+						$duracion="meses";
+					}
+					$dSeleccionados["duracion"]=$dPropu["duracion"]." ".$duracion;
+				}
+
+				if($this->datosBusqueda["campo"]==1){
+					foreach ($this->valflex as $vf) {
+						if ($dPropu["id_campo"] == $vf["id_valor_flexible"]) {
+			                 $dSeleccionados["campo"] = $vf["descripcion_valor"];
+			            }
+			            if ($dPropu["id_linea_inv"] == $vf["id_valor_flexible"]) {
+			                 $dSeleccionados["linea"] = $vf["descripcion_valor"];
+			            }
+					}
+				}
+				
+				fputcsv($output, $dSeleccionados,';');
+				//fputcsv($output, array($dPropu["id_aplicar"], $dPropu["codigo_proy"], $dPropu["nombre_proy"]),';');
+			}
+		}
+		if($conPropuestas==0){
+			fputcsv($output, array("No se encontraron propuestas/proyectos que coincidan con sus parámetros de búsqueda para esta convocatoria."),';');
+		}
+
+		fputcsv($output, array(""));
+		fputcsv($output, array(""));
+		fputcsv($output, array(""));
+    	//fputcsv($output, array($row["id_convocatoria"].";2".";3"));
+	}	
+}
+fclose($output);
+?>

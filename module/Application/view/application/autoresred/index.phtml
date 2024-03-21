@@ -1,0 +1,93 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+    echo $this->titulo;
+    ?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<div class="twelve columns">
+
+					<a
+						href="<?php echo $this->basePath() ?>/application/editarredinv/index/<?php echo $this->red; ?>">
+						<i class="icon-arrow-left"></i> Regresar
+					</a>
+
+	<?php
+echo '<br>';
+echo '<br>';
+
+$form = $this->form;
+$form->prepare();
+
+echo $this->form()->openTag($form);
+
+echo $this->formlabel($form->get('documento'));
+echo $this->formelement($form->get('documento'));
+echo '<br>';
+echo $this->formlabel($form->get('nombre'));
+echo $this->formelement($form->get('nombre'));
+echo '<br>';
+echo $this->formlabel($form->get('apellido'));
+echo $this->formelement($form->get('apellido'));
+echo '<br>';
+echo $this->formlabel($form->get('usuario'));
+echo $this->formelement($form->get('usuario'));
+echo '<br>';
+echo '<br>';
+echo $this->formelement($form->get('submit'));
+echo $this->form()->closeTag($form);
+echo '<br>';
+?>			
+	<?php
+    echo "<div style='overflow-y:auto; max-height:510px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    echo "<th style='width: 80%;'>Miembra de la red</th>";
+    echo "<th style='width: 20%; text-align:center;'>Agregar</th>";
+    echo '</thead>';
+    echo '<tbody>';
+    foreach ($this->datos as $dato) {
+        echo '<tr>';
+        echo '<td>';
+        echo $dato["primer_nombre"] . $dato["segundo_nombre"] . $dato["primer_apellido"] . $dato["segundo_apellido"];   
+        echo '</td>';
+        
+        echo '<td>';
+        ?>
+			<a class="btn" href="<?php echo $this->basePath() ?>/application/integrantesred/asignar/<?php echo $dato["id_usuario"];?>/<?php echo $this->red ?>">Asignar integrante</a>
+				<?php
+        echo '</td>';
+        echo '</tr>';
+    }
+    
+    echo '</tr>';
+    echo '</table>';
+    echo '<br>';
+    echo '<br>';
+    echo '<br>';
+	echo '</div>';    
+echo '</div>';
+echo '<br>';
+echo '<br>';
+echo "<label>.</label>";
+				?>
+
+
+</div>
+
+</br>
+</br>
+</br>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,34 @@
+<div class="paginationControl">
+	<?php $this->route = "usuario"; $this->action = "index" ?>
+	<a href="<?php echo $this->url($this->route, array('action'=>$this->action,'id' => $this->first)); ?>">Primera </a>|  
+	<!-- Previous id link -->
+	<?php if (isset($this->previous)){ ?>
+	  <a href="<?php echo $this->url($this->route, array('action'=>$this->action,'id' => $this->previous)); ?>">
+	    &lt; Previa
+	  </a> |
+	<?php }else{ ?>
+	        <span class="disabled">&lt; Previa</span> |
+	<?php } ?>
+	 
+	<!-- Numbered id links -->
+	<?php foreach ($this->pagesInRange as $id){ ?>
+	  <?php if ($id != $this->current){ ?>
+	    <a href="<?php echo $this->url($this->route, array('action'=>$this->action,'id' => $id)); ?>">
+	        <?php echo $id; ?>
+	    </a> |
+	<?php }else{
+	     echo $id." | ";
+	     }
+	} ?>
+	 
+	<!-- Next id link -->
+	<?php if (isset($this->next)){ ?>
+	  <a class="siguiente" href="<?php echo $this->url($this->route, array('action'=>$this->action,'id' => $this->next)); ?>">
+	    Siguiente &gt;
+	  </a>
+	<?php }else{ ?>
+	  <span class="disabled">Siguiente &gt;</span>
+	<?php } ?>
+	  |<a href="<?php echo $this->url($this->route, array('action'=>$this->action,'id' => $this->last)); ?>"> Ultima1</a>  
+	  <?php $this->page; ?>
+</div>

@@ -1,0 +1,56 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+<div class="row2">
+	<div class="nine3 columns">
+		<div id="centersectiontitle">
+			<div class="twelve columns">
+				<div class="sidebartitle"><h3>
+				<?php
+					echo $this->titulo;
+				?>
+				</h3>
+			</div>
+		</div>
+	</div>
+<div class="nine columns">
+<?php
+echo '<h6>';
+echo $this->flashMessenger()->render();
+echo '</h6>';
+?>
+<a href="<?php echo $this->basePath() ?>/application/mensajeusuario/index">
+	<i class="icon-arrow-left"></i>
+	 Regresar</a>
+
+	<?php
+echo '<br>';echo '<br>';
+				$form = $this->form;
+				$form->prepare();
+
+
+				echo $this->form()->openTag($form);
+				echo '<p>';
+				echo $this->formlabel($form->get('usuario'));
+				echo $this->formelement($form->get('usuario'));
+				echo '<p>';
+				echo $this->formlabel($form->get('asunto'));
+				echo $this->formelement($form->get('asunto'));
+				echo '<p>';
+				echo $this->formlabel($form->get('mensaje'));
+				echo $this->formelement($form->get('mensaje'));
+				echo '<br>';
+				echo $this->formlabel($form->get('image-file'));
+				echo $this->formelement($form->get('image-file'));
+				echo '<p>';
+				echo $this->formelement($form->get('submit'));
+?>
+<a class="btn" href="<?php echo $this->basePath() ?>/application/index/index">Cancelar</a>
+<?php
+				echo $this->form()->closeTag($form);
+				?>
+</div>
+</div>
+	</div>
+	</div>
+	

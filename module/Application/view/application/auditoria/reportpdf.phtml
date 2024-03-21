@@ -1,0 +1,45 @@
+<?php
+header('Content-Type: text/csv; charset=utf-8');
+header('Content-Disposition: attachment; filename=data.csv');
+
+// create a file pointer connected to the output stream
+$output = fopen('php://output', 'w');
+
+// output the column headings
+fputcsv($output, array('usuario', 'fecha ingreso', 'fecha salida','eventos'));
+$t=array();
+// fetch the data
+$c=array();
+$r=array();
+$u=array();
+foreach($datos2 as $row){
+
+
+foreach($datos as $d2){
+
+
+	if($d2["id_auditoria"]==$row["id_auditoria"]){
+		$c=array('evento'=>trim($row["evento"]));
+		$r=array('fi'=>$d2["fecha_ingreso"],'fs'=>$d2["fecha_salida"]);
+		foreach($datos3 as $d3){
+			if($d3["id_usuario"]==$d2["id_usuario"]){
+				$u=array('usuario'=>trim($d3["primer_nombre"])." ".trim($d3["primer_apellido"]));
+			}
+		}	
+	}
+
+}
+
+
+
+
+
+
+
+
+fputcsv($output,$u+$r+$c);
+}
+// loop over the rows, outputting them
+fclose($output);
+
+?>

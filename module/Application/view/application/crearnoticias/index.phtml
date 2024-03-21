@@ -1,0 +1,75 @@
+<style>
+	select {
+		width: 280px !important;
+	}
+	textarea {
+        height: 100px;
+        width: 100%;
+        max-width: 100%;
+    }
+</style>
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+<div class="row2">
+	<div class="nine3 columns">
+		<div id="centersectiontitle">
+			<div class="twelve columns">
+				<div class="sidebartitle"><h3>
+				<?php
+					echo $this->titulo;
+				?>
+				</h3>
+			</div>
+		</div>
+	</div>
+<div class="twelve columns">
+				<?php
+				$form = $this->form;
+				$form->prepare();
+
+				$form->setAttributes(array('action'=> $this->url.'/application/crearnoticias/index',
+										'method'=>'post'));
+				echo $this->form()->openTag($form);
+				
+				echo '<p>';
+				
+				?>
+				<a href="<?php echo $this->basePath() ?>/application/noticias/index"><i class="icon-arrow-left"></i> Regresar</a><br><br>
+				<?php
+				
+				echo '<p>';
+				echo $this->formlabel($form->get('titulo'));
+				echo $this->formelement($form->get('titulo'));
+				echo '<p>';
+				echo $this->formlabel($form->get('noticia'));
+				echo $this->formelement($form->get('noticia'));
+				echo '<p>';
+				echo $this->formlabel($form->get('fecha_inicio'));
+				echo $this->formelement($form->get('fecha_inicio'));
+				echo '<p>';
+				echo $this->formlabel($form->get('url'));
+				echo $this->formelement($form->get('url'));
+				echo '<p>';
+				echo $this->formlabel($form->get('estado'));
+				echo $this->formelement($form->get('estado'));
+				echo '<br>';
+				echo '<br>';
+				echo $this->formlabel($form->get('image-file'));
+				echo $this->formelement($form->get('image-file'));
+				echo '<p>';
+				
+				echo $this->formelement($form->get('submit'));
+				echo '<br>';
+				
+				echo $this->form()->closeTag($form);
+				?>
+				<br>
+
+
+				<?php
+				
+
+				?>
+
+</div></div></div>

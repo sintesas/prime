@@ -1,0 +1,134 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+    echo $this->titulo;
+    ?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<div class="twelve columns">
+				<?php
+    $form = $this->form;
+    $form->prepare();
+    echo '<h6>';
+    echo $this->flashMessenger()->render();
+    echo '</h6>';
+    $form->setAttributes(array(
+        'action' => $this->url . '/application/consulmisproyectos/index',
+        'method' => 'post'
+    ));
+    echo $this->form()->openTag($form);
+    
+    echo $this->form()->closeTag($form);
+    ?>
+	<br>
+
+	<h5 class="sidebartitle">Proyectos de investigación</h5>
+	<?php
+
+    echo '<div style="overflow-x:auto;  width: 100%;" >';
+    echo '<table class="table " style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    echo '<th style="width: 10%;">Código del proyecto</th>';
+    echo '<th>Nombre proyecto</th>';
+    echo '<th>Objetivo general</th>';
+    echo '<th>Convocatoria</th>';
+    echo '<th>Editar proyecto</th>';
+    echo '<th>Gestión presupuestal</th>';
+    echo '</thead>';
+    echo '<tbody>';
+
+    foreach ($this->pi as $proyi) {
+        echo '<tr>';
+        echo '<td>';
+        echo $proyi["codigo_proy"];
+        echo '</td>';
+        echo '<td>';
+        echo $proyi["nombre_proy"];
+        echo '</td>';
+        echo '<td>';
+        echo $proyi["objetivo_general"];
+        echo '</td>';
+        echo '<td>';
+        if($proyi["id_convocatoria"]!=""){
+            foreach ($this->convocatorias as $convocatoria) {
+                if($proyi["id_convocatoria"]==$convocatoria ["id_convocatoria"]){
+                    echo $convocatoria ["titulo"];
+                }
+            }
+        }
+        echo '</td>';
+        echo '<td>';
+?>
+        <a class="btn" href="<?php echo $this->basePath() ?>/application/editarproyecto/index/<?php echo $proyi["id_proyecto"];?>">Gestionar y/o Editar <br>Proyecto</a>
+<?php
+        echo '</td>';
+        echo '<td>';
+?>
+        <a class="btn" href="<?php echo $this->basePath() ?>/application/prueba/index/<?php echo $proyi["id_proyecto"];?>/<?php echo $proyi["codigo_proy"];?>">Gestión presupuestal</a>
+
+<?php
+        echo '</td>';
+        echo '</tr>';
+    }
+    echo '</tbody>';
+    echo '</table>';
+    echo "</div>";
+    ?>
+        </br></br>
+        <h5 class="sidebartitle">Mis monitorías</h5>
+<?php
+echo '<div style="overflow-x:auto;  width: 100%;" >';
+echo '<table class="table " style="width: 100%; max-width: 100%;">';
+echo '<thead>';
+echo '<th>Nombre proyecto</th>';
+echo '<th>Obeservaciones monitoria</th>';
+echo '<th>Estado</th>';
+echo '<th>Verificar productos</th>';
+echo '</thead>';
+echo '<tbody>';
+foreach ($this->datosAplicarm as $dato2) {
+    if($this->id_user == $dato2["id_usuario"] || $dato2["estado_seleccionado"]=="Seleccionado"){
+    //if(true){
+
+         echo '<tr>';
+            echo '<td>';
+            foreach ($this->proyin as $proy) {
+                if ($proy["id_proyecto_inv"] == $dato2["id_proyecto"]) {
+                    echo $proy["nombre_proyecto"];
+                }
+            }
+            echo '</td>';
+            echo '<td>';
+            echo $dato2["obervaciones_aprobacion"];
+            echo '</td>';
+            echo '<td>';
+            echo $dato2["estado_aprobacion"];
+            echo '</td>';
+            echo '<td>';
+            ?>
+               <a class="btn" href="<?php echo $this->basePath() ?>/application/aprobacionm/index/<?php echo $dato2["id_aplicar"]?>">Verificar</a>
+            <?php
+            echo '</td>';
+        echo '</tr>';
+    }
+}
+echo '</tbody>';
+echo '</table>';
+echo '</div>';
+?>
+
+
+</div>
+			</div>
+		</div>
+	</div>
+</div>

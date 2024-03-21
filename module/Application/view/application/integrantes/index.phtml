@@ -1,0 +1,69 @@
+<style>
+	.filter-group input[type="text"],select{
+		width: 100%;
+	}
+	.filter-group {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+	.filter-group-left {float: left;}
+	.filter-group-right {float:right;}
+	.filter-group .btn {width: 275px;}
+	.filter-group .dropdown {display: inline;}
+	.filter-group .dropdown-menu {width: 300px;top: 32px;padding: 10px;}
+	.dropdown-menu-inner {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+</style>
+<?php include("public/menu.php"); ?>
+<div class="col col100">
+	<div class="filter-group">
+		<div class="filter-group-left"><h4><?php echo $this->titulo; ?></h4></div>
+		<div class="filter-group-right">
+			<a class="btn" href="<?php echo $this->basePath() ?>/application/editargrupoinv/index/<?php echo $this->grupo ?>/<?php echo $this->id2; ?>"><i class="icon-arrow-left"></i> Regresar</a>
+			<a class="btn" style="margin-right: 8px;" href="<?php echo $this->basePath() ?>/application/editargrupoinv/index/<?php echo $this->grupo; ?>"><i class="fa fa-close" style="margin-right: 5px;"></i>Borrar filtro</a>
+			<div class="dropdown">
+				<button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="margin-right: 8px;"><i class="fa fa-filter" style="margin-right: 5px;"></i>Filtro</button>
+				<div class="dropdown-menu dropdown-menu-right">
+					<div class="dropdown-menu-inner">
+						<?php								
+						$form = $this->form;
+						$form->prepare ();
+						echo $this->form ()->openTag ( $form );
+						echo '<h6>'.$this->flashMessenger ()->render ().'</h6>';
+						echo $this->formlabel($form->get('documento'));
+						echo $this->formelement($form->get('documento'));
+						echo $this->formlabel($form->get('nombre'));
+						echo $this->formelement($form->get('nombre'));
+						echo $this->formlabel($form->get('apellido'));
+						echo $this->formelement($form->get('apellido'));
+						echo $this->formlabel($form->get('usuario'));
+						echo $this->formelement($form->get('usuario'));
+						echo $this->formelement($form->get('submit'));
+ 						echo $this->form ()->closeTag ( $form );
+ 						?>
+					</div>						
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="col col100 noshadow">
+	<div style='overflow-y:auto; max-height:4000px; width: 100%;'>
+		<table class="table" style="width: 100%; max-width: 100%;">
+			<thead>
+				<tr>
+					<th style="width:5%;">Integrante</th>
+					<th style="width:5%;">Asignar</th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php foreach ( $this->datos as $dato ) : ?>
+				<tr>
+					<td>
+						<?php echo $dato["primer_nombre"] ." ". $dato["segundo_nombre"] ." ". $dato["primer_apellido"] ." ". $dato["segundo_apellido"]; ?>						
+					</td>
+					<td>
+						<a class="btn" href="<?php echo $this->basePath() ?>/application/integrantes/asignar/<?php echo $dato["id_usuario"];?>/<?php echo $this->grupo ?>/<?php echo $this->id2 ?>"><?php echo ($this->id2==0) ? "Asignar" : "Actualizar"; ?> Integrante</a>
+					</td>
+				</tr>
+			<?php endforeach; ?>
+			</tbody>
+		</table>
+	</div>
+</div>

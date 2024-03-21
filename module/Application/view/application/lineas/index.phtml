@@ -1,0 +1,71 @@
+<style>
+    textarea {
+        height: 100px;
+        width: 100%;
+        max-width: 100%;
+    }
+    input[type=text]{
+        width:100%;
+    }
+</style> 
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+<div class="row2">
+	<div class="nine3 columns">
+		<div id="centersectiontitle">
+			<div class="twelve columns">
+				<div class="sidebartitle"><h3>
+				<?php
+					echo $this->titulo;
+				?>
+				</h3>
+			</div>
+		</div>
+	</div>
+<div class="twelve columns">
+<a href="<?php echo $this->basePath() ?>/application/editargrupoinv/index/<?php echo $this->id; ?>">
+	<i class="icon-arrow-left"></i>
+	 Regresar</a>
+
+	<?php
+echo '<br>';echo '<br>';
+
+				$form = $this->form;
+				$form->prepare();
+
+				$form->setAttributes(array('action'=> $this->url.'/application/lineas/index/'.$this->id.'/'.$this->id2,
+										'method'=>'post'));
+				echo $this->form()->openTag($form);
+				echo '<p>';
+				echo $this->formlabel($form->get('nombre_linea'));
+				echo $this->formelement($form->get('nombre_linea'));
+				echo '<p>';
+				echo $this->formlabel($form->get('objetivo'));
+				echo $this->formelement($form->get('objetivo'));
+				echo '<br>';
+				echo $this->formlabel($form->get('efectos'));
+				echo $this->formelement($form->get('efectos'));
+				echo '<br>';
+				echo $this->formlabel($form->get('logros'));
+				echo $this->formelement($form->get('logros'));
+				echo '<p>';
+                echo $this->formlabel($form->get('image-file'));
+                echo $this->formelement($form->get('image-file'));
+
+				echo '<p>';
+				echo '<br>';
+				echo $this->formelement($form->get('submit'));
+				echo '<br>';
+				
+				echo $this->form()->closeTag($form);
+				?>
+				<br>
+
+
+				<?php
+				
+
+				?>
+
+</div></div></div>

@@ -1,0 +1,126 @@
+<?php
+$output = fopen('php://output', 'w');
+
+// output the column headings
+header('Content-Type: application/csv; charset=utf-8');
+header('Content-Disposition: attachment; filename=redes.csv');
+
+fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
+fputcsv($output, array("Reporte de redes de investigación"));
+fputcsv($output, array(""));
+fputcsv($output, array(""));
+
+if(count($this->datos)<=0){
+    fputcsv($output, array("No se encontraron resultados."),';');
+}else{
+    foreach($this->datos as $dato){
+        fputcsv($output, array("Nombre de la red: ".trim($dato["nombre"])),';');
+        fputcsv($output, array(""));
+
+        fputcsv($output, array("Datos Generales  de la red:"),';');
+        $encabezado = array();
+        $encabezado["1"] = "Codigo";
+        $encabezado["2"] = "Fecha de creación";
+        $encabezado["3"] = "Coordinador 1";
+        $encabezado["4"] = "Coordinador 2";
+        $encabezado["5"] = "Estado";
+        $encabezado["6"] = "Visión";
+        $encabezado["7"] = "Misión";
+        $encabezado["8"] = "Objetivos";
+        $encabezado["9"] = "Antecedentes";
+        $encabezado["10"] = "Justificación";
+        $encabezado["11"] = "Descripción";
+        $encabezado["12"] = "Líneas de investigación";
+        $encabezado["13"] = "Instituciones";
+        $encabezado["14"] = "Socios";
+        $encabezado["15"] = "Aliados";
+        fputcsv($output, $encabezado,';');
+        $encabezado = array();
+        $encabezado["1"] = trim($dato["codigo"]);
+        $encabezado["2"] = trim($dato["fecha_creacion"]);
+        foreach ($this->usuarios as $us) {
+            if ($dato["coordinador_uno"] == $us["id_usuario"]) {
+                $encabezado["3"] = trim($us["primer_nombre"]).' '.trim($us["segundo_nombre"]).' '.trim($us["primer_apellido"]).' '.trim($us["segundo_apellido"]);
+            }
+        }
+        foreach ($this->usuarios as $us) {
+            if ($dato["coordinador_dos"] == $us["id_usuario"]) {
+                $encabezado["4"] = trim($us["primer_nombre"]).' '.trim($us["segundo_nombre"]).' '.trim($us["primer_apellido"]).' '.trim($us["segundo_apellido"]);
+            }
+        }
+        $encabezado["5"] = trim($dato["estado"]);;
+        $encabezado["6"] = trim($dato["vision"]);
+        $encabezado["7"] = trim($dato["mision"]);
+        $encabezado["8"] = trim($dato["objetivos"]);
+        $encabezado["9"] = trim($dato["antecedentes"]);
+        $encabezado["10"] = trim($dato["justificacion"]);
+        $encabezado["11"] = trim($dato["descripcion"]);
+        $encabezado["12"] = trim($dato["lineas_investigacion"]);
+        $encabezado["13"] = trim($dato["instituciones_aliadas"]);
+        $encabezado["14"] = trim($dato["socios"]);
+        $encabezado["15"] = trim($dato["aliados"]);
+        fputcsv($output, $encabezado,';');
+        fputcsv($output, array(""));
+
+        fputcsv($output, array("Miembros de la red de la UPN"),';');
+        $encabezado = array();
+        $encabezado["1"] = "Nombre del miembro";
+        $encabezado["2"] = "Tipo de vinculación";
+        $encabezado["3"] = "Fecha de vinculación";
+        $encabezado["4"] = "Fecha fin de Vinculación";
+        fputcsv($output, $encabezado,';');
+        $encabezado = array();
+        foreach ($this->intSemi as $semi) {
+            if ($dato["id"] == $semi["id_red"]) {
+                foreach ($this->usuarios as $us) {
+                    if ($semi["id_integrantered"] == $us["id_usuario"]) {
+                        $encabezado["1"] = trim($us["primer_nombre"]).' '.trim($us["segundo_nombre"]).' '.trim($us["primer_apellido"]).' '.trim($us["segundo_apellido"]);
+                    }
+                }
+
+                foreach ($this->valflex as $us) {
+                    if ($semi["tipo_vinculacion"] == $us["id_valor_flexible"]) {
+                        $encabezado["2"] = trim($us["descripcion_valor"]);
+                    }
+                }
+                $encabezado["3"] = $semi["fecha_vinculacion"];
+                $encabezado["4"] = $semi["fin_vinculacion"];
+            }
+        }
+        fputcsv($output, $encabezado,';');
+        fputcsv($output, array(""));
+
+        fputcsv($output, array("Grupos de investigación al que se encuentra articulado el semillero"),';');
+        $encabezado = array();
+        $encabezado["1"] = "Nombre del grupo";
+        $encabezado["2"] = "Codigo";
+        $encabezado["3"] = "Lider";
+        $encabezado["4"] = "Descripción";
+        fputcsv($output, $encabezado,';');
+        $encabezado = array();
+        foreach ($this->gruposSemi as $grupos) {
+            if ($dato["id"] == $grupos["id_red"]) {
+                foreach ($this->grupoinv as $grupoinv) {
+                    if ($grupos["id_grupo"] == $grupoinv["id_grupo_inv"]) {
+                        $encabezado["1"] = trim($grupoinv["nombre_grupo"]);
+                        $encabezado["2"] = trim($grupoinv["cod_grupo"]);
+                        foreach ($this->usuarios as $us) {
+                            if ($grupoinv["id_lider"] == $us["id_usuario"]) {
+                                $encabezado["3"] = trim($us["primer_nombre"]).' '.trim($us["segundo_nombre"]).' '.trim($us["primer_apellido"]).' '.trim($us["segundo_apellido"]);
+                            }
+                        }
+                        $encabezado["4"] = trim($grupoinv["descripcion"]);
+                    }
+                }
+            }
+        }
+        fputcsv($output, $encabezado,';');
+        fputcsv($output, array(""));
+        fputcsv($output, array(""));
+
+
+    }
+}
+fclose($output);
+
+?>

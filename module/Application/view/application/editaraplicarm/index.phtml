@@ -1,0 +1,711 @@
+<?php
+    if($this->valpdf=="Si"){
+        date_default_timezone_set('America/Bogota');
+    ?>
+        <style type="text/css">
+        .container {
+            width: 573px;
+            margin: auto;
+            padding: 10px;
+            border: 0px solid #000;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        html {
+            margin: 10px;
+            padding: 10px;
+        }
+
+        body {
+            font-family: dejavu sans, Arial;
+            font-size: 0.85em;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .font-xxl {
+            font-size: 2em;
+        }
+
+        .font-l {
+            font-size: 1.5em;
+        }
+
+        .font-n {
+            font-size: 0.8em;
+        }
+
+        .font-s {
+            font-size: 0.6em;
+        }
+
+        .font-middle {
+            text-align: center;
+        }
+
+        .page-wrap {
+            padding: 0px;
+            margin: 0px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 5px 1px 5px 1px;
+        }
+
+        td, th {
+            border: 1px solid black;
+            padding: 1px 1px 1px 1px;
+        }
+
+        .brdr-top {
+            border-top: 1px solid black;
+        }
+
+        .brdr-bottom {
+            border-bottom: 1px solid black;
+        }
+
+        .brdr-left {
+            border-left: 1px solid black;
+        }
+
+        .brdr-right {
+            border-right: 1px solid black;
+        }
+
+        .bordreless td, .bordreless th {
+            border: 0px thin #ffffff;
+        }
+        </style>
+        <div class="container" style="margin: 20px 20px 30px 30px;">
+            <p>____________________________________________________________________________</p>
+            <h1><?php echo utf8_decode("INSCRIPCIÓN PARA ASPIRANTES A MONITORIAS DE INVESTIGACIÓN"); ?></h1>
+            <h3><?php echo utf8_decode("Comprobante de aplicación"); ?></h3>
+            <p>____________________________________________________________________________</p>
+            <p>
+             <?php echo utf8_decode("Fecha de aplicación: ".$this->datos[0]["fecha"]); ?>
+            <p>
+              <?php echo utf8_decode("ID Inscripción: ".$this->id); ?>
+            <p>
+            Nombre del aplicante:  <?php 
+                foreach ($this->usu as $usuaT) {
+                    if($usuaT["id_usuario"] == $this->datos[0]["id_usuario"]){
+                        echo utf8_decode(trim($usuaT["primer_nombre"])." ".trim($usuaT["segundo_nombre"])." ".trim($usuaT["primer_apellido"])." ".trim($usuaT["segundo_apellido"]));
+                    }
+                }
+            ?>
+            <p>
+            Nombre de la convocatoria:  <?php 
+                foreach ($this->convo as $convoT) {
+                    if($convoT["id_convocatoria"] == $this->datos[0]["id_convocatoria"]){
+                        echo utf8_decode(trim($convoT["titulo"]));
+                    }
+                }
+            ?>
+            <p>
+            ID Convocatoria:  <?php echo utf8_decode($this->datos[0]["id_convocatoria"]); ?>
+            <p>
+            Fecha del reporte: <?php echo utf8_decode(date("Y-m-d H:i:s")); ?>
+            <p>
+            </br>
+            </br>
+
+        </div>
+    <?php
+    }else{
+?>
+
+
+<style>
+    textarea {
+        height: 100px;
+        width: 100%;
+        max-width: 100%;
+
+    }
+</style> 
+
+
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+    echo "EDITAR INSCRIPCIÓN PARA ASPIRANTES A MONITORIAS DE INVESTIGACIÓN";
+    echo "</br>";
+    echo $this->titulo;
+    ?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<div class="twelve columns">
+				<?php
+    $form = $this->form;
+    $form->prepare();
+    
+    $form->setAttributes(array(
+        'action' => $this->url . '/application/editaraplicarm/index/'.$this->id."/".$this->id2."/".$this->id3."/".$this->id4,
+        'method' => 'post'
+    ));
+    echo $this->form()->openTag($form);
+
+    $error = trim($this->flashMessenger ()->render ());
+    if(strpos($error, "Su aplicación no ha sido actualizada. Debe establecer un horario para la monitoria.") > 0){
+        echo '<div style="color: red; font-size: 20px;">';
+        echo $error;
+        echo '</div>';
+    }else if(strpos($error, "Su aplicación no ha sido actualizada. Debe incluir información en la sección 'Formación Académica'") > 0){
+        echo '<div style="color: red; font-size: 20px;">';
+        echo $error;
+        echo '</div>';
+    }else if(strpos($error, "Su aplicación no ha sido actualizada. Debe incluir información en la sección 'Formación complementaria'") > 0){
+        echo '<div style="color: red; font-size: 20px;">';
+        echo $error;
+        echo '</div>';
+    }else if(strpos($error, "Su aplicación no ha sido actualizada. Debe incluir información en la sección 'Experiencia laboral'") > 0){
+        echo '<div style="color: red; font-size: 20px;">';
+        echo $error;
+        echo '</div>';
+    }else{
+        echo '<h6>';
+        echo $error;
+        echo '</h6>';
+    }
+    
+    if($this->id4 != 1){
+        ?>
+            <a href="<?php echo $this->basePath() ?>/application/consulconvocatoria/index"><i class="icon-arrow-left"></i> Regresar</a><br><br>
+        <?php
+    }else{
+        ?>
+            <a href="<?php echo $this->basePath() ?>/application/consultaprocesom/index"><i class="icon-arrow-left"></i> Regresar</a><br><br>
+        <?php
+    }
+    echo '<div class="six columns">';
+    echo '<p>';
+    echo $this->formlabel($form->get('fecha'));
+    echo $this->formelement($form->get('fecha'));
+    echo '</div>';
+
+    echo '<div class="six columns">';
+    ?>
+        <a class="btn" style="max-width:240px;" href="<?php echo $this->basePath() ?>/application/editaraplicarm/index/<?php echo $datos[0]["id_aplicar"];?>/1">Descargar comprobante de la aplicación</a>
+    <?php
+    echo '</div>';
+    echo '</div>';
+    echo '<div class="six columns">';
+    echo '<p>';
+    echo $this->formlabel($form->get('primer_apellido'));
+    echo $this->formelement($form->get('primer_apellido'));
+    echo '<p>';
+    echo $this->formlabel($form->get('nombres'));
+    echo $this->formelement($form->get('nombres'));
+    echo '<p>';
+    echo $this->formlabel($form->get('cod_estudiante'));
+    echo $this->formelement($form->get('cod_estudiante'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_facultad'));
+    echo $this->formelement($form->get('id_facultad'));
+    echo '<p>';
+    echo $this->formlabel($form->get('direccion'));
+    echo $this->formelement($form->get('direccion'));
+    echo '<p>';
+    echo $this->formlabel($form->get('celular'));
+    echo $this->formelement($form->get('celular'));
+    if($this->menu=="1"){
+        echo '<p>';
+        echo $this->formlabel($form->get('promedio_ponderado'));
+        echo $this->formelement($form->get('promedio_ponderado'));
+        echo '<p>';
+        echo $this->formlabel($form->get('cumplimiento_conjunto'));
+        echo $this->formelement($form->get('cumplimiento_conjunto'));
+    }
+    
+    echo '<p>';
+    echo $this->formlabel($form->get('semestre'));
+    echo $this->formelement($form->get('semestre'));
+    echo '</div>';
+    echo '<div class="six columns">';
+
+    echo '<p>';
+    echo $this->formlabel($form->get('segundo_apellido'));
+    echo $this->formelement($form->get('segundo_apellido'));
+    echo '<p>';
+    echo $this->formlabel($form->get('fecha_nacimiento'));
+    echo $this->formelement($form->get('fecha_nacimiento'));
+    echo '<p>';
+    echo $this->formlabel($form->get('identificacion'));
+    echo $this->formelement($form->get('identificacion'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_programa_curricular'));
+    echo $this->formelement($form->get('id_programa_curricular'));
+    echo '<p>';
+    echo $this->formlabel($form->get('telefono'));
+    echo $this->formelement($form->get('telefono'));
+    echo '<p>';
+    echo $this->formlabel($form->get('email'));
+    echo $this->formelement($form->get('email'));
+    if($this->menu=="1"){
+        echo '<p>';
+        echo $this->formlabel($form->get('creditos_aprobados'));
+        echo $this->formelement($form->get('creditos_aprobados'));
+        echo '<p>';
+        echo $this->formlabel($form->get('creditos_programa'));
+        echo $this->formelement($form->get('creditos_programa'));
+    }
+    echo "</div>";
+    echo '<div class="twelve columns">';
+    ?>
+    <fieldset>
+        <legend style="margin-bottom:0px;">Proyecto / Semillero de investigación / Grupo de estudio </legend>
+        <?php
+        if($this->id3 != 1){    
+        	?>
+		       <a class="btn" href="<?php echo $this->basePath() ?>/application/agregarproyectosinv/index/<?php echo $datos[0]["id_aplicar"];?>/<?php echo $datos[0]["id_convocatoria"];?>">Editar</a>
+		     	</br></br>
+        	<?php
+        }
+        
+        $codProyecto="";
+        $nombProyecto="";
+        $InvesProyecto="";
+        $NumPlazasProyecto="";
+        $FechaLimiteProyecto="";
+        foreach ($proyinvest as $proInvesti) {
+        	if($datos[0]["id_proyecto"] == $proInvesti["id_proyecto_inv"]){
+        		$codProyecto = strstr($proInvesti ["nombre_proyecto"], '-/-', true);
+        		foreach ($prT as $proyeT){
+        			if($codProyecto == trim($proyeT["codigo_proy"])){
+        				$nombProyecto=$proyeT["nombre_proy"];
+				        $InvesProyecto=$proyeT["id_investigador"];
+				        $NumPlazasProyecto=$proInvesti["cantidad_plazas"];
+				        $FechaLimiteProyecto=$proInvesti["fecha_lim_soporte"];
+        			}
+        		}
+        	}
+        }
+
+        echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+            echo '<table class="table" style="width: 100%; max-width: 100%;" id="tablaProyectos">';
+                echo '<thead>';
+                    echo '<th style="width: 15%;">Código</th>';
+                    echo '<th style="width: 30%;">Nombre del proyecto / Semillero de investigación / Grupo de estudio</th>';
+                    echo '<th style="width: 20%;">Investigador principal / Coordinador</th>';
+                    echo '<th style="width: 10%;">Número de plazas</th>';
+                    //echo '<th style="width: 15%;">Fecha límite de soportes</th>';
+                    //echo '<th style="width: 10%;">Eliminar</th>';
+                echo '</thead>';
+                echo '<tbody>'; 
+	                if($datos[0]["id_proyecto"]!=""){               
+	                    echo '<tr>';
+	                        echo '<td>';
+	                        echo $codProyecto;
+	                        echo '</td>';
+	                        echo '<td>';
+	                        echo $nombProyecto;
+	                        echo '</td>';
+	                        echo '<td>';
+                            foreach ($this->usu as $usuaT) {
+                                if($usuaT["id_usuario"] == $InvesProyecto){
+                                    echo trim($usuaT["primer_nombre"])." ".trim($usuaT["segundo_nombre"])." ".trim($usuaT["primer_apellido"])." ".trim($usuaT["segundo_apellido"]);
+                                }
+                            }
+	                        echo '</td>';
+	                        echo '<td>';
+	                        echo $NumPlazasProyecto;
+	                        echo '</td>';  
+	                        //echo '<td>';
+	                        //echo $FechaLimiteProyecto;
+	                        //echo '</td>';
+                            /*
+	                        echo '<td>';
+                            if($this->id3 != 1){
+    	                        if($datos[0]["estado_seleccionado"] == "Seleccionado"){
+                                    echo "No se puede eleminiar el proyecto. El estado de la aplicación es: ".$datos[0]["estado_seleccionado"].".";
+                                }else{
+                                     ?>
+                                       <a class="btn" href="<?php echo $this->basePath() ?>/application/agregarproyectosinv/del/<?php echo $datos[0]["id_aplicar"];?>/<?php echo $datos[0]["id_convocatoria"];?>">Eliminar</a>
+                                    <?php
+                                }
+                            }
+	                        echo '</td>';     
+                            */
+	                    echo '</tr>';
+	                }
+                echo '</tbody>';
+        echo '</table>';
+    echo '</div>';
+    ?>
+    </fieldset>
+
+    </br>
+    <fieldset>
+        <legend style="margin-bottom:0px;">Horario disponible para la monitoria</legend>
+        <?php
+        if($this->id3 != 1){
+        ?>
+        <a class="btn" href="<?php echo $this->basePath() ?>/application/agregarhorario/index/<?php echo $datos[0]["id_aplicar"];?>/<?php echo $datos[0]["id_convocatoria"];?>">Agregar</a>
+    	</br></br>
+        <?php
+        }
+        echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+            echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                echo '<thead>';
+                    echo '<th style="width: 10%;">Día</th>';
+                    echo '<th style="width: 10%;">Hora inicio</th>';
+                    echo '<th style="width: 10%;">Hora fin</th>';
+                    echo '<th style="width: 10%;">Eliminar</th>';
+                echo '</thead>';
+                echo '<tbody>';
+                foreach ($this->horarios as $horarioApli) {
+                    echo '<tr>';
+                        echo '<td>';
+                        echo $horarioApli["dia"];
+                        echo '</td>';
+                        echo '<td>';
+                        $hora = strstr($horarioApli["hora_inicio"], ':', true);
+                        if(((int)$hora)>11){
+                            if(((int)$hora)==12){
+                                $horaIni = "12";
+                            }else{
+                                $horaIni = ((int)$hora-12);
+                            }
+                            $zona="p.m.";
+                        }else{
+                            $horaIni = $hora;
+                            $zona="a.m.";
+                        }
+                        echo $horaIni.":".substr($horarioApli["hora_inicio"], 3, 2)." ".$zona;
+                        echo '</td>';
+                        echo '<td>';
+                        $hora = strstr($horarioApli["hora_fin"], ':', true);
+                        if(((int)$hora)>11){
+                            if(((int)$hora)==12){
+                                $horaIni = "12";
+                            }else{
+                                $horaIni = ((int)$hora-12);
+                            }
+                            $zona="p.m.";
+                        }else{
+                            $horaIni = $hora;
+                            $zona="a.m.";
+                        }
+                        echo $horaIni.":".substr($horarioApli["hora_fin"], 3, 2)." ".$zona;
+                        echo '</td>';
+                        echo '<td>';
+                        if($this->id3 != 1){
+                            ?>
+                            	<a class="btn" href="<?php echo $this->basePath() ?>/application/agregarhorario/del/<?php echo $datos[0]["id_aplicar"];?>/<?php echo $horarioApli["id"];?>">Eliminar</a>
+                            <?php
+                        }
+                        echo '</td>';  
+                    echo '</tr>';
+                }
+                echo '</tbody>';
+        echo '</table>';
+    echo '</div>';
+    ?>
+    </fieldset>
+
+
+    <?php
+    echo "</br>";
+    echo "<h3>";
+    echo "HOJA DE VIDA";
+    echo "</h3>";
+    echo "La siguiente información corresponde a su hoja de vida.  Por favor actualícela para continuar con el proceso de inscripción. Diríjase al Menú Inicio e ingrese por el enlace “Editar mi usuario”. Posteriormente diríjase al submenú “Consulta proceso de monitoria” del menú 'Convocatoria' y accione el botón 'Ver/Editar' para continuar con el proceso.";
+    ?>
+    </br></br>
+    <fieldset>
+        <legend>Formación académica</legend>
+        <a target="_blank" class="btn" href="<?php echo $this->basePath() ?>/application/formacionacahv/index/<?php echo $usuario; ?>">Agregar</a>
+        </br></br>
+        <?php
+        echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+            echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                echo '<thead>';
+                    echo '<th style="width: 10%;">Tipo formación</th>';
+                    echo '<th style="width: 10%;">Institución</th>';
+                    echo '<th style="width: 10%;">Título obtenido</th>';
+                    echo '<th style="width: 10%;">Fecha grado</th>';
+                echo '</thead>';
+                echo '<tbody>';
+                foreach ($this->formaca as $formaca) {
+                    echo '<tr>';
+                        echo '<td>';
+                            foreach ($this->vl as $valflex) {
+                                if($formaca["tipo_formacion"] == $valflex["id_valor_flexible"]){
+                                    echo $valflex["descripcion_valor"];
+                                }
+                            }
+                        echo '</td>';
+                        echo '<td>';
+                            foreach ($this->vl as $valflex) {
+                                if($formaca["institucion"] == $valflex["id_valor_flexible"]){
+                                    echo $valflex["descripcion_valor"];
+                                }
+                            }
+                        echo '</td>';
+                        echo '<td>';
+                        echo $formaca["titulo_obtenido"];
+                        echo '</td>';
+                        echo '<td>';
+                        echo $formaca["fecha_grado"];
+                        echo '</td>';  
+                    echo '</tr>';
+                }
+                echo '</tbody>';
+        echo '</table>';
+    echo '</div>';
+    ?>
+    </fieldset>
+
+    </br>
+    <fieldset>
+        <legend>Idiomas</legend>
+        <a target="_blank" class="btn" href="<?php echo $this->basePath() ?>/application/idiomashv/index/<?php echo $usuario; ?>">Agregar</a>
+        </br></br>
+        <?php
+        echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+            echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                echo '<thead>';
+                    echo '<th style="width: 15%;">Idioma</th>';
+                    echo '<th style="width: 15%;">Porcentaje habla</th>';
+                    echo '<th style="width: 15%;">Porcentaje escribe</th>';
+                    echo '<th style="width: 15%;">Porcentaje lee</th>';
+                echo '</thead>';
+                echo '<tbody>';
+                foreach ($this->idioma as $idi) {
+                    echo '<tr>';
+                        echo '<td>';
+                        echo $idi["nombre"];
+                        echo '</td>';
+                        echo '<td>';
+                        echo $idi["hablar"];
+                        echo '</td>';
+                        echo '<td>';
+                        echo $idi["escribir"];
+                        echo '</td>';
+                        echo '<td>';
+                        echo $idi["leer"];
+                        echo '</td>';  
+                    echo '</tr>';
+                }
+                echo '</tbody>';
+        echo '</table>';
+    echo '</div>';
+    ?>
+    </fieldset>
+
+    </br>
+    <fieldset>
+        <legend>Formación complementaria / Otros cursos</legend>
+        <a target="_blank" class="btn" href="<?php echo $this->basePath() ?>/application/formacioncomhv/index/<?php echo $usuario; ?>">Agregar</a>
+        </br></br>
+        <?php
+        echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+            echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                echo '<thead>';
+                    echo '<th style="width: 10%;">Institución</th>';
+                    echo '<th style="width: 10%;">Nombre formación</th>';
+                    echo '<th style="width: 10%;">Duración / Horas</th>';
+                    echo '<th style="width: 10%;">Fecha terminación</th>';
+                echo '</thead>';
+                echo '<tbody>';
+                foreach ($this->formcom as $formcom) {
+                    echo '<tr>';
+                        echo '<td>';
+                            foreach ($this->vl as $valflex) {
+                                if($formcom["institucion"] == $valflex["id_valor_flexible"]){
+                                    echo $valflex["descripcion_valor"];
+                                }
+                            }
+                        echo '</td>';
+                        echo '<td>';
+                        echo $formcom["nombre_formacion"];
+                        echo '</td>';
+                        echo '<td>';
+                        echo $formcom["horas"];
+                        echo '</td>';
+                        echo '<td>';
+                        echo $formcom["fecha_fin"];
+                        echo '</td>';  
+                    echo '</tr>';
+                }
+                echo '</tbody>';
+        echo '</table>';
+    echo '</div>';
+    ?>
+    </fieldset>
+
+    </br>
+    <fieldset>
+        <legend>Experiencia laboral</legend>
+        <a target="_blank" class="btn" href="<?php echo $this->basePath() ?>/application/experiencialabhv/index/<?php echo $usuario; ?>">Agregar</a>
+        </br></br>
+        <?php
+        echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+            echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                echo '<thead>';
+                    echo '<th style="width:20%;">Empresa / Entidad</th>';
+                    echo '<th style="width:20%;">Cargo</th>';
+                    echo '<th style="width:15%;">Fecha de inicio</th>';
+                    echo '<th style="width:15%;">Fecha terminación</th>';
+                    echo '<th style="width:30%;">Funciones / Actividades</th>';
+                echo '</thead>';
+                echo '<tbody>';
+                foreach ($this->explab as $explab) {
+                    echo '<tr>';
+                        echo '<td>';
+                        echo $explab["empresa"];
+                        echo '</td>';
+                        echo '<td>';
+                        echo $explab["cargo"];
+                        echo '</td>';
+                        echo '<td>';
+                        echo $explab["fecha_inicio"];
+                        echo '</td>';
+                        echo '<td>';
+                        echo $explab["fecha_fin"];
+                        echo '</td>';  
+                        echo '<td>';
+                        echo $explab["descripcion_actividades"];
+                        echo '</td>';  
+                    echo '</tr>';
+                }
+                echo '</tbody>';
+            echo '</table>';
+        echo '</div>';
+    ?>
+    </fieldset>
+<?php
+    echo "<h3>";
+    echo "Escrito corto de tres párrafos (Describa su interés por participar en esta monitoría)";
+    echo "</h3>";
+    echo $this->formelement($form->get('justificacion'));
+    echo "<h3>";
+    echo "Documentos requeridos de la convocatoria ";
+    echo "</h3>";
+
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+        echo '<table class="table" style="width: 100%; max-width: 100%;">';
+            echo '<thead>';
+                echo '<th style="width:10%;">Tipo de documento</th>';
+                echo '<th style="width:25%;">Descripción</th>';
+                echo '<th style="width:10%;">Fecha límite</th>';
+                echo '<th style="width:10%;">Hora límite</th>';
+                echo '<th style="width:15%;">Archivo</th>';
+                echo '<th style="width:30%;">Adjuntar archivo</th>';
+            echo '</thead>';
+            echo '<tbody>';
+            foreach ($this->docreq as $dreq) {
+                echo '<tr>';
+                    echo '<td>';
+                    foreach ($this->vl as $valflex) {
+                        if($dreq["id_tipo_doc"] == $valflex["id_valor_flexible"]){
+                            echo $valflex["descripcion_valor"];
+                        }
+                    }
+                    echo '</td>';
+                    echo '<td>';
+                    echo $dreq["descripcion"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $dreq ["fecha_limite"];
+                    echo '</td>';
+                    echo '<td>';
+                    $hora = strstr($dreq["hora_limite"], ':', true);
+                    if(((int)$hora)>11){
+                        if(((int)$hora)==12){
+                            $horaIni = "12";
+                        }else{
+                            $horaIni = ((int)$hora-12);
+                        }
+                        $zona="p.m.";
+                    }else{
+                        $horaIni = $hora;
+                        $zona="a.m.";
+                    }
+                    echo $horaIni.":".substr($dreq ["hora_limite"], 3, 2)." ".$zona;
+                    echo '</td>';
+                
+                    foreach ($this->docreqap as $dreqap) {
+                        if($dreq["id_requisito_doc"] == $dreqap["id_requisito_doc"]){
+                            echo '<td>';
+                            if ($dreqap ["archivo"] != null) {
+                                ?>
+                                    <a href="<?php echo $this->basePath()?>/application/requisitosapdoc/bajar/<?php echo $dreqap["id_requisitoap_doc"];?>/<?php echo $dreqap["id_aplicar"];?>">Bajar
+                                archivo : </a><?php echo $dreqap["archivo"]; ?> 
+                                <?php
+                            }
+                            echo '</td>';  
+                            if($this->menu == 1){
+                                echo '<td>';
+                                 ?>
+                                    <a class="btn" href="<?php echo $this->basePath() ?>/application/requisitosapdoc/index/<?php echo $dreqap["id_requisitoap_doc"];?>/<?php echo $dreqap["id_aplicar"];?>">Subir/Editar archivo</a>
+                                <?php
+                                echo '</td>';
+                            }else{
+                                if($this->id3 != 1){
+                                    echo '<td>';
+                                    
+                                    date_default_timezone_set('America/Bogota');
+                                    $fecha = date("Y-m-d H:i");
+                                    
+                                    /*if($dreqap["hora_limite"] == ""){
+                                        $dreqap["hora_limite"] = "00:00";
+                                    }
+                                    
+                                    $dreqap ["fecha_limite"] = $dreqap ["fecha_limite"]." ".$dreqap["hora_limite"];
+                                    */
+                                    if ($fecha <= $dreqap ["fecha_limite"]." ".$dreq["hora_limite"]) {
+                                    ?>
+                                        <a class="btn" href="<?php echo $this->basePath() ?>/application/requisitosapdoc/index/<?php echo $dreqap["id_requisitoap_doc"];?>/<?php echo $dreqap["id_aplicar"];?>">Subir/Editar archivo </a>
+                                    <?php
+                                    } else {
+                                        echo 'La fecha de reportar el informe ha vencido';
+                                                       
+                                    }
+                                    //echo $fecha ."-". $dreqap ["fecha_limite"]." ".$dreq["hora_limite"];
+                                    echo '</td>'; 
+                                }
+                            }
+                        }
+                    }
+                echo '</tr>';
+            }
+            echo '</tbody>';
+        echo '</table>';
+    echo '</div>';
+
+	
+    echo $this->terminos;
+    echo '</br>';
+    echo '</br>';
+    echo '<p>';
+    if($this->id3 != 1){
+        echo $this->formelement($form->get('submit'));    
+    }
+    echo $this->form()->closeTag($form);
+    echo "</div>";
+    ?>
+			</div>
+		</div>
+	</div>
+</div>
+<?php
+    }
+?>

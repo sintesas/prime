@@ -1,0 +1,151 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+<div class="row2">
+	<div class="nine3 columns">
+		<div id="centersectiontitle">
+			<div class="twelve columns">
+				<div class="sidebartitle"><h3>
+				<?php
+					echo $this->titulo;
+				?>
+				</h3>
+				</div>
+			</div>
+		</div>
+
+
+<a href="<?php echo $this->basePath() ?>/application/foro/index">
+	<i class="icon-arrow-left"></i>
+	 Regresar</a>
+<?php
+echo '<h6>';
+echo $this->flashMessenger()->render();
+echo '</h6>';
+?>
+<?php  foreach ($this->datos as $d) {?>
+	<center><h4><strong><i><?php echo strtoupper($d["titulo"]); ?></i></strong></h4>
+<?php foreach ($this->usuario as $us) { 
+          if($us['id_usuario']==$d["id_autor"]) { 
+		$nombres = $us["primer_nombre"].' '.$us["primer_apellido"];
+ }} ?>
+	<center><h5><strong><i><?php echo strtoupper($nombres); ?></i></strong></h5>
+<?php
+echo '<p class="alignright">';
+$date = '';
+$date=$d["fecha"];
+$date= substr($date, 0, 19);
+echo $date;
+ ?>
+</P>
+<br>
+<br>
+<h8>
+<?php echo $d["mensaje"]; ?> 
+</h8>
+<br>
+<br>
+
+<?php
+
+$pos = strpos( trim($d["archivo"],' '), '.png');
+$pos2 = strpos( trim($d["archivo"],' '), '.jpg');
+echo '<center>';
+if ($pos!='' || $pos2!=''){
+?>
+
+<img SRC="<?php echo $this->basePath()?>/images/uploads/<?php echo  trim($d["archivo"],' ');?>" width="550" height="550">
+<br>
+<a href="<?php echo $this->basePath()?>/application/foro/bajar/<?php echo $d["id_foro"];?>">Bajar archivo: </a><?php echo $d["archivo"]; ?> 
+<?php
+}else
+{
+?>
+<?php if($d["archivo"]==''){}else{ ?> 
+<a href="<?php echo $this->basePath()?>/application/foro/bajar/<?php echo $d["id_foro"];?>">Bajar archivo : </a><?php echo $d["archivo"]; ?> 
+<?php }} ?>
+</center>
+</center>
+<?php } ?>
+<br><br>
+<a class="btn" href="<?php echo $this->basePath() ?>/application/responderforo/index/<?php echo $d["id_foro"];?>">Participar en el <br>tema del foro</a>
+<br><br>
+<h5>Respuestas</h5>
+
+<?php $conteo=0; foreach ($this->respuestas as $r) {?>
+<table class="table">
+			<thead>
+			
+	
+<tr>
+<th>
+<?php
+echo '<p class="alignleft">';
+echo '#'.$conteo=$conteo+1;
+echo '</P>';
+echo '<p class="alignright">';
+$date = '';
+$date=$r["fecha"];
+$date= substr($date, 0, 19);
+echo $date;
+ ?>
+</P>
+</th>
+</tr>
+</thead>
+			<tbody>			
+<tr>
+<?php if ($conteo%2==0){ ?>
+<th bgcolor="#B4CDCD">
+ <?php }else{ ?>
+<th bgcolor="#F0FFF0">
+ <?php } ?>
+<P ALIGN=left> Usuario: 
+<?php  foreach ($this->usuario as $us) { ?>
+<?php if($us['id_usuario']==$r["id_autor"]) {  ?>
+		<?php echo $us["primer_nombre"].' '.$us["primer_apellido"]; ; ?>
+	<?php }} ?>
+</P>
+</th>
+<tr>
+<?php if ($conteo%2==0){ ?>
+<th bgcolor="#B4CDCD">
+ <?php }else{ ?>
+<th bgcolor="#F0FFF0">
+ <?php } ?>
+ <P ALIGN=left> Mensaje:
+		<?php echo $r["mensaje"]; ?> 
+<br>
+<?php
+$pos3='';
+$pos4='';
+$pos3 = strpos( trim($r["archivo"],' '), '.png');
+$pos4 = strpos( trim($r["archivo"],' '), '.jpg');
+
+if ($pos3!='' || $pos4!=''){
+?>
+<IMG SRC="/public/images/uploads/<?php echo  trim($r["archivo"],' ');?>" width="550" height="550">
+<br>
+<a href="<?php echo $this->basePath()?>/application/foro/bajar/<?php echo $r["id_foro"];?>">Bajar archivo : </a><?php echo $r["archivo"]; ?> 
+<?php
+}else
+{
+?>
+<?php if($r["archivo"]==''){}else{ ?> 
+<a href="<?php echo $this->basePath()?>/application/foro/bajar/<?php echo $r["id_foro"];?>">Bajar archivo : </a><?php echo $r["archivo"]; ?> 
+<?php }} ?>
+<br>
+				<?php if($this->menu==1){ ?>
+					<a class="btn" href="<?php echo $this->basePath() ?>/application/foro/del/<?php echo $r["id_foro"];?>/<?php echo $this->id;?>">Eliminar respuesta</a>
+				<?php } ?>
+
+</P>
+</th>
+</tr>
+</tbody>
+</table>
+<br>
+
+	<?php } ?>
+
+</div></div></div>

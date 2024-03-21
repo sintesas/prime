@@ -1,0 +1,1154 @@
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/highcharts-3d.js"></script>
+<script src="https://code.highcharts.com/modules/cylinder.js"></script>
+
+<?php
+	//Grafica 2 y 3
+	$loginRoles = array();
+	$cantidadloginRoles = array();
+	$totalLoginRoles = 0;
+	foreach ($this->loginUsua  as $rolesUsu) {
+		if($rolesUsu["id_rol"] != ""){
+			foreach ($this->roles  as $rol) {
+				if($rolesUsu["id_rol"] == $rol["id_rol"]){
+					array_push($loginRoles,$rol["descripcion"]);
+					array_push($cantidadloginRoles, (int)$rolesUsu["cantidad"]);
+					$totalLoginRoles = $totalLoginRoles + (int)$rolesUsu["cantidad"];
+				}
+			}
+		}
+	}
+	array_push($loginRoles, "Total");
+	array_push($cantidadloginRoles, $totalLoginRoles);
+	$loginRoles = json_encode($loginRoles);
+	$cantidadloginRoles = json_encode($cantidadloginRoles);
+
+	//Grafica 2 y 3
+	$rolesUsuT = array();
+	$cantidadRolesUsu = array();
+	$arrayRoles = array();
+	$totalRolesUsu = 0;
+	foreach ($this->rolesusu  as $rolesUsu) {
+		if($rolesUsu["id_rol"] != ""){
+			foreach ($this->roles  as $rol) {
+				if($rolesUsu["id_rol"] == $rol["id_rol"]){
+					array_push($rolesUsuT,$rol["descripcion"]);
+					array_push($cantidadRolesUsu, (int)$rolesUsu["cantidad"]);
+					array_push($arrayRoles,array("name" => $rol["descripcion"], "y" => (int)$rolesUsu["cantidad"]));
+					$totalRolesUsu = $totalRolesUsu + (int)$rolesUsu["cantidad"];
+				}
+			}
+		}
+	}
+	array_push($rolesUsuT,"Sin rol");
+	array_push($cantidadRolesUsu, count($totalUsua)-$totalRolesUsu);
+
+	array_push($rolesUsuT, "Total");
+	array_push($cantidadRolesUsu, $totalRolesUsu+(count($totalUsua)-$totalRolesUsu));
+	$rolesUsuT = json_encode($rolesUsuT);
+	$cantidadRolesUsu = json_encode($cantidadRolesUsu);
+	$arrayRoles = json_encode($arrayRoles);
+
+	//Grafica 4
+	$ActivoUsu = 0;
+	$InactivoUsu = 0;
+	$BloqueadoUsu = 0;
+	$BloqueadoForosUsu = 0;
+	$cantEstados = array();
+	foreach ($this->usuaEstado  as $elemento) {
+		if($elemento["id_estado"] == "B"){
+			$BloqueadoUsu = (int)$elemento["cantidad"];	
+		}
+
+		if($elemento["id_estado"] == "N"){
+			$InactivoUsu = (int)$elemento["cantidad"];	
+		}
+
+		if($elemento["id_estado"] == "S"){
+			$ActivoUsu = (int)$elemento["cantidad"];	
+		}
+
+		if($elemento["id_estado"] == "F"){
+			$BloqueadoForosUsu = (int)$elemento["cantidad"];	
+		}
+	}
+	array_push($cantEstados, $ActivoUsu);
+	array_push($cantEstados, $InactivoUsu);
+	array_push($cantEstados, $BloqueadoUsu);
+	array_push($cantEstados, $BloqueadoForosUsu);
+	array_push($cantEstados, $BloqueadoForosUsu + $BloqueadoUsu + $InactivoUsu + $ActivoUsu);
+	$cantEstados = json_encode($cantEstados);
+
+	//Grafica 5
+	$añosGrupos = array();
+	$valoresGrupos = array();
+	$gruposTotal = 0;
+	foreach ($this->grupoinv  as $red) {
+		if($red["ano"]!=""){
+			array_push($añosGrupos,$red["ano"]);
+			array_push($valoresGrupos, (int)$red["cantidad"]);	
+			$gruposTotal = $gruposTotal + (int)$red["cantidad"];
+		}
+	}
+	array_push($añosGrupos, "Total");
+	array_push($valoresGrupos, $gruposTotal);	
+	$añosGrupos = json_encode($añosGrupos);
+	$valoresGrupos = json_encode($valoresGrupos);
+
+	//Grafica 7
+	$añosSemillero = array();
+	$valoresSemillero = array();
+	foreach ($this->semilleroinv  as $semillero) {
+		if($semillero["ano"]!=""){
+			array_push($añosSemillero,$semillero["ano"]);
+			array_push($valoresSemillero, (int)$semillero["cantidad"]);
+		}
+	}
+	$añosSemillero = json_encode($añosSemillero);
+	$valoresSemillero = json_encode($valoresSemillero);
+
+	//Grafica 6
+	$añosRedes = array();
+	$valoresRedes = array();
+	$totalRedes = 0;
+	foreach ($this->redinv  as $red) {
+		if($red["ano"]!=""){
+			array_push($añosRedes,$red["ano"]);
+			array_push($valoresRedes, (int)$red["cantidad"]);
+			$totalRedes = $totalRedes + (int)$red["cantidad"];
+		}
+	}
+	array_push($añosRedes, "Total");
+	array_push($valoresRedes, $totalRedes);
+	$añosRedes = json_encode($añosRedes);
+	$valoresRedes = json_encode($valoresRedes);
+
+	//Grafica 7
+	$añosSemillero = array();
+	$valoresSemillero = array();
+	$totalSemilleros = 0;
+	foreach ($this->semilleroinv  as $semillero) {
+		if($semillero["ano"]!=""){
+			array_push($añosSemillero,$semillero["ano"]);
+			array_push($valoresSemillero, (int)$semillero["cantidad"]);
+			$totalSemilleros = $totalSemilleros + (int)$semillero["cantidad"];
+		}
+	}
+	array_push($añosSemillero, "Total");
+	array_push($valoresSemillero, $totalSemilleros);	
+	$añosSemillero = json_encode($añosSemillero);
+	$valoresSemillero = json_encode($valoresSemillero);
+
+	//Grafica 8
+	$añosGrupoEstado = array();
+	$valoresGrupoActivo = array();
+	$valoresGrupoInactivo = array();
+	for($pos=0; $pos<count($this->grupoinvEstado); $pos++){
+		if($this->grupoinvEstado[$pos]["ano"]!=""){
+			array_push($añosGrupoEstado,$this->grupoinvEstado[$pos]["ano"]);
+			if($this->grupoinvEstado[$pos]["estado"]=="A"){
+				array_push($valoresGrupoActivo, (int)$this->grupoinvEstado[$pos]["cantidad"]);
+				if($pos+1 < count($this->grupoinvEstado)){
+					if($this->grupoinvEstado[$pos+1]["estado"]=="I" && $this->grupoinvEstado[$pos]["ano"]==$this->grupoinvEstado[$pos+1]["ano"]){
+						array_push($valoresGrupoInactivo, (int)$this->grupoinvEstado[$pos+1]["cantidad"]);
+						$pos = $pos + 1;
+					}else{
+						array_push($valoresGrupoInactivo,0);
+					}
+				}else{
+					array_push($valoresGrupoInactivo,0);
+				}
+			}else{
+				array_push($valoresGrupoActivo,0);
+				array_push($valoresGrupoInactivo,(int)$this->grupoinvEstado[$pos]["cantidad"]);
+			}
+		}
+	}
+	$añosGrupoEstado = json_encode($añosGrupoEstado);
+	$valoresGrupoActivo = json_encode($valoresGrupoActivo);
+	$valoresGrupoInactivo = json_encode($valoresGrupoInactivo);
+
+	//grafica 10
+	$añosSemilleroEstado = array();
+	$valoresSemilleroActivo = array();
+	$valoresSemilleroInactivo = array();
+	for($pos=0; $pos<count($this->semilleroinvEstado); $pos++){
+		if($this->semilleroinvEstado[$pos]["ano"]!=""){
+			array_push($añosSemilleroEstado,$this->semilleroinvEstado[$pos]["ano"]);
+			if($this->semilleroinvEstado[$pos]["estado"]=="A"){
+				array_push($valoresSemilleroActivo, (int)$this->semilleroinvEstado[$pos]["cantidad"]);
+				if($pos+1 < count($this->semilleroinvEstado)){
+					if($this->semilleroinvEstado[$pos+1]["estado"]=="I" && $this->semilleroinvEstado[$pos]["ano"]==$this->semilleroinvEstado[$pos+1]["ano"]){
+						array_push($valoresSemilleroInactivo, (int)$this->semilleroinvEstado[$pos+1]["cantidad"]);
+						$pos = $pos + 1;
+					}else{
+						array_push($valoresSemilleroInactivo,0);
+					}
+				}else{
+					array_push($valoresSemilleroInactivo,0);
+				}
+			}else{
+				array_push($valoresSemilleroActivo,0);
+				array_push($valoresSemilleroInactivo,(int)$this->semilleroinvEstado[$pos]["cantidad"]);
+			}
+		}
+	}
+	$añosSemilleroEstado = json_encode($añosSemilleroEstado);
+	$valoresSemilleroActivo = json_encode($valoresSemilleroActivo);
+	$valoresSemilleroInactivo = json_encode($valoresSemilleroInactivo);
+
+	//Grafica 9
+	$añosRedEstado = array();
+	$valoresRedActivo = array();
+	$valoresRedInactivo = array();
+	for($pos=0; $pos<count($this->redinvEstado); $pos++){
+		if($this->redinvEstado[$pos]["ano"]!=""){
+			array_push($añosRedEstado,$this->redinvEstado[$pos]["ano"]);
+			if($this->redinvEstado[$pos]["estado"]=="A"){
+				array_push($valoresRedActivo, (int)$this->redinvEstado[$pos]["cantidad"]);
+				if($pos+1 < count($this->redinvEstado)){
+					if($this->redinvEstado[$pos+1]["estado"]=="I" && $this->redinvEstado[$pos]["ano"]==$this->redinvEstado[$pos+1]["ano"]){
+						array_push($valoresRedInactivo, (int)$this->redinvEstado[$pos+1]["cantidad"]);
+						$pos = $pos + 1;
+					}else{
+						array_push($valoresRedInactivo,0);
+					}
+				}else{
+					array_push($valoresRedInactivo,0);
+				}
+			}else{
+				array_push($valoresRedActivo,0);
+				array_push($valoresRedInactivo,(int)$this->redinvEstado[$pos]["cantidad"]);
+			}
+		}
+	}
+	$añosRedEstado = json_encode($añosRedEstado);
+	$valoresRedActivo = json_encode($valoresRedActivo);
+	$valoresRedInactivo = json_encode($valoresRedInactivo);
+
+	//Grafica 11
+	$añosConvoTipo = array();
+	$valoresExternaActivo = array();
+	$valoresInternaActivo = array();
+	$valoresMonitoresActivo = array();
+	$valoresEspecialActivo = array();
+	$totalConvoE = 0;
+	$totalConvoI = 0;
+	$totalConvoM = 0;
+	$totalConvoS = 0;
+	for($pos=0; $pos<count($this->convoTipo); $pos++){
+		if($this->convoTipo[$pos]["ano"]!=""){
+			$band = false;
+			for($posA=0; $posA<count($añosConvoTipo); $posA++){
+				if($añosConvoTipo[$posA] == $this->convoTipo[$pos]["ano"]){
+					$band = true;
+				}
+			}
+			if($band == false ){
+				array_push($añosConvoTipo,$this->convoTipo[$pos]["ano"]);
+			}
+			if(trim($this->convoTipo[$pos]["tipo_conv"]) == "e"){
+				$totalConvoE = $totalConvoE + (int)$this->convoTipo[$pos]["cantidad"];
+				array_push($valoresExternaActivo, (int)$this->convoTipo[$pos]["cantidad"]);
+				if($pos+1 < count($this->convoTipo)){
+					if($this->convoTipo[$pos]["ano"] != $this->convoTipo[$pos+1]["ano"]){
+						array_push($valoresInternaActivo, 0);
+						array_push($valoresMonitoresActivo, 0);
+						array_push($valoresEspecialActivo, 0);
+					}
+				}
+			}else{
+				if(trim($this->convoTipo[$pos]["tipo_conv"]) == "i"){
+					if($band == false ){
+						array_push($valoresExternaActivo, 0);
+					}		
+					$totalConvoI = $totalConvoI + (int)$this->convoTipo[$pos]["cantidad"];
+					array_push($valoresInternaActivo, (int)$this->convoTipo[$pos]["cantidad"]);
+					if($pos+1 < count($this->convoTipo)){
+						if($this->convoTipo[$pos]["ano"] != $this->convoTipo[$pos+1]["ano"]){
+							array_push($valoresMonitoresActivo, 0);
+							array_push($valoresEspecialActivo, 0);
+						}
+					}
+				}else{
+					if(trim($this->convoTipo[$pos]["tipo_conv"])== "m"){
+						if($band == false ){
+							array_push($valoresExternaActivo, 0);
+							array_push($valoresInternaActivo, 0);
+						}		
+						$totalConvoM = $totalConvoM + (int)$this->convoTipo[$pos]["cantidad"];
+						array_push($valoresMonitoresActivo, (int)$this->convoTipo[$pos]["cantidad"]);
+						if($pos+1 < count($this->convoTipo)){
+							if($this->convoTipo[$pos]["ano"] != $this->convoTipo[$pos+1]["ano"]){
+								array_push($valoresEspecialActivo, 0);
+							}
+						}
+					}else{
+						if(trim($this->convoTipo[$pos]["tipo_conv"])== "s"){
+							if($band == false ){
+								array_push($valoresExternaActivo, 0);
+								array_push($valoresInternaActivo, 0);
+								array_push($valoresMonitoresActivo, 0);
+							}		
+							$totalConvoS = $totalConvoS + (int)$this->convoTipo[$pos]["cantidad"];
+							array_push($valoresEspecialActivo, (int)$this->convoTipo[$pos]["cantidad"]);
+						}
+					}
+				}
+			}
+		}
+	}
+	$añosConvoTipo = json_encode($añosConvoTipo);
+	$valoresExternaActivo = json_encode($valoresExternaActivo);
+	$valoresInternaActivo = json_encode($valoresInternaActivo);
+	$valoresMonitoresActivo = json_encode($valoresMonitoresActivo);
+	$valoresEspecialActivo = json_encode($valoresEspecialActivo);
+
+	//Grafica 12
+	$arrayConvo = array();
+	$valoresArray12 = array();
+	$totalPropuestasConvo = 0;
+	foreach ($this->aplicacionesCovo  as $aplicacion) {
+		array_push($arrayConvo,$aplicacion["id_convocatoria"]);
+		array_push($valoresArray12, (int)$aplicacion["cantidad"]);	
+		$totalPropuestasConvo = $totalPropuestasConvo + (int)$aplicacion["cantidad"];
+	}
+	array_push($arrayConvo, "Total");
+	array_push($valoresArray12, $totalPropuestasConvo);	
+	$arrayConvo = json_encode($arrayConvo);
+	$valoresArray12 = json_encode($valoresArray12);
+
+	//Grafica 13
+	$añosProyConvYear = array();
+	$valoresProyConvYear = array();
+	$totalProyectosConvo = 0;
+	foreach ($this->proyConvoYear  as $proy) {
+		array_push($añosProyConvYear,$proy["ano"]);
+		array_push($valoresProyConvYear, (int)$proy["cantidad"]);	
+		$totalProyectosConvo = $totalProyectosConvo + (int)$proy["cantidad"];
+	}
+	array_push($añosProyConvYear, "Total");
+	array_push($valoresProyConvYear, $totalProyectosConvo);	
+	$añosProyConvYear = json_encode($añosProyConvYear);
+	$valoresProyConvYear = json_encode($valoresProyConvYear);
+
+	//Grafica 14
+	$arrayProyConvo = array();
+	$valoresProyConvo = array();
+	$totalProyporConvo = 0;
+	foreach ($this->proyConvo  as $proy) {
+		array_push($arrayProyConvo,$proy["id_convocatoria"]);
+		array_push($valoresProyConvo, (int)$proy["cantidad"]);	
+		$totalProyporConvo = $totalProyporConvo + (int)$proy["cantidad"]; 
+	}
+	array_push($arrayProyConvo, "Total");
+	array_push($valoresProyConvo, $totalProyporConvo);	
+	$arrayProyConvo = json_encode($arrayProyConvo);
+	$valoresProyConvo = json_encode($valoresProyConvo);
+
+	//Grafica 15
+	$añosProySinConvYear = array();
+	$valoresProySinConvYear = array();
+	$totalProSinConvo = 0;
+	foreach ($this->proySinConvo  as $proy) {
+		array_push($añosProySinConvYear,$proy["ano"]);
+		array_push($valoresProySinConvYear, (int)$proy["cantidad"]);
+		$totalProSinConvo = $totalProSinConvo + (int)$proy["cantidad"];
+	}
+	array_push($añosProySinConvYear, "Total");
+	array_push($valoresProySinConvYear, $totalProSinConvo);
+	$añosProySinConvYear = json_encode($añosProySinConvYear);
+	$valoresProySinConvYear = json_encode($valoresProySinConvYear);
+?>
+
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+								<?php
+							    	echo $this->titulo;
+							    ?>
+							</h3>
+						</div>
+					</div>
+				</div>
+				</br>
+
+<?php
+$form = $this->form;
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo '<h5>';
+echo $this->flashMessenger()->render();
+echo '</h5>';
+
+?>
+<div class="six columns">
+	<div id="grafica1" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+	</br>
+	<div id="grafica3" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</br>
+	<div id="grafica5" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</br>
+	<div id="grafica7" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</br>
+	<div id="grafica9" style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto"></div>
+	</br>
+	<div id="grafica11" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</br>
+	<div id="grafica13" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</br>
+	<div id="grafica15" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</br>
+	</br>
+</div>
+<div class="six columns">
+	<div id="grafica2" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+	</br>
+	<div id="grafica4" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</br>
+	<div id="grafica6" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</br>
+	<div id="grafica8" style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto"></div>
+	</br>
+	<div id="grafica10" style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto"></div>
+	</br>
+	<div id="grafica12" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</br>
+	<div id="grafica14" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</br>
+	
+</div>
+<script type="text/javascript">
+
+Highcharts.chart('grafica1', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Inicio de sesión de usuarios por rol'
+    },
+    xAxis: {
+        categories: <?php echo $loginRoles; ?>
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Cantidad de inicios de sesión'
+        },
+        stackLabels: {
+            enabled: true,
+            style: {
+                fontWeight: 'normal',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+            }
+        }
+    },
+    tooltip: {
+        headerFormat: '<b>{point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y}<br/>'
+    },
+    legend: {
+        enabled: false
+    },
+    plotOptions: {
+        column: {
+            stacking: 'normal',
+            dataLabels: {
+                enabled: false,
+                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+            }
+        }
+    },
+    series: [{
+        name: 'Usuarios',
+        colorByPoint: true,
+        data: <?php echo $cantidadloginRoles; ?>
+    }
+    ]
+});
+
+
+Highcharts.chart('grafica2', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Usuarios creados por rol'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                style: {
+                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                }
+            }
+        }
+    },
+    series: [{
+        name: 'Brands',
+        colorByPoint: true,
+        data: <?php echo $arrayRoles; ?>
+    }]
+});
+
+
+Highcharts.chart('grafica3', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Usuarios creados por rol'
+    },
+    xAxis: {
+        categories: <?php echo $rolesUsuT; ?>
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Cantidad de usuarios'
+        },
+        stackLabels: {
+            enabled: true,
+            style: {
+                fontWeight: 'normal',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+            }
+        }
+    },
+    tooltip: {
+        headerFormat: '<b>{point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y}<br/>'
+    },
+    legend: {
+        enabled: false
+    },
+    plotOptions: {
+        column: {
+            stacking: 'normal',
+            dataLabels: {
+                enabled: false,
+                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+            }
+        }
+    },
+    series: [{
+        name: 'Usuarios',
+        colorByPoint: true,
+        data: <?php echo $cantidadRolesUsu; ?>
+    }
+    ]
+});
+
+Highcharts.chart('grafica4', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Usuarios de la plataforma por estado'
+    },
+    xAxis: {
+        categories: ["Activo", "Inactivo", "Bloqueado", "Bloqueado foros" , "Total"]
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Cantidad de usuarios'
+        },
+        stackLabels: {
+            enabled: true,
+            style: {
+                fontWeight: 'normal',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+            }
+        }
+    },
+    tooltip: {
+        headerFormat: '<b>{point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y}<br/>'
+    },
+    legend: {
+        enabled: false
+    },
+    plotOptions: {
+        column: {
+            stacking: 'normal',
+            dataLabels: {
+                enabled: false,
+                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+            }
+        }
+    },
+    series: [{
+        name: 'Usuarios',
+        colorByPoint: true,
+        data: <?php echo $cantEstados; ?>
+    }
+    ]
+});
+
+Highcharts.chart('grafica5', {
+    chart: {
+        type: 'column',
+    },
+    title: {
+        text: 'Grupos de investigación creados por año'
+    },
+    xAxis: {
+        categories: <?php echo $añosGrupos; ?>
+    },
+    legend: {
+        enabled: false
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Grupos de investigación'
+        },
+        stackLabels: {
+            enabled: true,
+            style: {
+                fontWeight: 'normal',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+            }
+        }
+    },
+    tooltip: {
+        headerFormat: '<b>{point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y}<br/>'
+    },
+    plotOptions: {
+        column: {
+            stacking: 'normal',
+            dataLabels: {
+                enabled: false,
+                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+            }
+        }
+    },
+    series: [{
+        name: 'Grupos',
+        colorByPoint: true,
+        data: <?php echo $valoresGrupos; ?>
+    }
+    ]
+});
+
+Highcharts.chart('grafica6', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Redes de investigación creadas por año'
+    },
+    xAxis: {
+        categories: <?php echo $añosRedes; ?>
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Redes de investigación'
+        },
+        stackLabels: {
+            enabled: true,
+            style: {
+                fontWeight: 'normal',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+            }
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    tooltip: {
+        headerFormat: '<b>{point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y}<br/>'
+    },
+    plotOptions: {
+        column: {
+            stacking: 'normal',
+            dataLabels: {
+                enabled: false,
+                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+            }
+        }
+    },
+    series: [{
+        name: 'Redes',
+        colorByPoint: true,
+        data: <?php echo $valoresRedes; ?>
+    }
+    ]
+});
+
+
+Highcharts.chart('grafica7', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Semilleros de investigación creados por año'
+    },
+    xAxis: {
+        categories: <?php echo $añosSemillero; ?>
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Semilleros de investigación'
+        },
+        stackLabels: {
+            enabled: true,
+            style: {
+                fontWeight: 'normal',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+            }
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    tooltip: {
+        headerFormat: '<b>{point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y}<br/>'
+    },
+    plotOptions: {
+        column: {
+            stacking: 'normal',
+            dataLabels: {
+                enabled: false,
+                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+            }
+        }
+    },
+    series: [{
+        name: 'Semilleros',
+        colorByPoint: true,
+        data: <?php echo $valoresSemillero; ?>
+    }
+    ]
+});
+
+Highcharts.chart('grafica8', {
+    chart: {
+        type: 'bar'
+    },
+    title: {
+        text: 'Grupos de investigación creados por estado y año'
+    },
+    xAxis: {
+        categories: <?php echo $añosGrupoEstado; ?>,
+        title: {
+            text: null
+        }
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Grupos de investigación',
+            align: 'high'
+        },
+        labels: {
+            overflow: 'justify'
+        }
+    },
+    plotOptions: {
+        bar: {
+            dataLabels: {
+                enabled: true
+            }
+        }
+    },
+    
+    credits: {
+        enabled: false
+    },
+    series: [{
+        name: 'Activo',
+        data: <?php echo $valoresGrupoActivo; ?>
+    }, {
+        name: 'Inactivo',
+        data: <?php echo $valoresGrupoInactivo; ?>
+    }]
+});
+
+Highcharts.chart('grafica10', {
+    chart: {
+        type: 'bar'
+    },
+    title: {
+        text: 'Semilleros de investigación creados por estado y año'
+    },
+    xAxis: {
+        categories: <?php echo $añosSemilleroEstado; ?>,
+        title: {
+            text: null
+        }
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Semilleros de investigación',
+            align: 'high'
+        },
+        labels: {
+            overflow: 'justify'
+        }
+    },
+    plotOptions: {
+        bar: {
+            dataLabels: {
+                enabled: true
+            }
+        }
+    },
+    
+    credits: {
+        enabled: false
+    },
+    series: [{
+        name: 'Activo',
+        data: <?php echo $valoresSemilleroActivo; ?>
+    }, {
+        name: 'Inactivo',
+        data: <?php echo $valoresSemilleroInactivo; ?>
+    }]
+});
+
+Highcharts.chart('grafica9', {
+    chart: {
+        type: 'bar'
+    },
+    title: {
+        text: 'Redes de investigación creados por estado y año'
+    },
+    xAxis: {
+        categories: <?php echo $añosRedEstado; ?>,
+        title: {
+            text: null
+        }
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Redes de investigación',
+            align: 'high'
+        },
+        labels: {
+            overflow: 'justify'
+        }
+    },
+    plotOptions: {
+        bar: {
+            dataLabels: {
+                enabled: true
+            }
+        }
+    },
+    
+    credits: {
+        enabled: false
+    },
+    series: [{
+        name: 'Activo',
+        data: <?php echo $valoresRedActivo; ?>
+    }, {
+        name: 'Inactivo',
+        data: <?php echo $valoresRedInactivo; ?>
+    }]
+});
+
+Highcharts.chart('grafica11', {
+    title: {
+        text: 'Convocatorias creadas por tipo y año'
+    },
+    xAxis: {
+        categories: <?php echo $añosConvoTipo; ?>,
+    },
+    labels: {
+        items: [{
+            html: 'Total convocatorias',
+            style: {
+                left: '90px',
+                top: '25px',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+            }
+        }]
+    },
+    series: [{
+        type: 'column',
+        name: 'Externa',
+        data: <?php echo $valoresExternaActivo; ?>
+    }, {
+        type: 'column',
+        name: 'Interna',
+        data: <?php echo $valoresInternaActivo; ?>
+    }, {
+        type: 'column',
+        name: 'De monitores',
+        data: <?php echo $valoresMonitoresActivo; ?>
+    }, {
+        type: 'column',
+        name: 'Especiales',
+        data: <?php echo $valoresEspecialActivo; ?>
+    }, {
+        type: 'pie',
+        name: 'Total convocatorias',
+        data: [{
+            name: 'Externa',
+            y: <?php echo $totalConvoE; ?>,
+            color: Highcharts.getOptions().colors[0] 
+        }, {
+            name: 'Interna',
+            y: <?php echo $totalConvoI; ?>,
+            color: Highcharts.getOptions().colors[1] 
+        }, {
+            name: 'De monitores',
+            y: <?php echo $totalConvoM; ?>,
+            color: Highcharts.getOptions().colors[2] 
+        }, {
+            name: 'Especiales',
+            y: <?php echo $totalConvoS; ?>,
+            color: Highcharts.getOptions().colors[3] 
+        }],
+        center: [250, 20],
+        size: 100,
+        showInLegend: false,
+        dataLabels: {
+            enabled: false
+        }
+    }]
+});
+
+Highcharts.chart('grafica12', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Propuestas presentadas por convocatoria'
+    },
+    xAxis: {
+    	title: {
+            text: 'ID Convocatoria'
+        },
+        categories: <?php echo $arrayConvo; ?>
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Cantidad de propuestas'
+        },
+        stackLabels: {
+            enabled: true,
+            style: {
+                fontWeight: 'normal',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+            }
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    tooltip: {
+        headerFormat: '<b>ID Convocatoria: {point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y}<br/>'
+    },
+    plotOptions: {
+        column: {
+            stacking: 'normal',
+            dataLabels: {
+                enabled: false,
+                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+            }
+        }
+    },
+    series: [{
+        name: 'Propuestas',
+        data: <?php echo $valoresArray12; ?>
+    }
+    ]
+});
+
+Highcharts.chart('grafica13', {
+    chart: {
+        type: 'cylinder',
+        options3d: {
+            enabled: true,
+            alpha: 15,
+            beta: 15,
+            depth: 50,
+            viewDistance: 25
+        }
+    },
+    title: {
+        text: 'Proyectos de investigación creados por convocatoria por año'
+    },
+    xAxis: {
+        categories: <?php echo $añosProyConvYear; ?>
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Proyectos de investigación'
+        },
+        stackLabels: {
+            enabled: true,
+            style: {
+                fontWeight: 'normal',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+            }
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    tooltip: {
+        headerFormat: '<b>{point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y}<br/>'
+    },
+    plotOptions: {
+        column: {
+            stacking: 'normal',
+            dataLabels: {
+                enabled: false,
+                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+            }
+        }
+    },
+    series: [{
+        name: 'Proyectos',
+        data: <?php echo $valoresProyConvYear; ?>
+    }
+    ]
+});
+
+Highcharts.chart('grafica14', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Proyectos de Investigación creados por convocatoria'
+    },
+    xAxis: {
+        categories: <?php echo $arrayProyConvo; ?>
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Cantidad de proyectos'
+        },
+        stackLabels: {
+            enabled: true,
+            style: {
+                fontWeight: 'normal',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+            }
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    tooltip: {
+        headerFormat: '<b>ID Convocatoria: {point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y}<br/>'
+    },
+    plotOptions: {
+        column: {
+            stacking: 'normal',
+            dataLabels: {
+                enabled: false,
+                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+            }
+        }
+    },
+    series: [{
+        name: 'Proyectos',
+        data: <?php echo $valoresProyConvo; ?>
+    }
+    ]
+});
+
+Highcharts.chart('grafica15', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Proyectos de investigación creados por año sin convocatoria'
+    },
+    xAxis: {
+        categories: <?php echo $añosProySinConvYear; ?>
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Proyectos de investigación'
+        },
+        stackLabels: {
+            enabled: true,
+            style: {
+                fontWeight: 'normal',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+            }
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    tooltip: {
+        headerFormat: '<b>{point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y}<br/>'
+    },
+    plotOptions: {
+        column: {
+            stacking: 'normal',
+            dataLabels: {
+                enabled: false,
+                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+            }
+        }
+    },
+    series: [{
+        name: 'Proyectos',
+        data: <?php echo $valoresProySinConvYear; ?>
+    }
+    ]
+});
+
+
+
+</script>
+
+
+<?php
+
+
+
+
+echo '<div>';
+echo '</div>';
+echo $this->form()->closeTag($form);
+?>				
+</div><!-- Cierre div six columns --> 
+			</div>
+		</div>
+	</div>
+</div>
+

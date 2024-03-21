@@ -1,0 +1,68 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+    echo $this->titulo;
+    ?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<div class="four columns">
+					<a
+						href="<?php echo $this->basePath() ?>/application/editarusuario/index/<?php echo $this->id; ?>">
+						<i class="icon-arrow-left"></i> Regresar
+					</a><br> <br>
+				<?php
+    $form = $this->form;
+    $form->prepare();
+    
+    $form->setAttributes(array(
+        'action' => $this->url . '/application/idiomashv/index/' . $this->id.'/'.$this->id2,
+        'method' => 'post'
+    ));
+    echo $this->form()->openTag($form);
+    echo '<p>';
+    echo $this->formlabel($form->get('nombre'));
+    echo $this->formelement($form->get('nombre'));
+    echo '<p>';
+    echo $this->formlabel($form->get('modalidad'));
+    echo $this->formelement($form->get('modalidad'));
+    echo '<p>';
+    echo $this->formlabel($form->get('leer'));
+    echo $this->formelement($form->get('leer'));
+    echo '<p>';
+    echo $this->formlabel($form->get('hablar'));
+    echo $this->formelement($form->get('hablar'));
+    echo '<p>';
+    echo $this->formlabel($form->get('escribir'));
+    echo $this->formelement($form->get('escribir'));
+    echo '<p>';
+    echo $this->formlabel($form->get('oir'));
+    echo $this->formelement($form->get('oir'));
+    echo '<p>';
+    echo $this->formlabel($form->get('image-file'));
+    echo $this->formelement($form->get('image-file'));
+    echo '<p>';
+    echo '<br>';
+    echo $this->formelement($form->get('submit'));
+    echo '<br>';
+    
+    echo $this->form()->closeTag($form);
+    ?>
+				<br>
+
+
+				<?php
+    
+    ?>
+
+</div>
+			</div>
+		</div>

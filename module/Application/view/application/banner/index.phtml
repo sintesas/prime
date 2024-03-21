@@ -1,0 +1,79 @@
+<script type="text/javascript">
+	function showHint1(str) {
+		var valthis = str.toLowerCase();
+	    var num = 0;
+
+	    $('select#autor>option').each(function () {
+	          var text = $(this).text().toLowerCase();
+	          if(text.indexOf(valthis) !== -1)  
+	              {$(this).show(); $(this).prop('selected',true);}
+	          else{$(this).hide();}
+	           });
+	}
+</script>
+
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+								<?php
+							    	echo $this->titulo;
+							    ?>
+							</h3>
+						</div>
+					</div>
+				</div>
+				<!--
+				<div class="six columns">
+					<a href="<?php //echo $this->basePath() ?>/application/semillerosinv/index">
+						<i class="icon-arrow-left"></i> Regresar
+					</a>
+				</div>
+				-->
+				</br>
+
+<?php
+$form = $this->form;
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo '<h5>';
+echo $this->flashMessenger()->render();
+echo '</h5>';
+
+echo '<div class="twelve columns">';
+echo '<p>';
+echo "<b>Nota: Para una mejor visualización, las dimensiones de la imagen a cargar deben ser de 1345 de ancho y 391 de alto. No debe pesar más de 500 KB y debe estar en la extensión .jpg<b>";
+
+echo '<p>';
+echo '<p>';
+echo '<p>';
+echo $this->formlabel($form->get('imagen'));
+echo $this->formelement($form->get('imagen'));
+
+echo '<p>';
+echo $this->formlabel($form->get('image-file'));
+echo $this->formelement($form->get('image-file'));
+echo '<p>';
+echo $this->formelement($form->get('submit'));
+echo '</div>';
+
+
+
+echo '<div>';
+
+echo '</div>';
+
+echo $this->form()->closeTag($form);
+?>				
+</div><!-- Cierre div six columns --> 
+			</div>
+		</div>
+	</div>
+</div>
+

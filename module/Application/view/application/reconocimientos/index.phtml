@@ -1,0 +1,74 @@
+<style>
+    textarea {
+        height: 100px;
+        width: 100%;
+        max-width: 100%;
+    }
+</style> 
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+    echo $this->titulo;
+    ?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<div class="twelve columns">
+					<a
+						href="<?php echo $this->basePath() ?>/application/editargrupoinv/index/<?php echo $this->id;?>/<?php echo $this->id2;?>">
+						<i class="icon-arrow-left"></i> Regresar
+					</a>
+
+	<?php
+echo '<br>';
+echo '<br>';
+$form = $this->form;
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo '<p>';
+echo $this->formlabel($form->get('nombre'));
+echo $this->formelement($form->get('nombre'));
+echo '<p>';
+echo $this->formlabel($form->get('num_acto'));
+echo $this->formelement($form->get('num_acto'));
+echo '<p>';
+echo $this->formlabel($form->get('descripcion'));
+echo $this->formelement($form->get('descripcion'));
+echo '<p>';
+echo $this->formlabel($form->get('semestre'));
+echo $this->formelement($form->get('semestre'));
+echo '<p>';
+echo $this->formlabel($form->get('valor'));
+echo $this->formelement($form->get('valor'));
+echo '<p>';
+echo $this->formlabel($form->get('image-file'));
+echo $this->formelement($form->get('image-file'));
+
+echo '<p>';
+echo '<br>';
+echo $this->formelement($form->get('submit'));
+echo '<br>';
+
+echo $this->form()->closeTag($form);
+?>
+				<br>
+
+
+				<?php
+    
+    ?>
+
+</div>
+			</div>
+		</div>
+	</div>
+</div>

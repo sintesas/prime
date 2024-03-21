@@ -1,0 +1,750 @@
+<div class="content">
+					<h2>
+						<?php
+						echo $this->titulo;
+						?>
+					</h2>
+				<?php
+echo '<br>';
+echo '<table>';
+echo '<thead>';
+echo '<th>Tipo Solicitud</th>';
+echo '<th>Justificación</th>';
+echo '<th>Fecha</th>';
+echo '<th>Lugar</th>';
+echo '<th>Valor</th>';
+echo '<th>Nueva Fecha</th>';
+echo '<th>Fecha Inicio</th>';
+echo '<th>Fecha Fin</th>';
+echo '<th>Estado</th>';
+echo '<th>Nuevo Estado</th>';
+echo '<th></th>';
+echo '</thead>';
+echo '</tbody>';
+foreach ($this->datos as $dato){
+if ($dato["id_tipo_sol"]==1){
+echo '<tr>';
+echo '<td>';
+echo "SolFechaExtemporanea";
+echo'</td>';
+echo '<td>';
+echo $dato["justificacion"];
+echo'</td>';
+echo '<td>';
+echo'</td>';
+echo '<td>';
+echo'</td>';
+echo '<td>';
+echo'</td>';
+echo '<td>';
+echo $dato["nueva_fecha"];
+echo'</td>';
+echo '<td>';
+echo'</td>';
+echo '<td>';
+echo'</td>';
+echo '<td>';
+if($dato["id_estado"]!=null){
+	if($dato["id_estado"]==1){
+		echo "En Revision";
+	}
+	if($dato["id_estado"]==2){
+		echo "Aprobado";
+	}
+	if($dato["id_estado"]==3){
+		echo "Denegado";
+	}	
+}else{
+	echo "Pendiente";
+}
+echo'</td>';
+echo '<td>';
+	$form = $this->form;
+	$form->prepare();
+	echo $this->form()->openTag($form);
+				echo $this->formlabel($form->get('estado'));
+				echo $this->formelement($form->get('estado'));
+	echo $this->form()->closeTag($form);
+echo'</td>';
+echo '<td>';
+?>
+	<a href="<?php echo $this->basePath() ?>/application/gestionar/index/<?php echo $dato["id_sol"];?>"> Cambiar Estado</a>
+<?php
+echo'</td>';
+echo '</tr>';
+}
+if ($dato["id_tipo_sol"]==2){
+echo '<tr>';
+echo '<td>';
+echo "SolCambioEquipo";
+echo'</td>';
+echo '<td>';
+echo $dato["justificacion"];
+echo'</td>';
+echo '<td>';
+echo'</td>';
+echo '<td>';
+echo'</td>';
+echo '<td>';
+echo'</td>';
+echo '<td>';
+echo'</td>';
+echo '<td>';
+echo'</td>';
+echo '<td>';
+echo'</td>';
+echo '<td>';
+if($dato["id_estado"]!=null){
+	if($dato["id_estado"]==1){
+		echo "En Revision";
+	}
+	if($dato["id_estado"]==2){
+		echo "Aprobado";
+	}
+	if($dato["id_estado"]==3){
+		echo "Denegado";
+	}	
+}else{
+	echo "Pendiente";
+}
+echo'</td>';
+echo '<td>';
+	$form = $this->form;
+	$form->prepare();
+	echo $this->form()->openTag($form);
+				echo $this->formlabel($form->get('estado'));
+				echo $this->formelement($form->get('estado'));
+	echo $this->form()->closeTag($form);
+echo'</td>';
+echo '<td>';
+?>
+	<a href="<?php echo $this->basePath() ?>/application/gestionar/index/<?php echo $dato["id_sol"];?>"> Cambiar Estado</a>
+<?php
+echo'</td>';
+echo '</tr>';
+}
+if ($dato["id_tipo_sol"]==3){
+echo '<tr>';
+echo '<td>';
+echo "SolSocializacion";
+echo'</td>';
+echo '<td>';
+echo $dato["justificacion"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha"];
+echo'</td>';
+echo '<td>';
+echo $dato["lugar"];
+echo'</td>';
+echo '<td>';
+echo $dato["valor"];
+echo'</td>';
+echo '<td>';
+echo $dato["nueva_fecha"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha_inicio"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha_fin"];
+echo'</td>';
+echo '<td>';
+if($dato["id_estado"]!=null){
+	if($dato["id_estado"]==1){
+		echo "En Revision";
+	}
+	if($dato["id_estado"]==2){
+		echo "Aprobado";
+	}
+	if($dato["id_estado"]==3){
+		echo "Denegado";
+	}	
+}else{
+	echo "Pendiente";
+}
+echo'</td>';
+echo '<td>';
+	$form = $this->form;
+	$form->prepare();
+	echo $this->form()->openTag($form);
+				echo $this->formlabel($form->get('estado'));
+				echo $this->formelement($form->get('estado'));
+	echo $this->form()->closeTag($form);
+echo'</td>';
+echo '<td>';
+?>
+	<a href="<?php echo $this->basePath() ?>/application/gestionar/index/<?php echo $dato["id_sol"];?>"> Cambiar Estado</a>
+<?php
+echo'</td>';
+echo '</tr>';
+}
+if ($dato["id_tipo_sol"]==4){
+echo '<tr>';
+echo '<td>';
+echo "SolCambioRubro";
+echo'</td>';
+echo '<td>';
+echo $dato["justificacion"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha"];
+echo'</td>';
+echo '<td>';
+echo $dato["lugar"];
+echo'</td>';
+echo '<td>';
+echo $dato["valor"];
+echo'</td>';
+echo '<td>';
+echo $dato["nueva_fecha"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha_inicio"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha_fin"];
+echo'</td>';
+echo '<td>';
+if($dato["id_estado"]!=null){
+	if($dato["id_estado"]==1){
+		echo "En Revision";
+	}
+	if($dato["id_estado"]==2){
+		echo "Aprobado";
+	}
+	if($dato["id_estado"]==3){
+		echo "Denegado";
+	}	
+}else{
+	echo "Pendiente";
+}
+echo'</td>';
+echo '<td>';
+	$form = $this->form;
+	$form->prepare();
+	echo $this->form()->openTag($form);
+				echo $this->formlabel($form->get('estado'));
+				echo $this->formelement($form->get('estado'));
+	echo $this->form()->closeTag($form);
+echo'</td>';
+echo '<td>';
+?>
+	<a href="<?php echo $this->basePath() ?>/application/gestionar/index/<?php echo $dato["id_sol"];?>"> Cambiar Estado</a>
+<?php
+echo'</td>';
+echo '</tr>';
+}
+if ($dato["id_tipo_sol"]==5){
+echo '<tr>';
+echo '<td>';
+echo "SolSalidaCampo";
+echo'</td>';
+echo '<td>';
+echo $dato["justificacion"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha"];
+echo'</td>';
+echo '<td>';
+echo $dato["lugar"];
+echo'</td>';
+echo '<td>';
+echo $dato["valor"];
+echo'</td>';
+echo '<td>';
+echo $dato["nueva_fecha"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha_inicio"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha_fin"];
+echo'</td>';
+echo '<td>';
+if($dato["id_estado"]!=null){
+	if($dato["id_estado"]==1){
+		echo "En Revision";
+	}
+	if($dato["id_estado"]==2){
+		echo "Aprobado";
+	}
+	if($dato["id_estado"]==3){
+		echo "Denegado";
+	}	
+}else{
+	echo "Pendiente";
+}
+echo'</td>';
+echo '<td>';
+	$form = $this->form;
+	$form->prepare();
+	echo $this->form()->openTag($form);
+				echo $this->formlabel($form->get('estado'));
+				echo $this->formelement($form->get('estado'));
+	echo $this->form()->closeTag($form);
+echo'</td>';
+echo '<td>';
+?>
+	<a href="<?php echo $this->basePath() ?>/application/gestionar/index/<?php echo $dato["id_sol"];?>"> Cambiar Estado</a>
+<?php
+echo'</td>';
+echo '</tr>';
+}
+if ($dato["id_tipo_sol"]==6){
+echo '<tr>';
+echo '<td>';
+echo "SolFotocopias";
+echo'</td>';
+echo '<td>';
+echo $dato["justificacion"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha"];
+echo'</td>';
+echo '<td>';
+echo $dato["lugar"];
+echo'</td>';
+echo '<td>';
+echo $dato["valor"];
+echo'</td>';
+echo '<td>';
+echo $dato["nueva_fecha"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha_inicio"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha_fin"];
+echo'</td>';
+echo '<td>';
+if($dato["id_estado"]!=null){
+	if($dato["id_estado"]==1){
+		echo "En Revision";
+	}
+	if($dato["id_estado"]==2){
+		echo "Aprobado";
+	}
+	if($dato["id_estado"]==3){
+		echo "Denegado";
+	}	
+}else{
+	echo "Pendiente";
+}
+echo'</td>';
+echo '<td>';
+	$form = $this->form;
+	$form->prepare();
+	echo $this->form()->openTag($form);
+				echo $this->formlabel($form->get('estado'));
+				echo $this->formelement($form->get('estado'));
+	echo $this->form()->closeTag($form);
+echo'</td>';
+echo '<td>';
+?>
+	<a href="<?php echo $this->basePath() ?>/application/gestionar/index/<?php echo $dato["id_sol"];?>"> Cambiar Estado</a>
+<?php
+echo'</td>';
+echo '</tr>';
+}
+if ($dato["id_tipo_sol"]==7){
+echo '<tr>';
+echo '<td>';
+echo "SolMaterialesBibliograficos";
+echo'</td>';
+echo '<td>';
+echo $dato["justificacion"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha"];
+echo'</td>';
+echo '<td>';
+echo $dato["lugar"];
+echo'</td>';
+echo '<td>';
+echo $dato["valor"];
+echo'</td>';
+echo '<td>';
+echo $dato["nueva_fecha"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha_inicio"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha_fin"];
+echo'</td>';
+echo '<td>';
+if($dato["id_estado"]!=null){
+	if($dato["id_estado"]==1){
+		echo "En Revision";
+	}
+	if($dato["id_estado"]==2){
+		echo "Aprobado";
+	}
+	if($dato["id_estado"]==3){
+		echo "Denegado";
+	}	
+}else{
+	echo "Pendiente";
+}
+echo'</td>';
+echo '<td>';
+	$form = $this->form;
+	$form->prepare();
+	echo $this->form()->openTag($form);
+				echo $this->formlabel($form->get('estado'));
+				echo $this->formelement($form->get('estado'));
+	echo $this->form()->closeTag($form);
+echo'</td>';
+echo '<td>';
+?>
+	<a href="<?php echo $this->basePath() ?>/application/gestionar/index/<?php echo $dato["id_sol"];?>"> Cambiar Estado</a>
+<?php
+echo'</td>';
+echo '</tr>';
+}
+if ($dato["id_tipo_sol"]==8){
+echo '<tr>';
+echo '<td>';
+echo "SolMaterales";
+echo'</td>';
+echo '<td>';
+echo $dato["justificacion"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha"];
+echo'</td>';
+echo '<td>';
+echo $dato["lugar"];
+echo'</td>';
+echo '<td>';
+echo $dato["valor"];
+echo'</td>';
+echo '<td>';
+echo $dato["nueva_fecha"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha_inicio"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha_fin"];
+echo'</td>';
+echo '<td>';
+if($dato["id_estado"]!=null){
+	if($dato["id_estado"]==1){
+		echo "En Revision";
+	}
+	if($dato["id_estado"]==2){
+		echo "Aprobado";
+	}
+	if($dato["id_estado"]==3){
+		echo "Denegado";
+	}	
+}else{
+	echo "Pendiente";
+}
+echo'</td>';
+echo '<td>';
+	$form = $this->form;
+	$form->prepare();
+	echo $this->form()->openTag($form);
+				echo $this->formlabel($form->get('estado'));
+				echo $this->formelement($form->get('estado'));
+	echo $this->form()->closeTag($form);
+echo'</td>';
+echo '<td>';
+?>
+	<a href="<?php echo $this->basePath() ?>/application/gestionar/index/<?php echo $dato["id_sol"];?>"> Cambiar Estado</a>
+<?php
+echo'</td>';
+echo '</tr>';
+}
+if ($dato["id_tipo_sol"]==9){
+echo '<tr>';
+echo '<td>';
+echo "SolCompraEquipo";
+echo'</td>';
+echo '<td>';
+echo $dato["justificacion"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha"];
+echo'</td>';
+echo '<td>';
+echo $dato["lugar"];
+echo'</td>';
+echo '<td>';
+echo $dato["valor"];
+echo'</td>';
+echo '<td>';
+echo $dato["nueva_fecha"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha_inicio"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha_fin"];
+echo'</td>';
+echo '<td>';
+if($dato["id_estado"]!=null){
+	if($dato["id_estado"]==1){
+		echo "En Revision";
+	}
+	if($dato["id_estado"]==2){
+		echo "Aprobado";
+	}
+	if($dato["id_estado"]==3){
+		echo "Denegado";
+	}	
+}else{
+	echo "Pendiente";
+}
+echo'</td>';
+echo '<td>';
+	$form = $this->form;
+	$form->prepare();
+	echo $this->form()->openTag($form);
+				echo $this->formlabel($form->get('estado'));
+				echo $this->formelement($form->get('estado'));
+	echo $this->form()->closeTag($form);
+echo'</td>';
+echo '<td>';
+?>
+	<a href="<?php echo $this->basePath() ?>/application/gestionar/index/<?php echo $dato["id_sol"];?>"> Cambiar Estado</a>
+<?php
+echo'</td>';
+echo '</tr>';
+}
+if ($dato["id_tipo_sol"]==10){
+echo '<tr>';
+echo '<td>';
+echo "SolTransporte";
+echo'</td>';
+echo '<td>';
+echo $dato["justificacion"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha"];
+echo'</td>';
+echo '<td>';
+echo $dato["lugar"];
+echo'</td>';
+echo '<td>';
+echo $dato["valor"];
+echo'</td>';
+echo '<td>';
+echo $dato["nueva_fecha"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha_inicio"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha_fin"];
+echo'</td>';
+echo '<td>';
+if($dato["id_estado"]!=null){
+	if($dato["id_estado"]==1){
+		echo "En Revision";
+	}
+	if($dato["id_estado"]==2){
+		echo "Aprobado";
+	}
+	if($dato["id_estado"]==3){
+		echo "Denegado";
+	}	
+}else{
+	echo "Pendiente";
+}
+echo'</td>';
+echo '<td>';
+	$form = $this->form;
+	$form->prepare();
+	echo $this->form()->openTag($form);
+				echo $this->formlabel($form->get('estado'));
+				echo $this->formelement($form->get('estado'));
+	echo $this->form()->closeTag($form);
+echo'</td>';
+echo '<td>';
+?>
+	<a href="<?php echo $this->basePath() ?>/application/gestionar/index/<?php echo $dato["id_sol"];?>"> Cambiar Estado</a>
+<?php
+echo'</td>';
+echo '</tr>';
+}
+if ($dato["id_tipo_sol"]==11){
+echo '<tr>';
+echo '<td>';
+echo "SolContratacion";
+echo'</td>';
+echo '<td>';
+echo $dato["justificacion"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha"];
+echo'</td>';
+echo '<td>';
+echo $dato["lugar"];
+echo'</td>';
+echo '<td>';
+echo $dato["valor"];
+echo'</td>';
+echo '<td>';
+echo $dato["nueva_fecha"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha_inicio"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha_fin"];
+echo'</td>';
+echo '<td>';
+if($dato["id_estado"]!=null){
+	if($dato["id_estado"]==1){
+		echo "En Revision";
+	}
+	if($dato["id_estado"]==2){
+		echo "Aprobado";
+	}
+	if($dato["id_estado"]==3){
+		echo "Denegado";
+	}	
+}else{
+	echo "Pendiente";
+}
+echo'</td>';
+echo '<td>';
+	$form = $this->form;
+	$form->prepare();
+	echo $this->form()->openTag($form);
+				echo $this->formlabel($form->get('estado'));
+				echo $this->formelement($form->get('estado'));
+	echo $this->form()->closeTag($form);
+echo'</td>';
+echo '<td>';
+?>
+	<a href="<?php echo $this->basePath() ?>/application/gestionar/index/<?php echo $dato["id_sol"];?>"> Cambiar Estado</a>
+<?php
+echo'</td>';
+echo '</tr>';
+}
+if ($dato["id_tipo_sol"]==12){
+echo '<tr>';
+echo '<td>';
+echo "SolCancelacion";
+echo'</td>';
+echo '<td>';
+echo $dato["justificacion"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha"];
+echo'</td>';
+echo '<td>';
+echo $dato["lugar"];
+echo'</td>';
+echo '<td>';
+echo $dato["valor"];
+echo'</td>';
+echo '<td>';
+echo $dato["nueva_fecha"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha_inicio"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha_fin"];
+echo'</td>';
+echo '<td>';
+if($dato["id_estado"]!=null){
+	if($dato["id_estado"]==1){
+		echo "En Revision";
+	}
+	if($dato["id_estado"]==2){
+		echo "Aprobado";
+	}
+	if($dato["id_estado"]==3){
+		echo "Denegado";
+	}	
+}else{
+	echo "Pendiente";
+}
+echo'</td>';
+echo '<td>';
+	$form = $this->form;
+	$form->prepare();
+	echo $this->form()->openTag($form);
+				echo $this->formlabel($form->get('estado'));
+				echo $this->formelement($form->get('estado'));
+	echo $this->form()->closeTag($form);
+echo'</td>';
+echo '<td>';
+?>
+	<a href="<?php echo $this->basePath() ?>/application/gestionar/index/<?php echo $dato["id_sol"];?>"> Cambiar Estado</a>
+<?php
+echo'</td>';
+echo '</tr>';
+}
+if ($dato["id_tipo_sol"]==13){
+echo '<tr>';
+echo '<td>';
+echo "SolProrroga";
+echo'</td>';
+echo '<td>';
+echo $dato["justificacion"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha"];
+echo'</td>';
+echo '<td>';
+echo $dato["lugar"];
+echo'</td>';
+echo '<td>';
+echo $dato["valor"];
+echo'</td>';
+echo '<td>';
+echo $dato["nueva_fecha"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha_inicio"];
+echo'</td>';
+echo '<td>';
+echo $dato["fecha_fin"];
+echo'</td>';
+echo '<td>';
+if($dato["id_estado"]!=null){
+	if($dato["id_estado"]==1){
+		echo "En Revision";
+	}
+	if($dato["id_estado"]==2){
+		echo "Aprobado";
+	}
+	if($dato["id_estado"]==3){
+		echo "Denegado";
+	}	
+}else{
+	echo "Pendiente";
+}
+echo'</td>';
+echo '<td>';
+	$form = $this->form;
+	$form->prepare();
+	echo $this->form()->openTag($form);
+				echo $this->formelement($form->get('estado'));
+				
+	
+echo'</td>';
+echo '<td>';
+echo $this->formelement($form->get('submit'));
+echo $this->form()->closeTag($form);
+echo'</td>';
+echo '</tr>';
+}
+}
+
+echo '</tr>';
+echo '</tbody>';
+echo '</table>';
+				?>
+				
+				<br>
+</div>
+</div>

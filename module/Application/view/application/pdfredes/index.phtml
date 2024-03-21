@@ -1,0 +1,267 @@
+<style>
+    .container {
+		width: 1000px;
+		margin: auto;
+		padding: 10px;
+		border: 0px solid #000;
+	}
+
+	body {
+		font-family: Arial, sans-serif;
+	}
+
+	html {
+		margin: 10px;
+		padding: 10px;
+	}
+
+	body {
+		font-family: dejavu sans, Arial;
+		font-size: 0.85em;
+	}
+
+	.bold {
+		font-weight: bold;
+	}
+
+	.font-xxl {
+		font-size: 0.4em;
+	}
+
+	.font-l {
+		font-size: 1.5em;
+	}
+
+	.font-n {
+		font-size: 0.8em;
+	}
+
+	.font-s {
+		font-size: 0.6em;
+	}
+
+	.font-middle {
+		text-align: center;
+	}
+
+	.page-wrap {
+		padding: 0px;
+		margin: 0px;
+	}
+
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		margin: 5px 1px 5px 1px;
+	}
+
+	td, th {
+		border: 1px solid black;
+		padding: 1px 1px 1px 1px;
+	}
+
+	.brdr-top {
+		border-top: 1px solid black;
+	}
+
+	.brdr-bottom {
+		border-bottom: 1px solid black;
+	}
+
+	.brdr-left {
+		border-left: 1px solid black;
+	}
+
+	.brdr-right {
+		border-right: 1px solid black;
+	}
+
+	.bordreless td, .bordreless th {
+		border: 0px thin #ffffff;
+	}
+</style>
+<p>_____________________________________________________________________________________________</p>
+	<h1>Redes de investigación</h1>
+<p>_____________________________________________________________________________________________</p>
+<br>
+<?php 
+	foreach ($datos as $dato) {
+		echo "</br>";
+		echo "</br>";
+		echo "</br>";
+		echo "</br>";
+		echo "</br>";
+		echo "<b>Nombre de la red:</b> ". utf8_decode(trim($dato["nombre"]));
+		echo "<br>";
+		echo "<br>";
+		echo "<b>Datos generales de la red:</b> ";
+		?>
+		<table>
+			<tbody>
+
+				<tr><td>
+					<label class="bold">Código:</label>
+					<label><?php echo utf8_decode(trim($dato["codigo"])); ?></label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Fecha de creación:</label>
+					<label><?php echo utf8_decode(trim($dato["fecha_creacion"])); ?></label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Coordinador 1:</label>
+					<label>
+						<?php 
+							foreach ($this->usuarios as $us) {
+				                if ($dato["coordinador_uno"] == $us["id_usuario"]) {
+				                    echo utf8_decode(trim($us["primer_nombre"]).' '.trim($us["segundo_nombre"]).' '.trim($us["primer_apellido"]).' '.trim($us["segundo_apellido"]));
+				                }
+				            }
+			            ?>
+					</label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Coordinador 2:</label>
+					<label>
+						<?php 
+							foreach ($this->usuarios as $us) {
+				                if ($dato["coordinador_dos"] == $us["id_usuario"]) {
+				                    echo utf8_decode(trim($us["primer_nombre"]).' '.trim($us["segundo_nombre"]).' '.trim($us["primer_apellido"]).' '.trim($us["segundo_apellido"]));
+				                }
+				            }
+			            ?>
+					</label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Estado:</label>
+					<label><?php echo utf8_decode(trim($dato["estado"])); ?></label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Visión:</label>
+					<label><?php echo utf8_decode(trim($dato["vision"])); ?></label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Misión:</label>
+					<label><?php echo utf8_decode(trim($dato["mision"])); ?></label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Objetivos:</label>
+					<label><?php echo utf8_decode(trim($dato["objetivos"])); ?></label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Antecedentes:</label>
+					<label><?php echo utf8_decode(trim($dato["antecedentes"])); ?></label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Justificación:</label>
+					<label><?php echo utf8_decode(trim($dato["justificacion"])); ?></label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Descripción:</label>
+					<label><?php echo utf8_decode(trim($dato["descripcion"])); ?></label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Líneas de investigación:</label>
+					<label><?php echo utf8_decode(trim($dato["lineas_investigacion"])); ?></label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Instituciones:</label>
+					<label><?php echo utf8_decode(trim($dato["instituciones_aliadas"])); ?></label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Socios:</label>
+					<label><?php echo utf8_decode(trim($dato["socios"])); ?></label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Aliados:</label>
+					<label><?php echo utf8_decode(trim($dato["aliados"])); ?></label>
+				</td></tr>
+			 </tbody>
+		</table>
+		<?php
+			echo "<br>";
+			echo "<b>Miembros de la red de la UPN:</b> ";
+		?>
+		<table>
+			<tbody>
+				<tr>
+					<td class="bold">Nombre del miembro</td>
+					<td class="bold">Tipo de vinculación</td>
+					<td class="bold">Fecha de vinculación</td>
+					<td class="bold">Fecha fin de vinculación</td>
+				</tr>
+				<?php
+					foreach ($this->intSemi as $semi) {
+		                if ($dato["id"] == $semi["id_red"]) {
+		                	echo "<tr>";
+			                	echo "<td>";
+				                	foreach ($this->usuarios as $us) {
+						                if ($semi["id_integrantered"] == $us["id_usuario"]) {
+						                    echo utf8_decode(trim($us["primer_nombre"]).' '.trim($us["segundo_nombre"]).' '.trim($us["primer_apellido"]).' '.trim($us["segundo_apellido"]));
+						                }
+						            }
+					            echo "</td>";
+			                    echo "<td>";
+									foreach ($this->valflex as $us) {
+						                if ($semi["tipo_vinculacion"] == $us["id_valor_flexible"]) {
+						                    echo utf8_decode(trim($us["descripcion_valor"]));
+						                }
+						            }
+			                    echo "</td>";
+			                    echo "<td>". utf8_decode(trim($semi["fecha_vinculacion"]))."</td>";
+			                    echo "<td>". utf8_decode(trim($semi["fin_vinculacion"]))."</td>";
+		                    echo "</tr>";
+		                }
+		            }
+				?>
+			</tbody>
+		</table>
+		<?php
+			echo "<br>";
+			echo "<b>Grupos de investigación al que se encuentra articulado el semillero:</b> ";
+		?>
+		<table>
+			<tbody>
+				<tr>
+					<td class="bold">Nombre del grupo</td>
+					<td class="bold">Código</td>
+					<td class="bold">Líder</td>
+					<td class="bold">Descripción</td>
+				</tr>
+				<?php
+					foreach ($this->gruposSemi as $grupos) {
+		                if ($dato["id"] == $grupos["id_red"]) {
+		                	foreach ($this->grupoinv as $grupoinv) {
+				                if ($grupos["id_grupo"] == $grupoinv["id_grupo_inv"]) {
+				                	echo "<tr>";
+					                    echo "<td>";
+					                    	echo utf8_decode(trim($grupoinv["nombre_grupo"]));
+					                    echo "</td>";
+					                    echo "<td>";
+					                    	echo utf8_decode(trim($grupoinv["cod_grupo"]));
+					                    echo "</td>";
+					                    echo "<td>";
+											foreach ($this->usuarios as $us) {
+								                if ($grupoinv["id_lider"] == $us["id_usuario"]) {
+								                    echo utf8_decode(trim($us["primer_nombre"]).' '.trim($us["segundo_nombre"]).' '.trim($us["primer_apellido"]).' '.trim($us["segundo_apellido"]));
+								                }
+								            }
+					                    echo "</td>";
+					                    echo "<td>";
+					                    	echo utf8_decode(trim($grupoinv["descripcion"]));
+					                    echo "</td>";
+                    				echo "</tr>";
+				                }
+				            }
+		                }
+		            }
+				?>
+			</tbody>
+		</table>
+		<?php
+			echo "<br>";
+			echo "<br>";
+			echo "<br>";
+			echo "<br>";
+			echo "<br>";
+	}
+?>

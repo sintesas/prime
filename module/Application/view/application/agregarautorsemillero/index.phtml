@@ -1,0 +1,91 @@
+<style>
+	.filter-group input[type="text"],select{
+		width: 100%;
+	}
+	.filter-group {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+	.filter-group-left {float: left;}
+	.filter-group-right {float:right;}
+	.filter-group .btn {width: 275px;}
+	.filter-group .dropdown {display: inline;}
+	.filter-group .dropdown-menu {width: 300px;top: 32px;padding: 10px;}
+	.dropdown-menu-inner {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+	.dropdown-menu-right {left:-140px !important;}
+</style>
+<script type="text/javascript">
+	function showHint(str) {
+		var valthis = str.toLowerCase();
+	    var num = 0;
+
+	    $('select#id_autor>option').each(function () {
+	          var text = $(this).text().toLowerCase();
+	          if(text.indexOf(valthis) !== -1)  
+	              {$(this).show(); $(this).prop('selected',true);}
+	          else{$(this).hide();}
+	           });
+	}
+</script>
+<?php include("public/menu.php"); ?>
+<div class="col col100">
+	<div class="filter-group">
+		<div class="filter-group-left"><h4><?php echo $this->titulo; ?></h4></div>
+		<div class="filter-group-right">
+			<a class="btn" style="margin-right: 8px;" href="<?php echo $this->basePath() ?>/application/editarsemilleroinv/index/<?php echo $this->id2; ?>"><i class="icon-arrow-left"></i>Regresar</a>
+			<a class="btn" style="margin-right: 8px;" href="<?php echo $this->basePath() ?>/application/agregarautorsemillero/index/<?php echo $id;?>/<?php echo $id2;?>/<?php echo $id3; ?>"><i class="fa fa-close" style="margin-right: 5px;"></i>Borrar filtro</a>
+			<div class="dropdown">
+				<button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="margin-right: 8px;"><i class="fa fa-filter" style="margin-right: 5px;"></i>Filtro</button>
+				<div class="dropdown-menu dropdown-menu-right">
+					<div class="dropdown-menu-inner">
+						<?php								
+						$form = $this->form;
+						$form->prepare ();
+						echo $this->form ()->openTag ( $form );
+						echo '<h6>'.$this->flashMessenger ()->render ().'</h6>';
+						echo $this->formlabel($form->get('documento'));
+						echo $this->formelement($form->get('documento'));
+						echo $this->formlabel($form->get('nombre'));
+						echo $this->formelement($form->get('nombre'));
+						echo $this->formlabel($form->get('apellido'));
+						echo $this->formelement($form->get('apellido'));
+						echo $this->formlabel($form->get('usuario'));
+						echo $this->formelement($form->get('usuario'));
+						echo $this->formelement ( $form->get ( 'submit' ) );
+ 						echo $this->form ()->closeTag ( $form );
+ 						?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="col col100 noshadow">
+<?php
+echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+echo '<table class="table" style="width: 100%; max-width: 100%;">';
+echo "<thead>";
+echo "<th style='width: 50%;'>Autor</th>";
+echo "<th style='width: 25%;'>Agregar</th>";
+echo "<th style='width: 25%;'>Eliminar</th>";
+echo '</thead>';
+echo '<tbody>';
+foreach ( $this->usuariosArray as $dato ) {
+	echo '<tr>';
+	echo '<td>';
+	echo $dato ["primer_nombre"]." ".$dato ["segundo_nombre"]." ".$dato ["primer_apellido"]." ".$dato ["segundo_apellido"];
+	echo '</td>';
+    echo '<td style="text-align:center;">';
+    ?>
+    	<a class="btn" href="<?php echo $this->basePath() ?>/application/agregarautorsemillero/add/<?php echo $dato ["id_usuario"];?>/<?php echo $id;?>/<?php echo $id2;?>/<?php echo $id3;?>"><i class="fa fa-plus"></i></a>
+	<?php
+    echo '</td>';
+    echo '<td style="text-align:center;">';
+    ?>
+    	<a class="btn" href="<?php echo $this->basePath() ?>/application/agregarautorsemillero/drop/<?php echo $dato ["id_usuario"];?>/<?php echo $id;?>/<?php echo $id2;?>/<?php echo $id3;?>"><i class="fa fa-trash"></i></a>
+	<?php
+    echo '</td>';
+	echo '</tr>';
+	
+}
+echo '</table>';
+echo '</div>';
+?>
+</div>

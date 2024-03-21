@@ -1,0 +1,210 @@
+<div class="rowmenu">
+	<div class="twelve columns">
+	<?php if($this->menu==1){ ?>
+		<ul class="menu">
+				<li><a href="<?php echo $this->basePath()?>/application/index/index">Inicio</a></li>
+				<li><a href="">Administracion y Procesos de Soporte</a>
+					<ul>
+						<li><a href="<?php echo $this->basePath()?>/application/usuario/index">Gestion Usuarios</a></li>
+						<li><a href="<?php echo $this->basePath()?>/application/tipovalores/index">Tipos Valores</a></li>
+						<li><a href="<?php echo $this->basePath()?>/application/anexodocumento/index">Anexo Documentos</a></li>
+						<li><a href="<?php echo $this->basePath()?>/application/gestionarsolicitudes/index">Gestionar Solicitudes</a></li>
+						<li><a href="<?php echo $this->basePath()?>/application/mensajeusuario/index">Mensaje a Usuario</a></li>
+						<li><a href="<?php echo $this->basePath()?>/application/roles/index">Gestion de Roles y Permisos</a></li>
+						<li><a href="<?php echo $this->basePath()?>/application/auditoria/index">Auditoria</a></li>
+						<li><a href="<?php echo $this->basePath()?>/application/reportes/index">Reportes</a></li>
+					</ul>
+				</li>
+				<li><a href="">Herramientas de Socializacion</a>
+					<ul>
+						<li><a href="<?php echo $this->basePath()?>/application/noticias/index">Noticias</a></li>
+						<li><a href="<?php echo $this->basePath()?>/application/eventos/index">Eventos</a></li>
+						<li><a href="<?php echo $this->basePath()?>/application/foro/index">Foro</a></li>
+					</ul>
+				</li>
+				<li><a href="">Grupos de Investigacion</a>
+					<ul>
+						<li><a href="<?php echo $this->basePath()?>/application/grupoinv/index">Gestion Grupos Investigacion</a></li>
+						<li><a href="<?php echo $this->basePath()?>/application/consultagi/index">Consulta Grupos Investigacion</a></li>
+						<li><a href="<?php echo $this->basePath()?>/application/consultagp/index">Consulta Grupos Proyectos</a></li>
+						<li><a href="<?php echo $this->basePath()?>/application/consultai/index">Consulta Investigadores</a></li>
+					</ul>
+				</li>
+<li><a href="<?php echo $this->basePath()?>/application/login/cerrar"><span class="label">Cerrar Sesion</span></a></li>
+		</ul>
+		<?php } else{?>
+		<ul class="menu">
+				<li><a href="<?php echo $this->basePath()?>/application/index/index">Inicio</a></li>
+				<li><a href="">Modulo Administracion y Procesos de Soporte</a>
+					<ul>
+						<li><a href="<?php echo $this->basePath()?>/application/mensajeadministrador/index">Mensaje al Administrador</a></li>
+						<li><a href="<?php echo $this->basePath()?>/application/cambiarcontrasena/index">Cambiar Clave </a></li>
+					</ul>
+				</li>
+				<li><a href="">Herramientas de Socializacion</a>
+					<ul>
+						<li><a href="<?php echo $this->basePath()?>/application/foro/index">Foro</a></li>
+					</ul>
+				</li>
+				<li><a href="">Grupos de Investigacion</a>
+					<ul>
+						<li><a href="<?php echo $this->basePath()?>/application/grupoinv/index">Editar Grupo Investigacion</a></li>
+					</ul>
+				</li>
+<li><a href="<?php echo $this->basePath()?>/application/login/cerrar"><span class="label">Cerrar Sesion</span></a></li>
+		</ul>
+		<?php } ?>
+	</div>
+</div>
+<div class="row">
+	<div class="nine columns">
+		<div id="centersectiontitle">
+			<div class="twelve columns">
+				<div class="sidebartitle"><h3>
+				<?php
+					echo $this->titulo;
+				?>
+				</h3>
+			</div>
+		</div>
+	</div>
+<div class="six columns">
+				<?php
+				$form = $this->form;
+				$form->prepare();
+
+				$form->setAttributes(array('action'=> $this->url.'/application/consultagi/index',
+										'method'=>'post'));
+				echo $this->form()->openTag($form);
+				echo '<p>';
+				echo $this->formlabel($form->get('nombre_grupo'));
+				echo $this->formelement($form->get('nombre_grupo'));
+				echo '<p>';
+				echo $this->formlabel($form->get('id_unidad_academica'));
+				echo $this->formelement($form->get('id_unidad_academica'));
+				echo '<p>';
+				echo $this->formlabel($form->get('id_dependencia_academica'));
+				echo $this->formelement($form->get('id_dependencia_academica'));
+				echo '<p>';
+				echo $this->formlabel($form->get('id_programa_academico'));
+				echo $this->formelement($form->get('id_programa_academico'));
+				echo '<p>';
+				
+				echo $this->formelement($form->get('submit'));
+				echo '<br>';
+				
+				echo $this->form()->closeTag($form);
+				?>
+				<br>
+
+
+				<?php
+if($this->consulta==1){		
+foreach ($this->datos as $dato){
+echo '<table style="width:100%; border-spacing:1;">';
+				echo '<tr  bgcolor="#B4CDCD">';
+				echo '<th>Nombre Grupo</th>';
+				echo '<th>Fecha Creación</th>';
+				echo '<th>Categoría</th>';
+				echo '<th>Unidad</th>';
+				echo '<th>Dependencia</th>';
+				echo '<th>Programa</th>';
+				echo '<th>Email</th>';
+				echo '</tr>';
+				echo '<tr>';
+				echo '<td>';
+				echo $dato["nombre_grupo"];
+				echo'</td>';
+				echo '<td>';
+				echo $dato["fecha_creacion"];
+				echo'</td>';
+				echo '<td>';
+				echo $dato["id_clasificacion"];
+				echo'</td>';
+				echo '<td>';
+				echo $dato["id_unidad_academica"];
+				echo'</td>';
+				echo '<td>';
+				echo $dato["id_dependencia_academica"];
+				echo'</td>';
+				echo '<td>';
+				echo $dato["id_programa_academico"];
+				echo'</td>';
+				echo '<td>';
+				echo $dato["email"];
+				echo'</td>';
+				echo '</tr>';
+					echo '<table style="width:100%; border-spacing:1;">';
+					echo '<tr>';
+					echo '<th>Líneas</th>';
+					echo '</tr>';
+					foreach ($this->datos2 as $dato2){
+					if($dato2["id_grupo_inv"]==$dato["id_grupo_inv"]){
+					echo '<tr>';
+					echo '<td>';
+					echo $dato2["nombre_linea"];
+					echo'</td>';
+					echo '</tr>';
+					}}
+					echo '</table>';
+
+					echo '<table style="width:100%; border-spacing:1;">';
+					echo '<tr>';
+					echo '<th>Código Proyecto</th>';
+					echo '<th>Objetivo Proyecto</th>';
+					echo '<th>Resumen Ejecutivo</th>';
+					echo '<th>Equipo Trabajo</th>';
+					echo '</tr>';
+					foreach ($this->datos4 as $dato4){
+					if($dato4["id_grupo_inv"]==$dato["id_grupo_inv"]){
+					echo '<tr>';
+					echo '<td>';
+					echo $dato4["codigo_proyecto"];
+					echo'</td>';
+					echo '<td>';
+					echo $dato4["objetivo_general"];
+					echo'</td>';
+					echo '<td>';
+					echo $dato4["resumen_ejecutivo"];
+					echo'</td>';
+					echo '<td>';
+					echo $dato4["equipo_trabajo"];
+					echo'</td>';
+					echo '</tr>';
+					}}
+					echo '</table>';
+
+					echo '<table style="width:100%; border-spacing:1;">';
+					echo '<tr>';
+					echo '<th>Nombre Libro</th>';
+					echo '<th>Autores</th>';
+					echo '<th>Fecha</th>';
+					echo '<th>Editorial</th>';
+					echo '</tr>';
+					foreach ($this->datos3 as $dato3){
+					if($dato3["id_grupo_inv"]==$dato["id_grupo_inv"]){
+					echo '<tr>';
+					echo '<td>';
+					echo $dato3["titulo_libro"];
+					echo'</td>';
+					echo '<td>';
+					echo $dato3["autores"];
+					echo'</td>';
+					echo '<td>';
+					echo $dato3["fecha"];
+					echo'</td>';
+					echo '<td>';
+					echo $dato3["editorial"];
+					echo'</td>';
+					echo '</tr>';
+					}}
+					echo '</table>';
+
+				echo '</table>';
+				}
+				}
+
+				?>
+
+
+</div>

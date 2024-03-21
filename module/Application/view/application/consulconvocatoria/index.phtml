@@ -1,0 +1,669 @@
+<style>
+    .filter-cons input[type="text"],select{
+        width: 100%;
+    }
+    .filter-cons {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .filter-cons-left {float: left;}
+    .filter-cons-right {float:right;}
+    .filter-cons .btn {width: 275px;}
+    .filter-cons .dropdown {display: inline;}
+    .filter-cons .dropdown-menu {width: 300px;top: 32px;padding: 10px;}
+    .dropdown-menu-inner {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .dropdown-menu-right {left:-140px !important;}
+    .user-success { left:-140px !important; }
+</style>
+
+<script type="text/javascript">
+    function funtionRegex (event) {
+        var keyCode = event.keyCode || event.which
+        // Don't validate the input if below arrow, delete and backspace keys were pressed 
+        if (keyCode == 8 || (keyCode >= 35 && keyCode <= 40)) { // Left / Up / Right / Down Arrow, Backspace, Delete keys
+            return;
+        }
+        
+        var regex = new RegExp("^[0-9]+$");
+        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+
+        if (!regex.test(key)) {
+            event.preventDefault();
+            return false;
+        }
+    };
+</script>
+
+<?php include("public/menu.php"); ?>
+<div class="col col100">
+    <div class="filter-cons">
+        <div class="filter-cons-left"><h4><?php echo $this->titulo; ?></h4></div>
+        <div class="filter-cons-right">
+            <a class="btn" style="margin-right: 8px;" href="<?php echo $this->basePath() ?>/application/consulconvocatoria/index"><i class="fa fa-close" style="margin-right: 5px;"></i>Borrar filtro</a>
+            <div class="dropdown">
+                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="margin-right: 8px;"><i class="fa fa-filter" style="margin-right: 5px;"></i>Filtro</button>
+                <div class="dropdown-menu dropdown-menu-right" onclick="event.stopPropagation()">
+                    <div class="dropdown-menu-inner">
+                        <?php                               
+                        $form = $this->form;
+                        $form->prepare ();
+                        $form->setAttributes(array(
+                            'action' => $this->url . '/application/consulconvocatoria/index',
+                            'method' => 'post'
+                        ));
+                        echo $this->form ()->openTag ( $form );
+                        echo '<h6>'.$this->flashMessenger ()->render ().'</h6>';
+                        echo $this->formlabel($form->get('id_convocatoria'));
+                        echo $this->formelement($form->get('id_convocatoria'));
+                        echo $this->formlabel($form->get('titulo'));
+                        echo $this->formelement($form->get('titulo'));
+                        echo $this->formlabel($form->get('id_tipo_conv'));
+                        echo $this->formelement($form->get('id_tipo_conv'));
+                        echo $this->formlabel($form->get('id_estado'));
+                        echo $this->formelement($form->get('id_estado'));
+                        echo $this->formlabel($form->get('fecha_apertura'));
+                        echo $this->formelement($form->get('fecha_apertura'));
+                        echo $this->formelement($form->get('submit'));
+                        echo $this->form ()->closeTag ( $form );
+                        ?>
+                    </div>                      
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="wrapper_1">
+	<div id="container_1">
+
+		<div class="row2">
+			<div class="nine3 columns">		
+				<?php
+    
+    if ($this->consulta == 1) {
+        
+        if ($this->datos == null) {
+            echo '<br>';
+            echo '<h5>';
+            echo 'No hay datos asociados a esta consulta';
+            echo '</h5>';
+        }
+        if(count($this->datos)>0)
+        foreach ($this->datos as $dato) {
+            
+            echo '<legend>';
+            echo 'Convocatoria ' . $dato["id_convocatoria"] . ' ' . $dato["titulo"];
+            echo '</legend>';
+            
+            if (trim($dato["id_estado"]) != "A" && trim($this->menu != 1)) {
+                $cont = 0;
+                $contm = 0;
+                echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+                echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                echo '<thead>';
+             
+                echo '<th style="width:5%">ID de la convocatoria</th>';
+                echo '<th style="width:25%">Título de la convocatoria</th>';
+                echo '<th style="width:5%">Tipo de convocatoria</th>';
+                echo '<th style="width:25%">Descripción de la convocatoria</th>';
+                echo '<th style="width:5%">Fecha de apertura</th>';
+                echo '<th style="width:5%">Fecha de cierre</th>';
+                echo '<th style="width:5%">Estado</th>';
+                echo '<th style="width:10%"># de aplicaciones</th>';
+                echo '<th style="width:10%">Ver convocatoria</th>';
+                echo '<th style="width:5%">Aplicar</th>';
+
+                echo '</tr>';
+                echo '</thead>';
+                echo '<tbody>';
+                echo '<td>';
+                echo $dato["id_convocatoria"];
+                echo '</td>';
+                echo '<td>';
+                echo $dato["titulo"];
+                echo '</td>';
+                echo '<td>';
+                
+                if (trim($dato["tipo_conv"]) == "i") {
+                    echo "Interna";
+                } elseif (trim($dato["tipo_conv"]) == "e") {
+                    echo "Externa";
+                } elseif (trim($dato["tipo_conv"]) == "m") {
+                    echo "De Monitores";
+                } elseif (trim($dato["tipo_conv"]) == "s") {
+                    echo "Especial";
+                }
+                echo '</td>';
+                echo '<td>';
+                echo $dato["descripcion"];
+                echo '</td>';
+                echo '<td>';
+                echo $dato["fecha_apertura"];
+                echo '</td>';
+                echo '<td>';
+                echo $dato["fecha_cierre"];
+                echo '</td>';
+                
+                echo '<td>';
+                $estado = '';
+                if (trim($dato["id_estado"]) == "A") {
+                    echo $estado = "En Construccion";
+                } elseif (trim($dato["id_estado"]) == "R") {
+                    echo $estado = "Cerrada";
+                } elseif (trim($dato["id_estado"]) == "H") {
+                    echo $estado = "Archivada";
+                } elseif (trim($dato["id_estado"]) == "N") {
+                    echo $estado = "Anulada";
+                } elseif (trim($dato["id_estado"]) == "P") {
+                    echo $estado = "Con Aplicaciones";
+                } elseif (trim($dato["id_estado"]) == "B") {
+                    echo $estado = "Abierta";
+                }
+                echo '</td>';
+                $f_hoy = date("Y") . '-' . date("m") . '-' . date("d");
+                echo '<td>';
+                $cantAplicacionesUsuario=0;
+                $cantAplicacionesUsuariom=0;
+                foreach ($this->ap as $aplica) {
+                    if ($aplica["id_convocatoria"] == $dato["id_convocatoria"]) {
+                        $cont = $cont + 1;
+                        if($aplica["id_investigador"]==$this->idUsuario){
+                            $cantAplicacionesUsuario++;
+                        }
+                    }
+                }
+                
+                foreach ($this->apm as $aplicam) {
+                    if ($aplicam["id_convocatoria"] == $dato["id_convocatoria"]) {
+                        $contm = $contm + 1;
+                        if($aplicam["id_usuario"]==$this->idUsuario){
+                            $cantAplicacionesUsuariom++;
+                        }
+                    }
+                }
+                if (trim($dato["tipo_conv"]) == 'm') {
+                    echo $contm;
+                } else {
+                    echo $cont;
+                }
+                
+                echo '<td>';
+                ?>
+<a class="btn"
+						href="<?php echo $this->basePath() ?>/application/editarconvocatoriai/index/<?php echo $dato["id_convocatoria"];?>/ver">Ver
+						<br>Convocatoria 
+					</a>
+
+                <?php
+                    echo '</td>';
+                    if (trim($dato["id_estado"]) == "B" || trim($dato["id_estado"]) == "P") {
+                        foreach ($this->rolesConv as $rolConv){
+                            if ($rolConv["id_rol"]==$this->rolUsuario && $rolConv["id_convocatoria"]==$dato["id_convocatoria"]) {
+                               echo '<td>';
+                               if($cantAplicacionesUsuario==0 && $cantAplicacionesUsuariom==0){
+                ?>
+                    <a class="btn" href="<?php echo $this->basePath() ?>/application/aplicar<?php if(trim($dato["tipo_conv"])=='m' || trim($dato["tipo_conv"])=='i'){echo trim($dato["tipo_conv"]); }?>/index/<?php echo $dato["id_convocatoria"];?>">Aplicar <br>a la Convocatoria</a>
+                <?php
+                                }else{
+                                    echo "Usted ya aplicó a esta convocatoria";
+                                }
+                                echo '</td>';
+                                break;
+                            }
+                        }
+                    }
+                echo '</tbody>';
+                echo '</table>';
+                echo '</div>';
+                ?>
+
+<fieldset>
+						<legend>Documentos anexos a la convocatoria</legend>
+
+				<?php
+                
+                echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+                echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                echo '<thead>';
+                
+                echo '<th style="width:30%">Tipo Archivo</th>';
+                echo '<th style="width:70%">Archivo</th>';
+                
+                echo '</thead>';
+                echo '<tbody>';
+                
+                foreach ($this->Archivosconv as $archi) {
+                    if ($dato["id_convocatoria"] == $archi["id_convocatoria"]) {
+                        echo '<tr>';
+                        echo '<td>';
+                        foreach ($this->valflex as $vf) {
+                            if ($vf["id_valor_flexible"] == $archi["id_tipo_archivo"]) {
+                                echo $vf["descripcion_valor"];
+                            }
+                        }
+                        echo '</td>';
+                        echo '<td>';
+                        ?>
+				<a
+							href="<?php echo $this->basePath()?>/application/archivosconv/bajar/<?php echo $archi["id_archivo"];?>">Bajar
+							archivo : </a><?php echo $archi["archivo"]; ?> 
+				<?php
+                        
+                        echo '</td>';
+                        echo '</tr>';
+                    }
+                }
+                
+                echo '</tr>';
+                echo '</table>';
+                echo '</div>';
+                ?>
+</fieldset>
+					<br>
+					<fieldset>
+						<legend>Vínculos agregados a la convocatoria</legend>
+
+				<?php
+                echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+                echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                echo '<thead>';
+                echo '<th style="width:25%">Título URL</th>';
+                echo '<th style="width:25%">Url</th>';
+                echo '<th style="width:50%">Descripción Url</th>';
+                
+                echo '</tr>';
+                
+                echo '<tr>';
+                foreach ($this->Urls as $ur) {
+                    if ($dato["id_convocatoria"] == $ur["id_convocatoria"]) {
+                        echo '</thead>';
+                        echo '<tbody>';
+                        echo '<td>';
+                        
+                        echo $ur["nom_url"];
+                        
+                        echo '</td>';
+                        echo '<td>';
+                        ?>
+<?php $ura='http://'.$ur["url"];  ?>
+			<a href="<?php echo $ura ?>" target="_blank">
+				<?php echo $ur["url"]; ?> 
+			</a><?php
+                        echo '</td>';
+                        echo '<td>';
+                        
+                        echo $ur["descripcion"];
+                        
+                        echo '</td>';
+                        
+                        echo '</tr>';
+                    }
+                }
+                
+                echo '</tr>';
+                echo '</table>';
+                echo '</div>';
+                ?>
+</fieldset>
+					<br>
+
+					<legend>Cronograma de la convocatoria</legend>
+
+				<?php
+                echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+                echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                echo '<thead>';
+                
+                echo '<th style="width:30%">Nombre Actividad</th>';
+                echo '<th style="width:30%">Descripción</th>';
+                echo '<th style="width:30%">Objetivo</th>';
+                echo '<th style="width:5%">Fecha Inicio</th>';
+                echo '<th style="width:5%">Fecha Fin</th>';
+                
+                echo '</tr>';
+                
+                foreach ($this->Cronograma as $crono) {
+                    if ($dato["id_convocatoria"] == $crono["id_convocatoria"]) {
+                        echo '</thead>';
+                        echo '<tbody>';
+                        echo '<td>';
+                        echo $crono["nombre_actividad"];
+                        echo '</td>';
+                        echo '<td>';
+                        echo $crono["descripcion"];
+                        echo '</td>';
+                        echo '<td>';
+                        echo $crono["objetivo"];
+                        echo '</td>';
+                        echo '<td>';
+                        echo $crono["fecha_inicio"];
+                        
+                        echo '</td>';
+                        echo '<td>';
+                        echo $crono["fecha_cierre"];
+                        echo '</td>';
+                    }
+                }
+                
+                echo '</tr>';
+                echo '</table>';
+                echo '</div>';
+                ?>
+
+<br>
+					<br>
+
+<?php
+            } elseif ($this->menu == 1) {
+                $cont = 0;
+                $contm = 0;
+                echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+                echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                echo '<thead>';
+                echo '<th style="width:5%">ID de la convocatoria</th>';
+                echo '<th style="width:25%">Título de la convocatoria</th>';
+                echo '<th style="width:5%">Tipo de convocatoria</th>';
+                echo '<th style="width:25%">Descripción de la convocatoria</th>';
+                echo '<th style="width:5%">Fecha de apertura</th>';
+                echo '<th style="width:5%">Fecha de cierre</th>';
+                echo '<th style="width:5%">Estado</th>';
+                echo '<th style="width:5%"># de aplicaciones</th>';
+                echo '<th style="width:5%">Editar convocatoria</th>';
+                echo '<th style="width:5%">Gestion requisitos</th>';
+                echo '<th style="width:5%">Ver convocatoria</th>';
+                echo '<th style="width:5%">Aplicar</th>';
+                echo '</tr>';
+                echo '</thead>';
+                echo '<tbody>';
+                echo '<td>';
+                echo $dato["id_convocatoria"];
+                echo '</td>';
+                echo '<td>';
+                echo $dato["titulo"];
+                echo '</td>';
+                echo '<td>';
+                
+                if (trim($dato["tipo_conv"]) == "i") {
+                    echo "Interna";
+                } elseif (trim($dato["tipo_conv"]) == "e") {
+                    echo "Externa";
+                } elseif (trim($dato["tipo_conv"]) == "m") {
+                    echo "De Monitores";
+                } elseif (trim($dato["tipo_conv"]) == "s") {
+                    echo "Especial";
+                }
+                echo '</td>';
+                echo '<td>';
+                echo $dato["descripcion"];
+                echo '</td>';
+                echo '<td>';
+                echo $dato["fecha_apertura"];
+                echo '</td>';
+                echo '<td>';
+                echo $dato["fecha_cierre"];
+                echo '</td>';
+                echo '<td>';
+                $estado = '';
+                if (trim($dato["id_estado"]) == "A") {
+                    echo $estado = "En Construccion";
+                } elseif (trim($dato["id_estado"]) == "R") {
+                    echo $estado = "Cerrada";
+                } elseif (trim($dato["id_estado"]) == "H") {
+                    echo $estado = "Archivada";
+                } elseif (trim($dato["id_estado"]) == "N") {
+                    echo $estado = "Anulada";
+                } elseif (trim($dato["id_estado"]) == "P") {
+                    echo $estado = "Con Aplicaciones";
+                } elseif (trim($dato["id_estado"]) == "B") {
+                    echo $estado = "Abierta";
+                }
+                echo '</td>';
+                $f_hoy = date("Y") . '-' . date("m") . '-' . date("d");
+                echo '<td>';
+                $cantAplicacionesUsuario=0;
+                $cantAplicacionesUsuariom=0;
+                foreach ($this->ap as $aplica) {
+                    if ($aplica["id_convocatoria"] == $dato["id_convocatoria"]) {
+                        $cont = $cont + 1;
+                        if($aplica["id_investigador"]==$this->idUsuario){
+                            $cantAplicacionesUsuario++;
+                        }
+                    }
+                }
+                
+                foreach ($this->apm as $aplicam) {
+                    if ($aplicam["id_convocatoria"] == $dato["id_convocatoria"]) {
+                        $contm = $contm + 1;
+                        if($aplicam["id_usuario"]==$this->idUsuario){
+                            $cantAplicacionesUsuariom++;
+                        }
+                    }
+                }
+                if (trim($dato["tipo_conv"]) == 'm') {
+                    echo $contm;
+                } else {
+                    echo $cont;
+                }
+                echo '</td>';
+                echo '<td>';
+                if ($this->menu == 1) {
+                    if (trim($dato["id_estado"]) != "B" && trim($dato["id_estado"]) != "P" && trim($dato["id_estado"]) != "H") {
+                        
+                        ?>
+<a class="btn"
+						href="<?php echo $this->basePath() ?>/application/editarconvocatoriai/index/<?php echo $dato["id_convocatoria"];?>">Editar
+						<br>convocatoria
+					</a>
+
+<?php
+                    } else {
+                        
+                        ?>
+<a class="btn"
+						href="<?php echo $this->basePath() ?>/application/editarconvocatoriai/index/<?php echo $dato["id_convocatoria"];?>/fechas">Editar
+						<br>fechas
+					</a>
+<?php
+                    }
+                }
+                
+                echo '</td>';
+                if ($this->menu == 1) {
+                    if (trim($dato["id_estado"]) == "P" || trim($dato["id_estado"]) == "R") {
+                        echo '<td>';
+                        ?>
+<a class="btn"
+						href="<?php echo $this->basePath() ?>/application/gestionrequi/index/<?php echo $dato["id_convocatoria"];?>">Gestion
+						<br>requisitos <br>y evaluaciones
+					</a>
+
+<?php
+                        echo '</td>';
+                    } else {
+                        echo '<td>';
+                        echo '</td>';
+                    }
+                } else {
+                    echo '<td>';
+                    echo '</td>';
+                }
+                
+                echo '<td>';
+                ?>
+<a class="btn"
+						href="<?php echo $this->basePath() ?>/application/editarconvocatoriai/index/<?php echo $dato["id_convocatoria"];?>/ver">Ver<br>
+						convocatoria
+					</a>
+
+                <?php
+                    echo '</td>';
+                    if (trim($dato["id_estado"]) == "B" || trim($dato["id_estado"]) == "P") {
+                        foreach ($this->rolesConv as $rolConv){
+                            if ($rolConv["id_rol"]==$this->menu && $rolConv["id_convocatoria"]==$dato["id_convocatoria"]) {
+                               echo '<td>';
+                               if($cantAplicacionesUsuario==0 && $cantAplicacionesUsuariom==0){
+                                    ?>
+                                        <a class="btn" href="<?php echo $this->basePath() ?>/application/aplicar<?php if(trim($dato["tipo_conv"])=='m' || trim($dato["tipo_conv"])=='i'){echo trim($dato["tipo_conv"]); }?>/index/<?php echo $dato["id_convocatoria"];?>">Aplicar <br>a la Convocatoria</a>
+                                    <?php
+                                }else{
+                                    echo "Usted ya aplicó a esta convocatoria";
+                                }
+                                echo '</td>';
+                                break;
+                            }
+                        }
+                    }
+                echo '</tbody>';
+                echo '</table>';
+                echo '</div>';
+                ?>
+
+<br>
+
+					<fieldset>
+
+						<legend>Documentos Anexos a la Convocatoria</legend>
+
+				<?php
+                
+                echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+                echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                echo '<thead>';
+                
+                echo '<th style="width:30%">Tipo Archivo</th>';
+                echo '<th style="width:70%">Archivo</th>';
+                
+                echo '</thead>';
+                echo '<tbody>';
+                
+                foreach ($this->Archivosconv as $archi) {
+                    if ($dato["id_convocatoria"] == $archi["id_convocatoria"]) {
+                        echo '<tr>';
+                        echo '<td>';
+                        foreach ($this->valflex as $vf) {
+                            if ($vf["id_valor_flexible"] == $archi["id_tipo_archivo"]) {
+                                echo $vf["descripcion_valor"];
+                            }
+                        }
+                        echo '</td>';
+                        echo '<td>';
+                        ?>
+				<a
+							href="<?php echo $this->basePath()?>/application/archivosconv/bajar/<?php echo $archi["id_archivo"];?>">Bajar
+							archivo : </a><?php echo $archi["archivo"]; ?> 
+				<?php
+                        
+                        echo '</td>';
+                        echo '</tr>';
+                    }
+                }
+                
+                echo '</tr>';
+                echo '</table>';
+                echo '</div>';
+                ?>
+</fieldset>
+					<br>
+					<fieldset>
+						<legend>Vínculos Agregados a la Convocatoria</legend>
+
+				<?php
+                echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+                echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                echo '<thead>';
+                echo '<th style="width:25%">Título URL</th>';
+                echo '<th style="width:25%">Url</th>';
+                echo '<th style="width:50%">Descripción Url</th>';
+                
+                echo '</tr>';
+                
+                echo '<tr>';
+                foreach ($this->Urls as $ur) {
+                    if ($dato["id_convocatoria"] == $ur["id_convocatoria"]) {
+                        echo '</thead>';
+                        echo '<tbody>';
+                        echo '<td>';
+                        
+                        echo $ur["nom_url"];
+                        
+                        echo '</td>';
+                        echo '<td>';
+                        ?>
+<?php $ura='http://'.$ur["url"];  ?>
+			<a href="<?php echo $ura ?>" target="_blank">
+				<?php echo $ur["url"]; ?> 
+			</a><?php
+                        echo '</td>';
+                        echo '<td>';
+                        
+                        echo $ur["descripcion"];
+                        
+                        echo '</td>';
+                        
+                        echo '</tr>';
+                    }
+                }
+                
+                echo '</tr>';
+                echo '</table>';
+                echo '</div>';
+                ?>
+</fieldset>
+					<br>
+					<fieldset>
+						<legend>Cronograma de la Convocatoria</legend>
+
+				<?php
+                echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+                echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                echo '<thead>';
+                
+                echo '<th style="width:30%">Nombre Actividad</th>';
+                echo '<th style="width:30%">Descripción</th>';
+                echo '<th style="width:30%">Objetivo</th>';
+                echo '<th style="width:5%">Fecha Inicio</th>';
+                echo '<th style="width:5%">Fecha Fin</th>';
+                
+                echo '</tr>';
+                
+                foreach ($this->Cronograma as $crono) {
+                    if ($dato["id_convocatoria"] == $crono["id_convocatoria"]) {
+                        echo '</thead>';
+                        echo '<tbody>';
+                        echo '<td>';
+                        echo $crono["nombre_actividad"];
+                        echo '</td>';
+                        echo '<td>';
+                        echo $crono["descripcion"];
+                        echo '</td>';
+                        echo '<td>';
+                        echo $crono["objetivo"];
+                        echo '</td>';
+                        echo '<td>';
+                        echo $crono["fecha_inicio"]; 
+
+				echo'</td>';
+				echo '<td>';
+					echo $crono["fecha_cierre"];
+				echo'</td>';
+
+}}			
+				
+				echo '</tr>';
+				echo '</table>';
+                echo '</div>';
+				?>
+</fieldset>
+
+<?php
+				}
+
+echo '<br>';
+echo '<br>';
+				}
+}
+
+
+				?>
+<br>
+					<br>
+				
+			</div>
+		</div>
+	</div>

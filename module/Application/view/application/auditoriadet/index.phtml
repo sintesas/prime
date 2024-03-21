@@ -1,0 +1,34 @@
+<style>
+	.filter-audi {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+	.filter-audi-left {float: left;}
+	.filter-audi-right {float: right;}
+	.filter-audi-right .btn {width: 275px;}
+</style>
+<?php include("public/menu.php"); ?>
+<div class="col col100">
+	<div class="filter-audi">
+		<div class="filter-audi-left"><h4><?php echo $this->titulo; ?></h4></div>
+		<div class="filter-audi-right">
+			<a class="btn" href="<?php echo $this->basePath() ?>/application/auditoria/index"><i class="fa fa-arrow-left"></i> Regresar</a>
+			<a class="btn" href="<?php echo $this->basePath() ?>/application/auditoria/report/<?php echo $this->id_p ?>"><i class="fa fa-bar-chart"></i> Reporte</a>
+		</div>
+	</div>
+</div>
+<div class="col col100 noshadow">
+	<div style='overflow-y:auto; max-height:4000px; width: 100%;'>
+		<table class="table" style="width: 100%; max-width: 100%;">
+			<thead>
+				<tr>
+					<th>Eventos</th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php foreach ($this->datos3 as $dato) { ?>
+				<tr>
+					<td><?php echo $dato["evento"]; ?></td>
+				</tr>
+			<?php } ?>
+			</tbody>
+		</table>
+	</div>
+</div>

@@ -1,0 +1,164 @@
+<style>
+    textarea {
+        height: 100px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .alineadoDerecha {
+        float: right;
+    }
+</style>
+<script type="text/javascript">
+	$(function () {
+	    var opts = $('#id_autor option').map(function () {
+	        return [[this.value, $(this).text()]];
+	    });
+	    $('#filtro_autor').keyup(function () {
+	        var rxp = new RegExp($('#filtro_autor').val(), 'i');
+	        var optlist = $('#id_autor').empty();
+	        opts.each(function () {
+	            if (rxp.test(this[1])) {
+	                optlist.append($('<option/>').attr('value', this[0]).text(this[1]));
+	            }
+	        });
+	    });
+	});
+</script>
+
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+								<?php
+							    	echo $this->titulo;
+							    ?>
+							</h3>
+						</div>
+					</div>
+				</div>
+				<div class="six columns">
+					<a href="<?php echo $this->basePath() ?>/application/editargrupoinv/index/<?php echo $this->id; ?>">
+						<i class="icon-arrow-left"></i> Regresar
+					</a>
+				</div>
+				</br>
+				</br>
+				</br>
+				</br>
+				</br>
+
+<?php
+$form = $this->form;
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo '<div class="twelve columns">';
+echo '<p>';
+echo $this->formlabel($form->get('titulo'));
+echo $this->formelement($form->get('titulo'));
+echo '</div>';
+
+echo '<div class="six columns">';
+echo '<p>';
+echo $this->formlabel($form->get('ano'));
+echo $this->formelement($form->get('ano'));
+
+echo '<p>';
+echo $this->formlabel($form->get('pais'));
+echo $this->formelement($form->get('pais'));
+
+echo '<p>';
+echo $this->formlabel($form->get('editorial'));
+echo $this->formelement($form->get('editorial'));
+
+echo '<p>';
+echo $this->formlabel($form->get('isbn'));
+echo $this->formelement($form->get('isbn'));
+
+echo '<p>';
+echo $this->formlabel($form->get('medio_divulgacion'));
+echo $this->formelement($form->get('medio_divulgacion'));
+echo '</div>';
+
+echo '<div class="six columns">';
+echo '<p>';
+echo $this->formlabel($form->get('mes'));
+echo $this->formelement($form->get('mes'));
+
+echo '<p>';
+echo $this->formlabel($form->get('ciudad'));
+echo $this->formelement($form->get('ciudad'));
+
+echo '<p>';
+echo $this->formlabel($form->get('edicion'));
+echo $this->formelement($form->get('edicion'));
+
+echo '<p>';
+echo $this->formlabel($form->get('serie'));
+echo $this->formelement($form->get('serie'));
+echo '</div>';
+
+echo '<div class="twelve columns">';
+echo '<p>';
+echo $this->formlabel($form->get('titulo_capitulo'));
+echo $this->formelement($form->get('titulo_capitulo'));
+echo '</div>';
+
+echo '<div class="six columns">';
+echo '<p>';
+echo $this->formlabel($form->get('numero_capitulo'));
+echo $this->formelement($form->get('numero_capitulo'));
+
+echo '<p>';
+echo $this->formlabel($form->get('pagina_inicio'));
+echo $this->formelement($form->get('pagina_inicio'));
+echo '</div>';
+
+echo '<div class="six columns">';
+echo '<p>';
+echo $this->formlabel($form->get('paginas_capitulo'));
+echo $this->formelement($form->get('paginas_capitulo'));
+
+echo '<p>';
+echo $this->formlabel($form->get('pagina_fin'));
+echo $this->formelement($form->get('pagina_fin'));
+echo '</div>';
+
+echo '<div class="six columns">';
+echo '<p>';
+echo $this->formlabel($form->get('filtro_autor'));
+echo $this->formelement($form->get('filtro_autor'));
+
+echo '<p>';
+echo $this->formlabel($form->get('id_autor'));
+echo $this->formelement($form->get('id_autor'));
+echo '</div>';
+
+echo '<div class="six columns">';
+echo '<p>';
+echo $this->formlabel($form->get('image-file'));
+echo $this->formelement($form->get('image-file'));
+echo '<p>';
+echo '<div>';
+echo $this->formelement($form->get('submit'));
+echo '</div>';
+echo '</div>';
+
+echo '</br>';
+echo '</br>';
+
+echo $this->form()->closeTag($form);
+?>				
+
+
+</div><!-- Cierre div six columns --> 
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,69 @@
+.ir-arriba {
+  display: :none;
+  height:30px;
+  widht:30px;
+  padding: 16px 16px;
+  background: url('/UPNp/public/images/icon-top2.png') no-repeat;
+  cursor:pointer;
+  position:fixed;
+  bottom:20px;
+  right:05px;
+
+}
+#menu_gral {
+    font-family: verdana, sans sherif;
+    width: 80%;
+    margin: 1.5rem auto;
+}
+#menu_gral ul {
+    list-style-type: none; 
+    text-align: center;
+    font-size: 0;
+}
+#menu_gral > ul li {
+    display: inline-block;
+    width: 250%;
+    position: relative;
+    background: rgb(221, 222, 226);
+}
+#menu_gral li a {
+    display: block;
+    text-decoration: none;
+    font-size: 1rem;
+    line-height: 2.5rem;
+    color: #444;
+}
+#menu_gral li:hover a, #menu_gral li a:focus {
+    background: #25ccd7;
+    color: #fff;
+}
+
+#menu_gral li ul {
+    position: absolute;
+    width: 0;
+    overflow: hidden;
+}
+#menu_gral li:hover ul, #menu_gral li:focus ul {
+   width: 400px;
+    margin: 0 -4rem -4rem -4rem;
+    padding: 0 4rem 4rem 4rem;
+    z-index: 5;
+}
+#menu_gral li li {
+    display: block;
+    width: 100%;
+}
+#menu_gral li:hover li a, #menu_gral li:focus li a {
+    font-family: arial;
+    font-size: .9rem;
+    line-height: 1.7rem;
+    border-top: 1px solid #e5e5e5;
+    background: #2d7dba;
+}
+#menu_gral li li a:hover, #menu_gral li li a:focus {
+    background: #2a92ac; 
+}
+
+#Table_Opciones{
+  background:rgba(255, 255, 255, .15);
+  }

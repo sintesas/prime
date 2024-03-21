@@ -1,0 +1,66 @@
+<?php include("public/menu.php"); ?>
+<style>
+.container-fluid {
+  display: none;
+}
+</style>
+
+<div id="wrapper_1">
+	<div id="container_1">
+<div class="row2">
+	<div class="nine3 columns">
+		<div id="centersectiontitle">
+			<div class="twelve columns">
+				<div class="sidebartitle"><h3>
+				<?php
+					echo $this->titulo;
+				?>
+				</h3>
+			</div>
+		</div>
+	</div>
+<div class="seven columns">
+<br><br><?php  foreach ($this->datos as $d) {?>
+
+			<h4><?php echo strtoupper($d["titulo"]); ?></span></h4>
+
+				<?php echo $d["fecha_inicio"]; ?>
+			</p>
+			<p>
+			<?php $ur=$d["url"];  ?>
+			<a href="<?php echo $ur ?>" target="_blank">
+				<?php echo $d["url"]; ?> 
+			</a>
+			</p>
+			<p>
+				<?php echo $d["noticia"]; ?> 
+			</p>
+
+			<p>
+
+<?php
+
+
+
+$pos = strpos( trim($d["archivo"],' '), '.png');
+$pos2 = strpos( trim($d["archivo"],' '), '.jpg');
+
+if ($pos!='' || $pos2!=''){
+?>
+<IMG SRC="/public/images/uploads/<?php echo $d["archivo"]; ?>" width="550" height="550">
+<br>
+<a href="/public/application/noticias/bajar/<?php echo $d["id_noticia"];?>">Bajar archivo : </a><?php echo $d["archivo"]; ?> 
+<?php
+}else
+{
+?>
+<?php if($d["archivo"]==''){}else{ ?> 
+<a href="/public/application/noticias/bajar/<?php echo $d["id_noticia"];?>">Bajar archivo : </a><?php echo $d["archivo"]; ?> 
+<?php }} ?>
+
+			</p>
+			<div class="hr">
+			</div>
+<?php }?>
+<br><br><br>
+</div></div></div>

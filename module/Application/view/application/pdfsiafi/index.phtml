@@ -1,0 +1,237 @@
+<?php
+
+include ("public/menu.php");
+if ($this->pdf == 'S') {
+    ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+
+				<style>
+.container {
+	width: 873px;
+	margin: auto;
+	padding: 10px;
+	border: 0px solid #000;
+}
+
+body {
+	font-family: Arial, sans-serif;
+}
+
+html {
+	margin: 10px;
+	padding: 10px;
+}
+
+body {
+	font-family: dejavu sans, Arial;
+	font-size: 0.85em;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.font-xxl {
+	font-size: 2em;
+}
+
+.font-l {
+	font-size: 1.5em;
+}
+
+.font-n {
+	font-size: 0.8em;
+}
+
+.font-s {
+	font-size: 0.6em;
+}
+
+.font-middle {
+	text-align: center;
+}
+
+.page-wrap {
+	padding: 0px;
+	margin: 0px;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 5px 1px 5px 1px;
+}
+
+td, th {
+	border: 1px solid black;
+	padding: 1px 1px 1px 1px;
+}
+
+.brdr-top {
+	border-top: 1px solid black;
+}
+
+.brdr-bottom {
+	border-bottom: 1px solid black;
+}
+
+.brdr-left {
+	border-left: 1px solid black;
+}
+
+.brdr-right {
+	border-right: 1px solid black;
+}
+
+.bordreless td, .bordreless th {
+	border: 0px thin #ffffff;
+}
+</style>
+
+				<div class="container">
+					<p>_______________________________________________________________</p>
+					<h1>PRESUPUESTO PROYECTO</h1>
+					<p>_______________________________________________________________</p>
+
+
+
+
+				<?php
+    
+    echo '<table style="width:100%; border-spacing:1;">';
+    echo '<tr>';
+    echo '<th>Item Plan de Compras</th>';
+    echo '<th>Vigencia</th>';
+    echo '<th>Programado</th>';
+    echo '<th>Solicitado</th>';
+    echo '<th>Con Registro Presupuestal</th>';
+    echo '<th>Disponible</th>';
+    echo '</tr>';
+    $sum = 0;
+    $sumsol = 0;
+    $sumdis = 0;
+    $sumsum = 0;
+    setlocale(LC_MONETARY, 'en_US');
+    foreach ($this->p as $tbproy) {
+        echo '<tr>';
+        echo '<td>';
+        echo $tbproy["ITEM_PLANCOMPRAS"];
+        echo '</td>';
+        echo '<td>';
+        echo $tbproy["VIGENCIA"];
+        echo '</td>';
+        echo '<td>';
+        echo money_format('%(#10n', $tbproy["VALOR_PROGRAMACION"]);
+        echo '</td>';
+        echo '<td>';
+        echo money_format('%(#10n', $tbproy["VALOR_SOLICITUD"]);
+        echo '</td>';
+        echo '<td>';
+        echo money_format('%(#10n', $tbproy["VALOR_DISPONIBILIDAD"]);
+        echo '</td>';
+        echo '<td>';
+        echo money_format('%(#10n', $tbproy["VALOR_PROGRAMACION"] - $tbproy["VALOR_SOLICITUD"]);
+        echo '</td>';
+        echo '</tr>';
+        
+        $sum = $sum + $tbproy["VALOR_PROGRAMACION"];
+        $sumsol = $sumsol + $tbproy["VALOR_SOLICITUD"];
+        $sumdis = $sumdis + $tbproy["VALOR_DISPONIBILIDAD"];
+        $sumsum = $sumsum + ($tbproy["VALOR_PROGRAMACION"] - $tbproy["VALOR_SOLICITUD"]);
+    }
+    echo '<tr>';
+    echo '<td>';
+    echo 'Total';
+    echo '</td>';
+    echo '<td>';
+    echo '';
+    echo '</td>';
+    echo '<td>';
+    echo money_format('%(#10n', $sum);
+    echo '</td>';
+    echo '<td>';
+    echo money_format('%(#10n', $sumsol);
+    echo '</td>';
+    echo '<td>';
+    echo money_format('%(#10n', $sumdis);
+    echo '</td>';
+    echo '<td>';
+    echo money_format('%(#10n', $sumsum);
+    echo '</td>';
+    
+    echo '</tr>';
+    echo '</tr>';
+    echo '</table>';
+    ?>
+
+<?php
+} else {
+    ?>
+<? include("public/menu.php"); ?>
+<div id="wrapper_1">
+						<div id="container_1">
+							<div class="row">
+								<div class="nine columns">
+									<div id="centersectiontitle">
+										<div class="twelve columns">
+											<div class="sidebartitle">
+												<h3>
+				<?php
+    echo $this->titulo;
+    ?>
+				</h3>
+											</div>
+										</div>
+									</div>
+									<div class="seven columns">
+										<a
+											href="<?php echo $this->basePath() ?>/application/reportes/index">
+											<i class="icon-arrow-left"></i> Regresar
+										</a><br><br>
+				<?php
+    $form = $this->form;
+    $form->prepare();
+    
+    $form->setAttributes(array(
+        'action' => $this->url . '/application/pdfsiafi/index',
+        'method' => 'post'
+    ));
+    echo $this->form()->openTag($form);
+    echo '<p>';
+    echo $this->formlabel($form->get('codigo'));
+    echo $this->formelement($form->get('codigo'));
+    echo '<p>';
+    echo $this->formlabel($form->get('convocatoria'));
+    echo $this->formelement($form->get('convocatoria'));
+    echo '<p>';
+    echo $this->formlabel($form->get('unidad'));
+    echo $this->formelement($form->get('unidad'));
+    echo '<p>';
+    echo $this->formlabel($form->get('dependencia'));
+    echo $this->formelement($form->get('dependencia'));
+    echo '<p>';
+    echo $this->formlabel($form->get('programa'));
+    echo $this->formelement($form->get('programa'));
+    
+    echo '<p>';
+    echo $this->formelement($form->get('submit'));
+    echo '<br>';
+    
+    echo $this->form()->closeTag($form);
+    ?>
+				<br>
+
+
+				<?php
+    
+    ?>
+
+</div>
+								</div>
+							</div>
+<?php
+}
+?>

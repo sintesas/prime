@@ -1,0 +1,92 @@
+<style>
+    .filter-cons input[type="text"],select{
+        width: 100%;
+    }
+    .filter-cons {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .filter-cons-left {float: left;}
+    .filter-cons-right {float:right;}
+    .filter-cons .btn {width: 275px;}
+    .filter-cons .dropdown {display: inline;}
+    .filter-cons .dropdown-menu {width: 300px;top: 32px;padding: 10px;}
+    .dropdown-menu-inner {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .dropdown-menu-right {left:-140px !important;}
+</style>
+<script type="text/javascript">
+	function showHint(str) {
+		var valthis = str.toLowerCase();
+	    var num = 0;
+
+	    $('select#id_autor>option').each(function () {
+	          var text = $(this).text().toLowerCase();
+	          if(text.indexOf(valthis) !== -1)  
+	              {$(this).show(); $(this).prop('selected',true);}
+	          else{$(this).hide();}
+	           });
+	}
+</script>
+<?php include("public/menu.php"); ?>
+<div class="col col100">
+    <div class="filter-cons">
+        <div class="filter-cons-left"><h4><?php echo $this->titulo; ?></h4></div>
+        <div class="filter-cons-right">
+			<a class="btn" href="<?php echo $this->basePath() ?>/application/editaraplicari/index/<?php echo $this->id; ?>" style="margin-right: 8px;"><i class="icon-arrow-left" style="margin-right: 5px;"></i> Regresar</a>
+            <a class="btn" style="margin-right: 8px;" href="#"><i class="fa fa-close" style="margin-right: 5px;"></i>Borrar filtro</a>
+            <div class="dropdown">
+                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="margin-right: 8px;"><i class="fa fa-filter" style="margin-right: 5px;"></i>Filtro</button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <div class="dropdown-menu-inner">
+                        <?php                               
+                        $form = $this->form;
+                        $form->prepare ();
+                        echo $this->form ()->openTag ( $form );
+                        echo '<h6>'.$this->flashMessenger ()->render ().'</h6>';
+                        echo $this->formlabel($form->get('codigo'));
+						echo $this->formelement($form->get('codigo'));
+						echo $this->formlabel($form->get('nombre'));
+						echo $this->formelement($form->get('nombre'));
+						echo $this->formlabel($form->get('filtro_autor'));
+						echo $this->formelement($form->get('filtro_autor'));
+						echo $this->formlabel($form->get('id_autor'));
+						echo $this->formelement($form->get('id_autor'));
+						echo $this->formlabel($form->get('unidad_academica'));
+						echo $this->formelement($form->get('unidad_academica'));
+						echo $this->formlabel($form->get('dependencia_academica'));
+						echo $this->formelement($form->get('dependencia_academica'));
+						echo $this->formlabel($form->get('programa_academico'));
+						echo $this->formelement($form->get('programa_academico'));
+                        echo $this->formelement($form->get('submit'));
+                        echo $this->form ()->closeTag ( $form );
+                        ?>
+                    </div>                      
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col col100 noshadow">
+<?php
+echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+echo '<table class="table" style="width: 100%; max-width: 100%;">';
+echo "<thead>";
+echo "<th style='width: 20%;'>Grupo de investigación</th>";
+echo "<th style='width: 5%;'>Agregar</th>";
+echo '</thead>';
+echo '<tbody>';
+foreach ( $this->grupos as $dato ) {
+	echo '<tr>';
+	echo '<td>';
+	echo $dato ["nombre_grupo"];
+	echo '</td>';
+    echo '<td style="text-align:center;">';
+    ?>
+    	<a class="btn" href="<?php echo $this->basePath() ?>/application/gruposaplicari/add/<?php echo $dato ["id_grupo_inv"];?>/<?php echo $id;?>/<?php echo $id2;?>"><?php echo ($this->id2 == 0) ? "Agregar" : "Actualizar"; ?></a>
+	<?php
+    echo '</td>';
+	echo '</tr>';
+	
+}
+echo '</table>';
+echo '</div>';
+?>
+</div>
+

@@ -1,0 +1,268 @@
+<?php 
+	include("public/menu.php"); 
+	$display="none";
+	if($this->flashMessenger()->render() != "" && strpos($this->flashMessenger()->render(), "Su rol no tiene permiso para ver el formulario. Si desea puede solicitarlo al administrador.") === false){
+		$display = "table";
+	}
+?>
+
+<script type="text/javascript">
+	sessionStorage.removeItem("varDocumento");
+	sessionStorage.removeItem("varPropuesta");
+</script>
+
+<style>
+	.flex-prev,
+	.flex-next {
+		font-size: 0;
+	}
+
+	.login_box {
+		background: rgba(0, 0, 0, 0.58);
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 99;
+		display: none;
+	}
+
+	.inner_login {
+		display: table-cell;
+		vertical-align: middle;
+	}
+
+	.box_login {
+		width: 350px;
+		padding: 25px;
+		background: #ffffff;
+		margin: 0 auto;
+		border-radius: 10px;
+		color: #929292;
+		position: relative;
+	}
+
+	.box_login input {
+		background: #cdcdcd;
+		width: 100%;
+	}
+
+	.box_login .btn {
+		background: #005da2;
+		margin-top: 10px;
+	}
+
+	.box_login {
+		text-align: center;
+	}
+
+	.box_login fieldset {
+		border-radius: 10px;
+		margin-bottom: 10px;
+	}
+
+	.title_login {
+		text-align: center;
+		padding: 12px;
+		padding-top: 0px;
+		color: #005da2;
+		font-weight: bold;
+		font-size: 20px;
+	}
+
+	.tools-social {
+		padding: 15px 0;
+		border-top: 2px solid gainsboro;
+	}
+
+	.tools-social ul li a {
+		padding: 0 10px;
+	}
+
+	.title-tools-social {
+		padding: 10px;
+		text-align: center;
+		font-size: 22px;
+		font-weight: bold;
+	}
+
+	.close_login {
+		position: absolute;
+		right: 25px;
+		font-size: 21px;
+	}
+</style>
+<div class="col col75">
+	<?php
+		if($multimedia != ""){
+			?>
+				<div class="embed-responsive embed-responsive-16by9">
+				  <iframe class="embed-responsive-item" style="padding-left: 4px; padding-top: 4px; padding-right: 4px;" src="https://www.youtube-nocookie.com/embed/<?php echo $multimedia; ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			<?php			
+		}
+	?>
+	<div class="slider">
+		<div class="flexslider">
+			<ul class="slides">
+				<li><img src="<?php echo $this->basePath(); ?>/public/images/img_1.jpg" alt=""></li>
+				<li><img src="<?php echo $this->basePath(); ?>/public/images/img_2.jpg" alt=""></li>
+				<li><img src="<?php echo $this->basePath(); ?>/public/images/img_3.jpg" alt=""></li>
+				<li><img src="<?php echo $this->basePath(); ?>/public/images/img_4.jpg" alt=""></li>
+				<li><img src="<?php echo $this->basePath(); ?>/public/images/img_5.jpg" alt=""></li>
+			</ul>
+		</div>
+	</div>
+	<div class="news clearfix">
+		<div class="titlenews">Noticias</div>
+		<?php
+		foreach ($noticias as $not) {
+			if (substr($not["fecha_inicio"], 5, 2) + 05 >= date("m")) { ?>
+				<a href="<?= $this->basePath() ?>/application/noticias/ver/<?= $not["id_noticia"] ?>">
+					<div class="itemn">
+						<!-- <div class="imageitemn"><img src="<?php echo $this->basePath();?>/public/images/uploads/noticias/hi_not_<?php echo $not["id_noticia"]."_".$not["imagen"];?>" onerror="this.onerror=null;this.src='<?php echo $this->basePath(); ?>/public/images/images_oscar/news/news2.jpg';" alt="Noticia" style="width: 100%;"></div> -->
+						<div class="infoitemn clearfix">
+							<div class="catitemn">La Universidad</div>
+							<div class="dateitemn"><?= $not["fecha_inicio"] ?></div>
+						</div>
+						<div class="titleitemn"><?= $not["titulo"] ?></div>
+						<div class="desitemn"><?= substr($not["noticia"], 0, 150) ?></div>
+					</div>
+				</a>
+		<?php }
+		}
+		?>
+	</div>
+	
+</div>
+<div class="col col25">
+	<div class="tools-social clearfix">
+		<div class="title-tools-social"> Herramientas de socialización</div>
+		<ul>
+			<li style="margin-bottom:7px;"><a class="hvr-bounce-to-right" href="<?php echo $this->basePath() ?>/application/foro/index">Foro</a></li>
+			<li style="margin-bottom:7px;"><a class="hvr-bounce-to-right" href="<?php echo $this->basePath() ?>/application/repositorio/index">Repositorio</a></li>
+			<li style="margin-bottom:7px;"><a class="hvr-bounce-to-right" href="<?php echo $this->basePath() ?>/application/consultagi/index">Consulta de grupos de investigación</a></li>
+			<li style="margin-bottom:7px;"><a class="hvr-bounce-to-right" href="<?php echo $this->basePath() ?>/application/consultaredes/index">Consulta redes</a></li>
+			<li style="margin-bottom:7px;"><a class="hvr-bounce-to-right" href="<?php echo $this->basePath() ?>/application/consultasemi/index">Consulta Semilleros/Otros procesos de formación</a></li>
+			<li style="margin-bottom:7px;"><a class="hvr-bounce-to-right" href="<?php echo $this->basePath() ?>/application/consultagp/index">Consulta de proyectos</a></li>
+			<li style="margin-bottom:7px;"><a class="hvr-bounce-to-right" href="<?php echo $this->basePath() ?>/application/consultai/index">Consulta de investigadores</a></li>
+
+		</ul>
+	</div>
+	<div class="eventos">
+		<div class="titleevento">Eventos</div>
+		<?php
+		foreach ($eventos as $eve) {
+			if (strtotime($eve["fecha_fin"]) >= strtotime(date('Y-m-d'))) {
+				$dia = substr($eve["fecha_inicio"], 8, 2);
+				$mes = substr($eve["fecha_inicio"], 5, 2);
+				if ($mes == 01) {
+					$mesn = 'Enero';
+				} elseif ($mes == 2) {
+					$mesn = 'Febrero';
+				} elseif ($mes == 3) {
+					$mesn = 'Marzo';
+				} elseif ($mes == 4) {
+					$mesn = 'Abril';
+				} elseif ($mes == 5) {
+					$mesn = 'Mayo';
+				} elseif ($mes == 6) {
+					$mesn = 'Junio';
+				} elseif ($mes == 7) {
+					$mesn = 'Julio';
+				} elseif ($mes == 8) {
+					$mesn = 'Agosto';
+				} elseif ($mes == 9) {
+					$mesn = 'Septiembre';
+				} elseif ($mes == 10) {
+					$mesn = 'Octubre';
+				} elseif ($mes == 11) {
+					$mesn = 'Noviembre';
+				} elseif ($mes == 12) {
+					$mesn = 'Diciembre';
+				}
+		?>
+				<div class="iteme">
+					<div class="date"><?= $dia . ' ' . $mesn ?></div>
+					<div class="title"><?= $eve["titulo"] ?></div>
+					<div class="text"><?= substr($eve["evento"], 0, 150); ?></div>
+					<a href="<?= $this->basePath() ?>/application/eventos/ver/<?= $eve["id_evento"] ?>">
+						<div class="btn-evento">Ver Evento</div>
+					</a>
+				</div>
+		<?php }
+		}
+		?>
+	</div>
+</div>
+<div class="login_box" style="display: <?= $display; ?> ">
+	<div class="inner_login">
+		<div class="box_login animated zoomIn">
+			<div class="close_login pointer"> <i class="fa fa-times-circle"></i> </div>
+			<div class="title_login">Acceso al sistema <i class="fa fa-user"></i> </div>
+			<?php
+			if ($this->flashMessenger()->render() != "" && strpos($this->flashMessenger()->render(), "Su rol no tiene permiso para ver el formulario. Si desea puede solicitarlo al administrador.") === false) {
+				echo "<div class='alert'>";
+				echo $this->flashMessenger()->render();
+				echo "</div>";
+			}
+			$this->headTitle("Login usuarios");
+			$form = $this->form;
+			$form->prepare();
+			echo $this->form()->openTag($form);
+
+			echo '<p>';
+			$usuario = $form->get('usuario');
+
+			echo "Usuario (Correo): " . $this->formInput($usuario);
+			echo '<br>';
+			if (isset($error["usuario"])) {
+				echo $error["usuario"]['usuarioAddressInvalidHostname'];
+			}
+			$pass = $form->get('contrasena');
+
+			echo "Contraseña: " . $this->formInput($pass);
+			echo '<img id="togglePassword" src="/public/images/images_oscar/eye.png" alt="Ver contraseña" style="max-width:5%; padding-bottom: 12px; margin-left: 6px;">';
+			echo '<p>';
+			echo $this->formElementErrors($pass);
+			echo '<p>';
+
+			echo $this->formRow($form->get('captcha'));
+
+			?>
+			<a href="<?php echo $this->basePath() ?>/application/recuperarcontra/index">
+				Recuperar Usuario y/o Contrase&ntilde;a</a> <br>
+			<?php
+
+			echo $this->formElement($form->get('submit'));
+			echo $this->form()->closeTag();
+			echo '<br>';
+			echo '<br>';
+			echo '<br>';
+			?>
+		</div>
+	</div>
+</div>
+<link rel="stylesheet" href="<?php echo $this->basePath(); ?>/public/include/flexslider/flexslider.css">
+<script src="<?php echo $this->basePath(); ?>/public/include/flexslider/jquery.flexslider-min.js"></script>
+<script>
+	$(window).load(function() {
+		$('.flexslider').flexslider({
+			controlNav: false,
+			animation: "slide",
+			animationLoop: true
+		});
+
+		const togglePassword = document.querySelector("#togglePassword");
+        const password = document.querySelector("#contrasena");
+
+		togglePassword.onmousedown = function() {
+		  	password.setAttribute("type", "text");
+		};
+
+		togglePassword.onmouseup = function() {
+		  password.setAttribute("type", "password");
+		};
+	});
+</script>

@@ -1,0 +1,33 @@
+<?php
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
+
+$workbook = new \Spreadsheet_Excel_Writer();
+
+$worksheet = &$workbook->addWorksheet('Hoja1');
+
+$titleFormat = &$workbook->addFormat();
+$titleFormat->setBold();
+
+$worksheet->setColumn(0, 0, 40);
+$worksheet->setColumn(1, 1, 26);
+$worksheet->setColumn(2, 2, 26);
+$worksheet->setColumn(3, 3, 18);
+
+$worksheet->write(0, 0, 'Usuario', $titleFormat);
+$worksheet->write(0, 1, 'Fecha Ingreso', $titleFormat);
+$worksheet->write(0, 2, 'Fecha Salida', $titleFormat);
+$worksheet->write(0, 3, 'Eventos', $titleFormat);
+
+$j = 1;
+foreach ($datos as $row) {
+    $worksheet->write($j, 0, $row['nombres'] . ' ' . $row['apellidos']);
+    $worksheet->write($j, 1, $row['fecha_ingreso']);
+    $worksheet->write($j, 2, $row['fecha_salida']);
+    $worksheet->write($j, 3, $row['evento']);
+    $j++;
+}
+
+$workbook->send('report.xls');
+
+$workbook->close();
+?>

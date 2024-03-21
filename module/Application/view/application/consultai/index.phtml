@@ -1,0 +1,155 @@
+<style>
+    .filter-cons input[type="text"],select{
+        width: 100%;
+    }
+    .filter-cons {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .filter-cons-left {float: left;}
+    .filter-cons-right {float:right;}
+    .filter-cons .btn {width: 275px;}
+    .filter-cons .dropdown {display: inline;}
+    .filter-cons .dropdown-menu {width: 300px;top: 32px;padding: 10px;}
+    .dropdown-menu-inner {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .dropdown-menu-right {left:-140px !important;}
+</style>
+<?php
+	include("public/menu.php");
+	require_once("public/rutas.php"); 
+?>
+<script>
+$(function () {
+    var opts = $('#id_grupo_inv option').map(function () {
+        return [[this.value, $(this).text()]];
+    });
+    $('#someinput').keyup(function () {
+        var rxp = new RegExp($('#someinput').val(), 'i');
+        var optlist = $('#id_grupo_inv').empty();
+        opts.each(function () {
+            if (rxp.test(this[1])) {
+                optlist.append($('<option/>').attr('value', this[0]).text(this[1]));
+            }
+        });
+
+    });
+
+});
+</script>
+<div class="col col100">
+    <div class="filter-cons">
+        <div class="filter-cons-left"><h4><?php echo $this->titulo; ?></h4></div>
+        <div class="filter-cons-right">
+            <a class="btn" style="margin-right: 8px;" href="<?php echo $this->basePath() ?>/application/consultai/index"><i class="fa fa-close" style="margin-right: 5px;"></i>Borrar filtro</a>
+            <div class="dropdown">
+                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="margin-right: 8px;"><i class="fa fa-filter" style="margin-right: 5px;"></i>Filtro</button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <div class="dropdown-menu-inner">
+                        <?php                               
+                        $form = $this->form;
+                        $form->prepare ();
+                        $form->setAttributes(array(
+                            'action' => $this->url.'/application/consultai/index',
+                            'method' => 'post' 
+                        ));
+                        echo $this->form ()->openTag ( $form );
+                        echo '<h6>'.$this->flashMessenger ()->render ().'</h6>';
+                        echo $this->formlabel ( $form->get('nombre'));
+                        echo $this->formelement ( $form->get('nombre'));
+                        echo $this->formlabel ( $form->get ( 'apellido' ) );
+                        echo $this->formelement ( $form->get ( 'apellido' ) );
+                        echo $this->formlabel ( $form->get ( 'documento' ) );
+                        echo $this->formelement ( $form->get ( 'documento' ) );                        
+                        echo $this->formlabel ( $form->get ( 'id_grupo_inv' ) );
+                        echo $this->formelement ( $form->get ( 'id_grupo_inv' ) );
+                        echo $this->formelement ( $form->get ( 'submit' ) );
+                        echo $this->form ()->closeTag ( $form );
+                        ?>
+                    </div>                      
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col col100 noshadow">
+<?php
+if($this->consulta==1) {
+    $r=$this->campos;
+    if($this->campos["nombre"]=="" && $this->campos["apellido"]=="" && $this->campos["documento"]=="" && $this->campos["id_grupo_inv"]==""){
+        echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>Debe utilizar los filtros para cargar la información</h3></div>';
+    }
+    else {
+        if ($r["id_grupo_inv"]!=null) {
+            if(count($this->datos2)==0){
+                echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos investigadores con este grupo de investigación</h3></div>';
+            }
+            else
+            {
+                echo '<div style="overflow-y:auto; max-height:410px; width: 100%;"">';
+                echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                echo '  <thead>';
+                echo '      <tr>';
+                echo '          <th style="width:5%">Nombre</th>';
+                echo '          <th style="width:5%">Hoja de vida</th>';
+                echo '      </tr>';
+                echo '  </thead>';
+                echo '  <tbody>';
+                foreach ($this->datos2 as $datos2){
+                    foreach ($this->usua as $dato){
+                        if($dato["id_usuario"]==$datos2["id_integrante"]){
+                            echo '  <tr>';
+                            echo '      <td>';
+                            echo $dato["primer_nombre"].' '.$dato["segundo_nombre"].' '.$dato["primer_apellido"].' '.$dato["segundo_apellido"];
+                            echo '      </td>';
+                            echo '      <td>';
+                            echo '<a class="btn" href="'.$this->basePath().'/application/hvinvestigador/index/'.$dato["id_usuario"].'"><i class="fa fa-eye"></i></a>';
+                            echo '      </td>';
+                            echo '  </tr>';
+                        }
+                    }
+                }
+                echo '  </tbody>';
+                echo '</table>';
+            }
+        }
+        else {
+            if(count($this->datos)==0){
+                if($this->campos["nombre"] != ""){
+                    echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos investigadores con nombre</h3></div>';
+                }else if($this->campos["apellido"]){
+                    echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos investigadores con este apellido</h3></div>';
+                }else{
+                    echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos investigadores con este número de documento</h3></div>';
+                }
+                
+            }
+            else {
+                echo '<div style="overflow-y:auto; max-height:410px; width: 100%;"">';
+                echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                echo '  <thead>';
+                echo '      <tr>';
+                echo '          <th style="width:5%">Nombre</th>';
+                echo '          <th style="width:5%">Hoja de vida</th>';
+                echo '      </tr>';
+                echo '  </thead>';
+                echo '  <tbody>';
+                foreach ($this->datos as $datos){
+                    foreach ($this->usua as $dato){
+                        if($dato["id_usuario"]==$datos["id_usuario"]){
+                            echo '  <tr>';
+                            echo '      <td>';
+                            echo $dato["primer_nombre"].' '.$dato["segundo_nombre"].' '.$dato["primer_apellido"].' '.$dato["segundo_apellido"];
+                            echo '      </td>';
+                            echo '      <td>';
+                            echo '<a class="btn" href="'.$this->basePath().'/application/hvinvestigador/index/'.$dato["id_usuario"].'/1"><i class="fa fa-eye"></i></a>';
+                            echo '      </td>';
+                            echo '  </tr>';
+                        }
+                    }
+                }
+                echo '  </tbody>';
+                echo '</table>';
+            }
+        }
+    }
+}
+?>
+</div>
+

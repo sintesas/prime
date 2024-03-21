@@ -1,0 +1,128 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+    echo $this->titulo;
+    ?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<br> <a
+					href="<?php echo $this->basePath() ?>/application/editarconvocatoriai/index/<?php echo $this->id; ?>">
+					<i class="icon-arrow-left"></i> Regresar
+				</a> <br> <br>
+				<div class="twelve columns">
+
+				<?php
+    $form = $this->form;
+    $form->prepare();
+    
+    $form->setAttributes(array(
+        'action' => $this->url . '/application/tablafin/index/' . $this->id,
+        'method' => 'post'
+    ));
+    echo '<h6>';
+    echo $this->flashMessenger()->render();
+    echo '</h6>';
+    echo $this->form()->openTag($form);
+    echo '<p>';
+    echo $this->formlabel($form->get('id_rubro'));
+    echo $this->formelement($form->get('id_rubro'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_fuente'));
+    echo $this->formelement($form->get('id_fuente'));
+    echo '<p>';
+    echo $this->formlabel($form->get(strip_tags(htmlspecialchars_decode('descripcion'))));
+    echo $this->formelement($form->get(strip_tags(htmlspecialchars_decode('descripcion'))));
+    echo '<p>';
+    echo $this->formlabel($form->get(trim('observaciones')));
+    echo $this->formelement($form->get(Trim('observaciones')));
+    
+    echo '<p>';
+    
+    echo $this->formelement($form->get('submit'));
+    echo '<br>';
+    
+    echo $this->form()->closeTag($form);
+    ?>
+				<br>
+
+				<?php
+    
+    ?>
+		
+			<h5 class="sidebartitle">Tabla de Financiación</h5>
+					<br> <br>
+				<?php
+    echo '<table class="table">';
+    
+    foreach ($this->Tablafinm as $tfinm) {
+        
+        echo '<thead>';
+        
+        echo '<td>';
+        
+        foreach ($this->valflex as $vf) {
+            if ($vf["id_valor_flexible"] == $tfinm["id_fuente"]) {
+                echo $vf["descripcion_valor"];
+            }
+        }
+        echo '<td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>Rubro</td>';
+        echo '<td>Descripcion</td>';
+        echo '<td>Observaciones</td>';
+        echo '<td></td>';
+        echo '</thead>';
+        echo '<tbody>';
+        
+        foreach ($this->Tablafin as $tfin) {
+            if ($tfinm["id_fuente"] == $tfin["id_fuente"]) {
+                echo '<tr>';
+                echo '<td>';
+                foreach ($this->valflex as $vf) {
+                    if ($vf["id_valor_flexible"] == $tfin["id_rubro"]) {
+                        echo $vf["descripcion_valor"];
+                    }
+                }
+                echo '</td>';
+                
+                echo '<td>';
+                echo $tfin["descripcion"];
+                echo '</td>';
+                echo '<td>';
+                echo $tfin["observaciones"];
+                echo '</td>';
+                echo '<td>';
+                if ($this->ver != 'ver' && $this->ver != 'fechas') {
+                    ?>
+					<a class="btn"
+						href="<?php echo $this->basePath() ?>/application/tablafin/del/<?php echo $tfin["id_financiacion"];?>/<?php echo $tfin["id_convocatoria"];?>">Eliminar
+						Registro</a>
+
+				<?php
+                }
+                echo '</td>';
+                
+                echo '</tr>';
+            }
+        }
+    }
+    
+    echo '</table>';
+    ?>
+
+
+		</div>
+			</div>
+		</div>
+	</div>
+</div>

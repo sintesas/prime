@@ -1,0 +1,201 @@
+<style>
+    textarea {
+        height: 70px;
+        width: 100%;
+        max-width: 100%;
+
+    }
+</style> 
+
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+    echo $this->titulo;
+    ?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<div class="twelve columns">
+				<?php
+    $form = $this->form;
+    $form->prepare();
+    
+    $form->setAttributes(array(
+        'action' => $this->url . '/application/entrevistam/index/' . $this->id,
+        'method' => 'post'
+    ));
+    echo $this->form()->openTag($form);
+    echo '<h6>';
+                                echo $this->flashMessenger ()->render ();
+                                echo '</h6>';
+    ?>
+        <a href="<?php echo $this->basePath() ?>/application/consultaprocesom/index"><i class="icon-arrow-left"></i> Regresar</a><br><br>
+    <?php
+    echo '<p>';
+    echo $this->formlabel($form->get('fecha_entrevista'));
+    echo $this->formelement($form->get('fecha_entrevista'));
+    echo '</div>';
+    echo '<div class="six columns">';
+    echo $this->formlabel($form->get('codProyecto'));
+    echo $this->formelement($form->get('codProyecto'));
+    echo '</div>';
+    echo '<div class="six columns">';
+    echo $this->formlabel($form->get('NumPlazasProyecto'));
+    echo $this->formelement($form->get('NumPlazasProyecto'));
+    echo '</div>';
+    echo '<div class="twelve columns">';
+    echo $this->formlabel($form->get('nombProyecto'));
+    echo $this->formelement($form->get('nombProyecto'));
+    echo "<h3>";
+    echo "DATOS DEL ASPIRANTE";
+    echo "</h3>";
+    echo '</div>';
+    echo '<div class="six columns">';
+    echo '<p>';
+    echo $this->formlabel($form->get('primer_apellido'));
+    echo $this->formelement($form->get('primer_apellido'));
+    echo '<p>';
+    echo $this->formlabel($form->get('nombres'));
+    echo $this->formelement($form->get('nombres'));
+    echo '<p>';
+    echo $this->formlabel($form->get('cod_estudiante'));
+    echo $this->formelement($form->get('cod_estudiante'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_facultad'));
+    echo $this->formelement($form->get('id_facultad'));
+    echo '<p>';
+    echo $this->formlabel($form->get('direccion'));
+    echo $this->formelement($form->get('direccion'));
+    echo '<p>';
+    echo $this->formlabel($form->get('celular'));
+    echo $this->formelement($form->get('celular'));
+    echo '<p>';
+    echo $this->formlabel($form->get('promedio_ponderado'));
+    echo $this->formelement($form->get('promedio_ponderado'));
+    echo '<p>';
+    echo $this->formlabel($form->get('cumplimiento_conjunto'));
+    echo $this->formelement($form->get('cumplimiento_conjunto'));
+    echo '<p>';
+    echo $this->formlabel($form->get('semestre'));
+    echo $this->formelement($form->get('semestre'));
+    echo '</div>';
+    echo '<div class="six columns">';
+
+    echo '<p>';
+    echo $this->formlabel($form->get('segundo_apellido'));
+    echo $this->formelement($form->get('segundo_apellido'));
+    echo '<p>';
+    echo $this->formlabel($form->get('fecha_nacimiento'));
+    echo $this->formelement($form->get('fecha_nacimiento'));
+    echo '<p>';
+    echo $this->formlabel($form->get('identificacion'));
+    echo $this->formelement($form->get('identificacion'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_programa_curricular'));
+    echo $this->formelement($form->get('id_programa_curricular'));
+    echo '<p>';
+    echo $this->formlabel($form->get('telefono'));
+    echo $this->formelement($form->get('telefono'));
+    echo '<p>';
+    echo $this->formlabel($form->get('email'));
+    echo $this->formelement($form->get('email'));
+    echo '<p>';
+    echo $this->formlabel($form->get('creditos_aprobados'));
+    echo $this->formelement($form->get('creditos_aprobados'));
+    echo '<p>';
+    echo $this->formlabel($form->get('creditos_programa'));
+    echo $this->formelement($form->get('creditos_programa'));
+    echo "</div>";
+    echo '<div class="twelve columns">';
+    echo "<h3>";
+    echo "Escrito corto de tres párrafos (Describa su interés por participar en esta monitoría)";
+    echo "</h3>";
+    echo $this->formelement($form->get('justificacion'));
+    echo "</br>";
+    echo "</br>";
+    ?>
+    <fieldset>
+        <legend style="margin-bottom:0px;">Criterios de evaluación</legend>
+        <?php
+        echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+            echo '<table class="table" style="width: 100%; max-width: 100%;" id="tablaProyectos">';
+                echo '<thead>';
+                    echo '<th style="width: 40%;">Criterio</th>';
+                    echo '<th style="width: 40%;">Evaluación cualitativa</th>';
+                    echo '<th style="width: 10%;">Evaluación cuantitativa</th>';
+                    echo '<th style="width: 10%;">Evaluar</th>';
+                echo '</thead>';
+                echo '<tbody>'; 
+                    $suma_pr = 0; 
+                    foreach ($this->criterios as $criterio) {
+                        echo '<tr>';
+                            echo '<td>';
+                            echo $criterio["criterio"];
+                            echo '</td>';
+                            $cuantitativa = "";
+                            $cualitativa = "";
+                            foreach ($this->evaluarCr as $evaluarCriT) {
+                                if($evaluarCriT["id_criterio"] == $criterio["id"]){
+                                    $cuantitativa = $evaluarCriT["evaluacion_cuantitativa"];
+                                    $cualitativa = $evaluarCriT["evaluacion_cualitativa"];
+                                }
+                            }
+                            echo '<td>';
+                            echo $cualitativa;
+                            echo '</td>';
+                            echo '<td>';
+                            echo $cuantitativa;
+                            $suma_pr = $suma_pr + floatval($cuantitativa);
+                            echo '</td>';
+                            echo '<td style="text-align:center;">';
+                                ?>
+                                    <a class="btn" href="<?php echo $this->basePath() ?>/application/evaluarcriterio/index/<?php echo $datos[0]["id_aplicar"];?>/<?php echo $criterio["id"];?>">Evaluar</a>
+                                <?php
+                            echo '</td>';     
+                        echo '</tr>';
+                    }                 
+                echo '</tbody>';
+        echo '</table>';
+    echo '</div>';
+    ?>
+    </fieldset>
+<?php
+    echo "</br>";
+    echo "<h4>";
+    if(count($this->criterios) == 0){
+        echo "Promedio: 0,00";
+    }else{
+        $promedioLe = round($suma_pr/count($this->criterios), 2);
+        if(strlen($promedioLe) == 1){
+            $promedioLe = $promedioLe.",00";
+        }else{
+            if(strlen($promedioLe) == 3){
+                $promedioLe = $promedioLe."0";
+            }
+        }
+        echo "Promedio: ".$promedioLe;    
+    }
+    echo "</h4>";
+    echo "<h3>";
+    echo "OBSERVACIONES";
+    echo "</h3>";
+    echo $this->formelement($form->get('obervaciones_entrevista'));
+    echo "</br>";
+    echo "</br>";
+    echo '<p>';
+    echo $this->formelement($form->get('submit'));
+    echo $this->form()->closeTag($form);
+    echo "</div>";
+    ?>
+			</div>
+		</div>
+	</div>
+</div>

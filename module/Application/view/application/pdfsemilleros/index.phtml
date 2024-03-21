@@ -1,0 +1,304 @@
+<?php
+header('Content-Type: text/html; charset=UTF-8');
+mb_internal_encoding("UTF-8");
+echo mb_internal_encoding();
+?>
+<style>
+    .container {
+		width: 1000px;
+		margin: auto;
+		padding: 10px;
+		border: 0px solid #000;
+	}
+
+	body {
+		font-family: DejaVu Sans, sans-serif;
+	}
+
+	html {
+		margin: 10px;
+		padding: 10px;
+	}
+
+	body {
+		font-family: DejaVu Sans, sans-serif;
+		font-size: 0.85em;
+	}
+
+	.bold {
+		font-weight: bold;
+	}
+
+	.font-xxl {
+		font-size: 0.4em;
+	}
+
+	.font-l {
+		font-size: 1.5em;
+	}
+
+	.font-n {
+		font-size: 0.8em;
+	}
+
+	.font-s {
+		font-size: 0.6em;
+	}
+
+	.font-middle {
+		text-align: center;
+	}
+
+	.page-wrap {
+		padding: 0px;
+		margin: 0px;
+	}
+
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		margin: 5px 1px 5px 1px;
+	}
+
+	td, th {
+		border: 1px solid black;
+		padding: 1px 1px 1px 1px;
+	}
+
+	.brdr-top {
+		border-top: 1px solid black;
+	}
+
+	.brdr-bottom {
+		border-bottom: 1px solid black;
+	}
+
+	.brdr-left {
+		border-left: 1px solid black;
+	}
+
+	.brdr-right {
+		border-right: 1px solid black;
+	}
+
+	.bordreless td, .bordreless th {
+		border: 0px thin #ffffff;
+	}
+</style>
+<p>_____________________________________________________________________________________________</p>
+	<h1>Semilleros</h1>
+<p>_____________________________________________________________________________________________</p>
+<br>
+<?php 
+	foreach ($datos as $dato) {
+		echo "</br>";
+		echo "</br>";
+		echo "</br>";
+		echo "</br>";
+		echo "</br>";
+		echo "<b>Nombre del Semillero/Otro proceso de formación:</b> ". utf8_decode(trim($dato["nombre"]));
+		echo "<br>";
+		echo "<br>";
+		echo "<b>Datos generales del Semillero/Otros procesos de formación:</b> ";
+		?>
+		<table>
+			<tbody>
+
+				<tr><td>
+					<label class="bold">Código:</label>
+					<label><?php echo utf8_decode(trim($dato["codigo"])); ?></label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Fecha de creación:</label>
+					<label><?php echo utf8_decode(trim($dato["fecha_creacion"])); ?></label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Coordinador 1:</label>
+					<label>
+						<?php 
+							foreach ($this->usuarios as $us) {
+				                if ($dato["coordinador_uno"] == $us["id_usuario"]) {
+				                    echo utf8_decode(trim($us["primer_nombre"]).' '.trim($us["segundo_nombre"]).' '.trim($us["primer_apellido"]).' '.trim($us["segundo_apellido"]));
+				                }
+				            }
+			            ?>
+					</label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Coordinador 2:</label>
+					<label>
+						<?php 
+							foreach ($this->usuarios as $us) {
+				                if ($dato["coordinador_dos"] == $us["id_usuario"]) {
+				                    echo utf8_decode(trim($us["primer_nombre"]).' '.trim($us["segundo_nombre"]).' '.trim($us["primer_apellido"]).' '.trim($us["segundo_apellido"]));
+				                }
+				            }
+			            ?>
+					</label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Estado:</label>
+					<label><?php echo utf8_decode(trim($dato["estado"])); ?></label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Unidad:</label>
+					<label><?php echo utf8_decode(trim($dato["id_unidad_academica"])); ?></label>
+					<label>
+						<?php 
+							foreach ($this->valflex as $us) {
+				                if ($dato["id_unidad_academica"] == $us["id_valor_flexible"]) {
+				                    echo utf8_decode(trim($us["descripcion_valor"]));
+				                }
+				            }
+			            ?>
+					</label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Dependencia:</label>
+					<label><?php echo utf8_decode(trim($dato["id_dependencia_academica"])); ?></label>
+					<label>
+						<?php 
+							foreach ($this->valflex as $us) {
+				                if ($dato["id_dependencia_academica"] == $us["id_valor_flexible"]) {
+				                    echo utf8_decode(trim($us["descripcion_valor"]));
+				                }
+				            }
+			            ?>
+					</label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Programa:</label>
+					<label><?php echo utf8_decode(trim($dato["id_programa_academico"])); ?></label>
+					<label>
+						<?php 
+							foreach ($this->valflex as $us) {
+				                if ($dato["id_programa_academico"] == $us["id_valor_flexible"]) {
+				                    echo utf8_decode(trim($us["descripcion_valor"]));
+				                }
+				            }
+			            ?>
+					</label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Qué entiende por semillero de investigación, joven investigador, grupo de estudio o colectivo académico:</label>
+					<label><?php echo utf8_decode(trim($dato["que_entiende"])); ?></label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Objetivo general:</label>
+					<label><?php echo utf8_decode(trim($dato["objetivo_general"])); ?></label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Objetivos especificos:</label>
+					<label><?php echo utf8_decode(trim($dato["objetivo_especifico"])); ?></label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">¿En donde centra principalmente las actividades del proceso de formación?:</label>
+					<label><?php echo utf8_decode(trim($dato["actividades"])); ?></label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Describa la relación que tienen estos procesos con la formación inicial de profesores:</label>
+					<label><?php echo utf8_decode(trim($dato["relacion_procesos"])); ?></label>
+				</td></tr>
+				<tr><td>
+					<label class="bold">Relación con otras instituciones:</label>
+					<label><?php echo utf8_decode(trim($dato["relacion_instituciones"])); ?></label>
+				</td></tr>
+			 </tbody>
+		</table>
+		<?php
+			echo "<br>";
+			echo "<b>Integrantes:</b> ";
+		?>
+		<table>
+			<tbody>
+				<tr>
+					<td class="bold">Nombre del integrante</td>
+					<td class="bold">Tipo de vinculación</td>
+					<td class="bold">Fecha de vinculación</td>
+					<td class="bold">Fecha fin de vinculación</td>
+					<td class="bold">Rol participación</td>
+				</tr>
+				<?php
+					foreach ($this->intSemi as $semi) {
+		                if ($dato["id"] == $semi["id_semillero"]) {
+		                	echo "<tr>";
+			                	echo "<td>";
+				                	foreach ($this->usuarios as $us) {
+						                if ($semi["integrante"] == $us["id_usuario"]) {
+						                    echo utf8_decode(trim($us["primer_nombre"]).' '.trim($us["segundo_nombre"]).' '.trim($us["primer_apellido"]).' '.trim($us["segundo_apellido"]));
+						                }
+						            }
+					            echo "</td>";
+			                    echo "<td>";
+									foreach ($this->valflex as $us) {
+						                if ($semi["tipo_vinculacion"] == $us["id_valor_flexible"]) {
+						                    echo utf8_decode(trim($us["descripcion_valor"]));
+						                }
+						            }
+			                    echo "</td>";
+
+			                    echo "<td>".$semi["fecha_inicio"]."</td>";
+			                    echo "<td>".$semi["fecha_fin"]."</td>";
+			                    echo "<td>";
+									foreach ($this->valflex as $us) {
+						                if ($semi["rol_participacion"] == $us["id_valor_flexible"]) {
+						                    echo utf8_decode(trim($us["descripcion_valor"]));
+						                }
+						            }
+			                    echo "</td>";
+		                    echo "</tr>";
+		                }
+		            }
+				?>
+			</tbody>
+		</table>
+		<?php
+			echo "<br>";
+			echo "<b>Grupos de investigación al que se encuentra articulado el semillero:</b> ";
+		?>
+		<table>
+			<tbody>
+				<tr>
+					<td class="bold">Nombre del grupo</td>
+					<td class="bold">Código</td>
+					<td class="bold">Líder</td>
+					<td class="bold">Descripción</td>
+				</tr>
+				<?php
+					foreach ($this->gruposSemi as $grupos) {
+		                if ($dato["id"] == $grupos["id_semillero"]) {
+		                	foreach ($this->grupoinv as $grupoinv) {
+				                if ($grupos["id_grupo"] == $grupoinv["id_grupo_inv"]) {
+				                	echo "<tr>";
+					                    echo "<td>";
+					                    	echo utf8_decode(trim($grupoinv["nombre_grupo"]));
+					                    echo "</td>";
+					                    echo "<td>";
+					                    	echo utf8_decode(trim($grupoinv["cod_grupo"]));
+					                    echo "</td>";
+					                    echo "<td>";
+											foreach ($this->usuarios as $us) {
+								                if ($grupoinv["id_lider"] == $us["id_usuario"]) {
+								                    echo utf8_decode(trim($us["primer_nombre"]).' '.trim($us["segundo_nombre"]).' '.trim($us["primer_apellido"]).' '.trim($us["segundo_apellido"]));
+								                }
+								            }
+					                    echo "</td>";
+					                    echo "<td>";
+					                    	echo utf8_decode(trim($grupoinv["descripcion"]));
+					                    echo "</td>";
+                    				echo "</tr>";
+				                }
+				            }
+		                }
+		            }
+				?>
+			</tbody>
+		</table>
+		<?php
+			echo "<br>";
+			echo "<br>";
+			echo "<br>";
+			echo "<br>";
+			echo "<br>";
+	}
+?>

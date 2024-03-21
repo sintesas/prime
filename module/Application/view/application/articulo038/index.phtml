@@ -1,0 +1,89 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+<div class="row2">
+	<div class="nine3 columns">
+		<div id="centersectiontitle">
+			<div class="twelve columns">
+				<div class="sidebartitle"><h3>
+				<?php
+					echo $this->titulo;
+				?>
+				</h3>
+			</div>
+		</div>
+	</div>
+<div class="six columns">
+				<?php
+				$form = $this->form;
+				$form->prepare();
+echo '<h6>';
+echo $this->flashMessenger()->render();
+echo '</h6>';
+				$form->setAttributes(array('action'=> $this->url.'/application/gestionrequi/index',
+										'method'=>'post'));
+				echo $this->form()->openTag($form);
+				
+				echo $this->form()->closeTag($form);
+				?>
+				<br>
+
+
+				<?php
+
+?>
+
+		
+			<h5 class="sidebartitle">Info Monitor en MARES</h5>
+
+				<br><br>
+				<?php
+
+				echo '<br>';
+				echo '<table class="table">';
+				echo '<thead>';
+				echo '<th>Nombres</th>';
+				echo '<th>Facultad</th>';
+				echo '<th>Programa</th>';
+				echo '<th>Promedio</th>';
+				echo '<th>Créditos Validos</th>';
+				echo '<th>Créditos del Programa</th>';
+				echo '<th>Créditos Pendientes</th>';
+				echo '<th>25% promedio<th>';
+
+				echo '</thead>';
+				echo '<tbody>';
+$res=$this->mares;
+
+				echo '<td>';
+				echo $res->NOMBRE;
+				echo '</td>';
+				echo '<td>';
+				echo $res->FACULTAD;
+				echo '</td>';
+				echo '<td>';
+				echo $res->PROGRAMA;
+				echo '</td>';
+				echo '<td>';
+				echo $res->PROMEDIO;
+				echo '</td>';
+				echo '<td>';
+				echo $res->CRED_VALIDOS;
+				echo '</td>';
+				echo '<td>';
+				echo $res->CRED_PROGRAMA;
+				echo '</td>';
+				echo '<td>';
+				echo $res->CRED_PENDIENTES;
+				echo '</td>';
+				echo '<td>';
+				echo $res->TOP_25;
+				echo '</td>';
+				echo '</tbody>';
+				echo '</table>';
+
+				?>
+
+		</div>	
+	</div>
+</div>

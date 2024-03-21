@@ -1,0 +1,89 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+								<?php
+							    	echo $this->titulo;
+							    ?>
+							</h3>
+						</div>
+					</div>
+				</div>
+				<div class="six columns">
+					<a href="<?php echo $this->basePath() ?>/application/editarredinv/index/<?php echo $this->red; ?>">
+						<i class="icon-arrow-left"></i> Regresar
+					</a>
+				</div>
+				</br>
+				</br>
+				</br>
+				</br>
+				</br>
+
+<?php
+$form = $this->form;
+$form->prepare();
+
+echo $this->form()->openTag($form);
+
+echo '<div class="six columns">';
+echo '<p>';
+echo $this->formlabel($form->get('correo'));
+echo $this->formelement($form->get('correo'));
+
+echo '<p>';
+echo $this->formlabel($form->get('telefono_1'));
+echo $this->formelement($form->get('telefono_1'));
+
+echo '<p>';
+echo $this->formlabel($form->get('redsocial_1'));
+echo $this->formelement($form->get('redsocial_1'));
+
+echo '<p>';
+echo $this->formlabel($form->get('redsocial_3'));
+echo $this->formelement($form->get('redsocial_3'));
+echo '<p>';
+echo $this->formlabel($form->get('image-file'));
+echo $this->formelement($form->get('image-file'));
+
+echo '<p>';
+echo '<br>';
+echo $this->formelement($form->get('submit'));
+echo '</div>';
+
+echo '<div class="six columns">';
+echo '<p>';
+echo $this->formlabel($form->get('paginaweb'));
+echo $this->formelement($form->get('paginaweb'));
+
+echo '<p>';
+echo $this->formlabel($form->get('telefono_2'));
+echo $this->formelement($form->get('telefono_2'));
+
+echo '<p>';
+echo $this->formlabel($form->get('redsocial_2'));
+echo $this->formelement($form->get('redsocial_2'));
+
+echo '<p>';
+echo $this->formlabel($form->get('otro_contacto'));
+echo $this->formelement($form->get('otro_contacto'));
+echo '</div>';
+
+echo '<div>';
+
+echo '</div>';
+
+echo $this->form()->closeTag($form);
+?>				
+
+
+</div><!-- Cierre div six columns --> 
+			</div>
+		</div>
+	</div>
+</div>

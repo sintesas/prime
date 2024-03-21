@@ -1,0 +1,329 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+				echo $this->titulo;
+				?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<a
+					href="<?php echo $this->basePath() ?>/application/consultaproyecto/index">
+					<i class="icon-arrow-left"></i> Regresar
+				</a>
+
+<?php
+
+if ($this->Tablafinper != null) {
+	echo '<br>';
+	$per = 0;
+	
+	setlocale ( LC_MONETARY, 'en_US' );
+	?>
+			<h5 class="sidebartitle">Tabla financiación</h5>
+				<?php
+	
+	foreach ( $this->Tablafinper as $tbper ) {
+		$per = $tbper ["periodo"];
+	}
+	
+	for($x = 1; $x <= $per; $x ++) {
+		echo '<table class="table">';
+		echo '<thead>';
+		echo '<th colspan="6">TABLA FINANCIACION (VIGENCIA ' . $x . ')</th>';
+		echo '</thead>';
+		echo '<tbody>';
+		echo '<tr align="center" valign="middle">';
+		echo '<th rowspan="2">RUBROS</th>';
+		echo '<th colspan="3">FUENTES</th>';
+		echo '<th rowspan="2">TOTAL</th>';
+		echo '</tr>';
+		echo '<tr align="center" valign="middle">';
+		echo '<th>RECURSOS DE FUNCIONAMIENTO</th>';
+		echo '<th>RECURSOS DE INVERSIÓN</th>';
+		echo '<th>RECURSOS DE COOFINANCIACIÓN</th>';
+		echo '</tr>';
+		$sum_78 = 0;
+		$sum_79 = 0;
+		$sum_80 = 0;
+		
+		foreach ( $this->pr as $prueba ) {
+			if ($prueba ["periodo"] == $x) {
+				echo '<tr align="center" valign="middle">';
+				echo '<td>';
+				foreach ( $this->valflex as $vf ) {
+					if ($vf ["id_valor_flexible"] == $prueba ["id_rubro"]) {
+						echo $vf ["descripcion_valor"];
+					}
+				}
+				echo '</td>';
+				echo '<td>';
+				$sum_78 = $sum_78 + $prueba ["recursos_funcionamiento"];
+				//echo '<center>' . money_format ( '%.0n', floor ( $prueba ["recursos_funcionamiento"] ) );
+				echo '<center>' . number_format(floor($prueba ["recursos_funcionamiento"]), 2);
+				echo '<br>';
+				if ($prueba ["id_funcionamiento"] != '0') {
+					if ($this->ver != 'ver') {
+						?>
+					<a class="btn"
+					href="<?php echo $this->basePath() ?>/application/editartablafin/index/<?php echo $prueba["id_funcionamiento"];?>/<?php echo $prueba["id_aplicar"];?>">Editar
+					Valor</a>
+
+				<?php
+					}
+				}
+				echo '</td>';
+				echo '<td>';
+				$sum_79 = $sum_79 + $prueba ["recursos_inversion"];
+				//echo '<center>' . money_format ( '%.0n', floor ( $prueba ["recursos_inversion"] ) );
+				
+				echo '<br>';
+				if ($prueba ["id_inversion"] != '0') {
+					if ($this->ver != 'ver') {
+						?>
+					<a class="btn"
+					href="<?php echo $this->basePath() ?>/application/editartablafin/index/<?php echo $prueba["id_inversion"];?>/<?php echo $prueba["id_aplicar"];?>">Editar
+					Valor</a>
+
+				<?php
+					}
+				}
+				echo '</td>';
+				echo '<td>';
+				$sum_80 = $sum_80 + $prueba ["recursos_cofinanciacion"];
+				//echo '<center>' . money_format ( '%.0n', floor ( $prueba ["recursos_cofinanciacion"] ) );
+				echo '<br>';
+				if ($prueba ["id_cofinanciacion"] != '0') {
+					if ($this->ver != 'ver') {
+						?>
+					<a class="btn"
+					href="<?php echo $this->basePath() ?>/application/editartablafin/index/<?php echo $prueba["id_cofinanciacion"];?>/<?php echo $prueba["id_aplicar"];?>">Editar
+					Valor</a>
+
+				<?php
+					}
+				}
+				echo '</td>';
+				echo '<td>';
+				//echo money_format ( '%.0n', floor ( $prueba ["total"] ) );
+				echo '</td>';
+				echo '</tr>';
+			}
+		}
+		
+		echo '<tr>';
+		echo '<th>TOTAL</th>';
+		echo '<th>';
+		//echo money_format ( '%.0n', floor ( $sum_78 ) );
+		echo '</th>';
+		echo '<th>';
+		//echo money_format ( '%.0n', floor ( $sum_79 ) );
+		echo '</th>';
+		echo '<th>';
+		//echo money_format ( '%.0n', floor ( $sum_80 ) );
+		echo '</th>';
+		echo '<th>';
+		//echo money_format ( '%.0n', floor ( $sum_78 + $sum_80 + $sum_79 ) );
+		echo '</th>';
+		echo '</tr>';
+		echo '</tbody>';
+		echo '</table>';
+		echo '<br>';
+	}
+	
+	echo '<table class="table">';
+	echo '<thead>';
+	
+	echo '<TH>Descripcion</TH>';
+	echo '<TH>Valores total</TH>';
+	echo '</thead>';
+	echo '<tbody>';
+	foreach ( $this->sumfuente as $fu ) {
+		echo '<tr align="center" valign="middle">';
+		echo '<td>';
+		foreach ( $this->valflex as $vf ) {
+			if ($vf ["id_valor_flexible"] == $fu ["id_fuente"]) {
+				echo $vf ["descripcion_valor"];
+			}
+		}
+		echo '</td>';
+		
+		echo '<td>';
+		//echo money_format ( '%.0n', floor ( $fu ["total"] ) );
+		echo '</td>';
+		echo '</tr>';
+	}
+	
+	foreach ( $this->sumrubro as $ru ) {
+		echo '<tr align="center" valign="middle">';
+		echo '<td>';
+		foreach ( $this->valflex as $vf ) {
+			if ($vf ["id_valor_flexible"] == $ru ["id_rubro"]) {
+				echo $vf ["descripcion_valor"];
+			}
+		}
+		echo '</td>';
+		
+		echo '<td>';
+		//echo money_format ( '%.0n', floor ( $ru ["total"] ) );
+		echo '</td>';
+		echo '</tr>';
+	}
+	echo '<tr>';
+	echo '<th>TOTAL DEL PROYECTO</th>';
+	echo '<th>';
+	foreach ( $this->sumtotal as $to ) {
+		//echo money_format ( '%.0n', floor ( $to ["total"] ) );
+	}
+	
+	echo '</th>';
+	echo '</tr>';
+	
+	echo '</tbody>';
+	echo '</table>';
+}
+?>
+
+<br>
+
+
+
+
+				<h5 class="sidebartitle">Tabla financiación SIAFI</h5>
+				<?php
+				$array = 0;
+				$conta = 1;
+				foreach ( $this->vig as $v ) {
+					$array = $array . ',' . $v ["VIGENCIA"];
+					$conta = $conta + 1;
+				}
+				
+				$array2 = explode ( ",", $array );
+				//print_r($array2);
+				for($i = 1; $i < $conta; $i ++) {
+					echo '<table class="table">';
+					echo '<thead>';
+					echo '<th>Item plan de compras</th>';
+					echo '<th>Vigencia</th>';
+					echo '<th>Programado</th>';
+					echo '<th>Con registro presupuestal</th>';
+					echo '<th>Pendiente</th>';
+					echo '</thead>';
+					echo '<tbody>';
+					$sum = 0;
+					$sumsol = 0;
+					$sumdis = 0;
+					$sumsum = 0;
+					setlocale ( LC_MONETARY, 'en_US' );
+					
+					foreach ( $this->p as $tbproy ) {
+						
+						if ($array2 [$i] == $tbproy ["VIGENCIA"]) {
+							
+							echo '<tr>';
+							echo '<td>';
+							echo $tbproy ["ITEM_PLANCOMPRAS"];
+							echo '</td>';
+							echo '<td>';
+							echo $tbproy ["VIGENCIA"];
+							echo '</td>';
+							echo '<td>';
+							//echo money_format ( '%.0n', floor ( $tbproy ["VALOR_PROGRAMACION"] ) );
+							echo number_format(floor($tbproy["VALOR_PROGRAMACION"]), 2);
+							echo '</td>';
+							echo '<td>';
+							//echo money_format ( '%.0n', floor ( $tbproy ["VALOR_DISPONIBILIDAD"] ) );
+							echo number_format(floor($tbproy["VALOR_DISPONIBILIDAD"]), 2);
+							echo '</td>';
+							echo '<td>';
+							//echo money_format ( '%.0n', floor ( $tbproy ["VALOR_PROGRAMACION"] - $tbproy ["VALOR_DISPONIBILIDAD"] ) );
+							echo number_format(floor($tbproy["VALOR_PROGRAMACION"] - $tbproy ["VALOR_DISPONIBILIDAD"]), 2);
+							echo '</td>';
+							echo '</tr>';
+							
+							$sum = $sum + $tbproy ["VALOR_PROGRAMACION"];
+							//$sumsol = $sumsol + $tbproy ["VALOR_SOLICITUD"];
+							$sumdis = $sumdis + $tbproy ["VALOR_DISPONIBILIDAD"];
+							$sumsum = $sumsum + ((int)$tbproy["VALOR_PROGRAMACION"] - (int)$tbproy["VALOR_DISPONIBILIDAD"]);
+						}
+					}
+					echo '<tr>';
+					echo '<td>';
+					echo 'Total';
+					echo '</td>';
+					echo '<td>';
+					echo '';
+					echo '</td>';
+					echo '<td>';
+					//echo money_format ( '%.0n', floor ( $sum ) );
+					echo number_format(floor($sum),2);
+					echo '</td>';
+					echo '<td>';
+					//echo money_format ( '%.0n', floor ( $sumdis ) );
+					echo number_format(floor($sumdis),2);
+					echo '</td>';
+					echo '<td>';
+					//echo money_format ( '%.0n', floor ( $sumsum ) );
+					echo number_format(floor($sumsum),2);
+					echo '</td>';
+					
+					echo '</tr>';
+				}
+				
+				echo '</tr>';
+				echo '</table>';
+				echo '</br>';
+				echo '</br>';				
+				echo '<table class="table">';
+				echo '<thead>';
+				echo '<th>Total programado</th>';
+				echo '<th>Total solicitado</th>';
+				echo '<th>Total con registro presupuestal</th>';
+				echo '<th>Total disponible</th>';
+				echo '</thead>';
+				echo '<tbody>';
+				$sum = 0;
+				$sumdis = 0;
+				$sumsol = 0;
+				$sumsum = 0;
+				foreach ( $this->p as $tbproy ) {
+					
+					$sum = $sum + $tbproy ["VALOR_PROGRAMACION"];
+					$sumsol = $sumsol + $tbproy ["VALOR_SOLICITUD"];
+					$sumdis = $sumdis + $tbproy ["VALOR_DISPONIBILIDAD"];
+					$sumsum = $sumsum + ($tbproy ["VALOR_PROGRAMACION"] - $tbproy ["VALOR_SOLICITUD"]);
+				}
+				echo '<td>';
+				echo number_format($sum, 2 );
+				echo '</td>';
+				echo '<td>';
+				echo number_format ($sumsol,2);
+				echo '</td>';
+				echo '<td>';
+				echo number_format ($sumdis,2 );
+				echo '</td>';
+				echo '<td>';
+				echo number_format ($sumsum,2);
+				echo '</td>';
+				echo '</tbody>';
+				echo '</table>';
+				echo '</br>';
+				echo '</br>';
+				?>
+
+
+
+		</div>
+		</div>
+
+
+
+	</div>
+</div>

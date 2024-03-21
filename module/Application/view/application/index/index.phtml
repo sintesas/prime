@@ -1,0 +1,112 @@
+<?php 
+    include("public/menu.php");
+?>
+<div class="col col75">
+
+    <?php
+    if($multimedia != ""){
+        ?>
+        <div class="news clearfix">
+                <div class="embed-responsive embed-responsive-16by9">
+                  <iframe class="embed-responsive-item" style="padding-left: 4px; padding-top: 4px; padding-right: 4px;" src="https://www.youtube-nocookie.com/embed/<?php echo $multimedia; ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        <?php           
+    }
+    ?>
+    <div class="news clearfix">
+        <div class="titlenews">Noticias</div>
+        <?php
+        foreach ($noticias as $not) {
+            if (substr($not["fecha_inicio"], 5, 2) + 05 >= date("m")) { ?>
+                <a href="<?= $this->basePath() ?>/application/noticias/ver/<?= $not["id_noticia"] ?>">
+                    <div class="itemn">
+                        <div class="imageitemn"><img src="<?php echo $this->basePath();?>/public/images/uploads/noticias/hi_not_<?php echo $not["id_noticia"]."_".$not["imagen"]; ?>" onerror="this.onerror=null;this.src='<?php echo $this->basePath(); ?>/public/images/images_oscar/news/news2.jpg';" alt="Noticia" style="width: 100%;"></div>
+                        <div class="infoitemn clearfix">
+                            <div class="catitemn">La Universidad</div>
+                            <div class="dateitemn"><?= $not["fecha_inicio"] ?></div>
+                        </div>
+                        <div class="titleitemn"><?= $not["titulo"] ?></div>
+                        <div class="desitemn"><?= substr($not["noticia"], 0, 150) ?></div>
+                    </div>
+                </a>
+        <?php }
+        }
+        ?>
+    </div>
+</div>
+<div class="col col25">
+    <div class="eventos">
+        <div class="titleevento">Opciones</div>
+        <a href="<?php echo $this->basePath() ?>/application/editarusuario/index/<?php echo $this->usuario ?>">Editar
+            mi usuario</a> <br>
+        <a href="<?php echo $this->basePath() ?>/application/cambiarcontrasena/index">Cambiar
+            contraseña</a> <br>
+        Solicitudes de vinculación de productos:
+        <ul>
+            <li><a href="<?php echo $this->basePath() ?>/application/solicitudesvinculacion/index/1">Grupos de Investigación</a></li>
+            <li><a href="<?php echo $this->basePath() ?>/application/solicitudesvinculacion/index/2">Redes</a></li>
+            <li><a href="<?php echo $this->basePath() ?>/application/solicitudesvinculacion/index/3">Semilleros/Otros procesos de formación</a></li>
+        </ul>
+        <?php
+            echo '<br>';
+            if ($this->menu != 1) {
+        ?>
+            <a href="<?php echo $this->basePath() ?>/application/evaluarproy/index">Revisar
+            propuestas por evaluar</a>
+        <?php
+            echo '<br>';
+        ?>
+            <a href="<?php echo $this->basePath() ?>/application/consulmisproyectos/index">Revisar
+            mis proyectos y monitorias</a>
+        <?php
+            }
+        ?>
+    </div>
+    <br />
+    <div class="eventos">
+        <div class="titleevento">Eventos</div>
+        <?php
+        foreach ($eventos as $eve) {
+            if (strtotime($eve["fecha_fin"]) >= strtotime(date('Y-m-d'))) {
+                $dia = substr($eve["fecha_inicio"], 8, 2);
+                $mes = substr($eve["fecha_inicio"], 5, 2);
+                if ($mes == 01) {
+                    $mesn = 'Enero';
+                } elseif ($mes == 2) {
+                    $mesn = 'Febrero';
+                } elseif ($mes == 3) {
+                    $mesn = 'Marzo';
+                } elseif ($mes == 4) {
+                    $mesn = 'Abril';
+                } elseif ($mes == 5) {
+                    $mesn = 'Mayo';
+                } elseif ($mes == 6) {
+                    $mesn = 'Junio';
+                } elseif ($mes == 7) {
+                    $mesn = 'Julio';
+                } elseif ($mes == 8) {
+                    $mesn = 'Agosto';
+                } elseif ($mes == 9) {
+                    $mesn = 'Septiembre';
+                } elseif ($mes == 10) {
+                    $mesn = 'Octubre';
+                } elseif ($mes == 11) {
+                    $mesn = 'Noviembre';
+                } elseif ($mes == 12) {
+                    $mesn = 'Diciembre';
+                }
+        ?>
+                <div class="iteme">
+                    <div class="date"><?= $dia . ' ' . $mesn ?></div>
+                    <div class="title"><?= $eve["titulo"] ?></div>
+                    <div class="text"><?= substr($eve["evento"], 0, 150); ?></div>
+                    <a href="<?= $this->basePath() ?>/application/eventos/ver/<?= $eve["id_evento"] ?>">
+                        <div class="btn-evento">Ver Evento</div>
+                    </a>
+                </div>
+        <?php }
+        }
+        ?>
+    </div>
+</div>

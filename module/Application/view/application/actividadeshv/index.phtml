@@ -1,0 +1,98 @@
+<style>
+    textarea {
+        height: 100px;
+        width: 100%;
+        max-width: 100%;
+    }
+</style>
+<script type="text/javascript">
+    function showHint(str) {
+        var valthis = str.toLowerCase();
+        var num = 0;
+
+        $('select#id_autor>option').each(function () {
+              var text = $(this).text().toLowerCase();
+              if(text.indexOf(valthis) !== -1)  
+                  {$(this).show(); $(this).prop('selected',true);}
+              else{$(this).hide();}
+               });
+    }
+</script>
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+    echo $this->titulo;
+    ?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<div class="twelve columns">
+					<a
+						href="<?php echo $this->basePath() ?>/application/editarusuario/index/<?php echo $this->id; ?>">
+						<i class="icon-arrow-left"></i> Regresar
+					</a><br> <br>
+				<?php
+    $form = $this->form;
+    $form->prepare();
+    
+    $form->setAttributes(array(
+        'action' => $this->url . '/application/actividadeshv/index/' . $this->id.'/'.$this->id2,
+        'method' => 'post'
+    ));
+    echo $this->form()->openTag($form);
+    echo '<p>';
+    echo $this->formlabel($form->get('tipo'));
+    echo $this->formelement($form->get('tipo'));
+    echo '<p>';
+    echo $this->formlabel($form->get('descripcion'));
+    echo $this->formelement($form->get('descripcion'));
+    echo '<p>';
+    echo $this->formlabel($form->get('documento_vinculacion'));
+    echo $this->formelement($form->get('documento_vinculacion'));
+    echo '<p>';
+    echo $this->formlabel($form->get('valor'));
+    echo $this->formelement($form->get('valor'));
+    echo '<p>';
+    echo $this->formlabel($form->get('dedicacion'));
+    echo $this->formelement($form->get('dedicacion'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_pais'));
+    echo $this->formelement($form->get('id_pais'));
+    echo '<p>';
+    echo $this->formlabel($form->get('fecha'));
+    echo $this->formelement($form->get('fecha'));
+    echo '<p>';
+    echo $this->formlabel($form->get('tema'));
+    echo $this->formelement($form->get('tema'));
+    echo '<p>';
+    echo $this->formlabel($form->get('instituciones'));
+    echo $this->formelement($form->get('instituciones'));
+    echo '<p>';
+    echo $this->formlabel($form->get('image-file'));
+    echo $this->formelement($form->get('image-file'));
+
+    echo '<p>';
+    echo '<br>';
+    echo $this->formelement($form->get('submit'));
+    echo '<br>';
+    
+    echo $this->form()->closeTag($form);
+    ?>
+				<br>
+
+
+				<?php
+    
+    ?>
+
+</div>
+			</div>
+		</div>

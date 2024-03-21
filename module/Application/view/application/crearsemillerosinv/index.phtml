@@ -1,0 +1,218 @@
+<style>
+    textarea {
+        height: 100px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+</style>
+<script type="text/javascript">
+	$(function () {
+	    var opts = $('#coordinador_1 option').map(function () {
+	        return [[this.value, $(this).text()]];
+	    });
+	    $('#id_coordinador_1').keyup(function () {
+	    	console.log(2);
+	        var rxp = new RegExp($('#id_coordinador_1').val(), 'i');
+	        var optlist = $('#coordinador_1').empty();
+	        opts.each(function () {
+	            if (rxp.test(this[1])) {
+	                optlist.append($('<option/>').attr('value', this[0]).text(this[1]));
+	            }
+	        });
+
+	    });
+	});
+
+	$(function () {
+	    var opts = $('#coordinador_2 option').map(function () {
+	        return [[this.value, $(this).text()]];
+	    });
+	    $('#id_coordinador_2').keyup(function () {
+	        var rxp = new RegExp($('#id_coordinador_2').val(), 'i');
+	        var optlist = $('#coordinador_2').empty();
+	        opts.each(function () {
+	            if (rxp.test(this[1])) {
+	                optlist.append($('<option/>').attr('value', this[0]).text(this[1]));
+	            }
+	        });
+
+	    });
+	});
+
+	$(function () {
+	    $('#nombre').keyup(function () {
+	        var listaSemilleros = <?php echo json_encode($this->semilleros); ?>;
+	        var bandNombre = false;
+	        for (i = 0; i < listaSemilleros.length; i++) {
+	        	if($("#nombre").val().trim().toLowerCase() === listaSemilleros[i].nombre.trim().toLowerCase()){
+	        		bandNombre = true;
+	        	}   
+            }
+            if(bandNombre){
+            	$("#lbNombre").css("display", "block");
+            }else{
+            	$("#lbNombre").css("display", "none");
+            }
+	    });
+	});
+
+	$(function () {
+	    $('#codigo').keyup(function () {
+		 	var listaSemilleros = <?php echo json_encode($this->semilleros); ?>;
+	        var bandCodigo = false;
+	        for (i = 0; i < listaSemilleros.length; i++) {
+	        	if($("#codigo").val().trim().toLowerCase() === listaSemilleros[i].codigo.trim().toLowerCase()){
+	        		bandCodigo = true;
+	        	}   
+            }
+            if(bandCodigo){
+            	$("#lbCodigo").css("display", "block");
+            }else{
+            	$("#lbCodigo").css("display", "none");
+            }
+	    });
+	});
+
+	function myFunction2() {
+        var dependenciasAca = document.getElementById("id_dependencia_academica");
+        for (i = 0; i < dependenciasAca.length; i++) {
+            if(dependenciasAca.options[i].value != ''){
+                var option = dependenciasAca.options[i]; // item
+                var id = dependenciasAca.options[i].value.split(/-/); // extrae el id del padre    
+                var idPadreValorFlexible = id[1];
+                //valida que el item de la iteracion es del padre seleccionado
+                if(idPadreValorFlexible == document.getElementById("id_unidad_academica").value.split(/-/)[0]){
+                    option.style.display = "block";
+                }else{
+                    option.style.display = "none";
+                }
+                // Selecciona el placeholder por defecto en linea
+                if(option.text == ""){
+                    option.selected = true;
+                }
+            }                                                                      
+        }
+        document.getElementById("id_dependencia_academica").value = "";
+        document.getElementById("id_programa_academico").value = "";
+    }
+
+    function myFunction3() {
+        var programaAca = document.getElementById("id_programa_academico");                               
+        for (i = 0; i < programaAca.length; i++) {
+            if(programaAca.options[i].value != ''){
+                var option = programaAca.options[i]; // item
+                var id = programaAca.options[i].value.split(/-/); // extrae el id del padre    
+                var idPadreValorFlexible = id[1];
+                //valida que el item de la iteracion es del padre seleccionado
+                if(idPadreValorFlexible == document.getElementById("id_dependencia_academica").value.split(/-/)[0]){
+                    option.style.display = "block";
+                }else{
+                    option.style.display = "none";
+                }
+                // Selecciona el placeholder por defecto en linea
+                if(option.text == ""){
+                    option.selected = true;
+                }
+            }                                                                       
+        }
+        document.getElementById("id_programa_academico").value = "";
+    }
+
+    
+</script>
+
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+								<?php
+							    	echo $this->titulo;
+							    ?>
+							</h3>
+						</div>
+					</div>
+				</div>
+				<div class="six columns">
+					<a href="<?php echo $this->basePath() ?>/application/semillerosinv/index">
+						<i class="icon-arrow-left"></i> Regresar
+					</a>
+				</div>
+				</br>
+				</br>
+				</br>
+				</br>
+				</br>
+
+<?php
+$form = $this->form;
+$form->prepare();
+
+echo $this->form()->openTag($form);
+
+echo '<div class="six columns">';
+echo '<p>';
+echo '<p>';
+echo $this->formlabel($form->get('nombre'));
+echo $this->formelement($form->get('nombre'));
+echo "<label id='lbNombre' style='display: none; color: red;'>Ya existe un semillero con este nombre</label>";
+echo '<p>';
+echo $this->formlabel($form->get('codigo'));
+echo $this->formelement($form->get('codigo'));
+echo "<label id='lbCodigo' style='display: none; color: red;'>Ya existe un semillero con este código</label>";
+echo '<p>';
+echo $this->formlabel($form->get('fecha'));
+echo $this->formelement($form->get('fecha'));
+echo '<p>';
+echo $this->formlabel($form->get('id_unidad_academica'));
+echo $this->formelement($form->get('id_unidad_academica'));
+echo '<p>';
+echo $this->formlabel($form->get('id_dependencia_academica'));
+echo $this->formelement($form->get('id_dependencia_academica'));
+echo '<p>';
+echo $this->formlabel($form->get('id_programa_academico'));
+echo $this->formelement($form->get('id_programa_academico'));
+echo '</div>';
+echo '<div class="six columns">';
+echo '<p>';
+echo $this->formlabel($form->get('id_coordinador_1'));
+echo $this->formelement($form->get('id_coordinador_1'));
+echo '</br>';
+echo $this->formelement($form->get('coordinador_1'));
+echo '<p>';
+echo $this->formlabel($form->get('id_coordinador_2'));
+echo $this->formelement($form->get('id_coordinador_2'));
+echo '</br>';
+echo $this->formelement($form->get('coordinador_2'));
+echo '<p>';
+echo $this->formlabel($form->get('estado'));
+echo $this->formelement($form->get('estado'));
+echo '<p>';
+echo '<br>';
+echo '<br>';
+echo '<p>';
+echo '<div>';
+echo '<center>';
+echo $this->formelement($form->get('submit'));
+echo '</center>';
+echo '</div>';
+echo '<br>';
+echo '</div>';
+
+echo '<div>';
+
+echo '</div>';
+
+echo $this->form()->closeTag($form);
+?>				
+</div><!-- Cierre div six columns --> 
+			</div>
+		</div>
+	</div>
+</div>
+

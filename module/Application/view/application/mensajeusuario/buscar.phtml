@@ -1,0 +1,118 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+<div class="row2">
+	<div class="nine3 columns">
+
+		<div id="centersectiontitle">
+			<div class="twelve columns">
+				<div class="sidebartitle"><h3>
+				<?php
+					echo $this->titulo;
+				?>
+				</h3>
+			</div>
+		</div>
+	</div>
+<div class="four columns">
+<?php
+echo '<h6>';
+echo $this->flashMessenger()->render();
+echo '</h6>';
+?>
+<a href="<?php echo $this->basePath() ?>/application/mensajeusuario/index">
+	<i class="icon-arrow-left"></i>
+	 Regresar</a>
+
+	<?php
+echo '<br>';echo '<br>';
+$form = $this->form;
+$form->prepare();
+$form->setAttributes(array('action'=> 'buscar',
+						   'method'=>'post'));
+echo $this->form()->openTag($form);
+
+				echo $this->formlabel($form->get('documento'));
+				echo "                ";
+				echo $this->formelement($form->get('documento'));
+				echo "                ";
+				echo $this->formlabel($form->get('nombre'));
+				echo "                ";
+				echo $this->formelement($form->get('nombre'));
+				echo "                ";
+				echo $this->formlabel($form->get('apellido'));
+				echo "                ";
+				echo $this->formelement($form->get('apellido'));
+				echo "                ";
+				echo $this->formlabel($form->get('usuario'));
+				echo "                ";
+				echo $this->formelement($form->get('usuario'));
+				echo "                ";
+	echo $this->formelement($form->get('submit'));
+	echo $this->form()->closeTag($form);
+				?>
+			</div>
+	<div class="twelve columns">
+<?php
+
+
+echo '<br>';
+echo '<div class="col col100 noshadow">';
+echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+echo '<table class="table" style="width: 100%; max-width: 100%;">';
+echo '<thead>';
+echo '<th>Nombre</th>';
+echo '<th>Apellido</th>';
+echo '<th>Usuario</th>';
+echo '<th>Cédula</th>';
+echo '<th>Rol asignado</th>';
+echo '<th></th>';
+echo '</thead>';
+echo '</tbody>';
+foreach ($this->datos as $dato){
+
+echo '<tr>';
+echo '<td>';
+echo $dato["primer_nombre"].$dato["segundo_nombre"];
+echo'</td>';
+echo '<td>';
+echo $dato["primer_apellido"].$dato["segundo_apellido"];
+echo'</td>';
+echo '<td>';
+echo $dato["usuario"];
+echo'</td>';
+echo '<td>';
+echo $dato["documento"];
+echo'</td>';
+echo '<td>';
+foreach ($this->datos2 as $dat){
+if ($dat["id_usuario"]==$dato["id_usuario"]){
+    
+	foreach ($this->datos3 as $d){
+		if ($dat["id_rol"]==$d["id_rol"]){
+		echo $d["descripcion"];
+		}
+	}
+}
+}
+echo'</td>';
+echo '<td>';
+if($this->menu==1){
+?>
+<a class="btn" href="<?php echo $this->basePath() ?>/application/mensajeusuario/adicionar/<?php echo $dato["email"];?>"> Adicionar</a>
+
+<?php
+}
+echo'</td>';
+echo '</tr>';
+}
+
+echo '</tr>';
+echo '</tbody>';
+echo '</table>';
+echo '</div>';
+echo '</div>';
+echo '</div>';
+
+?>
+</div>

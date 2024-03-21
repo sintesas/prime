@@ -1,0 +1,306 @@
+<style>
+    textarea {
+        height: 100px;
+        width: 100%;
+        max-width: 100%;
+    }
+    select {
+        width: 64%;
+        max-width: 100%;
+    }
+    label {
+        display: table-cell; 
+    }
+</style> 
+
+<script type="text/javascript">
+    $( document ).ready(function() {
+        var lineaInv = document.getElementById("id_linea_inv");
+        for (i = 0; i < lineaInv.length; i++) {
+            if(lineaInv.options[i].value != ''){
+                var option = lineaInv.options[i]; // item
+                var id = lineaInv.options[i].value.split(/-/); // extrae el id del                    
+                var idPadreValorFlexible = id[1];
+                if(idPadreValorFlexible == document.getElementById('id_campo').value){
+                    option.style.display = "block";
+                }else{
+                    option.style.display = "none";
+                }
+                if(option.text == "Seleccione"){
+                    option.selected = true;
+                }
+            }
+        }
+        if(document.getElementById('id_campo').value == ''){
+            document.getElementById("id_linea_inv").disabled = true;
+        }else{
+            document.getElementById("id_linea_inv").disabled = false;
+        }
+    });
+
+    function modelo() {
+        var categoria = document.getElementById("id_categoria").value;
+        var idCategoria = categoria.split("-");
+        if(idCategoria[1] == 901){
+            document.getElementById("planteamiento_problema").disabled = true;
+            document.getElementById("total_financia").disabled = false;
+            document.getElementById("area_tematica").disabled = false;
+            document.getElementById("instituciones_coofinanciacion").disabled = false;
+            document.getElementById("total_financia").placeholder = "Ingrese el total de cofinanciación";
+            document.getElementById("area_tematica").placeholder = "En este apartado presente una breve descripción sobre el aporte que se hará con esta investigación al eje y/o línea de investigación en el cual se inscribe la propuesta. Revise términos de referencia.";
+
+            document.getElementById("planteamiento_problema").placeholder = "No aplica para la modalidad escogida.";
+        }else if(idCategoria[1] == 902 || idCategoria[1] == 903){
+            document.getElementById("total_financia").disabled = true;
+            document.getElementById("area_tematica").disabled = true;
+            document.getElementById("instituciones_coofinanciacion").disabled = true;
+            document.getElementById("planteamiento_problema").disabled = false;
+
+            document.getElementById("total_financia").placeholder = "No aplica para la modalidad escogida.";
+            document.getElementById("area_tematica").placeholder = "No aplica para la modalidad escogida.";
+            document.getElementById("planteamiento_problema").placeholder = "Formular de forma explícita el problema u objeto que se propone abordar o responder y, si es el caso, las preguntas que lo delimitan, mostrando la pertinencia en el contexto del área del conocimiento del grupo y de las líneas declaradas por el mismo, en la cual se ubican y en relación directa con la problematización construida. En este apartado, los proponentes deberán enunciar la o las hipótesis de investigación que han elaborado (sólo si son pertinentes dentro de la estrategia de investigación seleccionada), y la justificación de la problemática.";
+        }else{
+            document.getElementById("planteamiento_problema").disabled = false;
+            document.getElementById("total_financia").disabled = false;
+            document.getElementById("area_tematica").disabled = false;
+            document.getElementById("instituciones_coofinanciacion").disabled = false;
+
+
+            document.getElementById("planteamiento_problema").placeholder = "Formular de forma explícita el problema u objeto que se propone abordar o responder y, si es el caso, las preguntas que lo delimitan, mostrando la pertinencia en el contexto del área del conocimiento del grupo y de las líneas declaradas por el mismo, en la cual se ubican y en relación directa con la problematización construida. En este apartado, los proponentes deberán enunciar la o las hipótesis de investigación que han elaborado (sólo si son pertinentes dentro de la estrategia de investigación seleccionada), y la justificación de la problemática.";
+            document.getElementById("total_financia").placeholder = "Ingrese el total de cofinanciación";
+            document.getElementById("area_tematica").placeholder = "En este apartado presente una breve descripción sobre el aporte que se hará con esta investigación al eje y/o línea de investigación en el cual se inscribe la propuesta. Revise términos de referencia.";
+        }
+    }
+    
+    function myFunction(id_campo) {
+        var lineaInv = document.getElementById("id_linea_inv");
+        for (i = 0; i < lineaInv.length; i++) {
+            if(lineaInv.options[i].value != ''){
+                var option = lineaInv.options[i]; // item
+                var id = lineaInv.options[i].value.split(/-/); 
+                var idPadreValorFlexible = id[1];
+                if(idPadreValorFlexible == document.getElementById(id_campo).value){
+                    option.style.display = "block";
+                }else{
+                    option.style.display = "none";
+                }
+                if(option.text == "Seleccione"){
+                    option.selected = true;
+                }
+            }
+        }
+        if(document.getElementById(id_campo).value == ''){
+            document.getElementById("id_linea_inv").disabled = true;
+        }else{
+            document.getElementById("id_linea_inv").disabled = false;
+        }
+    }
+
+    function sumValores() {
+        var valRecursosContrapartida=0;
+        var valRecursosInversion=0;
+        var valRecursosCofinanciacion=0;
+
+        if($("input[name='recursos_funcion']").val()!=""){
+            valRecursosContrapartida = parseInt($("input[name='recursos_funcion']").val());
+        }
+         if($("input[name='recursos_inversion']").val()!=""){
+            valRecursosInversion = parseInt($("input[name='recursos_inversion']").val());
+        }
+         if($("input[name='total_financia']").val()!=""){
+            valRecursosCofinanciacion = parseInt($("input[name='total_financia']").val());
+        }
+        $("input[name='total_proy']").val(valRecursosContrapartida+valRecursosInversion+valRecursosCofinanciacion);
+        var formatter = new Intl.NumberFormat('en-us', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0
+        });
+        $('#lb_recursos_funcion').text(formatter.format($("input[name='recursos_funcion']").val()));
+        $('#lb_recursos_inversion').text(formatter.format($("input[name='recursos_inversion']").val()));
+        $('#lb_total_financia').text(formatter.format($("input[name='total_financia']").val()));
+        $('#lb_total_proy').text(formatter.format($("input[name='total_proy']").val()));
+    }
+
+    function myFunction2() {
+        var dependenciasAca = document.getElementById("id_dependencia_academica");
+        for (i = 0; i < dependenciasAca.length; i++) {
+          if(dependenciasAca.options[i].value != ''){
+                var option = dependenciasAca.options[i]; // item
+                var idPadreValorFlexible = dependenciasAca.options[i].value.split(/-/)[1];
+                //valida que el item de la iteracion es del padre seleccionado
+                if(idPadreValorFlexible == document.getElementById("id_unidad_academica").value.split(/-/)[0]){
+                    option.style.display = "block";
+                }else{
+                    option.style.display = "none";
+                }
+                // Selecciona el placeholder por defecto en linea
+                if(option.text == ""){
+                    option.selected = true;
+                }
+            }                                                                      
+        }
+    }
+    
+    function myFunction3() {
+        var programaAca = document.getElementById("id_programa_academico");                               
+        for (i = 0; i < programaAca.length; i++) {
+            if(programaAca.options[i].value != ''){
+                var option = programaAca.options[i]; // item
+                var idPadreValorFlexible = programaAca.options[i].value.split(/-/)[1];
+                //valida que el item de la iteracion es del padre seleccionado
+                if(idPadreValorFlexible == document.getElementById("id_dependencia_academica").value.split(/-/)[0]){
+                    option.style.display = "block";
+                }else{
+                    option.style.display = "none";
+                }
+                // Selecciona el placeholder por defecto en linea
+                if(option.text == ""){
+                    option.selected = true;
+                }
+            }                                                                       
+        }
+        
+    }
+</script>
+
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+    echo $this->titulo."/PROPUESTA DE INVESTIGACIÓN";
+    ?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<div class="twelve columns">
+				<?php
+    $form = $this->form;
+    $form->prepare();
+    
+    $form->setAttributes(array(
+        'action' => $this->url . '/application/aplicari/index/' . $this->id,
+        'method' => 'post'
+    ));
+    echo $this->form()->openTag($form);
+    ?>
+        <a href="<?php echo $this->basePath() ?>/application/consulconvocatoria/index"><i class="icon-arrow-left"></i> Regresar</a><br><br>
+    <?php
+    echo "<h3>";
+    echo "IDENTIFICACIÓN DEL PROYECTO";
+    echo "</h3>";
+    echo '</div>';
+    echo '<div class="six columns">';
+    echo '<p>';
+    echo $this->formlabel($form->get('nombre_proy'));
+    echo $this->formelement($form->get('nombre_proy'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_categoria'));
+    echo $this->formelement($form->get('id_categoria'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_campo'));
+    echo $this->formelement($form->get('id_campo'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_linea_inv'));
+    echo $this->formelement($form->get('id_linea_inv'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_area_tematica'));
+    echo $this->formelement($form->get('id_area_tematica'));
+    echo '<p>';
+    echo $this->formlabel($form->get('recursos_funcion')); echo '<label id="lb_recursos_funcion"></label>';
+    echo $this->formelement($form->get('recursos_funcion'));
+    echo '<p>';
+    echo $this->formlabel($form->get('recursos_inversion')); echo '<label id="lb_recursos_inversion"></label>';
+    echo $this->formelement($form->get('recursos_inversion'));
+    echo '<p>';
+    echo $this->formlabel($form->get('total_financia')); echo '<label id="lb_total_financia"></label>';
+    echo $this->formelement($form->get('total_financia'));
+    echo '<p>';
+    echo $this->formlabel($form->get('total_proy')); echo '<label id="lb_total_proy"></label>';
+    echo $this->formelement($form->get('total_proy'));
+    echo '</div>';
+    echo '<div class="six columns">';
+    echo '<p>';
+    echo $this->formlabel($form->get('investigador_principal'));
+    echo $this->formelement($form->get('investigador_principal'));
+    echo '<p>';
+    echo $this->formlabel($form->get('tipo_documento'));
+    echo $this->formelement($form->get('tipo_documento'));
+    echo '<p>';
+    echo $this->formlabel($form->get('numero_documento'));
+    echo $this->formelement($form->get('numero_documento'));
+    echo '<p>';
+    echo $this->formlabel($form->get('tipo_vinculacion'));
+    echo $this->formelement($form->get('tipo_vinculacion'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_unidad_academica'));
+    echo $this->formelement($form->get('id_unidad_academica'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_dependencia_academica'));
+    echo $this->formelement($form->get('id_dependencia_academica'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_programa_academico'));
+    echo $this->formelement($form->get('id_programa_academico'));
+    echo '<p>';
+    echo $this->formlabel($form->get('instituciones_coofinanciacion'));
+    echo $this->formelement($form->get('instituciones_coofinanciacion'));
+    echo '<p>';
+    echo $this->formlabel($form->get('duracion'));
+    echo $this->formelement($form->get('duracion'));
+    echo '<p>';
+    echo $this->formelement($form->get('periodo'));
+    echo "</div>";
+    echo '<div class="twelve columns">';    
+    echo "<h3>";
+    echo "CONTENIDO DE LA PROPUESTA";
+    echo "</h3>";
+    echo $this->formlabel($form->get('area_tematica'));
+    echo $this->formelement($form->get('area_tematica'));
+    echo '<p>';
+    echo '<center>';
+    echo "<h3>";
+    echo "MÓDULO I";
+    echo "</h3>";
+    echo '</center>';
+    echo $this->formlabel($form->get('resumen_ejecutivo'));
+    echo $this->formelement($form->get('resumen_ejecutivo'));
+    echo '<p>';
+    echo $this->formlabel($form->get('descriptores'));
+    echo $this->formelement($form->get('descriptores'));
+    echo '<p>';
+    echo $this->formlabel($form->get('antecedentes'));
+    echo $this->formelement($form->get('antecedentes'));
+    echo "(Puntaje máximo en la evaluación: 10 puntos de 100)";
+    echo '<p>';
+    echo '<center>';
+    echo "<h3>";
+    echo "MÓDULO II";
+    echo "</h3>";
+    echo '</center>';
+    echo "<h3>";
+    echo "PROBLEMAS, OBJETIVOS Y METAS";
+    echo "</h3>";
+    echo $this->formlabel($form->get('planteamiento_problema'));
+    echo $this->formelement($form->get('planteamiento_problema'));
+    echo '<p>';
+    echo $this->formlabel($form->get('objetivo_general'));
+    echo $this->formelement($form->get('objetivo_general'));
+    echo "Una vez aplique a la convocatoria acepta los terminos y condiciones estipuladas.";
+    echo '</br>';
+    echo '</br>';
+    echo '<p>';
+    echo $this->formelement($form->get('submit'));
+    echo $this->form()->closeTag($form);
+    echo "</div>";
+    ?>
+			</div>
+		</div>
+	</div>
+</div>

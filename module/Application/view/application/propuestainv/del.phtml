@@ -1,0 +1,26 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+<div class="row2">
+	<div class="nine3 columns">
+
+		<div id="centersectiontitle">
+			<div class="twelve columns">
+<center>
+<h6>Eliminar el registro?</h6>
+<a class="btn" href="<?php echo $this->basePath() ?>/application/propuestainv/eliminar/<?php echo $this->datos;?>/<?php echo $this->id2;?>/<?php echo $this->id3;?>">Eliminar Registro</a>
+<?php
+if($id3==0){ ?>
+
+<a class="btn" href="<?php echo $this->basePath() ?>/application/editaraplicar/index/<?php echo $this->id2;?>">Cancelar</a>
+<?php }else{ ?>
+	<a class="btn" href="<?php echo $this->basePath() ?>/application/editaraplicari/index/<?php echo $this->id2;?>">Cancelar</a>
+<?php } ?>
+
+		<br><br>	</div>
+		</div>
+	</div>
+			</div>
+	
+
+

@@ -1,0 +1,287 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+    echo $this->titulo;
+    ?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<div class="twelve columns">
+					<a
+						href="<?php echo $this->basePath().'/application/gestionrequi/index/'. $this->id_convocatoria?>">
+						<i class="icon-arrow-left"></i> Regresar
+					</a>
+				
+				<?php
+    $form = $this->form;
+    $form->prepare();
+    echo '<h6>';
+    echo $this->flashMessenger()->render();
+    echo '</h6>';
+    $form->setAttributes(array(
+        'action' => $this->url . '/application/gestionrequi/index/'.$this->id_convocatoria,
+        'method' => 'post'
+    ));
+    echo $this->form()->openTag($form);
+    
+    echo $this->form()->closeTag($form);
+    ?>
+				<br>
+
+
+				<?php
+    
+				    $tipo = $this->tipo["tipo_conv"];
+                
+                ?>
+
+                <fieldset>
+                    <legend>Proyecto</legend>
+                    
+    <?php
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    echo '<th style="width: 30%;">ID Convocatoria</th>';
+    echo '<th style="width: 40%;">Nombre de la propuesta</th>';
+    echo '<th style="width: 10%;">Nombre del proponente</th>';
+    echo '</tr>';
+    
+    echo '<tr>';
+        echo '<td>';
+        echo $this->id_convocatoria;
+        echo '</td>';
+        echo '<td>';
+        echo $this->proyecto[0]["nombre_proy"];
+        echo '</td>';
+        echo '<td>';
+            foreach ($this->usua as $ua) {
+                if ($ua["id_usuario"] == $this->proyecto[0]["id_investigador"]) {
+                    echo trim($ua["primer_nombre"]) . ' ' . trim($ua["segundo_nombre"]). ' ' . trim($ua["primer_apellido"]). ' ' . trim($ua["segundo_apellido"]);
+                }
+            }
+        echo '</td>';
+
+        echo '</tr>';
+    
+    echo '</tr>';
+    echo '</table>';
+    echo '</div>';
+    ?>
+</fieldset>
+<br><br>
+
+
+					<fieldset>
+    				<legend>Requisitos de la convocatoria</legend>
+    				
+    <?php
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    echo '<th style="width: 30%;">Nombre del Requisito</th>';
+    echo '<th style="width: 40%;">Descripción</th>';
+    echo '<th style="width: 10%;">Estado</th>';
+    echo '<th style="width: 20%;">Editar estado</th>';
+    echo '</tr>';
+    
+    foreach ($this->Requisitos as $requi) {
+        
+        echo '<tr>';
+        echo '<td>';
+        foreach ($this->valflex as $vf) {
+            if ($vf["id_valor_flexible"] == $requi["id_tipo_requisito"]) {
+                echo $vf["descripcion_valor"];
+            }
+        }
+        echo '</td>';
+        echo '<td>';
+        echo $requi["descripcion"];
+        echo '</td>';
+        echo '<td>';
+        if ($requi["id_ponderacion2"] == 'C') {
+            echo 'Cumple';
+        } else {
+            echo 'No Cumple';
+        }
+        echo '</td>';
+        echo '<td>';
+        echo '<center>';
+        if ($this->ver != 'ver' && $this->ver != 'fechas') {
+            ?>
+                <a class="btn"
+                        href="<?php echo $this->basePath() ?>/application/gestionproy/cumplimientoAp/<?php echo $requi["id_requisitoap"];?>/<?php echo $requi["id_aplicar"];?>/1">Cumple</a>
+               <a class="btn"
+                        href="<?php echo $this->basePath() ?>/application/gestionproy/cumplimientoAp/<?php echo $requi["id_requisitoap"];?>/<?php echo $requi["id_aplicar"];?>/2">No cumple</a>
+            <?php
+        }
+        echo '</center>';
+        echo '</td>';
+        /*
+        echo '<td>';
+        if ($this->ver != 'ver' && $this->ver != 'fechas') {
+            ?>
+					<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/requisitosap/index/<?php echo $requi["id_requisitoap"];?>/<?php echo $requi["id_aplicar"];?>">Editar
+							Estado</a>
+
+				<?php
+        }
+        echo '</td>';
+        */
+        echo '</tr>';
+    }
+    
+    echo '</tr>';
+    echo '</table>';
+    echo '</div>';
+    ?>
+</fieldset>
+					<br>
+					<fieldset>
+						<legend>Documentos requeridos del proyecto</legend>
+
+				<?php
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    echo '<th style="width: 40%;">Título del documento</th>';
+    echo '<th style="width: 30%;">Archivo</th>';
+    echo '<th style="width: 10%;">Estado</th>';
+    echo '<th style="width: 20%;">Editar estado</th>';
+    echo '</tr>';
+    
+    foreach ($this->docreq as $dreq) {
+        echo '<tr>';
+        echo '<td>';
+        echo $dreq["descripcion"];
+        echo '</td>';
+        echo '<td>';
+        ?>
+				<a
+							href="<?php echo $this->basePath()?>/application/requisitosapdoc/bajar/<?php echo $dreq["id_requisitoap_doc"];?>">Descargar archivo: </a><?php echo $dreq["archivo"]; ?> 
+				<?php
+        echo '</td>';
+        echo '<td>';
+        if ($dreq["id_ponderacion2"] == 'C ') {
+            echo 'Cumple';
+        } else {
+            echo 'No Cumple';
+        }
+        echo '</td>';
+        echo '<td>';
+        echo '<center>';
+        if ($this->ver != 'ver' && $this->ver != 'fechas') {
+            ?>
+                <a class="btn"
+                        href="<?php echo $this->basePath() ?>/application/gestionproy/cumplimientoApDoc/<?php echo $dreq["id_requisitoap_doc"];?>/<?php echo $dreq["id_aplicar"];?>/1">Cumple</a>
+               <a class="btn"
+                        href="<?php echo $this->basePath() ?>/application/gestionproy/cumplimientoApDoc/<?php echo $dreq["id_requisitoap_doc"];?>/<?php echo $dreq["id_aplicar"];?>/2">No cumple</a>
+            <?php
+        }
+        echo '</center>';
+        echo '</td>';
+        /*
+        echo '<td>';
+        if ($this->ver != 'ver') {
+            ?>
+					<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/requisitosapdoc/index/<?php echo $dreq["id_requisitoap_doc"];?>/<?php echo $dreq["id_aplicar"];?>/1/0/conv">Editar
+							estado</a>
+
+				<?php
+        }
+        echo '</td>';
+        */
+        echo '</tr>';
+    }
+    
+    echo '</tr>';
+    echo '</table>';
+    echo '</div>';
+    ?>
+
+</fieldset>
+<?php
+if ($tipo != 'e') {
+    ?>
+<br>
+					<fieldset>
+
+						<legend>Aspectos evaluados</legend>
+
+				<?php
+    $total = 0;
+    foreach ($this->datos as $dato) {
+        $total = $total + $dato["id_ponderacion2"];
+    }
+    echo 'Total promedio : ' . $total / 100;
+    echo '<br>';
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    echo '<th style="width: 30%;">Descripción</th>';
+    echo '<th style="width: 5%;">Puntos asignados</th>';
+    echo '<th style="width: 5%;">Puntos evaluador</th>';
+    echo '<th style="width: 30%;">Observación del evaluador</th>';
+    echo '<th style="width: 10%;">Estado</th>';
+    echo '<th style="width: 10%;">Editar estado</th>';
+   
+    echo '</tr>';
+    foreach ($this->datos as $dato) {
+        echo '<tr>';
+        echo '<td>';
+        echo $dato["descripcion"];
+        echo '</td>';
+        echo '<td>';
+        echo $dato["id_ponderacion1"];
+        echo '</td>';
+        echo '<td>';
+        echo $dato["id_ponderacion2"];
+        echo '</td>';
+        echo '<td>';
+        echo $dato["observaciones"];
+        echo '</td>';
+        echo '<td>';
+        if ($dato["id_estado"] == 1) {
+            echo 'Cumple';
+        } else {
+            echo 'No Cumple';
+        }
+        echo '</td>';
+        echo '<td>';
+        ?>
+					<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/editarevaluar/index/<?php echo $dato["id_aspecto"];?>/<?php echo $dato["id_aplicar"];?>/1">Editar
+							Estado</a>
+				<?php
+        echo '</td>';
+        echo '</tr>';
+    }
+    
+    echo '</tr>';
+    echo '</table>';
+    echo '</div>';
+    
+    ?>
+
+</fieldset>
+<?php
+}
+?>
+</br>
+</br>
+<a class="btn" href="<?php echo $this->basePath() ?>/application/gestionrequi/index/<?php echo $this->id_convocatoria; ?>">Guardar</a>
+</div>
+    		</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,77 @@
+<?php
+	$output = fopen('php://output', 'w');
+	header('Content-Type: application/csv; charset=utf-8');
+	header('Content-Disposition: attachment; filename=ReporteConvocatoriaEquipo.csv');
+
+	fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
+	fputcsv($output, array("Reporte de convocatorias - Equipo de trabajo"));
+	fputcsv($output, array(""));
+	fputcsv($output, array(""));
+
+	fputcsv($output, array('Proyecto','Nombre proyecto','Código proyecto','Nombres y apellidos','Documento','Unidad, Dependencia','Rol en el proyecto','Tipo de vinculación','Tipo de dedicación','Año','Periodo','Horas solicitadas', 'Horas aprobadas', 'ID Convocatoria'),";");
+	
+	if(count($this->datos)==0){
+		fputcsv($output, array("No se encontraron resultados que coincidan con sus parámetros de búsqueda."));
+	}else{
+		$u=array();
+		$f=array();
+		foreach($this->datos as $d){
+			$documento = "";
+			$vfunidad = "";
+			$vfdependencia = "";
+			$rol = "";
+			$vfvinculacion = "";
+			$tipo = "";
+			
+			foreach($this->usuarios as $us){
+				if($d["id_integrante"]==$us["id_usuario"]){
+					$nombres=trim($us["primer_nombre"]).' '.trim($us["primer_apellido"]);
+					$email=$us["email"];
+					$documento=$us["documento"];
+					$unidad=$us["id_unidad_academica"];
+					$dependencia=$us["id_dependencia_academica"];
+					$vinculacion=$us["id_tipo_vinculacion"];
+				}
+			}
+			foreach($this->valflex as $vf){
+				if($unidad==$vf["id_valor_flexible"]){
+					$vfunidad=$vf["descripcion_valor"];
+				}
+				if($vinculacion==$vf["id_valor_flexible"]){
+					$vfvinculacion=$vf["descripcion_valor"];
+				}
+				if($dependencia==$vf["id_valor_flexible"]){
+					$vfdependencia=$vf["descripcion_valor"];
+				}
+				if($d["id_tipo_dedicacion"]==$vf["id_valor_flexible"]){
+					$tipo=$vf["descripcion_valor"];
+				}
+				if($d["id_rol"]==$vf["id_valor_flexible"]){
+					$rol=$vf["descripcion_valor"];
+				}
+			}
+			if($d["horas_sol"]==""){
+				$d["horas_sol"]="0";
+			}
+
+			$u=array(
+				'proyecto'=>trim($d["id_proyecto"]),
+				'nombre_proy'=>trim($d["nombre_proy"]),
+				'codigo_proy'=>trim($d["codigo_proy"]),
+				'nombres'=>trim($nombres),
+				'documento'=>trim($documento),
+				'unidep'=>trim($vfunidad).';'.trim($vfdependencia),
+				'rol'=>trim($rol),
+				'tipvin'=>trim($vfvinculacion),
+				'tipded'=>trim($tipo),
+				'ano'=>trim($d["ano"]),
+				'periodo'=>trim($d["periodo"]),
+				'horassol'=>trim($d["horas_sol"]),
+				'horasapro'=>trim($d["horas_apro"]),
+				'id_convocatoria'=>trim($d["id_convocatoria"])
+			);
+			fputcsv($output, $u,";");
+		}
+	}
+	fclose($output);
+?>

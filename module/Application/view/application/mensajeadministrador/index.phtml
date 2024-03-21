@@ -1,0 +1,113 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+<div class="row2">
+	<div class="nine3 columns">
+
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+						<h3><?php echo $this->titulo ?></h3>
+					</div>
+				</div>
+			</div>
+			<div class="four columns">
+				<a href="<?php echo $this->basePath() ?>/application/index/index">
+				<i class="icon-arrow-left"></i>Regresar</a>
+				
+			<?php $form = $this->form; $form->prepare();
+
+				echo $this->form()->openTag($form);
+				echo '<br>';
+				echo '<h6>';
+				echo $this->flashMessenger()->render();
+				echo '</h6>';
+				echo '<p>';
+				echo $this->formlabel($form->get('asunto'));
+				echo $this->formelement($form->get('asunto'));
+				echo '<p>';
+				echo $this->formlabel($form->get('mensaje'));
+				echo $this->formelement($form->get('mensaje'));
+				echo '<p>';
+				echo $this->formelement($form->get('submit'));
+				echo '<br>';
+				echo $this->form()->closeTag($form);
+				?>
+
+				<h5>Preguntas Frecuentes</h5>
+<h5>¿Olvido su usuario y/o contraseña?</h5>
+<h6>
+1.	El usuario en la sección de autenticación hace clic en “Recuperar Usuario y/o Contraseña” para acceder a la sección de recuperar contraseña.
+<br>
+2.	En esta sección el usuario debe ingresar el nombre de usuario y el número de identificación. Su usuario es el correo institucional, de lo contrario comuníquese al correo prmeCIUP@pedagogica.edu.co ó contáctese con la Subdirección de Gestión de Proyectos CIUP.
+<br>
+3.	En caso de que el nombre de usuario y el número de identificación coincidan con los de la base de datos, el sistema indica “Recuperación de contraseña exitosa, la contraseña fue enviada al correo registrado <dirección de correo>”, donde <dirección de correo> es el correo correspondiente al nombre de usuario y número de identificación ingresadas.
+<br>
+4.	El sistema envía un correo con la clave a la dirección de correo correspondiente
+
+</h6>
+<h5>¿Como enviar un mensaje al administrador de la plataforma?</h5>
+<h6>
+1.	El usuario ingresa a la sección de envió de mensajes al administrador en el menú de administración y procesos de soporte.
+<br>
+2.	El usuario ingresa la siguiente información:
+<br>
+	o Asunto
+<br>
+	o Dirección de correo electrónico es tomada por defecto.
+<br>
+	o Mensaje
+<br>
+3.	El usuario hace clic en “Enviar”, para que el mensaje sea enviado.
+Nota: el mensaje es enviado al correo electrónico del sistema (primeCIUP.pedagogica.edu.co).
+</h6>
+<h5>¿Cómo comunicarse con la Subdirección de Gestión de Proyectos – CIUP de la Universidad?</h5>
+<h6>
+Se puede usar cualquier navegador de internet, pero se recomienda usar las ultimas versiones de estos en especial Mozilla Firefox
+</h6>
+<br>
+<h5>¿ Como usar el foro?</h5>
+<h6>
+1.	El usuario se autentica en el sistema e ingresa al módulo de herramientas de socialización, en la pestaña “foro” en donde encontrara la información para gestión del foro. En esta sección se ve una lista de los temas propuestos en orden cronológico con su título y una breve descripción.  Adicionalmente en esta sección hay un buscador de publicaciones donde se ingresa el titulo o parte del título, mensaje o parte del mensaje.
+<br>
+2.	En esta sección se hace clic en el link “nuevo tema” para acceder a la sección de creación del tema del foro.
+<br>
+3.	En esta sección se ingresa la siguiente información:
+<br>
+o	Título del foro.
+<br>
+o	Mensaje del foro.
+<br>
+o	Archivo del foro (si aplica).
+<br>
+o	Nombre de quien pública.  Por defecto el sistema lo realiza
+<br>
+o	Fecha y hora de publicación. Por defecto el sistema lo realiza
+<br>
+4.	Una vez ingresada toda la información se hace clic en “guardar” y el tema del foro queda publicado.
+<br>
+5.	En relación con el funcionamiento del foro la pantalla principal de foro tendrá el contenido de los temas creados, si un usuario quiere responder a un tema, deberá ingresar al tema en cuestión y presionar el botón de “Participar en el tema del foro”. Si quiere ingresar un nuevo tema deberá presionar el botón de nuevo tema.
+</h6>
+
+
+<h5>¿ Porque cuando ingreso a una página dentro de la aplicación lo redirecciona a la pantalla de mensaje al administrador? </h5>
+<h6>
+Esto ocurre porque el rol del usuario no tiene los permisos para acceder a esta página, en caso de necesitar el permiso comunique con el administrador de la plataforma
+</h6>
+
+<h5>¿Cómo actualiza su hoja de vida dentro de la plataforma?</h5>
+<h6>
+1.	El usuario se autentica en el sistema e ingresa al menú de opciones de la parte derecha de la pantalla a la opción editar mi usuario.
+<br>
+2.	Allí aparece el formulario de datos, diligencie los campos pertinentes y haga clic al botón actualizar.
+</h6>
+<br>
+<br>
+<br>
+
+
+		</div>
+	</div>
+</div>
+</div>
+</div>

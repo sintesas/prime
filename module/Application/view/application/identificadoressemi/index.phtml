@@ -1,0 +1,131 @@
+<style>
+    textarea {
+        height: 100px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .alineadoDerecha {
+        float: right;
+    }
+</style>
+<script type="text/javascript">
+	function showHint(str) {
+		var valthis = str.toLowerCase();
+	    var num = 0;
+
+	    $('select#id_autor>option').each(function () {
+	          var text = $(this).text().toLowerCase();
+	          if(text.indexOf(valthis) !== -1)  
+	              {$(this).show(); $(this).prop('selected',true);}
+	          else{$(this).hide();}
+	           });
+	}
+</script>
+
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+								<?php
+							    	echo $this->titulo;
+							    ?>
+							</h3>
+						</div>
+					</div>
+				</div>
+				<div class="six columns">
+					<a href="<?php echo $this->basePath() ?>/application/editarsemilleroinv/index/<?php echo $this->id; ?>">
+						<i class="icon-arrow-left"></i> Regresar
+					</a>
+				</div>
+				</br>
+				</br>
+				</br>
+				</br>
+				</br>
+				<div class="twelve columns">
+					<h3>
+						Plataformas
+					</h3>
+				</div>
+
+<?php
+$form = $this->form;
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo '<div class="six columns">';
+echo '<p>';
+echo $this->formlabel($form->get('id_tipoidentificador'));
+echo $this->formelement($form->get('id_tipoidentificador'));
+echo '<p>';
+echo $this->formlabel($form->get('id_field'));
+echo $this->formelement($form->get('id_field'));
+echo '</div>';
+
+echo '<div class="six columns">';
+echo '<p>';
+echo $this->formlabel($form->get('id_tipocategoria'));
+echo $this->formelement($form->get('id_tipocategoria'));
+echo '<p>';
+echo $this->formlabel($form->get('fecha_registro'));
+echo $this->formelement($form->get('fecha_registro'));
+echo '</div>';
+
+
+echo '<div class="twelve columns">';
+echo '<p>';
+echo $this->formlabel($form->get('nombre'));
+echo $this->formelement($form->get('nombre'));
+echo '</div>';
+
+echo '<div class="six columns">';
+echo '<p>';
+echo $this->formlabel($form->get('web'));
+echo $this->formelement($form->get('web'));
+echo '</div>';
+
+echo '<div class="six columns">';
+echo '<p>';
+echo $this->formlabel($form->get('ciudad'));
+echo $this->formelement($form->get('ciudad'));
+echo '</div>';
+
+echo '<div class="twelve columns">';
+echo '<p>';
+echo $this->formlabel($form->get('descripcion'));
+echo $this->formelement($form->get('descripcion'));
+
+echo '<p>';
+echo $this->formlabel($form->get('otra_informacion'));
+echo $this->formelement($form->get('otra_informacion'));
+echo '</div>';
+
+echo '<div class="six columns">';
+echo '<p>';
+echo $this->formlabel($form->get('image-file'));
+echo $this->formelement($form->get('image-file'));
+echo '<p>';
+echo '<div>';
+echo $this->formelement($form->get('submit'));
+echo '</div>';
+echo '</div>';
+
+echo '</br>';
+echo '</br>';
+
+echo $this->form()->closeTag($form);
+?>				
+
+
+</div><!-- Cierre div six columns --> 
+			</div>
+		</div>
+	</div>
+</div>

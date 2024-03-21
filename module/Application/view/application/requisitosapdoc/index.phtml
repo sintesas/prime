@@ -1,0 +1,56 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+<div class="row2">
+	<div class="nine3 columns">
+		<div id="centersectiontitle">
+			<div class="twelve columns">
+				<div class="sidebartitle"><h3>
+				<?php
+					echo $this->titulo;
+				?>
+				</h3>
+			</div>
+		</div>
+	</div>
+<?php 
+if($this->id3==1){
+?>
+<a href="<?php echo $this->basePath() ?>/application/gestionproym/index/<?php echo $this->id2;?>/<?php echo $this->id4;?>">
+	<i class="icon-arrow-left"></i>
+	 Regresar</a>
+<?php
+}
+?>
+<br>
+
+<br>
+				<?php
+				$form = $this->form;
+				$form->prepare();
+
+				$form->setAttributes(array('action'=> $this->url.'/application/requisitosapdoc/index/'.$this->id.'/'.$this->id2.'/'.$this->id3.'/'.$this->id4.'/'.$this->id5,
+										'method'=>'post'));
+				echo $this->form()->openTag($form);
+if($this->id3==1){
+				echo $this->formlabel($form->get('estado'));
+				echo $this->formelement($form->get('estado'));
+}else{
+				echo $this->formlabel($form->get('image-file'));
+				echo $this->formelement($form->get('image-file'));
+}
+				echo '<p>';				
+				echo $this->formelement($form->get('submit'));
+				echo '<br>';
+				
+				echo $this->form()->closeTag($form);
+				?>
+				<br>
+
+
+				<?php
+				
+
+				?>
+
+</div></div></div>

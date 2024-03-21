@@ -1,0 +1,281 @@
+<?php include("public/menu.php"); ?>
+<style>
+    textarea {
+        height: 100px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .alineadoDerecha {
+        float: right;
+    }
+</style>
+
+<script type="text/javascript">
+    function sumValores() {
+        var valRecursosContrapartida=0;
+        var valRecursosInversion=0;
+        var valRecursosCofinanciacion=0;
+
+        if($("input[name='recursos_funcion']").val()!=""){
+            valRecursosContrapartida = parseInt($("input[name='recursos_funcion']").val());
+        }
+         if($("input[name='recursos_inversion']").val()!=""){
+            valRecursosInversion = parseInt($("input[name='recursos_inversion']").val());
+        }
+         if($("input[name='total_financia']").val()!=""){
+            valRecursosCofinanciacion = parseInt($("input[name='total_financia']").val());
+        }
+        $("input[name='total_proy']").val(valRecursosContrapartida+valRecursosInversion+valRecursosCofinanciacion);
+    }
+</script>
+
+
+
+
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+    				            <?php echo $this->titulo; ?>
+			                    </h3>
+						</div>
+					</div>
+				</div>
+				<div class="twelve columns">
+					<a
+						href="<?php echo $this->basePath() ?>/application/consulconvocatoria/index">
+						<i class="icon-arrow-left"></i> Regresar
+					</a>
+					<script type="text/javascript">			
+				
+                            function myFunction(id_campo) {                            
+                                var lineaInv = document.getElementById("linea_inv");
+                            
+                                for (i = 0; i < lineaInv.length; i++) {
+
+                                    if(lineaInv.options[i].value != ''){
+                                    	var option = lineaInv.options[i]; // item
+                                        
+                                        var id = lineaInv.options[i].value.split(/-/); // extrae el id del padre    
+                                        var idPadreValorFlexible = id[1];
+                                
+                                        //valida que el item de la iteracion es del grupo de información seleccionado
+                                        if(idPadreValorFlexible == document.getElementById(id_campo).value){
+                                            option.style.display = "block";
+                                        }else{
+                                        	option.style.display = "none";
+                                        }
+    									
+                                        // Selecciona el placeholder por defecto en linea
+                                        if(option.text == ''){
+                                        	option.selected = true;
+                                        }
+                                    }
+                                }
+                                
+                                //Bloquea el campo linea de investigación dependiendo de la selección
+                                if(document.getElementById(id_campo).value == ''){
+                                	document.getElementById("linea_inv").disabled = true;
+                                }else{
+                                	document.getElementById("linea_inv").disabled = false;
+                                }
+                                
+                                var id = "<?php echo $this->id; ?>";  
+                            }
+                            
+                            function myFunction2() {
+                            
+                            	//document.cookie = escape("unidad_o") + "=" + document.getElementById(id_unidad).value;
+                            
+                                var dependenciasAca = document.getElementById("id_dependencia_academica");
+                                
+                            	for (i = 0; i < dependenciasAca.length; i++) {
+
+                            		if(dependenciasAca.options[i].value != ''){
+                            			var option = dependenciasAca.options[i]; // item
+                                        
+                                        var id = dependenciasAca.options[i].value.split(/-/); // extrae el id del padre    
+                                        var idPadreValorFlexible = id[1];
+                                
+                                        //valida que el item de la iteracion es del padre seleccionado
+                                        if(idPadreValorFlexible == document.getElementById("id_unidad_academica").value.split(/-/)[0]){
+                                            option.style.display = "block";
+                                        }else{
+                                        	option.style.display = "none";
+                                        }
+                                
+                                        // Selecciona el placeholder por defecto en linea
+                                        if(option.text == ""){
+                                        	option.selected = true;
+                                        }
+                            		}                                	                                   
+                                }
+                                
+                                
+                                //Bloquea el campo hijo dependiendo de la selección
+                                if(document.getElementById("id_unidad_academica").value == ''){
+                                	document.getElementById("id_dependencia_academica").disabled = true;
+                                }else{
+                                	document.getElementById("id_dependencia_academica").disabled = false;
+                                }
+                                
+                                var id = "<?php echo $this->id; ?>";
+                            }
+                            
+                            function myFunction3() {
+                            
+                            	//document.cookie = escape("unidad_o") + "=" + document.getElementById(id_unidad).value;
+                            
+                                var programaAca = document.getElementById("id_programa_academico");                               
+                                
+                                for (i = 0; i < programaAca.length; i++) {
+
+                                	if(programaAca.options[i].value != ''){
+                                		var option = programaAca.options[i]; // item
+                                        
+                                        var id = programaAca.options[i].value.split(/-/); // extrae el id del padre    
+                                        var idPadreValorFlexible = id[1];
+                                
+                                        //valida que el item de la iteracion es del padre seleccionado
+                                        if(idPadreValorFlexible == document.getElementById("id_dependencia_academica").value.split(/-/)[0]){
+                                            option.style.display = "block";
+                                        }else{
+                                        	option.style.display = "none";
+                                        }
+                                
+                                        // Selecciona el placeholder por defecto en linea
+                                        if(option.text == ""){
+                                        	option.selected = true;
+                                        }
+                                    }                                                                       
+                                }
+                                
+                                //Bloquea el campo hijo dependiendo de la selección
+                                if(document.getElementById("id_dependencia_academica").value == ''){
+                                	document.getElementById("id_programa_academico").disabled = true;
+                                }else{
+                                	document.getElementById("id_programa_academico").disabled = false;
+                                }
+                                
+                                var id = "<?php echo $this->id; ?>";
+                            }
+
+</script>
+
+<?php
+$form = $this->form;
+$form->prepare();
+
+$form->setAttributes(array(
+    'action' => $this->url . '/application/aplicar/index/' . $this->id . '/' . $this->id2 . '/' . $this->id3 . '/' . $this->id4,
+    'method' => 'post'
+));
+
+echo $this->form()->openTag($form);
+
+echo '<p>';
+echo '<p>';
+echo '<div class="six columns">';
+
+
+echo '<p>';
+echo $this->formlabel($form->get('nombre_proy'));
+echo $this->formelement($form->get('nombre_proy'));
+
+echo '<p>';
+echo $this->formlabel($form->get('id_investigador'));
+echo $this->formelement($form->get('id_investigador'));
+
+echo '<p>';
+echo $this->formlabel($form->get('duracion'));
+echo $this->formelement($form->get('duracion'));
+echo $this->formelement($form->get('periodo'));
+
+/*
+echo '<p>';
+echo $this->formlabel($form->get('id_categoria'));
+echo $this->formelement($form->get('id_categoria'));
+*/
+
+echo '<p>';
+echo $this->formlabel($form->get('recursos_funcion'));
+echo $this->formelement($form->get('recursos_funcion'));
+
+echo '<p>';
+echo $this->formlabel($form->get('recursos_inversion'));
+echo $this->formelement($form->get('recursos_inversion'));
+
+echo '<p>';
+echo $this->formlabel($form->get('total_financia'));
+echo $this->formelement($form->get('total_financia'));
+
+echo '<p>';
+echo $this->formlabel($form->get('total_proy'));
+echo $this->formelement($form->get('total_proy'));
+
+echo '</div>';
+
+echo '<div class="six columns">';
+echo '<p>';
+echo $this->formlabel($form->get('id_programa_inv'));
+echo $this->formelement($form->get('id_programa_inv'));
+
+echo '<p>';
+echo $this->formlabel($form->get('id_campo'));
+echo $this->formelement($form->get('id_campo'));
+
+echo '<p>';
+echo $this->formlabel($form->get('id_linea_inv'));
+echo $this->formelement($form->get('id_linea_inv'));
+
+echo '<p>';
+echo $this->formlabel($form->get('id_unidad_academica'));
+echo $this->formelement($form->get('id_unidad_academica'));
+
+echo '<p>';
+echo $this->formlabel($form->get('id_dependencia_academica'));
+echo $this->formelement($form->get('id_dependencia_academica'));
+
+echo '<p>';
+echo $this->formlabel($form->get('id_programa_academico'));
+echo $this->formelement($form->get('id_programa_academico'));
+
+echo '<p>';
+echo $this->formlabel($form->get('id_area_tematica'));
+echo $this->formelement($form->get('id_area_tematica'));
+
+echo '</div>';
+
+echo '<div class="twelve columns">';
+
+echo '<p>';
+echo $this->formlabel($form->get('resumen_ejecutivo'));
+echo $this->formelement($form->get('resumen_ejecutivo'));
+
+echo '<p>';
+echo $this->formlabel($form->get('objetivo_general'));
+echo $this->formelement($form->get('objetivo_general'));
+
+echo '<p>';
+echo $this->terminos;
+echo '<p>';
+
+echo $this->formelement($form->get('submit'));
+echo '<br>';
+echo '</div>';
+
+echo $this->form()->closeTag($form);
+?>
+	<br>
+
+		  <?php ?>
+        </div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,36 @@
+<div id="content">
+
+<article class="post clearfix">
+<header>
+<h1 class="post-title">
+<?php
+echo $this->titulo;
+?>
+</h1>
+</header>
+<?php
+
+
+$form = $this->form;
+$form->prepare();
+$form->setAttributes(array('action'=> $this->url.'/application/autenticar/index',
+						   'method'=>'post'));
+echo $this->form()->openTag($form);
+
+echo $this->formlabel($form->get('usuario'));
+echo $this->formelement($form->get('usuario'));
+echo '<br>';
+echo $this->formlabel($form->get('contrasena'));
+echo $this->formelement($form->get('contrasena'));
+echo '<br>';
+
+echo $this->formelement($form->get('submit'));
+echo '<br>';
+?>
+	<a href="<?php echo $this->basePath() ?>/application/recuperarcontra/index">Olvidé Contraseña</a>
+<?php
+
+echo $this->form()->closeTag($form);
+?>
+
+</div>

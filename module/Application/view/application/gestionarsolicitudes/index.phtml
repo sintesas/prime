@@ -1,0 +1,148 @@
+<style>
+    .filter-sol input[type="text"],.filter-sol input[type="date"],.filter-sol select{
+        width: 100% !important;
+    }
+    .filter-sol {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .filter-sol-left {float: left;}
+    .filter-sol-right {float:right;}
+    .filter-sol .btn {width: 275px;}
+    .filter-sol .dropdown {display: inline;}
+    .filter-sol .dropdown-menu {width: 300px;top: 32px;padding: 10px;}
+    .dropdown-menu-inner {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .dropdown-menu-right {left:-140px !important;}
+</style>
+<?php include("public/menu.php"); ?>
+<div class="col col100">
+    <div class="filter-sol">
+        <div class="filter-sol-left"><h4><?php echo $this->titulo; ?></h4></div>
+        <div class="filter-sol-right">
+            <a class="btn" style="margin-right: 8px;" href="<?php echo $this->basePath() ?>/application/gestionarsolicitudes/index"><i class="fa fa-close" style="margin-right: 5px;"></i>Borrar filtro</a>
+            <div class="dropdown">
+                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="margin-right: 8px;"><i class="fa fa-filter" style="margin-right: 5px;"></i>Filtro</button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <div class="dropdown-menu-inner">
+                        <?php
+                        $form = $this->form;
+                        $form->prepare();
+                        $form->setAttributes(array(
+                            'action' => $this->url . '/application/gestionarsolicitudes/index',
+                            'method' => 'post'
+                        ));
+                        echo $this->form()->openTag($form);               
+                        echo $this->formlabel($form->get('filtroestado'));
+                        echo $this->formelement($form->get('filtroestado'));
+                        echo $this->formlabel($form->get('filtrosolicitud'));
+                        echo $this->formelement($form->get('filtrosolicitud'));
+                        echo $this->formlabel($form->get('codigo'));
+                        echo $this->formelement($form->get('codigo'));
+                        echo $this->formlabel($form->get('fecha_sol'));
+                        echo $this->formelement($form->get('fecha_sol'));
+                        echo $this->formelement($form->get('filtrar'));
+                        echo $this->form()->closeTag($form);
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col col100 noshadow">
+    <div style='overflow-y:auto; max-height:4000px; width: 100%;'>
+        <table class="table" style="width: 100%; max-width: 100%;">
+            <thead>
+                <tr>
+                    <th style="width:5%">Tipo Solicitud</th>
+                    <th style="width:5%">Fecha Solicitud</th>
+                    <th style="width:5%">Código del Proyecto</th>
+                    <th style="width:5%">Justificación</th>
+                    <th style="width:5%">Usuario creador</th>
+                    <th style="width:5%">Archivo</th>
+                    <th style="width:5%">Observaciones</th>
+                    <th style="width:5%">Usuario Gestiona Respuesta</th>
+                    <th style="width:5%">Archivo de Respuesta</th>
+                    <th style="width:5%">Estado</th>
+                    <th style="width:5%">Gestión</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php 
+            $band=true; 
+                foreach ($this->datos as $dato) { 
+                    $band=false;
+                ?>
+                <tr>
+                    <td>
+                        <?php
+                        foreach ($this->valflex as $vf) {
+                            if ($dato["id_tipo_sol"] == $vf["id_valor_flexible"]) {  
+                                echo $vf["descripcion_valor"];                    
+                            }
+                        }
+                        ?>
+                    </td>
+                    <td><?php echo $dato["nueva_fecha"]; ?></td>
+                    <td><?php echo $dato["codigo_proy"]; ?></td>
+                    <td><?php echo $dato["justificacion"]; ?></td>
+                    <td>
+                        <?php
+                        foreach ($this->usuarios as $us) {
+                            if ($dato["usuario_crea"] == $us["id_usuario"]) {  
+                                echo $us["primer_nombre"] . ' ' . $us["primer_apellido"];
+                            }
+                        }
+                        ?>
+                    </td>
+                    <td>
+                        <?php if ($dato["archivo"] != null) { ?>
+                            <a class="btn" href="<?php echo $this->basePath()?>/application/solicitudes/bajar/<?php echo $dato["id_sol"];?>"><i class="fa fa-download"></i></a>
+                        <?php } ?>
+                    </td>
+                    <td><?php echo $dato["observaciones"]; ?></td>
+                    <td>
+                        <?php
+                        foreach ($this->usuarios as $us) {
+                            if ($dato["usuario_mod"] == $us["id_usuario"]) { ?>  
+                                <?php echo $us["primer_nombre"] . ' ' . $us["primer_apellido"]; ?>
+                        <?php
+                            }
+                        }
+                        ?>
+                    </td>
+                    <td>
+                        <?php if ($dato["archivo_res"] != null) { ?>
+                            <a class="btn" href="<?php echo $this->basePath()?>/application/solicitudes/bajar2/<?php echo $dato["id_sol"];?>"><i class="fa fa-download"></i></a>
+                        <?php } ?>
+                    </td>
+                    <td>
+                        <?php if ($dato["id_estado"] != null) {
+                            if ($dato["id_estado"] == 1) {
+                                echo "Enviado";
+                            }
+                            if ($dato["id_estado"] == 2) {
+                                echo "En gestión";
+                            }
+                            if ($dato["id_estado"] == 3) {
+                                echo "Tramitado";
+                            }
+                        }
+                        ?>
+                    </td>
+                    <td>
+                        <a class="btn" href="<?php echo $this->basePath() ?>/application/gestionarunitaria/index/<?php echo $dato["id_sol"];?>"><i class="fa fa-pencil"></i></a>
+                    </td>
+                </tr>
+            <?php } ?>
+            </tbody>
+        </table>
+        <?php 
+            if($band && $this->data != null){
+                if($this->data["codigo"]){
+                    echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos solicitudes con este código de proyecto</h3></div>';
+                }else{
+                    echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos solicitudes con estos parametros de búsqueda</h3></div>';
+                }
+            }
+
+        ?>
+    </div>
+</div>

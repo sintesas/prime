@@ -1,0 +1,97 @@
+<style>
+    .filter-rol input[type="text"],.filter-sol input[type="date"],.filter-sol select{
+        width: 100% !important;
+    }
+    .filter-rol {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .filter-rol-left {float: left;}
+    .filter-rol-right {float:right;}
+    .filter-rol .btn {width: 275px;}
+    .filter-rol .dropdown {display: inline;}
+    .filter-rol .dropdown-menu {width: 300px;top: 32px;padding: 10px;}
+    .dropdown-menu-inner {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .dropdown-menu-right {left:-140px !important;}
+</style>
+<?php include("public/menu.php"); ?>
+<div class="col col100">
+    <div class="filter-rol">
+        <div class="filter-rol-left"><h4><?php echo $this->titulo; ?></h4></div>
+        <div class="filter-rol-right">
+            <a class="btn" style="margin-right: 8px;" href="<?php echo $this->basePath() ?>/application/rolesusuario/index/<?php echo $this->id ?>"><i class="fa fa-close" style="margin-right: 5px;"></i>Borrar filtro</a>
+            <div class="dropdown">
+                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="margin-right: 8px;"><i class="fa fa-filter" style="margin-right: 5px;"></i>Filtro</button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <div class="dropdown-menu-inner">
+                        <?php
+                        $form = $this->form;
+                        $form->prepare();                        
+                        echo $this->form()->openTag($form);               
+                        echo $this->formlabel($form->get('documento'));
+                        echo $this->formelement($form->get('documento'));
+                        echo $this->formlabel($form->get('nombre'));
+                        echo $this->formelement($form->get('nombre'));
+                        echo $this->formlabel($form->get('apellido'));
+                        echo $this->formelement($form->get('apellido'));
+                        echo $this->formlabel($form->get('usuario'));
+                        echo $this->formelement($form->get('usuario'));
+                        echo $this->formelement($form->get('submit'));
+                        echo $this->form()->closeTag($form);
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="padding: 0 15px;display: inline-block; width: 100%;">
+	<h2>Rol a usuario: 
+	<?php 
+		foreach ($this->roles as $r){
+			if($r["id_rol"] == $this->id){
+				echo $r["descripcion"];
+			}
+		}
+	?>
+	</h2>
+</div>
+<div class="col col100 noshadow">
+	<?php if(count($this->paginator) > 0) : ?>
+		<center>
+			<?php 
+				echo $this->paginationControl($this->paginator, 'sliding', 'partials/paginator',array('id' => $this->id, 'dataPost' => $this->dataPost));
+			?>
+		</center>
+		<div style='overflow-y:auto; max-height:4000px; width: 100%;'>
+			<div class="results resultsh clearfix">
+				<div class="result-item itemh">Nombre Usuario</div>
+				<div class="result-item itemh">Rol</div>
+				<div class="result-item itemh">Asignar</div>
+				<div class="result-item itemh">Eliminar</div>
+			</div>
+			<?php foreach ($this->paginator as $user) : ?>
+			<div class="results clearfix">
+				<div class="result-item"><?php echo $this->escapeHtml($user->primer_nombre.' '.$user->segundo_nombre.' '.$user->primer_apellido.' '.$user->segundo_apellido);?></div>
+				<div class="result-item">
+					<?php 
+					foreach ($this->rolesusuario as $rolusuario) :
+					    if($user->id_usuario==$rolusuario["id_usuario"]){
+					    	foreach ($this->roles as $rol) :
+					    		if($rolusuario["id_rol"] == $rol["id_rol"]){
+					    			echo $this->escapeHtml($rol["descripcion"]);
+					    		}
+					    	endforeach;
+					    }
+					endforeach;
+					?>
+				</div>
+				<div class="result-item"><a class="btn" href="<?php echo $this->basePath() ?>/application/rolesusuario/asignar/<?php echo $user["id_usuario"];?>/<?php echo $id ?>"><i class="fa fa-plus"></i></a></div>
+				<div class="result-item"><a class="btn" href="<?php echo $this->basePath() ?>/application/rolesusuario/eliminar/<?php echo $user["id_usuario"];?>"><i class="fa fa-trash"></i></a></div>
+			</div>
+			<?php endforeach; ?>
+		</div>
+		<center>
+			<?php 
+				echo $this->paginationControl($this->paginator, 'sliding', 'partials/paginator',array('id' => $this->id, 'dataPost' => $this->dataPost));
+			?>
+		</center>
+	<?php endif; ?>
+</div>

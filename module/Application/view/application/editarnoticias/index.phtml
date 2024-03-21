@@ -1,0 +1,70 @@
+<style>
+	select {
+		width: 280px !important;
+	}
+	textarea {
+        height: 100px;
+        width: 100%;
+        max-width: 100%;
+    }
+</style>
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+<div class="row2">
+	<div class="nine3 columns">
+		<div id="centersectiontitle">
+			<div class="twelve columns">
+				<div class="sidebartitle"><h3>
+				<?php
+					echo $this->titulo;
+				?>
+				</h3>
+			</div>
+		</div>
+	</div>
+<div class="twelve columns">
+	<?php
+		$form = $this->form;
+		$form->prepare();
+		$form->setAttributes(array('action'=> $this->url.'/application/editarnoticias/index/'.$this->id,
+								'method'=>'post'));
+		echo $this->form()->openTag($form);
+echo '<h6>';
+echo $this->flashMessenger()->render();
+echo '</h6>';
+
+echo '<p>';
+
+?>
+<a href="<?php echo $this->basePath() ?>/application/noticias/index"><i class="icon-arrow-left"></i> Regresar</a><br><br>
+<?php
+		echo '<p>';
+		echo $this->formlabel($form->get('titulo'));
+		echo $this->formelement($form->get('titulo'));
+		echo '<p>'; 
+		echo $this->formlabel($form->get('noticia'));
+		echo $this->formelement($form->get('noticia'));
+		echo '<p>';
+		echo $this->formlabel($form->get('url'));
+		echo $this->formelement($form->get('url'));
+		echo '<p>';
+if($this->menu==1){ 
+				echo $this->formlabel($form->get('estado'));
+				echo $this->formelement($form->get('estadoOp'));
+				echo $this->formelement($form->get('estado'));
+}
+		echo '<br>';
+		echo '<br>';		
+		
+		echo $this->formelement($form->get('submit'));
+?>
+<a class="btn" style="width: 280px !important; margin-left: 8px;" href="<?php echo $this->basePath() ?>/application/noticias/index">Cancelar</a>
+<?php
+		echo '<br>';
+		
+		echo $this->form()->closeTag($form);
+		?>
+	</div></div>
+</div>
+

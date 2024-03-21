@@ -1,0 +1,109 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+<div class="row2">
+	<div class="nine3 columns">
+		<div id="centersectiontitle">
+			<div class="twelve columns">
+				<div class="sidebartitle"><h3>
+				<?php
+					echo $this->titulo;
+				?>
+				</h3>
+			</div>
+		</div>
+	</div>
+<div class="twelve columns">
+				<?php
+				$form = $this->form;
+				$form->prepare();
+
+				$form->setAttributes(array('action'=> $this->url.'/application/consultamonitor/index',
+										'method'=>'post'));
+
+
+				echo $this->form()->openTag($form);
+				echo '<p>';
+				echo $this->formlabel($form->get('id_proyecto'));
+				echo $this->formelement($form->get('id_proyecto'));
+				echo '<p>';
+				echo $this->formlabel($form->get('codigo_proy'));
+				echo $this->formelement($form->get('codigo_proy'));
+				echo '<p>';
+				echo $this->formlabel($form->get('nombre_proy'));
+				echo $this->formelement($form->get('nombre_proy'));
+
+				echo '<p>';
+				
+				echo $this->formelement($form->get('submit'));
+				echo '<br>';
+				
+				echo $this->form()->closeTag($form);
+				?>
+				<br>
+
+
+				<?php
+
+if($this->consulta==1){		
+foreach ($this->datos as $dato){
+				echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+        		echo '<table class="table" style="width: 100%; max-width: 100%;">';   
+				echo '<thead>';
+				echo '<th style="width:15%;">Código del proyecto</th>';
+				echo '<th style="width:30%;">Nombre del proyecto / Semillero de investigación / Grupo de estudio</th>';
+				echo '<th style="width:30%;">Monitor</th>';
+				echo '<th style="width:25%;">Verificación de productos / Monitoria de investigación</th>';
+foreach ($this->pi as $proy){
+if($proy["id_proyecto_inv"]==$dato["id_proyecto"]){
+$nom=$proy["nombre_proyecto"];
+
+}
+}
+
+foreach ($this->us as $usa){
+if($usa["id_usuario"]==$dato["id_usuario"]){
+$nom_u = $usa["primer_nombre"]." ".$usa["segundo_nombre"]." ".$usa["primer_apellido"]." ".$usa["segundo_apellido"];
+}
+}
+
+				echo '</thead>';
+				echo '<tbody>';
+				echo '<tr>';
+
+				echo '<td>';
+				$pos = strrpos($nom, "-");
+                echo substr($nom, 0, $pos);;			
+				echo'</td>';
+
+				echo '<td>';
+				$pos = strrpos($nom, "-");
+                $cant = strlen($nom);
+                echo substr($nom, $pos+1, $cant);
+				echo'</td>';
+				echo '<td>';
+				echo $nom_u;
+				echo'</td>';
+				
+
+echo '<td style="text-align: center;">';
+?>
+<a class="btn" href="<?php echo $this->basePath() ?>/application/editarmonitor/index/<?php echo $dato["id_monitor"];?>">Verificar productos</a>
+
+<?php
+echo'</td>';
+
+				echo '</tr>';
+
+
+
+				echo '</table>';
+				echo '</div>';
+				echo '</br>';
+				echo '</br>';
+				}
+				}
+				?>
+
+
+</div></div></div>

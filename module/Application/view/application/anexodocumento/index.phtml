@@ -1,0 +1,45 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+<div class="row2">
+	<div class="nine3 columns">
+		<div id="centersectiontitle">
+			<div class="twelve columns">
+				<div class="sidebartitle"><h3>
+				<?php
+					echo $this->titulo;
+				?>
+				</h3>
+			</div>
+		</div>
+	</div>
+<div class="eight columns">
+				<?php
+				
+				echo '<table style="width:100%; border-spacing:1;">';
+				echo '<tr>';
+				echo '<th>Nombre</th>';
+				echo '<th>Descripción</th>';
+				echo '<th></th>';
+				echo '</tr>';
+				foreach ($this->datos as $dato){
+				echo '<tr>';
+				echo '<td>';
+				echo $dato["nombre"];
+				echo'</td>';
+				echo '<td>';
+				echo $dato["descripcion"];
+				echo'</td>';
+				echo '<td>';
+				?>
+					<a href="<?php echo $this->basePath() ?>/application/anexodocumento/descargar/<?php echo $dato["id_documento"];?>"> Descargar</a>
+				<?php
+				echo'</td>';
+				echo '</tr>';
+				}
+				
+				echo '</tr>';
+				echo '</table>';
+				?>
+
+</div></div></div>

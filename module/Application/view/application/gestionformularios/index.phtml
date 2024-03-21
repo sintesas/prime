@@ -1,0 +1,49 @@
+<style>
+	.filter-form {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+	.filter-form-left {float: left;}
+	.filter-form-right {float: right;}
+</style>
+<?php include("public/menu.php"); ?>
+<div class="col col100">
+	<div class="filter-form">
+		<div class="filter-form-left"><h4><?php echo $this->titulo; ?></h4></div>
+		<div class="filter-form-right"><a class="btn" href="<?php echo $this->basePath() ?>/application/gestionpantallas/index"><i class="fa fa-arrow-left"></i> Regresar</a></div>
+	</div>
+</div>
+<div class="col col100 noshadow">
+	<div style='overflow-y:auto; max-height:4000px; width: 100%;'>
+		<table class="table" style="width: 100%; max-width: 100%;">
+			<thead>
+				<tr>
+					<th style="width:5%">Nombre del módulo</th>
+					<th style="width:5%">Nombre del submódulo</th>
+					<th style="width:5%">Nombre del formulario</th>
+					<th style="width:5%">Descripción</th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php foreach ($this->formularios as $formulario) {	?>
+				<tr>
+					<?php foreach ($this->submodulos as $submodulo){
+						if($submodulo["id"]==$formulario["id_submodulo"]){
+							foreach ($this->modulos as $modulo){
+								if($modulo["id"]==$submodulo["id_modulo"]){
+					?>
+									<td><?php echo $modulo ["nombre"]; ?></td>
+						<?php
+								}
+							}
+						?>
+							<td><?php echo $submodulo ["nombre"]; ?></td>
+					<?php
+						}
+					}
+					?>
+					<td><?php echo $formulario ["nombre"]; ?></td>
+					<td><?php echo $formulario ["descripcion"]; ?></td>
+				</tr>
+			<?php } ?>
+			</tbody>
+		</table>
+	</div>
+</div>

@@ -1,0 +1,85 @@
+<style>
+    .filter-cons input[type="text"],select{
+        width: 100%;
+    }
+    .filter-cons {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .filter-cons-left {float: left;}
+    .filter-cons-right {float:right;}
+    .filter-cons .btn {width: 275px;}
+    .filter-cons .dropdown {display: inline;}
+    .filter-cons .dropdown-menu {width: 300px;top: 32px;padding: 10px;}
+    .dropdown-menu-inner {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .dropdown-menu-right {left:-140px !important;}
+</style>
+<?php include("public/menu.php"); ?>
+<div class="col col100">
+    <div class="filter-cons">
+        <div class="filter-cons-left"><h4><?php echo $this->titulo; ?></h4></div>
+        <div class="filter-cons-right">
+            <a class="btn" href="<?php echo $this->basePath() ?>/application/consulproyectos/index" style="margin-right: 8px;"><i class="icon-arrow-left" style="margin-right: 5px;"></i> Regresar</a>
+            <a class="btn" style="margin-right: 8px;" href="#"><i class="fa fa-close" style="margin-right: 5px;"></i>Borrar filtro</a>
+            <div class="dropdown">
+                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="margin-right: 8px;"><i class="fa fa-filter" style="margin-right: 5px;"></i>Filtro</button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <div class="dropdown-menu-inner">
+                        <?php                               
+                        $form = $this->form;
+                        $form->prepare ();
+                        echo $this->form ()->openTag ( $form );
+                        echo '<h6>'.$this->flashMessenger ()->render ().'</h6>';
+                        echo $this->formlabel($form->get('documento'));
+                        echo $this->formelement($form->get('documento'));
+                        echo $this->formlabel($form->get('nombre'));
+                        echo $this->formelement($form->get('nombre'));
+                        echo $this->formlabel($form->get('apellido'));
+                        echo $this->formelement($form->get('apellido'));
+                        echo $this->formlabel($form->get('usuario'));
+                        echo $this->formelement($form->get('usuario'));
+                        echo $this->formelement($form->get('submit'));
+                        echo $this->form ()->closeTag ( $form );
+                        ?>
+                    </div>                      
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col col100 noshadow">
+    <div style='overflow-y:auto; max-height:410px; width: 100%;'>
+        <?php
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    echo '<th>Usuarios</th>';
+    echo '<th>Asignar evaluador</th>';
+    echo '<th>Info evaluador</th>';
+    echo '</thead>';
+    echo '<tbody>';
+    foreach ($this->datos as $dato) {
+        echo '<tr>';
+        echo '<td>';
+        echo $dato["primer_nombre"]." ".$dato["segundo_nombre"]." ".$dato["primer_apellido"] ." ". $dato["segundo_apellido"];
+        echo '</td>';
+        
+        echo '<td>';
+        ?>
+<a class="btn"
+                        href="<?php echo $this->basePath() ?>/application/asignareval/asignar/<?php echo $dato["id_usuario"];?>/<?php echo $this->grupo ?>">Asignar
+                        Evaluador</a>
+                <?php
+        echo '</td>';
+        echo '<td>';
+        ?>
+<a class="btn"
+                        href="<?php echo $this->basePath() ?>/application/editarusuario/index/<?php echo $dato["id_usuario"];?>/ver"
+                        target="_blank">Info Evaluador</a>
+                <?php
+        echo '</td>';
+        echo '</tr>';
+    }
+    
+    echo '</tr>';
+    echo '</table>';
+        ?>
+    </div>
+</div>

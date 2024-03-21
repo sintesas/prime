@@ -1,0 +1,2533 @@
+<style>
+    .titulos{
+        color: red;
+        font-size: 22px;
+    }
+    textarea {
+        height: 100px;
+        width: 100%;
+        max-width: 100%;
+    }
+    [type|="checkbox"] {
+    	vertical-align: baseline;
+    }
+    label[for=equipo]{
+       display: inline-block;
+       margin-left: 15px;
+    }
+    label[for=contacto]{
+       display: inline-block;
+       margin-left: 15px;
+    }
+    label[for=miembros]{
+       display: inline-block;
+       margin-left: 15px;
+    }
+    label[for=grupos]{
+       display: inline-block;
+       margin-left: 15px;
+    }
+    label[for=servicios]{
+       display: inline-block;
+       margin-left: 15px;
+    }
+    label[for=articulos]{
+       display: inline-block;
+       margin-left: 15px;
+    }
+    label[for=libros]{
+       display: inline-block;
+       margin-left: 15px;
+    }
+    label[for=capitulos]{
+       display: inline-block;
+       margin-left: 15px;
+    }
+    label[for=otras]{
+       display: inline-block;
+       margin-left: 15px;
+    }
+    label[for=otros]{
+       display: inline-block;
+       margin-left: 15px;
+    }
+    label[for=proyectos]{
+       display: inline-block;
+       margin-left: 15px;
+    }
+    label[for=proyectosint]{
+       display: inline-block;
+       margin-left: 15px;
+    }
+    label[for=material]{
+       display: inline-block;
+       margin-left: 15px;
+    }
+    label[for=participacion]{
+       display: inline-block;
+       margin-left: 15px;
+    }
+    label[for=datos]{
+       display: inline-block;
+       margin-left: 15px;
+    }
+    label[for=identificadores]{
+       display: inline-block;
+       margin-left: 15px;
+    }
+    label[for=divulgacion]{
+       display: inline-block;
+       margin-left: 15px;
+    }
+    label[for=formacion]{
+       display: inline-block;
+       margin-left: 15px;
+    }
+</style> 
+
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+				echo $this->titulo;
+				?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<fieldset>
+					<?php
+						$form = $this->form;
+						$form->prepare ();
+						$form->setAttributes ( array (
+								'action' => 'index',
+								'method' => 'post' 
+						) );
+						echo $this->form ()->openTag ( $form );
+						echo '<h6>';
+						echo $this->flashMessenger ()->render ();
+						echo '</h6>';
+						echo '<br>';
+						
+						echo '<p>';
+						echo $this->formlabel ( $form->get ( 'nombre' ) );
+						echo $this->formelement ( $form->get ( 'nombre' ) );
+
+						echo '<p>';
+						echo $this->formlabel ( $form->get ( 'codigo' ) );
+						echo $this->formelement ( $form->get ( 'codigo' ) );
+				?>
+				</fieldset>
+				</br>
+				<?php
+					if($this->menu!="0"){
+
+				?>
+				<fieldset>
+					<legend>Secciones</legend>
+					<div class="four columns">
+						<?php
+							echo '<p>';
+							echo $this->formelement($form->get('datos'));
+							echo $this->formlabel($form->get ('datos'));
+
+							echo '<p>';
+							echo $this->formelement($form->get('equipo'));
+							echo $this->formlabel($form->get ('equipo'));
+
+							echo '<p>';
+							echo $this->formelement($form->get('contacto'));
+							echo $this->formlabel($form->get ('contacto'));
+
+							echo '<p>';
+							echo $this->formelement($form->get('miembros'));
+							echo $this->formlabel($form->get ('miembros'));
+
+							echo '<p>';
+							echo $this->formelement($form->get('participacion'));
+							echo $this->formlabel($form->get ('participacion'));
+
+							echo '<p>';
+							echo $this->formelement($form->get('grupos'));
+							echo $this->formlabel($form->get ('grupos'));
+
+							echo '<p>';
+							echo $this->formelement($form->get('servicios'));
+							echo $this->formlabel($form->get ('servicios'));
+
+						?>
+					</div>
+					<div class="four columns">
+						<?php
+							echo '<p>';
+							echo $this->formelement($form->get('articulos'));
+							echo $this->formlabel($form->get ('articulos'));
+
+							echo '<p>';
+							echo $this->formelement($form->get('libros'));
+							echo $this->formlabel($form->get ('libros'));
+
+							echo '<p>';
+							echo $this->formelement($form->get('capitulos'));
+							echo $this->formlabel($form->get ('capitulos'));
+
+							echo '<p>';
+							echo $this->formelement($form->get('otras'));
+							echo $this->formlabel($form->get ('otras'));
+
+
+							echo '<p>';
+							echo $this->formelement($form->get('otros'));
+							echo $this->formlabel($form->get ('otros'));
+
+							echo '<p>';
+							echo $this->formelement($form->get('proyectos'));
+							echo $this->formlabel($form->get ('proyectos'));
+
+						?>
+					</div>
+					<div class="four columns">
+						<?php
+							echo '<p>';
+							echo $this->formelement($form->get('proyectosint'));
+							echo $this->formlabel($form->get ('proyectosint'));
+
+							echo '<p>';
+							echo $this->formelement($form->get('material'));
+							echo $this->formlabel($form->get ('material'));
+
+							echo '<p>';
+							echo $this->formelement($form->get('identificadores'));
+							echo $this->formlabel($form->get('identificadores'));	
+							
+							echo '<p>';
+							echo $this->formelement($form->get('divulgacion'));
+							echo $this->formlabel($form->get('divulgacion'));	
+							
+							echo '<p>';
+							echo $this->formelement($form->get('formacion'));
+							echo $this->formlabel($form->get('formacion'));	
+
+							echo '<p>';
+							echo "<div>";
+							echo "<center>";
+							echo $this->formelement ( $form->get ( 'submit' ) );
+							echo "</center>";
+							echo "</div>";
+							echo '<br>';
+							echo '<br>';
+							echo $this->form ()->closeTag ( $form );
+						?>
+					</div>
+					<?php 
+					}else{
+						echo $this->formelement ( $form->get ( 'submit' ) );
+					}
+					?>
+
+				</fieldset>
+				<?php
+				if($this->menu!="0"){
+
+				if($this->datosredes == null && $this->dataConsulta != null && $this->dataConsulta["nombre"] != ""){
+					echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos redes de investigación con este nombre</h3></div>';
+				}else if($this->datosredes == null && $this->dataConsulta != null && $this->dataConsulta["codigo"] != ""){
+					echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos redes de investigación con este código</h3></div>';
+				}
+
+				echo '<br>';
+				foreach ( $this->datosredes as $dato ) {
+					if($dataConsulta->datos == 0 && $dataConsulta->equipo == 0 && $dataConsulta->contacto == 0 && $dataConsulta->miembros == 0 && $dataConsulta->participacion == 0 && $dataConsulta->grupos == 0 && $dataConsulta->servicios == 0 && $dataConsulta->articulos == 0 && $dataConsulta->libros == 0 && $dataConsulta->capitulos == 0 && $dataConsulta->otras == 0 && $dataConsulta->proyectos == 0 && $dataConsulta->otros == 0 && $dataConsulta->proyectosint == 0 && $dataConsulta->material == 0 && $dataConsulta->identificadores == 0 && $dataConsulta->divulgacion == 0 && $dataConsulta->formacion == 0){
+
+						$dataConsulta->datos = $dataConsulta->equipo = $dataConsulta->contacto = $dataConsulta->miembros = $dataConsulta->participacion = $dataConsulta->grupos = $dataConsulta->servicios = $dataConsulta->articulos = $dataConsulta->libros = $dataConsulta->capitulos = $dataConsulta->otras = $dataConsulta->proyectos = $dataConsulta->otros  = $dataConsulta->proyectosint = $dataConsulta->material = $dataConsulta->identificadores = $dataConsulta->divulgacion = $dataConsulta->formacion = 1;
+					}
+					echo '<br>';
+					echo '<br>';
+					echo '<fieldset class="fieldset-blue">';
+					echo "<legend><h5 class='titulos'>"."  ".$dato ["nombre"]."</h5></legend>";
+					echo '<div class="twelve columns">';
+					echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+					echo '<table class="table" style="width: 100%; max-width: 100%;">';
+					echo "<thead>";
+					echo "<th style='width: 10%;'>Código de la red</th>";
+					echo "<th style='width: 15%;'>Fecha de creaci&#243;n</th>";
+					echo "<th style='width: 15%;'>Coordinador 1 UPN</th>";
+					echo "<th style='width: 15%;'>Coordinador 2 UPN</th>";
+					echo "<th style='width: 15%;'>Estado de la red</th>";
+					echo '</thead>';
+					echo '<tbody>';
+					echo '<tr>';
+					echo '<td>';
+					echo $dato ["codigo"];
+					echo '</td>';
+					echo '<td>';
+					echo $dato ["fecha_creacion"];
+					echo '</td>';
+					echo '<td>';
+					foreach ( $this->d_user as $vf ) {
+						if ($vf ["id_usuario"] == $dato ["coordinador_uno"]) {
+							echo  $vf["primer_nombre"].' '.$vf["segundo_nombre"].' '.$vf["primer_apellido"].' '.$vf["segundo_apellido"];
+						}
+					}
+					echo '</td>';
+					echo '<td>';
+					foreach ( $this->d_user as $vf ) {
+						if ($vf ["id_usuario"] == $dato ["coordinador_dos"]) {
+							echo  $vf["primer_nombre"].' '.$vf["segundo_nombre"].' '.$vf["primer_apellido"].' '.$vf["segundo_apellido"];
+						}
+					}
+					echo '</td>';
+					echo '<td>';
+					if ( $dato ["estado"] == "A") {
+						echo "Activo";
+					}
+					else{
+						echo "Inactivo";
+					}
+					echo '</td>';
+					echo '</tr>';
+					echo '</table>';
+					echo '</div>';
+					echo '</br>';
+					echo "</fieldset>";
+					if($dataConsulta->datos == 1){
+						echo '</br>';
+						echo '<label><b>Visión</b></label>';
+						echo '<textarea disabled>'.$dato ["vision"].'</textarea>';
+
+						echo '</br>';
+						echo '<label><b>Misión</b></label>';
+						echo '<textarea disabled>'.$dato ["mision"].'</textarea>';
+
+						echo '</br>';
+						echo '<label><b>Objetivos</b></label>';
+						echo '<textarea disabled>'.$dato ["objetivos"].'</textarea>';
+
+						echo '</br>';
+						echo '<label><b>Antecedentes</b></label>';
+						echo '<textarea disabled>'.$dato ["antecedentes"].'</textarea>';
+
+						echo '</br>';
+						echo '<label><b>Justificación</b></label>';
+						echo '<textarea disabled>'.$dato ["justificacion"].'</textarea>';
+
+						echo '</br>';
+						echo '<label><b>Descripción</b></label>';
+						echo '<textarea disabled>'.$dato ["descripcion"].'</textarea>';
+
+						echo '</br>';
+						echo '<label><b>Líneas de investigación</b></label>';
+						echo '<textarea disabled>'.$dato ["lineas_investigacion"].'</textarea>';
+
+						echo '</br>';
+						echo '<label><b>Instituciones aliadas</b></label>';
+						echo '<textarea disabled>'.$dato ["instituciones_aliadas"].'</textarea>';
+
+						echo '</br>';
+						echo '<label><b>Socios</b></label>';
+						echo '<textarea disabled>'.$dato ["socios"].'</textarea>';
+					}
+					if($dataConsulta->equipo == 1){
+						?>
+						<fieldset class="fieldset-blue">
+						    <a name='Areas'></a>
+						    <legend>Equipo directivo o Estructura organizacional</legend>
+						    <?php
+						    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+						    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+						    echo '<thead>';
+						    echo "<th style='width: 25%;'>Nombre del cargo o rol</th>";
+						    echo "<th style='width: 23%;'>Nombre de la persona</th>";
+						    echo "<th style='width: 23%;'>Institución</th>";
+						    echo "<th style='width: 23%;'>País</th>";
+							foreach ($this->equipodirectivo as $int) {
+						      	if($int["id_red"] == $dato["id"]){
+						        echo '<tr>';
+						            echo '<td>';
+						            echo $int["cargo"];
+						            echo '</td>';
+						        
+						            echo '<td>';
+						            echo $int["nombre"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["institucion"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["pais"];
+						            echo '</td>';
+						            echo '</tr>';
+						        }
+						    }
+
+						    echo '</table>';
+						    echo '</div>';
+						?>
+						</fieldset>
+						</br>
+						</br>
+						<?php
+					}
+
+					if($dataConsulta->contacto == 1){
+						?>
+						<fieldset class="fieldset-blue">
+						    <a name='Areas'></a>
+						    <legend>Contacto</legend>
+						    <?php
+						   echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+						    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+						    echo '<thead>';
+						    echo "<th style='width: 13%;'>Correo electrónico</th>";
+						    echo "<th style='width: 20%;'>Página Web</th>";
+						    echo "<th style='width: 8%;'>Teléfono 1</th>";
+						    echo "<th style='width: 8%;'>Teléfono 2</th>";
+						    echo "<th style='width: 10%;'>Red social 1</th>";
+						    echo "<th style='width: 10%;'>Red social 2</th>";
+						    echo "<th style='width: 10%;'>Red social 3</th>";
+						    echo "<th style='width: 15%;'>Otros tipos de contacto</th>";
+						    echo '<tr>';
+
+						    foreach ($this->contactored as $int) {
+						    	if($int["id_red"] == $dato["id"]){
+						        echo '<tr>';
+						            echo '<td>';
+						            echo $int["correo_electronico"];
+						            echo '</td>';
+						        
+						            echo '<td>';
+						            echo $int["pagina_web"];
+						            echo '</td>';
+						        
+						            echo '<td>';
+						            echo $int["telefono_2"];
+						            echo '</td>';
+						        
+						            echo '<td>';
+						            echo $int["telefono_2"];
+						            echo '</td>';
+						        
+						            echo '<td>';
+						            echo $int["redsocial_1"];
+						            echo '</td>';
+						        
+						            echo '<td>';
+						            echo $int["redsocial_2"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["redsocial_3"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["otro_contacto"];
+						            echo '</td>';
+						        echo '</tr>';
+						    	}
+						    }
+						    echo '</tr>';
+						    echo '</table>';
+						    echo '</div>';
+						?>
+						</fieldset>
+						</br>
+						</br>
+						<?php
+					}
+
+					if($dataConsulta->miembros == 1){
+						?>
+						<fieldset class="fieldset-blue">
+						    <a name='Areas'></a>
+						    <legend>Miembros de la Red de la UPN</legend>
+						    <?php
+						    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+						    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+						    echo '<thead>';
+						    echo "<th style='width: 25%;'>Nombre del miembro</th>";
+						    echo "<th style='width: 25%;'>Tipo de vinculación</th>";
+						    echo "<th style='width: 25%;'>Fecha de vinculación</th>";
+						    echo "<th style='width: 25%;'>Fecha fin de vinculación</th>";
+						    echo '<tr>';
+
+						    foreach ($this->integrantesred as $int) {
+						    	if($int["id_red"] == $dato["id"]){
+						        echo '<tr>';
+						            echo '<td>';
+						            foreach ($this->usuarios as $usuario) {
+						                if($usuario["id_usuario"]==$int["id_integrantered"]){
+						                    echo $usuario["primer_nombre"] . $usuario["segundo_nombre"] . $usuario["primer_apellido"] . $usuario["segundo_apellido"];    
+						                }
+						                
+						            }
+						            echo '</td>';
+						            echo '<td>';
+						            foreach ($this->d_val as $val) {
+						                if($val["id_valor_flexible"]==$int["tipo_vinculacion"]){
+						                    echo $val["descripcion_valor"];
+						                }
+						            }
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["fecha_vinculacion"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["fin_vinculacion"];
+						            echo '</td>';
+						        echo '</tr>';
+						    	}
+						    }
+
+						    echo '</tr>';
+						    echo '</table>';
+						    echo '</div>';
+						?>
+						</fieldset>
+						</br>
+						</br>
+						<?php
+					}
+
+					if($dataConsulta->participacion == 1){
+						?>
+						<fieldset class="fieldset-blue">
+						    <a name='Areas'></a>
+						    <legend>Participación en eventos</legend>
+						    <?php
+						    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+						    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+						    echo '<thead>';
+						    echo "<th style='width: 30%;'>Nombre del evento</th>";
+						    echo "<th style='width: 15%;'>Lugar del evento</th>";
+						    echo "<th style='width: 15%;'>Tipo de participación</th>";
+						    echo "<th style='width: 15%;'>Fecha del evento</th>";
+						    echo "<th style='width: 15%;'>Descargar archivo</th>";
+						    echo '<tr>';
+
+						    foreach ($this->participacioneventos as $int) {
+						    	if($int["id_red"] == $dato["id"]){
+						        echo '<tr>';
+						            echo '<td>';
+						            echo $int["nombre"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["lugar"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            foreach ($this->d_val as $val) {
+						                if($val["id_valor_flexible"]==$int["tipo_participacion"]){
+						                    echo $val["descripcion_valor"];
+						                }
+						            }
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["fecha"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            if($int["archivo"]!=""){
+						                ?>    
+						                    <a href="<?php echo $this->basePath()?>/application/participacioneventosred/bajar/<?php echo $int["id_archivo"];?>">Bajar archivo</a>
+						                <?php echo " - " . $int["archivo"]; 
+						            }else{
+						                echo 'Sin archivo';
+						            }
+						            echo '</td>';
+						        echo '</tr>';
+						    	}
+						    }
+						    echo '</tr>';
+						    echo '</table>';
+						    echo '</div>';
+						?>
+						</fieldset>
+						</br>
+						</br>
+						<?php
+					}
+
+					if($dataConsulta->grupos == 1){
+						?>
+						<fieldset class="fieldset-blue">
+						    <a name='Areas'></a>
+						    <legend>Grupos de investigación asociados a la red de la UPN</legend>
+						    <?php
+						    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+						    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+						    echo '<thead>';
+						    echo "<th style='width: 30%;'>Nombre del grupo</th>";
+						    echo "<th style='width: 15%;'>Código</th>";
+						    echo "<th style='width: 15%;'>Líder</th>";
+						    echo "<th style='width: 30%;'>Descripción</th>";
+						    echo '<tr>';
+
+						    foreach ($this->gruposred as $int) {
+						    	if($int["id_red"] == $dato["id"]){
+						        foreach ($this->grupostotal as $grupo) {
+						            if($int["id_grupo"]==$grupo["id_grupo_inv"]){
+						                 echo '<tr>';
+						                    echo '<td>';
+						                    echo $grupo["nombre_grupo"];
+						                    echo '</td>';
+
+						                    echo '<td>';
+						                    echo $grupo["cod_grupo"];
+						                    echo '</td>';
+
+						                    echo '<td>';
+						                    foreach ($this->usuarios as $usuario) {
+						                        if($usuario["id_usuario"]==$grupo["id_lider"]){
+						                            echo $usuario["primer_nombre"] . $usuario["segundo_nombre"] . $usuario["primer_apellido"] . $usuario["segundo_apellido"];    
+						                        }
+						                        
+						                    }
+						                    echo '</td>';
+
+						                    echo '<td>';
+						                    echo $grupo["descripcion"];
+						                    echo '</td>';
+						                 echo '</tr>';
+						            }
+						        }
+						    	}
+						    }
+						    echo '</tr>';
+						    echo '</table>';
+						    echo '</div>';
+						?>
+						</fieldset>
+						</br>
+						</br>
+						<?php
+					}
+
+					if($dataConsulta->servicios == 1){
+						?>
+						<fieldset class="fieldset-blue">
+						    <a name='Areas'></a>
+						    <legend>Servicios</legend>
+						    <?php
+						    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+						    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+						    echo '<thead>';
+						    echo "<th style='width: 50%;'>Servicios que ofrece</th>";
+						    echo "<th style='width: 50%;'>Noticias de la red</th>";
+						    echo '<tr>';
+
+						    foreach ($this->serviciosred as $int) {
+						    	if($int["id_red"] == $dato["id"]){
+						        echo '<tr>';
+						            echo '<td>';
+						            echo $int["servicios"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["noticias"];
+						            echo '</td>';
+						        echo '</tr>';
+						    	}
+						    }
+						    echo '</tr>';
+						    echo '</table>';
+						    echo '</div>';
+						?>
+						</fieldset>
+						</br>
+						</br>
+						<?php
+					}
+
+
+					if($dataConsulta->articulos == 1){
+						?>
+						<fieldset class="fieldset-blue">
+						    <a name='Areas'></a>
+						    <legend>Artículos</legend>
+						    <?php
+						 echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+					    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+					    echo '<thead>';
+					    echo "<th style='width: 7%;'>Nombre revista</th>";
+					    echo "<th style='width: 7%;'>Nombre articulo</th>";
+					    echo "<th style='width: 6%;'>Categorización</th>";
+					    echo "<th style='width: 4%;'>Año</th>";
+					    echo "<th style='width: 4%;'>Mes</th>";
+					    echo "<th style='width: 5%;'>País</th>";
+					    echo "<th style='width: 5%;'>Ciudad</th>";
+					    echo "<th style='width: 5%;'>ISSN/e-ISSN</th>";
+					    echo "<th style='width: 8%;'>No. de páginas</th>";
+					    echo "<th style='width: 5%;'>Página inicio</th>";
+					    echo "<th style='width: 5%;'>Página fin</th>";
+					    echo "<th style='width: 5%;'>Fascículo</th>";
+					    echo "<th style='width: 5%;'>Volúmen</th>";
+					    echo "<th style='width: 5%;'>No. de serie</th>";
+					    echo "<th style='width: 14%;'>Autor(es)</th>";
+					    echo '<tr>';
+
+					    foreach ($this->articulos as $int) {
+					    	if($int["id_red"] == $dato["id"]){
+					        echo '<tr>';
+					            echo '<td>';
+					            echo $int["nombre_revista"];
+					            echo '</td>';
+					        
+					            echo '<td>';
+					            echo $int["nombre_articulo"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            foreach ($this->d_val as $val) {
+					                if($val["id_valor_flexible"]==$int["categoria"]){
+					                    echo $val["descripcion_valor"];
+					                }
+					            }
+					            echo '</td>';
+					        
+					            echo '<td>';
+					            echo $int["ano"];
+					            echo '</td>';
+					        
+					            echo '<td>';
+					            switch ($int["mes"]) {
+					                case 1:
+					                    echo "Enero";
+					                    break;
+					                case 2:
+					                    echo "Febrero";
+					                    break;
+					                case 3:
+					                    echo "Marzo";
+					                    break;
+					                case 4:
+					                    echo "Abril";
+					                    break;
+					                case 5:
+					                    echo "Mayo";
+					                    break;
+					                case 6:
+					                    echo "Junio";
+					                    break;
+					                case 7:
+					                    echo "Julio";
+					                    break;
+					                case 8:
+					                    echo "Agosto";
+					                    break;
+					                case 9:
+					                    echo "Septiembre";
+					                    break;
+					                case 10:
+					                    echo "Octubre";
+					                    break;
+					                case 11:
+					                    echo "Noviembre";
+					                    break;
+					                case 12:
+					                    echo "Diciembre";
+					                    break;
+					            }
+					            echo '</td>';
+					        
+					            echo '<td>';
+					            echo $int["pais"];
+					            echo '</td>';
+					        
+					            echo '<td>';
+					            echo $int["ciudad"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            echo $int["issn"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            echo $int["paginas"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            echo $int["pagina_inicio"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            echo $int["pagina_fin"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            echo $int["fasciculo"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            echo $int["volumen"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            echo $int["serie"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            $autores="";
+					            foreach ($this->autoresred as $autor) {
+					                if($autor["seccion"]=="1" && $autor["id_objeto"]==$int["id"]){
+					                    foreach ($this->usuarios as $usuario) {
+					                        if($usuario["id_usuario"]==$autor["id_usuario"]){
+					                            $autores .= $usuario["primer_nombre"] . $usuario["primer_apellido"] . $usuario["segundo_apellido"] . " - ";    
+					                        }    
+					                    }
+					                }
+					            }
+					            echo $autores;
+					            echo '</td>';
+					            
+					            
+					        echo '</tr>';
+					    	}
+					    }
+					    echo '</tr>';
+					    //Articulos usuario
+					    foreach($this->dataDocumentos as $documento){
+					        if($documento["tipo_documento"]=="articulo"){
+					            foreach ($this->Articuloshv as $art) {
+					                if($art["id_gi_articulo"] == $documento["id_documento"] && $documento["id_grupoinv"]==$dato["id"]){
+					                    echo '<tr>';
+					                    echo '<td>';
+					                    echo $art["nombre_revista"];
+					                    echo '</td>';
+					                    echo '<td>';
+					                    echo $art["nombre_articulo"];
+					                    echo '</td>';
+					                    echo '<td>';
+					                    foreach ($this->d_val as $vl) {
+					                        if ($vl["id_valor_flexible"] == $art["categoria"]) {
+					                            echo $vl["descripcion_valor"];
+					                        }
+					                    }
+					                    echo '</td>';
+					                    echo '<td>';
+					                    echo $art["ano"];
+					                    echo '</td>';
+					                    echo '<td>';
+					                    switch ($art["mes"]) {
+					                            case 1:
+					                                echo "Enero";
+					                                break;
+					                            case 2:
+					                                echo "Febrero";
+					                                break;
+					                            case 3:
+					                                echo "Marzo";
+					                                break;
+					                            case 4:
+					                                echo "Abril";
+					                                break;
+					                            case 5:
+					                                echo "Mayo";
+					                                break;
+					                            case 6:
+					                                echo "Junio";
+					                                break;
+					                            case 7:
+					                                echo "Julio";
+					                                break;
+					                            case 8:
+					                                echo "Agosto";
+					                                break;
+					                            case 9:
+					                                echo "Septiembre";
+					                                break;
+					                            case 10:
+					                                echo "Octubre";
+					                                break;
+					                            case 11:
+					                                echo "Noviembre";
+					                                break;
+					                            case 12:
+					                                echo "Diciembre";
+					                                break;
+					                        }
+					                    echo '</td>';
+					                    echo '<td>';
+					                    foreach ($this->d_val as $vl) {
+					                        if ($vl["id_valor_flexible"] == $art["id_pais"]) {
+					                            $art["id_pais"] = $vl["descripcion_valor"];
+					                        }
+					                    }
+					                    echo $art["id_pais"];
+					                    echo '</td>';
+					                    echo '<td>';
+					                    foreach ($this->d_val as $vl) {
+					                        if ($vl["id_valor_flexible"] == $art["id_ciudad"]) {
+					                            $art["id_pais"] = $vl["descripcion_valor"];
+					                        }
+					                    }
+					                    echo $art["id_ciudad"];
+					                    echo '</td>';
+					                    echo '<td>';
+					                    echo $art["issn"];
+					                    echo '</td>';
+					                    echo '<td>';
+					                    echo $art["num_paginas"];
+					                    echo '</td>';
+					                    echo '<td>';
+					                    echo $art["pagina_inicio"];
+					                    echo '</td>';
+					                    echo '<td>';
+					                    echo $art["pagina_fin"];
+					                    echo '</td>';
+					                    echo '<td>';
+					                    echo $art["fasciculo"];
+					                    echo '</td>';
+					                    echo '<td>';
+					                    echo $art["volumen"];
+					                    echo '</td>';
+					                    echo '<td>';
+					                    echo $art["serie"];
+					                    echo '</td>';
+					                    $autorAux="";
+					                    foreach ($this->usuarios as $usa) {
+					                        if ($usa["id_usuario"] == $art["id_autor"]) {
+					                            
+					                            $autorAux .= trim($usa["primer_nombre"]).' '.trim($usa["segundo_nombre"]).' '.trim($usa["primer_apellido"]).' '.trim($usa["segundo_apellido"])." - ";
+					                        }
+					                    }
+					                    foreach ($this->auto as $aut) {
+					                        if ($art["id_gi_articulo"] == $aut["id_padre"] && trim($aut["nombre_padre"]) == 'Articuloshv') {
+					                            foreach ($this->usuarios as $ua) {
+					                                if ($ua["id_usuario"] == $aut["id_usuario"]) {
+					                                    $autorAux .= trim($ua["primer_nombre"]).' '.trim($ua["segundo_nombre"]).' '.trim($ua["primer_apellido"]).' '.trim($ua["segundo_apellido"])." - ";
+					                                }
+					                            }
+					                        }
+					                    }
+					                    echo '<td>';
+					                    echo $autorAux;
+					                    echo '</td>';
+					                }
+					            }
+					        }
+					    }//Articulos usuario  
+					    echo '</table>';
+					    echo '</div>';
+						?>
+						</fieldset>
+						</br>
+						</br>
+						<?php
+					}
+
+					if($dataConsulta->libros == 1){
+						?>
+						<fieldset class="fieldset-blue">
+						    <a name='Areas'></a>
+						    <legend>Líbros</legend>
+						    <?php
+						 echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+						    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+						    echo '<thead>';
+						    echo "<th style='width: 8%;'>Título del libro</th>";
+                    		echo "<th style='width: 7%;'>Tipo de libro</th>";
+						    echo "<th style='width: 4%;'>No. de Páginas</th>";
+						    echo "<th style='width: 4%;'>Año</th>";
+						    echo "<th style='width: 4%;'>Mes</th>";
+						    echo "<th style='width: 5%;'>País de publicación</th>";
+						    echo "<th style='width: 5%;'>Ciudad de publicación</th>";
+						    echo "<th style='width: 5%;'>Serie</th>";
+						    echo "<th style='width: 8%;'>Editorial</th>";
+						    echo "<th style='width: 8%;'>No. de Edición</th>";
+						    echo "<th style='width: 8%;'>ISBN ó e-ISBN</th>";
+						    echo "<th style='width: 8%;'>Medio de divulgación</th>";
+						    echo "<th style='width: 10%;'>Autor(es)</th>";
+						    echo '<tr>';
+
+						    foreach ($this->libros as $int) {
+						    	if($int["id_red"] == $dato["id"]){
+						        echo '<tr>';
+						            echo '<td>';
+						            echo $int["titulo"];
+						            echo '</td>';
+
+						            echo '<td>';
+		                            foreach ($this->d_val as $vl) {
+		                                if ($vl["id_valor_flexible"] == $int["tipo_libro"]) {
+		                                    echo $vl["descripcion_valor"];
+		                                }
+		                            }
+		                        echo '</td>';
+						        
+						            echo '<td>';
+						            echo $int["paginas"];
+						            echo '</td>';
+						        	
+						        	echo '<td>';
+						            echo $int["ano"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            switch ($int["mes"]) {
+						                case 1:
+						                    echo "Enero";
+						                    break;
+						                case 2:
+						                    echo "Febrero";
+						                    break;
+						                case 3:
+						                    echo "Marzo";
+						                    break;
+						                case 4:
+						                    echo "Abril";
+						                    break;
+						                case 5:
+						                    echo "Mayo";
+						                    break;
+						                case 6:
+						                    echo "Junio";
+						                    break;
+						                case 7:
+						                    echo "Julio";
+						                    break;
+						                case 8:
+						                    echo "Agosto";
+						                    break;
+						                case 9:
+						                    echo "Septiembre";
+						                    break;
+						                case 10:
+						                    echo "Octubre";
+						                    break;
+						                case 11:
+						                    echo "Noviembre";
+						                    break;
+						                case 12:
+						                    echo "Diciembre";
+						                    break;
+						            }
+						            echo '</td>';
+						       						        
+						            echo '<td>';
+						            echo $int["pais"];
+						            echo '</td>';
+						        
+						            echo '<td>';
+						            echo $int["ciudad"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["serie"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["editorial"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["edicion"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["isbn"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["medio_divulgacion"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            $autores="";
+						            foreach ($this->autoresred as $autor) {
+						                if($autor["seccion"]=="2" && $autor["id_objeto"]==$int["id"]){
+						                    foreach ($this->usuarios as $usuario) {
+						                        if($usuario["id_usuario"]==$autor["id_usuario"]){
+						                            $autores .= $usuario["primer_nombre"] . $usuario["primer_apellido"] . $usuario["segundo_apellido"] . " - ";    
+						                        }    
+						                    }
+						                }
+						            }
+						            echo $autores;
+						            echo '</td>';
+						        echo '</tr>';
+						    	}
+						    }
+						    echo '</tr>';
+						    //Libros usuario
+						    foreach($this->dataDocumentos as $documento){
+						        if($documento["tipo_documento"]=="libro"){
+						            foreach ($this->libroshv as $lib) {
+						                if($lib["id_gi_libro"] == $documento["id_documento"] && $documento["id_grupoinv"]==$dato["id"]){
+						                    echo '<tr>';
+						                    echo '<td>';
+						                    echo $lib["titulo_libro"];
+						                    echo '</td>';
+						                    echo '<td>';
+		                            foreach ($this->d_val as $vl) {
+		                                if ($vl["id_valor_flexible"] == $lib["tipo_libro"]) {
+		                                    echo $vl["descripcion_valor"];
+		                                }
+		                            }
+		                        echo '</td>';
+						                    echo '<td>';
+						                    echo $lib["num_paginas"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $lib["ano"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    switch ($lib["mes"]) {
+						                            case 1:
+						                                echo "Enero";
+						                                break;
+						                            case 2:
+						                                echo "Febrero";
+						                                break;
+						                            case 3:
+						                                echo "Marzo";
+						                                break;
+						                            case 4:
+						                                echo "Abril";
+						                                break;
+						                            case 5:
+						                                echo "Mayo";
+						                                break;
+						                            case 6:
+						                                echo "Junio";
+						                                break;
+						                            case 7:
+						                                echo "Julio";
+						                                break;
+						                            case 8:
+						                                echo "Agosto";
+						                                break;
+						                            case 9:
+						                                echo "Septiembre";
+						                                break;
+						                            case 10:
+						                                echo "Octubre";
+						                                break;
+						                            case 11:
+						                                echo "Noviembre";
+						                                break;
+						                            case 12:
+						                                echo "Diciembre";
+						                                break;
+						                        }
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $lib["pais"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $lib["ciudad"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $lib["serie"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $lib["editorial"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $lib["edicion"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $lib["isbn"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $lib["medio_divulgacion"];
+						                    echo '</td>';
+						                    $autorAux="";
+						                    foreach ($this->usuarios as $usa) {
+						                        if ($usa["id_usuario"] == $lib["id_autor"]) {    
+						                            $autorAux .= trim($usa["primer_nombre"]).' '.trim($usa["segundo_nombre"]).' '.trim($usa["primer_apellido"]).' '.trim($usa["segundo_apellido"])." - ";
+						                        }
+						                    }
+						                    foreach ($this->auto as $aut) {
+						                        if ($lib["id_gi_libro"] == $aut["id_padre"] && trim($aut["nombre_padre"]) == 'Libroshv') {
+						                            foreach ($this->usuarios as $ua) {
+						                                if ($ua["id_usuario"] == $aut["id_usuario"]) {
+						                                    $autorAux .= trim($ua["primer_nombre"]).' '.trim($ua["segundo_nombre"]).' '.trim($ua["primer_apellido"]).' '.trim($ua["segundo_apellido"])." - ";
+						                                }
+						                            }
+						                        }
+						                    }
+						                    echo '<td>';
+						                    echo $autorAux;
+						                    echo '</td>';
+						                }
+						            }
+						        }
+						    }//Libros usuario  
+						    echo '</table>';
+						?>
+						</fieldset>
+						</br>
+						</br>
+						<?php
+					}
+
+					if($dataConsulta->capitulos == 1){
+						?>
+						<fieldset class="fieldset-blue">
+						    <a name='Areas'></a>
+						    <legend>Capítulos de libros</legend>
+						    <?php
+						 echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+					    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+					    echo '<thead>';
+					    echo "<th style='width: 6%;'>Título del libro</th>";
+					    echo "<th style='width: 4%;'>Año</th>";
+					    echo "<th style='width: 3%;'>Mes</th>";
+					    echo "<th style='width: 5%;'>País de publicación</th>";
+					    echo "<th style='width: 5%;'>Ciudad de publicación</th>";
+					    echo "<th style='width: 4%;'>Serie</th>";
+					    echo "<th style='width: 7%;'>Editorial</th>";
+					    echo "<th style='width: 5%;'>No. de Edición</th>";
+					    echo "<th style='width: 7%;'>ISBN ó e-ISBN</th>";
+					    echo "<th style='width: 7%;'>Medio de divulgación</th>";
+					    echo "<th style='width: 6%;'>Título del capítulo</th>";
+					    echo "<th style='width: 3%;'>No. de capítulo</th>";
+					    echo "<th style='width: 4%;'>Páginas del capítulo</th>";
+					    echo "<th style='width: 3%;'>Página inicio</th>";
+					    echo "<th style='width: 3%;'>Página fin</th>";
+					    echo "<th style='width: 7%;'>Autor(es)</th>";
+					    echo '<tr>';
+
+					    foreach ($this->capitulos as $int) {
+					    	if($int["id_red"] == $dato["id"]){
+					        echo '<tr>';
+					            echo '<td>';
+					            echo $int["titulo"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            echo $int["ano"];
+					            echo '</td>';
+					        
+					            echo '<td>';
+					            switch ($int["mes"]) {
+					                case 1:
+					                    echo "Enero";
+					                    break;
+					                case 2:
+					                    echo "Febrero";
+					                    break;
+					                case 3:
+					                    echo "Marzo";
+					                    break;
+					                case 4:
+					                    echo "Abril";
+					                    break;
+					                case 5:
+					                    echo "Mayo";
+					                    break;
+					                case 6:
+					                    echo "Junio";
+					                    break;
+					                case 7:
+					                    echo "Julio";
+					                    break;
+					                case 8:
+					                    echo "Agosto";
+					                    break;
+					                case 9:
+					                    echo "Septiembre";
+					                    break;
+					                case 10:
+					                    echo "Octubre";
+					                    break;
+					                case 11:
+					                    echo "Noviembre";
+					                    break;
+					                case 12:
+					                    echo "Diciembre";
+					                    break;
+					            }
+					            echo '</td>';
+					        
+					            echo '<td>';
+					            echo $int["pais"];
+					            echo '</td>';
+					        
+					            echo '<td>';
+					            echo $int["ciudad"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            echo $int["serie"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            echo $int["editorial"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            echo $int["edicion"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            echo $int["isbn"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            echo $int["medio_divulgacion"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            echo $int["titulo_capitulo"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            echo $int["numero_capitulo"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            echo $int["paginas_capitulo"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            echo $int["pagina_inicio"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            echo $int["pagina_fin"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            $autores="";
+					            foreach ($this->autoresred as $autor) {
+					                if($autor["seccion"]=="3" && $autor["id_objeto"]==$int["id"]){
+					                    foreach ($this->usuarios as $usuario) {
+					                        if($usuario["id_usuario"]==$autor["id_usuario"]){
+					                            $autores .= $usuario["primer_nombre"] . $usuario["primer_apellido"] . $usuario["segundo_apellido"] . " - ";    
+					                        }    
+					                    }
+					                }
+					            }
+					            echo $autores;
+					            echo '</td>';
+					        echo '</tr>';
+					    	}
+					    }
+					    echo '</tr>';
+					    //Capitulo de libros usuario
+					    foreach($this->dataDocumentos as $documento){
+					        if($documento["tipo_documento"]=="capitulo"){
+					            foreach ($this->capituloshv as $int) {
+					                if($int["id"] == $documento["id_documento"] && $documento["id_grupoinv"]==$dato["id"]){
+					                    echo '<tr>';
+					                        echo '<td>';
+					                        echo $int["titulo"];
+					                        echo '</td>';
+
+					                        echo '<td>';
+					                        echo $int["ano"];
+					                        echo '</td>';
+					                    
+					                        echo '<td>';
+					                        switch ($int["mes"]) {
+					                            case 1:
+					                                echo "Enero";
+					                                break;
+					                            case 2:
+					                                echo "Febrero";
+					                                break;
+					                            case 3:
+					                                echo "Marzo";
+					                                break;
+					                            case 4:
+					                                echo "Abril";
+					                                break;
+					                            case 5:
+					                                echo "Mayo";
+					                                break;
+					                            case 6:
+					                                echo "Junio";
+					                                break;
+					                            case 7:
+					                                echo "Julio";
+					                                break;
+					                            case 8:
+					                                echo "Agosto";
+					                                break;
+					                            case 9:
+					                                echo "Septiembre";
+					                                break;
+					                            case 10:
+					                                echo "Octubre";
+					                                break;
+					                            case 11:
+					                                echo "Noviembre";
+					                                break;
+					                            case 12:
+					                                echo "Diciembre";
+					                                break;
+					                        }
+					                        echo '</td>';
+					                    
+					                        echo '<td>';
+					                        echo $int["pais"];
+					                        echo '</td>';
+					                    
+					                        echo '<td>';
+					                        echo $int["ciudad"];
+					                        echo '</td>';
+
+					                        echo '<td>';
+					                        echo $int["serie"];
+					                        echo '</td>';
+
+					                        echo '<td>';
+					                        echo $int["editorial"];
+					                        echo '</td>';
+
+					                        echo '<td>';
+					                        echo $int["edicion"];
+					                        echo '</td>';
+
+					                        echo '<td>';
+					                        echo $int["isbn"];
+					                        echo '</td>';
+
+					                        echo '<td>';
+					                        echo $int["medio_divulgacion"];
+					                        echo '</td>';
+
+					                        echo '<td>';
+					                        echo $int["titulo_capitulo"];
+					                        echo '</td>';
+
+					                        echo '<td>';
+					                        echo $int["numero_capitulo"];
+					                        echo '</td>';
+
+					                        echo '<td>';
+					                        echo $int["paginas_capitulo"];
+					                        echo '</td>';
+
+					                        echo '<td>';
+					                        echo $int["pagina_inicio"];
+					                        echo '</td>';
+
+					                        echo '<td>';
+					                        echo $int["pagina_fin"];
+					                        echo '</td>';
+
+					                        echo '<td>';
+					                        $autores="";
+					                        foreach ($this->usuarios as $usa) {
+					                            if ($usa["id_usuario"] == $int["id_autor"]) {
+					                                $autores .= trim($usa["primer_nombre"]).' '.trim($usa["segundo_nombre"]).' '.trim($usa["primer_apellido"]).' '.trim($usa["segundo_apellido"])." - ";
+					                            }
+					                        }
+					                        foreach ($this->autoresusuario as $autor) {
+					                            if($autor["seccion"]=="3" && $autor["id_objeto"]==$int["id"]){
+					                                foreach ($this->usuarios as $usuario) {
+					                                    if($usuario["id_usuario"]==$autor["id_usuario"]){
+					                                        $autores .= $usuario["primer_nombre"]." ".$usuario["segundo_nombre"]." ".$usuario["primer_apellido"]." ".$usuario["segundo_apellido"]." - ";    
+					                                    }    
+					                                }
+					                            }
+					                        }
+					                        echo $autores;
+					                        echo '</td>';
+					                    echo '</tr>';
+					                }
+					            }
+					        }
+					    }//Capitulo de libros usuario
+					    echo '</table>';
+					    echo '</div>';
+						?>
+						</fieldset>
+						</br>
+						</br>
+						<?php
+					}
+
+					if($dataConsulta->otras == 1){
+						?>
+						<fieldset class="fieldset-blue">
+						    <a name='Areas'></a>
+						    <legend>Otras producciones de investigación</legend>
+						    <?php
+						 echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+					    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+					    echo '<thead>';
+					    echo "<th style='width: 10%;'>Nombre producto</th>";
+					    echo "<th style='width: 10%;'>Descripción producto</th>";
+					    echo "<th style='width: 10%;'>Tipo producto</th>";
+					    echo "<th style='width: 3%;'>Año</th>";
+					    echo "<th style='width: 3%;'>Mes</th>";
+					    echo "<th style='width: 4%;'>Pais</th>";
+					    echo "<th style='width: 5%;'>Ciudad</th>";
+					    echo "<th style='width: 10%;'>Instituciones participantes</th>";
+					    echo "<th style='width: 15%;'>Registro</th>";
+					    echo "<th style='width: 10%;'>Otra información</th>";
+					    echo "<th style='width: 10%;'>Autor(es)</th>";
+					    echo '<tr>';
+
+					    foreach ($this->produccionesinv as $int) {
+					    	if($int["id_red"] == $dato["id"]){
+					        echo '<tr>';
+					            echo '<td>';
+					            echo $int["nombre"];
+					            echo '</td>';
+					        
+					            echo '<td>';
+					            echo $int["descripcion"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            echo $int["tipo"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            echo $int["ano"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            switch ($int["mes"]) {
+					                case 1:
+					                    echo "Enero";
+					                    break;
+					                case 2:
+					                    echo "Febrero";
+					                    break;
+					                case 3:
+					                    echo "Marzo";
+					                    break;
+					                case 4:
+					                    echo "Abril";
+					                    break;
+					                case 5:
+					                    echo "Mayo";
+					                    break;
+					                case 6:
+					                    echo "Junio";
+					                    break;
+					                case 7:
+					                    echo "Julio";
+					                    break;
+					                case 8:
+					                    echo "Agosto";
+					                    break;
+					                case 9:
+					                    echo "Septiembre";
+					                    break;
+					                case 10:
+					                    echo "Octubre";
+					                    break;
+					                case 11:
+					                    echo "Noviembre";
+					                    break;
+					                case 12:
+					                    echo "Diciembre";
+					                    break;
+					            }
+					            echo '</td>';
+					        
+					            echo '<td>';
+					            echo $int["pais"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            echo $int["ciudad"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            echo $int["instituciones"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            echo $int["registro"];
+					            echo '</td>';
+					        
+					            echo '<td>';
+					            echo $int["otra_informacion"];
+					            echo '</td>';
+
+					            echo '<td>';
+					            $autores="";
+					            foreach ($this->autoresred as $autor) {
+					                if($autor["seccion"]=="4" && $autor["id_objeto"]==$int["id"]){
+					                    foreach ($this->usuarios as $usuario) {
+					                        if($usuario["id_usuario"]==$autor["id_usuario"]){
+					                            $autores .= $usuario["primer_nombre"] . $usuario["primer_apellido"] . $usuario["segundo_apellido"] . " - ";    
+					                        }    
+					                    }
+					                }
+					            }
+					            echo $autores;
+					            echo '</td>';
+					        echo '</tr>';
+					     }
+					    }
+					    echo '</tr>';
+					    //Otras producciones usuario
+					    foreach($this->dataDocumentos as $documento){
+					        if($documento["tipo_documento"]=="producciones"){
+					            foreach ($this->Otrasproduccioneshv as $ot) {
+					                if($ot["id_otra_prod"] == $documento["id_documento"] && $documento["id_grupoinv"]==$dato["id"]){
+					                    echo '<tr>';
+					                    echo '<td>';
+					                    echo $ot["nombre_producto"];
+					                    echo '</td>';
+					                    echo '<td>';
+					                    echo $ot["descripcion_producto"];
+					                    echo '</td>';
+					                    echo '<td>';
+					                    echo $ot["tipo_producto"];
+					                    echo '</td>';
+					                    echo '<td>';
+					                    echo $ot["ano"];
+					                    echo '</td>';
+					                    echo '<td>';
+					                    switch ($ot["mes"]) {
+					                        case 1:
+					                            echo "Enero";
+					                            break;
+					                        case 2:
+					                            echo "Febrero";
+					                            break;
+					                        case 3:
+					                            echo "Marzo";
+					                            break;
+					                        case 4:
+					                            echo "Abril";
+					                            break;
+					                        case 5:
+					                            echo "Mayo";
+					                            break;
+					                        case 6:
+					                            echo "Junio";
+					                            break;
+					                        case 7:
+					                            echo "Julio";
+					                            break;
+					                        case 8:
+					                            echo "Agosto";
+					                            break;
+					                        case 9:
+					                            echo "Septiembre";
+					                            break;
+					                        case 10:
+					                            echo "Octubre";
+					                            break;
+					                        case 11:
+					                            echo "Noviembre";
+					                            break;
+					                        case 12:
+					                            echo "Diciembre";
+					                            break;
+					                    }
+					                    echo '</td>';
+					                    echo '</td>';
+					                    echo '<td>';
+					                    foreach ($this->d_val as $vl) {
+					                        if ($vl["id_valor_flexible"] == $ot["id_pais"]) {
+					                            $ot["id_pais"] = $vl["descripcion_valor"];
+					                        }
+					                    }
+					                    echo $ot["id_pais"];
+					                    echo '</td>';
+					                    echo '<td>';
+					                    foreach ($this->d_val as $vl) {
+					                        if ($vl["id_valor_flexible"] == $ot["id_ciudad"]) {
+					                            $ot["id_pais"] = $vl["descripcion_valor"];
+					                        }
+					                    }
+					                    echo $ot["id_ciudad"];
+					                    echo '</td>';
+					                    echo '</td>';
+					                    echo '<td>';
+					                    echo $ot["instituciones"];
+					                    echo '</td>';
+					                    echo '<td>';
+					                    echo $ot["registro"];
+					                    echo '</td>';
+					                    echo '<td>';
+					                    echo $ot["otra_info"];
+					                    echo '</td>';
+					                    $autorAux="";
+					                    foreach ($this->usuarios as $usa) {
+					                        if ($usa["id_usuario"] == $ot["id_autor"]) {    
+					                            $autorAux .= trim($usa["primer_nombre"]).' '.trim($usa["segundo_nombre"]).' '.trim($usa["primer_apellido"]).' '.trim($usa["segundo_apellido"])." - ";
+					                        }
+					                    }
+					                    foreach ($this->auto as $aut) {
+					                        if ($ot["id_otra_prod"] == $aut["id_padre"] && trim($aut["nombre_padre"]) == 'otra_prodhv') {
+					                            foreach ($this->usuarios as $ua) {
+					                                if ($ua["id_usuario"] == $aut["id_usuario"]) {
+					                                    $autorAux .= trim($ua["primer_nombre"]).' '.trim($ua["segundo_nombre"]).' '.trim($ua["primer_apellido"]).' '.trim($ua["segundo_apellido"])." - ";
+					                                }
+					                            }
+					                        }
+					                    }
+					                    echo '<td>';
+					                    echo $autorAux;
+					                    echo '</td>';
+					                    echo '</tr>';
+					                }
+					            }  
+					        }
+					    }//Otras producciones usuario
+					    echo '</table>';
+					    echo '</div>';
+						?>
+						</fieldset>
+						</br>
+						</br>
+						<?php
+					}
+
+					if($dataConsulta->otros == 1){
+						?>
+						<fieldset class="fieldset-blue">
+						    <a name='Areas'></a>
+						    <legend>Otros documentos bibliográficos</legend>
+						    <?php
+						    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+						    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+						    echo '<thead>';
+						    echo "<th style='width: 6%;'>Nombre</th>";
+						    echo "<th style='width: 3%;'>No. Páginas</th>";
+						    echo "<th style='width: 3%;'>Año</th>";
+						    echo "<th style='width: 3%;'>Mes</th>";
+						    echo "<th style='width: 4%;'>Pais</th>";
+						    echo "<th style='width: 4%;'>Ciudad</th>";
+						    echo "<th style='width: 15%;'>Indexación</th>";
+						    echo "<th style='width: 15%;'>Instituciones participantes</th>";
+						    echo "<th style='width: 5%;'>URL</th>";
+						    echo "<th style='width: 14%;'>Descripción</th>";
+						    echo "<th style='width: 12%;'>Medio de divulgación</th>";
+						    echo "<th style='width: 6%;'>Autor(es)</th>";
+						    echo '<tr>';
+
+						    foreach ($this->documentosbliograficos as $int) {
+						    	if($int["id_red"] == $dato["id"]){
+						        echo '<tr>';
+						            echo '<td>';
+						            echo $int["nombre"];
+						            echo '</td>';
+						        
+						            echo '<td>';
+						            echo $int["numero_paginas"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["ano"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            switch ($int["mes"]) {
+						                case 1:
+						                    echo "Enero";
+						                    break;
+						                case 2:
+						                    echo "Febrero";
+						                    break;
+						                case 3:
+						                    echo "Marzo";
+						                    break;
+						                case 4:
+						                    echo "Abril";
+						                    break;
+						                case 5:
+						                    echo "Mayo";
+						                    break;
+						                case 6:
+						                    echo "Junio";
+						                    break;
+						                case 7:
+						                    echo "Julio";
+						                    break;
+						                case 8:
+						                    echo "Agosto";
+						                    break;
+						                case 9:
+						                    echo "Septiembre";
+						                    break;
+						                case 10:
+						                    echo "Octubre";
+						                    break;
+						                case 11:
+						                    echo "Noviembre";
+						                    break;
+						                case 12:
+						                    echo "Diciembre";
+						                    break;
+						            }
+						            echo '</td>';
+						        
+						            echo '<td>';
+						            echo $int["pais"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["ciudad"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["numero_indexacion"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["instituciones"];
+						            echo '</td>';
+						        
+						            echo '<td>';
+						            echo $int["url"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["descripcion"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["medio_divulgacion"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            $autores="";
+						            foreach ($this->autoresred as $autor) {
+						                if($autor["seccion"]=="5" && $autor["id_objeto"]==$int["id"]){
+						                    foreach ($this->usuarios as $usuario) {
+						                        if($usuario["id_usuario"]==$autor["id_usuario"]){
+						                            $autores .= $usuario["primer_nombre"] . $usuario["primer_apellido"] . $usuario["segundo_apellido"] . " - ";    
+						                        }    
+						                    }
+						                }
+						            }
+						            echo $autores;
+						            echo '</td>';
+						        echo '</tr>';
+						    	}
+						    }
+						    echo '</tr>';
+						    //Otros documentos usuario
+						    foreach($this->dataDocumentos as $documento){
+						        if($documento["tipo_documento"]=="documentos"){
+						            foreach ($this->Bibliograficoshv as $bli) {
+						                if($bli["id_bibliografico"] == $documento["id_documento"] && $documento["id_grupoinv"]==$dato["id"]){
+						                    echo '<tr>';
+						                    echo '<td>';
+						                    echo $bli["nombre_documento"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $bli["numero_paginas"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $bli["ano"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    switch ($bli["mes"]) {
+						                        case 1:
+						                            echo "Enero";
+						                            break;
+						                        case 2:
+						                            echo "Febrero";
+						                            break;
+						                        case 3:
+						                            echo "Marzo";
+						                            break;
+						                        case 4:
+						                            echo "Abril";
+						                            break;
+						                        case 5:
+						                            echo "Mayo";
+						                            break;
+						                        case 6:
+						                            echo "Junio";
+						                            break;
+						                        case 7:
+						                            echo "Julio";
+						                            break;
+						                        case 8:
+						                            echo "Agosto";
+						                            break;
+						                        case 9:
+						                            echo "Septiembre";
+						                            break;
+						                        case 10:
+						                            echo "Octubre";
+						                            break;
+						                        case 11:
+						                            echo "Noviembre";
+						                            break;
+						                        case 12:
+						                            echo "Diciembre";
+						                            break;
+						                    }
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $bli["pais"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $bli["ciudad"];
+						                    echo '</td>';        
+						                    echo '<td>';
+						                    echo $bli["num_indexacion"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $bli["instituciones"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $bli["url"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $bli["descripcion"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $bli["medio_divulgacion"];
+						                    echo '</td>';
+						                    $autorAux="";
+						                    foreach ($this->usuarios as $usa) {
+						                        if ($usa["id_usuario"] == $bli["id_autor"]) {    
+						                            $autorAux .= trim($usa["primer_nombre"]).' '.trim($usa["segundo_nombre"]).' '.trim($usa["primer_apellido"]).' '.trim($usa["segundo_apellido"])." - ";
+						                        }
+						                    }
+						                    foreach ($this->auto as $aut) {
+						                        if ($bli["id_bibliografico"] == $aut["id_padre"] && trim($aut["nombre_padre"]) == 'bibliograficohv') {
+						                            foreach ($this->usuarios as $ua) {
+						                                if ($ua["id_usuario"] == $aut["id_usuario"]) {
+						                                    $autorAux .= trim($ua["primer_nombre"]).' '.trim($ua["segundo_nombre"]).' '.trim($ua["primer_apellido"]).' '.trim($ua["segundo_apellido"])." - ";
+						                                }
+						                            }
+						                        }
+						                    }
+						                    echo '<td>';
+						                    echo $autorAux;
+						                    echo '</td>';
+						                    echo '</tr>';
+						                }
+						            }
+						        }
+						    }//Otros documentos usuario
+						    echo '</table>';
+						    echo '</div>';
+						?>
+						</fieldset>
+						</br>
+						</br>
+						<?php
+					}
+
+
+					if($dataConsulta->proyectos == 1){
+						?>
+						<fieldset class="fieldset-blue">
+						    <a name='Areas'></a>
+						    <legend>Proyectos de investigación externos</legend>
+						    <?php
+						  echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+						    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+						    echo '<thead>';
+						    echo "<th style='width: 5%;'>Código del proyecto</th>";
+						    echo "<th style='width: 5%;'>Nombre del proyecto</th>";
+						    echo "<th style='width: 5%;'>Fecha inicio</th>";
+						    echo "<th style='width: 5%;'>Fecha fin</th>";
+						    echo "<th style='width: 20%;'>Resumen ejecutivo</th>";
+						    echo "<th style='width: 15%;'>Objetivo general</th>";
+						    echo "<th style='width: 20%;'>Equipo de trabajo</th>";
+						    echo "<th style='width: 10%;'>Productos derivados</th>";
+						    echo '<tr>';
+
+						    foreach ($this->proyectored as $int) {
+						    	if($int["id_red"] == $dato["id"]){
+						        echo '<tr>';
+						            echo '<td>';
+						            echo $int["codigo"];
+						            echo '</td>';
+						        
+						            echo '<td>';
+						            echo $int["nombre"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["fecha_inicio"];
+						            echo '</td>';
+						        
+						            echo '<td>';
+						            echo $int["fecha_fin"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["resumen"];
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["objetivo"];
+						            echo '</td>';
+						        
+						            echo '<td style="text-align:center;">';
+						            echo '<table style="border-style: hidden;">';
+						            $autores="";
+						            $rol = "";
+						            foreach ($this->autoresred as $autor) {
+						                if($autor["seccion"]=="6" && $autor["id_objeto"]==$int["id"]){
+						                    foreach ($this->usuarios as $usuario) {
+						                        if($usuario["id_usuario"]==$autor["id_usuario"]){
+
+						                            foreach ($this->d_val as $v) {
+						                                if ($v["id_valor_flexible"] == $autor["id_rol"]) {
+						                                    $rol = $v["descripcion_valor"];
+						                                }
+						                            }
+						                            $autores .= '<tr><td>'.$usuario["primer_nombre"]." ".$usuario["segundo_nombre"]." ".$usuario["primer_apellido"]." ".$usuario["segundo_apellido"]. '</td><td>'.$rol.'</td></tr>';   
+						                        }    
+						                    }
+						                }
+						            }
+						            echo $autores;
+						            echo '</table>';
+						            echo '</td>';
+
+						            echo '<td>';
+						            echo $int["productos"];
+						            echo '</td>';
+						        echo '</tr>';
+						    	}
+						    }
+						    echo '</tr>';
+						    //Proyectos externos usuario
+						    foreach($this->dataDocumentos as $documento){
+						        if($documento["tipo_documento"]=="externos"){
+						            foreach ($this->Proyectosexthv as $proyext) {
+						                if($proyext["id_proyecto_ext"] == $documento["id_documento"] && $documento["id_grupoinv"]==$dato["id"]){
+						                    echo '<tr>';
+						                    echo '<td>';
+						                    echo $proyext["codigo_proyecto"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $proyext["nombre_proyecto"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $proyext["fecha_inicio"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $proyext["fecha_fin"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $proyext["resumen_ejecutivo"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $proyext["objetivo_general"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo '<table style="border-style: hidden;">';
+						                    foreach ($this->auto as $auts) {
+						                        if ($proyext["id_proyecto_ext"] == $auts["id_padre"] && trim($auts["nombre_padre"]) == 'proy_exthv') {
+						                            foreach ($this->d_val as $v) {
+						                                if ($v["id_valor_flexible"] == $auts["id_rol"]) {
+						                                    $rol = $v["descripcion_valor"];
+						                                }
+						                            }
+						                            foreach ($this->usuarios as $ua) {
+						                                if ($ua["id_usuario"] == $auts["id_usuario"]) {
+						                                    echo '<tr><td>'.trim($ua["primer_nombre"]).' '.trim($ua["segundo_nombre"]).' '.trim($ua["primer_apellido"]).' '.trim($ua["segundo_apellido"]).'</td><td>'.$rol.'</td>';
+						                                    echo '</tr>';
+						                                }
+						                            }
+						                        }
+						                    }
+						                    echo '</table></td>';
+						                    echo '<td>';
+						                    echo $proyext["productos_derivados"];
+						                    echo '</td>';
+						                    echo '</tr>';
+						                }
+						            }
+						        }
+						    }//Proyectos externos usuario
+						    echo '</table>';
+						    echo '</div>';
+						?>
+						</fieldset>
+						</br>
+						</br>
+						<?php
+					}
+
+					if($dataConsulta->proyectosint == 1){
+						?>
+						<fieldset class="fieldset-blue">
+						    <a name='Areas'></a>
+						    <legend>Proyectos de investigación internos</legend>
+						    <?php
+						  echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+						    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+						    echo '<thead>';
+						     echo "<th style='width: 5%;'>Código del proyecto</th>";
+							echo "<th style='width: 5%;'>Nombre del proyecto</th>";
+							echo "<th style='width: 5%;'>Investigador principal</th>";
+							echo "<th style='width: 5%;'>Duración</th>";
+							echo "<th style='width: 5%;'>Unidad académica</th>";
+							echo "<th style='width: 20%;'>Dependencia académica</th>";
+							echo "<th style='width: 15%;'>Resumen ejecutivo</th>";
+							echo "<th style='width: 20%;'>Objetivo general</th>";
+							echo "<th style='width: 10%;'>Equipo de trabajo</th>";
+						    echo '<tr>';
+							foreach ($this->proyectosint as $proyint){
+						    	if($proyint["id_grupo_inv"] == $dato["id"]){
+							        foreach ($this->proyectos as $proyectosT){
+							            if($proyint["id_proyecto"]==$proyectosT["id_proyecto"]){
+						                   echo '<tr>';
+						                    echo '<td>';
+						                    echo $proyectosT["codigo_proy"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $proyectosT["nombre_proy"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    foreach ($this->usuarios as $ua) {
+						                        if ($ua["id_usuario"] == $proyectosT["id_investigador"]) {
+						                            echo trim($ua["primer_nombre"]) . ' ' . trim($ua["segundo_nombre"]). ' ' . trim($ua["primer_apellido"]). ' ' . trim($ua["segundo_apellido"]);
+						                        }
+						                    }
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $proyectosT["duracion"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    foreach ($this->d_val as $vl) {
+						                        if ($vl["id_valor_flexible"] == $proyectosT["id_unidad_academica"]) {
+						                            $proyectosT["id_unidad_academica"] = $vl["descripcion_valor"];
+						                        }
+						                    }
+						                    echo $proyectosT["id_unidad_academica"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    foreach ($this->d_val as $vl) {
+						                        if ($vl["id_valor_flexible"] == $proyectosT["id_dependencia_academica"]) {
+						                            $proyectosT["id_dependencia_academica"] = $vl["descripcion_valor"];
+						                        }
+						                    }
+						                    echo $proyectosT["id_dependencia_academica"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $proyectosT["resumen_ejecutivo"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo $proyectosT["objetivo_general"];
+						                    echo '</td>';
+						                    echo '<td>';
+						                    echo '<table style="border-style: hidden;">';
+						                    $rol="";
+						                    foreach ($this->tablaequipo as $auts) {
+						                        if ($proyectosT["id_proyecto"] == $auts["id_proyecto"]) {
+						                            foreach ($this->d_val as $v) {
+						                                if ($v["id_valor_flexible"] == $auts["id_rol"]) {
+						                                    $rol = $v["descripcion_valor"];
+						                                }
+						                            }
+						                            foreach ($this->usuarios as $ua) {
+						                                if ($ua["id_usuario"] == $auts["id_integrante"]) {
+						                                    echo '<tr><td>'.trim($ua["primer_nombre"]) . ' ' . trim($ua["segundo_nombre"]). ' ' . trim($ua["primer_apellido"]). ' ' . trim($ua["segundo_apellido"]). '</td><td>'.$rol.'</td>';
+						                                    echo '</tr>';
+						                                }
+						                            }
+						                        }
+						                    }
+						                    echo '</table></td>';
+						                    echo '</td>';
+							            }
+							        }
+						    	}
+						    }
+						    echo '</tr>';
+						    //Proyectos internos usuario
+						    foreach($this->dataDocumentos as $documento){
+		                    if($documento["tipo_documento"]=="internos"){
+		                        foreach ($this->Proyectosintusua as $proyint) {
+		                            if($proyint["id"] == $documento["id_documento"]){
+		                                foreach ($this->proyectos as $proyectosT) {
+		                                    if($proyint["id_proyecto"]==$proyectosT["id_proyecto"] && $documento["id_grupoinv"]==$dato["id"]){
+		                                           echo '<tr>';
+		                                            echo '<td>';
+		                                            echo $proyectosT["codigo_proy"];
+		                                            echo '</td>';
+		                                            echo '<td>';
+		                                            echo $proyectosT["nombre_proy"];
+		                                            echo '</td>';
+		                                            echo '<td>';
+		                                            foreach ($this->usuarios as $ua) {
+		                                                if ($ua["id_usuario"] == $proyectosT["id_investigador"]) {
+		                                                    echo trim($ua["primer_nombre"]) . ' ' . trim($ua["segundo_nombre"]). ' ' . trim($ua["primer_apellido"]). ' ' . trim($ua["segundo_apellido"]);
+		                                                }
+		                                            }
+		                                            echo '</td>';
+		                                            echo '<td>';
+		                                            echo $proyectosT["duracion"];
+		                                            echo '</td>';
+		                                            echo '<td>';
+		                                            foreach ($this->d_val as $vl) {
+		                                                if ($vl["id_valor_flexible"] == $proyectosT["id_unidad_academica"]) {
+		                                                    $proyectosT["id_unidad_academica"] = $vl["descripcion_valor"];
+		                                                }
+		                                            }
+		                                            echo $proyectosT["id_unidad_academica"];
+		                                            echo '</td>';
+		                                            echo '<td>';
+		                                            foreach ($this->d_val as $vl) {
+		                                                if ($vl["id_valor_flexible"] == $proyectosT["id_dependencia_academica"]) {
+		                                                    $proyectosT["id_dependencia_academica"] = $vl["descripcion_valor"];
+		                                                }
+		                                            }
+		                                            echo $proyectosT["id_dependencia_academica"];
+		                                            echo '</td>';
+		                                            echo '<td>';
+		                                            echo $proyectosT["resumen_ejecutivo"];
+		                                            echo '</td>';
+		                                            echo '<td>';
+		                                            echo $proyectosT["objetivo_general"];
+		                                            echo '</td>';
+		                                            echo '<td>';
+		                                            echo '<table style="border-style: hidden;">';
+		                                            $rol="";
+		                                            foreach ($this->tablaequipo as $auts) {
+		                                                if ($proyectosT["id_proyecto"] == $auts["id_proyecto"]) {
+		                                                    foreach ($this->d_val as $v) {
+		                                                        if ($v["id_valor_flexible"] == $auts["id_rol"]) {
+		                                                            $rol = $v["descripcion_valor"];
+		                                                        }
+		                                                    }
+		                                                    foreach ($this->usuarios as $ua) {
+		                                                        if ($ua["id_usuario"] == $auts["id_integrante"]) {
+		                                                            echo '<tr><td>'.trim($ua["primer_nombre"]) . ' ' . trim($ua["segundo_nombre"]). ' ' . trim($ua["primer_apellido"]). ' ' . trim($ua["segundo_apellido"]). '</td><td>'.$rol.'</td>';
+		                                                            echo '</tr>';
+		                                                        }
+		                                                    }
+		                                                }
+		                                            }
+		                                            echo '</table></td>';
+		                                    }
+		                                }
+		                            }
+		                        }
+		                    }
+		                }//Proyectos internos usuario
+						    echo '</div>';
+						    echo '</table>';
+						?>
+						</fieldset>
+						</br>
+						</br>
+						<?php
+					}
+
+
+					if($dataConsulta->material == 1){
+						?>
+						<fieldset class="fieldset-blue">
+						    <a name='Areas'></a>
+						    <legend>Material colaborativo gratuito</legend>
+						    <?php
+						  echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+						    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+						    echo '<thead>';
+						    echo "<th style='width: 5%;'>Tipo de archivo</th>";
+						    echo "<th style='width: 5%;'>Descargar</th>";
+						    echo '<tr>';
+						    foreach ($this->archivosred as $int) {
+						    	if($int["id_red"] == $dato["id"]){
+						        echo '<tr>';
+						            echo '<td>';
+						            foreach ($this->vf as $val) {
+						                if($val["id_valor_flexible"]==$int["id_tipo_archivo"]){
+						                    echo $val["descripcion_valor"];
+						                }
+						            }
+						            echo '</td>';
+						        
+						            echo '<td>';
+						            ?>    
+						                <a href="<?php echo $this->basePath()?>/application/archivossemillero/bajar/<?php echo $int["id_archivo"];?>">Descargar archivo</a>
+						            <?php echo " - " . $int["archivo"]; 
+						            echo '</td>';
+						        echo '</tr>';
+						 	   }
+							}
+
+
+						    echo '</tr>';
+						    echo '</table>';
+						    echo '</div>';
+						?>
+						</fieldset>
+						</br>
+						</br>
+						<?php
+					}
+
+
+					if($dataConsulta->identificadores == 1){
+						?>
+						<fieldset class="fieldset-blue">
+						    <a name='Identificadores'></a>
+						    <legend>Identificadores de Investigación</legend>
+						    <?php
+						    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+						    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+						    echo '<thead>';
+						    echo "<th style='width: 5%;'>ID</th>";
+		                echo "<th style='width: 10%;'>Nombre registrado</th>";
+		                echo '<th style="width: 5%;">Tipo de identificador</th>';
+		                echo "<th style='width: 10%;'>Tipo de categoría</th>";
+		                echo "<th style='width: 5%;'>Fecha de registro</th>";
+		                echo "<th style='width: 5%;'>Dirección web</th>";
+		                echo "<th style='width: 5%;'>Ciudad</th>";
+		                echo "<th style='width: 20%;'>Descripción</th>";
+		                echo "<th style='width: 20%;'>Otra información relevante</th>";
+						    echo '<tr>';
+
+						    foreach ($this->identificadores as $int) {
+						    	if($int["id_red"] == $dato["id"]){
+						    		echo '<tr>';
+                            echo '<td>';
+                                echo $int["id_field"];
+                            echo '</td>';
+                            echo '<td>';
+                                echo $int["nombre"];
+                            echo '</td>';
+                            echo '<td>';
+                                foreach ($this->d_val as $val) {
+                                    if($val["id_valor_flexible"]==$int["id_tipoidentificador"]){
+                                        echo $val["descripcion_valor"];
+                                    }
+                                }
+                            echo '</td>';
+                            echo '<td>';
+                                foreach ($this->d_val as $val) {
+                                    if($val["id_valor_flexible"]==$int["id_tipocategoria"]){
+                                        echo $val["descripcion_valor"];
+                                    }
+                                }
+                            echo '</td>';
+                            echo '<td>';
+                                echo $int["fecha_registro"];
+                            echo '</td>';
+                            echo '<td>';
+                                echo $int["web"];
+                            echo '</td>';
+                            echo '<td>';
+                                echo $int["ciudad"];
+                            echo '</td>';
+                            echo '<td>';
+                                echo $int["descripcion"];
+                            echo '</td>';
+                            echo '<td>';
+                                echo $int["otra_informacion"];
+                            echo '</td>';                        
+                        	echo '</tr>';
+						    	}
+                      }
+
+						    echo '</tr>';
+						    echo '</table>';
+						    echo '</div>';
+						?>
+						</fieldset>
+						</br>
+						</br>
+<?php
+					}
+
+
+					if($dataConsulta->divulgacion == 1){
+						?>
+
+						<fieldset class="fieldset-blue">
+						    <a name='Divulgacion'></a>
+						    <legend>Divulgación</legend>
+						    <?php
+						    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+						    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+						    echo '<thead>';
+						    echo "<th style='width: 15%;'>Nombre de trabajo</th>";
+                      echo "<th style='width: 15%;'>Tipo de evento</th>";
+                      echo '<th style="width: 15%;">Tipo de participación</th>';
+                      echo "<th style='width: 15%;'>Nombre de trabajo</th>";
+                      echo "<th style='width: 10%;'>Tipo de medio</th>";
+                      echo "<th style='width: 15%;'>Medio de divulgación</th>";
+						    echo '<tr>';
+
+						    foreach ($this->eventos as $int) {
+						    	if($int["id_red"] == $dato["id"]){
+	                        echo '<tr>';
+	                            echo '<td>';
+	                                echo $int["nombre_trabajo"];
+	                            echo '</td>';
+	                            echo '<td>';
+	                                foreach ($this->d_val as $val) {
+	                                    if($val["id_valor_flexible"]==$int["id_tipoevento"]){
+	                                        echo $val["descripcion_valor"];
+	                                    }
+	                                }
+	                            echo '</td>';
+	                            echo '<td>';
+	                                foreach ($this->d_val as $val) {
+	                                    if($val["id_valor_flexible"]==$int["id_tipoparticipacion"]){
+	                                        echo $val["descripcion_valor"];
+	                                    }
+	                                }
+	                            echo '</td>';
+	                            echo '<td>';
+	                                echo $int["nombre_trabajo_medio"];
+	                            echo '</td>';
+	                            echo '<td>';
+	                                foreach ($this->d_val as $val) {
+	                                    if($val["id_valor_flexible"]==$int["id_tipomedio"]){
+	                                        echo $val["descripcion_valor"];
+	                                    }
+	                                }
+	                            echo '</td>';
+	                            echo '<td>';
+	                                echo $int["medio_divulgacion"];
+	                            echo '</td>';                   
+	                        echo '</tr>';
+	                     }
+                     }
+
+						    echo '</tr>';
+						    echo '</table>';
+						    echo '</div>';
+						?>
+						</fieldset>
+						</br>
+						</br>
+<?php
+					}
+
+
+					if($dataConsulta->formacion == 1){
+						?>
+
+						<fieldset class="fieldset-blue">
+						    <a name='Formacion'></a>
+						    <legend>Formación</legend>
+						    <?php
+						    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+						    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+						    echo '<thead>';
+						    echo "<th style='width: 15%;'>Trabajo de grado</th>";
+                      echo "<th style='width: 10%;'>Tipo de trabajo</th>";
+                      echo '<th style="width: 10%;">Tipo de participación</th>';
+                      echo "<th style='width: 10%;'>Estado</th>";
+                      echo "<th style='width: 10%;'>Proyecto de Inv.</th>";
+                      echo "<th style='width: 10%;'>Tipo de formación</th>";
+                      echo "<th style='width: 10%;'>Semillero</th>";
+                      echo "<th style='width: 10%;'>Tipo de participación</th>";
+						    echo '<tr>';
+
+						    foreach ($this->formacion as $int) {
+                 			if($int["id_red"] == $dato["id"]){
+	                        echo '<tr>';
+	                            echo '<td>';
+	                                echo $int["nombre_trabajo"];
+	                            echo '</td>';
+	                            echo '<td>';
+	                                foreach ($this->d_val as $val) {
+	                                    if($val["id_valor_flexible"]==$int["id_tipotrabajo"]){
+	                                        echo $val["descripcion_valor"];
+	                                    }
+	                                }
+	                            echo '</td>';
+	                            echo '<td>';
+	                                foreach ($this->d_val as $val) {
+	                                    if($val["id_valor_flexible"]==$int["id_tipoparticipacion"]){
+	                                        echo $val["descripcion_valor"];
+	                                    }
+	                                }
+	                            echo '</td>';
+	                            echo '<td>';
+	                                foreach ($this->d_val as $val) {
+	                                    if($val["id_valor_flexible"]==$int["id_estadotipotrabajo"]){
+	                                        echo $val["descripcion_valor"];
+	                                    }
+	                                }
+	                            echo '</td>';
+	                            echo '<td>';
+	                                echo $int["nombre_proyecto"];
+	                            echo '</td>';
+	                            echo '<td>';
+	                                foreach ($this->d_val as $val) {
+	                                    if($val["id_valor_flexible"]==$int["id_formacioninvestigador"]){
+	                                        echo $val["descripcion_valor"];
+	                                    }
+	                                }
+	                            echo '</td>';
+	                            echo '<td>';
+	                                foreach ($this->semilleros as $val) {
+	                                    if($val["id"]==$int["id_semillero"]){
+	                                        echo $val["codigo"]."-".$val["nombre"];
+	                                    }
+	                                }
+	                            echo '</td>';
+	                             echo '<td>';
+	                                foreach ($this->d_val as $val) {
+	                                    if($val["id_valor_flexible"]==$int["id_rolparticipacion"]){
+	                                        echo $val["descripcion_valor"];
+	                                    }
+	                                }
+	                            echo '</td>';             
+	                        echo '</tr>';
+	                       }
+                      }
+
+						    echo '</tr>';
+						    echo '</table>';
+						    echo '</div>';
+						?>
+						</fieldset>
+						</br>
+						</br>
+<?php
+					}
+
+						?>
+
+						<?php
+					echo '</div">';
+				}
+			}else{
+				if($this->datosredes == null && $this->dataConsulta != null && $this->dataConsulta["nombre"] != ""){
+					echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos redes de investigación con este nombre</h3></div>';
+				}else if($this->datosredes == null && $this->dataConsulta != null && $this->dataConsulta["codigo"] != ""){
+					echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos redes de investigación con este código</h3></div>';
+				}else{
+					echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+                echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                echo '<thead>';
+                echo '<th style="width: 80%;">Nombre</th>';
+                echo '<th style="width: 20%;">Informacion de la red</th>';
+                echo '</thead>';
+                echo '<tbody>';
+                foreach ($this->datosredes as $dato ){
+                    echo '<tr>';
+                        echo '<td>';
+                            echo $dato ["nombre"];
+                        echo '</td>';
+                        echo '<td style="text-align:center;">';
+                        ?>
+                            <a class="btn" href="<?php echo $this->basePath() ?>/application/hredinvestigacion/index/<?php echo $dato["id"];?>">Ver</a>
+                        <?php
+                        echo '</td>';
+                    echo '</tr>';
+                }
+                echo '</tbody>';
+                echo '</table>';
+                echo '</div>';
+				}
+			}
+
+
+				echo '<legend></legend>';
+

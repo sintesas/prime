@@ -1,0 +1,46 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+<div class="row2">
+	<div class="nine3 columns">
+		<div id="centersectiontitle">
+			<div class="twelve columns">
+				<div class="sidebartitle"><h3>
+				<?php
+					echo $this->titulo;
+				?>
+				</h3>
+			</div>
+		</div>
+	</div>
+<div class="four columns">
+<a href="<?php echo $this->basePath() ?>/application/editarredinv/index/<?php echo $this->id3; ?>">
+	<i class="icon-arrow-left"></i>
+	 Regresar</a>
+
+	<?php
+echo '<br>';echo '<br>';
+				$form = $this->form;
+				$form->prepare();
+
+		$form->setAttributes(array('action'=> $this->url.'/application/agregarautorrol/index/'.$this->id.'/'.$this->id2.'/'.$this->id3.'/'.$this->id4,
+										'method'=>'post'));
+				echo $this->form()->openTag($form);
+				echo '<p>';
+				echo $this->formlabel($form->get('id_rol'));
+				echo $this->formelement($form->get('id_rol'));
+				echo '<br>';
+				echo $this->formelement($form->get('submit'));
+				echo '<br>';
+				
+				echo $this->form()->closeTag($form);
+				?>
+				<br>
+
+
+				<?php
+				
+
+				?>
+
+</div></div></div>

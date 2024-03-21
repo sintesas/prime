@@ -1,0 +1,162 @@
+<style>
+    .btn {
+        color: white !important;
+    }
+
+	.filter-rol {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .filter-rol-left {float: left;}
+    .filter-rol-right {float: right;}
+    .filter-rol .btn {width: 200px;}
+    /*.filter-rol-right div.btn {max-width: 230px !important;width: 230px;}*/
+</style>
+<div class="edit-slide transition">
+    <div class="close-edit"><i class="fa fa-times" aria-hidden="true"></i></div>
+    <div class="content-edit-slide">
+        <div><h3>Crear permiso</h3></div><br/>
+        <?php
+        $form = $this->form;
+        $form->prepare();
+        $form->setAttributes(array(
+			'action' => $this->url . '/application/permisos/index/' . $this->id,
+			'method' => 'post'
+		));
+        echo $this->form()->openTag($form);
+        echo '<h6>'.$this->flashMessenger()->render().'</h6>';
+        echo $this->formlabel($form->get('id_modulo'));
+        echo $this->formelement($form->get('id_modulo'));
+        echo $this->formlabel($form->get('id_submodulo'));
+        echo $this->formelement($form->get('id_submodulo'));
+        echo $this->formlabel($form->get('id_formulario'));
+        echo $this->formelement($form->get('id_formulario'));
+        echo '<div class="content-edit-slide-button">';            
+        echo '<div class="col">';
+        echo $this->formelement($form->get('submit'));
+        echo '</div>';
+        echo '<div class="col">';
+        ?>
+        <div class="btn1 cancel-edit">Cancelar</div>
+        <?php
+        echo '</div>';
+        echo '</div>';
+        echo $this->form()->closeTag($form);        
+        ?>
+    </div>
+</div>
+<?php 
+include("public/menu.php");
+require_once("public/rutas.php");
+?>
+<link rel="stylesheet" href="<?php echo $GLOBALS["ruta_servidor"] . 'css/estilos_arriba/estilos_arriba.css'; ?>">
+<link rel="stylesheet" href="<?php echo $GLOBALS["ruta_servidor"] . 'js/ui/jquery-ui.min.css'; ?>">
+<link rel="stylesheet" href="<?php echo $GLOBALS["ruta_servidor"] . 'js/ui/jquery-ui.theme.min.css'; ?>">
+<link rel="stylesheet" href="<?php echo $GLOBALS["ruta_servidor"] . 'js/ui/jquery-ui.structure.min.css'; ?>">
+<div class="col col100">
+    <div class="filter-rol">
+        <div class="filter-rol-left"><h4><?php echo $this->titulo; ?></h4></div>
+        <div class="filter-rol-right">
+        	<a class="btn" style="margin-right: 10px;" href="<?php echo $this->basePath() ?>/application/roles/index"><i class="fa fa-arrow-left" style="margin-right: 5px;"></i>Regresar</a>
+            <div class="btn transition pointer rol_edit"><i class="fa fa-users" style="margin-right: 5px;"></i>Crear permiso</div>
+        </div>
+    </div>    
+</div>
+<div class="col col100" style="padding: 0 15px;">
+	<div style="display: inline-block; width: 100%;">
+		<?php echo '<h3>Permisos del rol: '.$this->rol[0]["descripcion"].'</h3>'; ?>
+	</div>
+</div>
+<div class="col col100 noshadow">
+	<div style='overflow-y:auto; max-height:4000px; width: 100%;'>
+		<div class="results resultsh clearfix">
+            <div class="result-item itemh">Nombre del módulo</div>
+            <div class="result-item itemh">Nombre del submódulo</div>
+            <div class="result-item itemh">Nombre del formulario</div>
+            <div class="result-item itemh">Descripción</div>
+            <div class="result-item itemh">Acciones</div>
+        </div>
+        <?php foreach ($this->permisos as $permiso){ ?>
+        	<div class="results clearfix">
+        		<?php foreach ($this->formularios as $formulario){
+						if($permiso["id_pantalla"]==$formulario["id"]){
+							foreach ($this->submodulos as $submodulo){
+								if($submodulo["id"]==$formulario["id_submodulo"]){
+									foreach ($this->modulos as $modulo){
+										if($modulo["id"]==$submodulo["id_modulo"]){ ?>
+											<div class="result-item"><?php echo $modulo ["nombre"];?></div>	
+									<?php
+										}
+									}
+									?>
+									<div class="result-item"><?php echo $submodulo ["nombre"];?></div>
+							<?php
+								}
+							}
+							?>
+							<div class="result-item"><?php echo $formulario ["nombre"];?></div>
+							<div class="result-item"><?php echo $formulario ["descripcion"];?></div>
+							<div class="result-item"><a class="btn" href="<?php echo $this->basePath() ?>/application/permisos/eliminar/<?php echo $permiso["id_permiso"]?>/<?php echo $id?>"><i class="fa fa-trash"></i></a></div>
+					<?php
+						}
+					}
+					?>
+        	</div>
+        <?php } ?>
+	</div>
+</div>
+<script type="text/javascript">
+	function myFunction2() {
+		var submenu = document.getElementById("id_submodulo");
+		for (i = 0; i < submenu.length; i++) {
+		    if(submenu.options[i].value != ''){
+		        var option = submenu.options[i]; // item
+		        var id = submenu.options[i].value.split(/-/); // extrae el id del padre    
+		        var idPadreValorFlexible = id[1];
+		        //valida que el item de la iteracion es del padre seleccionado
+		        if(idPadreValorFlexible == document.getElementById("id_modulo").value.split(/-/)[0]){
+		            option.style.display = "block";
+		        }else{
+		            option.style.display = "none";
+		        }
+		        // Selecciona el placeholder por defecto en linea
+		        if(option.text == ""){
+		            option.selected = true;
+		        }
+		    }                                                                      
+		}
+		$("#id_submodulo").prop("selectedIndex", -1);
+		myFunction3();
+	}
+
+	function myFunction3() {
+		var formulario = document.getElementById("id_formulario");
+		for (i = 0; i < formulario.length; i++) {
+		    if(formulario.options[i].value != ''){
+		        var option = formulario.options[i]; // item
+		        var id = formulario.options[i].value.split(/-/); // extrae el id del padre    
+		        var idPadreValorFlexible = id[1];
+		        //valida que el item de la iteracion es del padre seleccionado
+		        if(idPadreValorFlexible == document.getElementById("id_submodulo").value.split(/-/)[0]){
+		            option.style.display = "block";
+		        }else{
+		            option.style.display = "none";
+		        }
+		        // Selecciona el placeholder por defecto en linea
+		        if(option.text == ""){
+		            option.selected = true;
+		        }
+		    }                                                                      
+		}
+		$("#id_formulario").prop("selectedIndex", -1);	
+	}
+</script>
+<script src="<?php echo $GLOBALS["ruta_servidor"] . 'js/ui/jquery-ui.min.js'; ?>"></script>
+<script>
+    $(".rol_edit").click(function() {
+        $(".edit-slide").css("left", "0%");
+    });
+    $(".close-edit").click(function() {
+        $(".edit-slide").css("left", "-100%");
+    });
+    $(".cancel-edit").click(function() {
+        $(".edit-slide").css("left", "-100%");
+    });
+</script>

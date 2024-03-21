@@ -1,0 +1,2586 @@
+<style>
+    textarea {
+        height: 100px;
+        width: 100%;
+        max-width: 100%;
+    }
+    .btn {
+        color: white !important;
+    }
+
+    .alineadoDerecha {
+        float: right;
+    }
+
+    .nopadding {
+        padding: 0;
+        margin: 0;
+    }
+
+    .filter-semi select, input {
+        width: 100% !important;
+    }
+
+    td, th {
+        padding: 0;
+        font-size: 10px;
+    }
+    .filter-semi {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .filter-semi-left {float: left;}
+    .filter-semi-right {float:right;}
+    .filter-semi .btn {width: 275px;}
+    .filter-semi-right div.btn {max-width: 230px !important;width: 230px;}
+</style>
+<script type="text/javascript">
+    $(function () {
+        var opts = $('#coordinador_1 option').map(function () {
+            return [[this.value, $(this).text()]];
+        });
+        $('#id_coordinador_1').keyup(function () {
+            var rxp = new RegExp($('#id_coordinador_1').val(), 'i');
+            var optlist = $('#coordinador_1').empty();
+            opts.each(function () {
+                if (rxp.test(this[1])) {
+                    optlist.append($('<option/>').attr('value', this[0]).text(this[1]));
+                }
+            });
+        });
+    });
+
+    $(function () {
+        var opts = $('#coordinador_2 option').map(function () {
+            return [[this.value, $(this).text()]];
+        });
+        $('#id_coordinador_2').keyup(function () {
+            console.log(2);
+            var rxp = new RegExp($('#id_coordinador_2').val(), 'i');
+            var optlist = $('#coordinador_2').empty();
+            opts.each(function () {
+                if (rxp.test(this[1])) {
+                    optlist.append($('<option/>').attr('value', this[0]).text(this[1]));
+                }
+            });
+
+        });
+    });
+
+    $(document).ready(function(){
+        $('#coordinador_2').on('change', function (e) {
+            var opts = $('#coordinador_hide option').map(function () {
+                return [[this.value, $(this).text()]];
+            });
+            var value = this.value;
+            var textValue = "";
+            var label = "Correo electrónico institucional: ";
+            opts.each(function () {
+                if (value == this[0]) {
+                    textValue = this[1];
+                }
+            });
+            if(textValue != ""){
+                var parts = textValue.split("-");
+                if(parts.length > 1){
+                    label += parts[1];
+                }
+            }
+            $('#emailCoordinador2').html(label);
+        });
+
+        $('#coordinador_1').on('change', function (e) {
+            var opts = $('#coordinador_hide option').map(function () {
+                return [[this.value, $(this).text()]];
+            });
+            var value = this.value;
+            var textValue = "";
+            var label = "Correo electrónico institucional: ";
+            opts.each(function () {
+                if (value == this[0]) {
+                    textValue = this[1];
+                }
+            });
+            if(textValue != ""){
+                var parts = textValue.split("-");
+                if(parts.length > 1){
+                    label += parts[1];
+                }
+            }
+            $('#emailCoordinador1').html(label);
+        });
+        $('#coordinador_2').trigger("change");
+        $('#coordinador_1').trigger("change");
+    });
+
+    function myFunction2() {
+        var dependenciasAca = document.getElementById("id_dependencia_academica");
+        for (i = 0; i < dependenciasAca.length; i++) {
+            if(dependenciasAca.options[i].value != ''){
+                var option = dependenciasAca.options[i]; // item
+                var id = dependenciasAca.options[i].value.split(/-/); // extrae el id del padre    
+                var idPadreValorFlexible = id[1];
+                //valida que el item de la iteracion es del padre seleccionado
+                if(idPadreValorFlexible == document.getElementById("id_unidad_academica").value.split(/-/)[0]){
+                    option.style.display = "block";
+                }else{
+                    option.style.display = "none";
+                }
+                // Selecciona el placeholder por defecto en linea
+                if(option.text == ""){
+                    option.selected = true;
+                }
+            }                                                                      
+        }
+        document.getElementById("id_dependencia_academica").value = "";
+        document.getElementById("id_programa_academico").value = "";
+    }
+
+    function myFunction3() {
+        var programaAca = document.getElementById("id_programa_academico");                               
+        for (i = 0; i < programaAca.length; i++) {
+            if(programaAca.options[i].value != ''){
+                var option = programaAca.options[i]; // item
+                var id = programaAca.options[i].value.split(/-/); // extrae el id del padre    
+                var idPadreValorFlexible = id[1];
+                //valida que el item de la iteracion es del padre seleccionado
+                if(idPadreValorFlexible == document.getElementById("id_dependencia_academica").value.split(/-/)[0]){
+                    option.style.display = "block";
+                }else{
+                    option.style.display = "none";
+                }
+                // Selecciona el placeholder por defecto en linea
+                if(option.text == ""){
+                    option.selected = true;
+                }
+            }                                                                       
+        }
+        document.getElementById("id_programa_academico").value = "";
+    }
+</script>
+<div class="edit-slide transition">
+    <div class="close-edit" id="titulo_top"><i class="fa fa-times" aria-hidden="true"></i></div>
+    <div class="content-edit-slide">
+        <div class="titulo_top"><h3><?php echo $this->titulo; ?></h3></div>
+        <a href="<?php echo $this->basePath() ?>/application/semillerosinv/index"><i class="icon-arrow-left"></i> Regresar</a><br><br>
+        <?php
+        $form = $this->form;
+        $form->prepare();
+        $form->setAttributes(array(
+            'action' => $this->url . '/application/editarsemilleroinv/index/' . $this->id,
+            'method' => 'post'
+        ));
+        echo $this->form()->openTag($form);
+        echo '<h5>'.$this->flashMessenger()->render().'</h5>';
+        echo $this->formlabel($form->get('nombre'));
+        echo $this->formelement($form->get('nombre'));
+        echo $this->formlabel($form->get('codigo'));
+        echo $this->formelement($form->get('codigo'));
+        echo $this->formlabel($form->get('fecha_creacion'));
+        echo $this->formelement($form->get('fecha_creacion'));
+        echo $this->formlabel($form->get('id_coordinador_1')); 
+        echo $this->formelement($form->get('id_coordinador_1'));
+        echo $this->formelement($form->get('coordinador_1'));
+        echo '<label id="emailCoordinador1"></label>';
+        echo $this->formlabel($form->get('id_coordinador_2'));
+        echo $this->formelement($form->get('id_coordinador_2'));
+        echo $this->formelement($form->get('coordinador_2'));
+        echo '<label id="emailCoordinador2"></label>';
+        echo $this->formlabel($form->get('id_unidad_academica'));
+        echo $this->formelement($form->get('id_unidad_academica'));
+        echo $this->formlabel($form->get('id_dependencia_academica'));
+        echo $this->formelement($form->get('id_dependencia_academica'));
+        echo $this->formlabel($form->get('id_programa_academico'));
+        echo $this->formelement($form->get('id_programa_academico'));
+        echo $this->formlabel($form->get('estado'));
+        echo $this->formelement($form->get('estado'));
+        echo '<h4>Información general del semillero</h4>';
+        echo $this->formlabel($form->get('objetivo_general'));
+        echo $this->formelement($form->get('objetivo_general'));
+        echo $this->formlabel($form->get('objetivo_especifico'));
+        echo $this->formelement($form->get('objetivo_especifico'));
+        echo $this->formlabel($form->get('actividades'));
+        echo $this->formelement($form->get('actividades'));
+        echo $this->formelement($form->get('coordinador_hide'));
+        echo '<div class="content-edit-slide-button">';            
+        echo '<div class="col">';
+        echo $this->formelement($form->get('submit'));
+        echo '</div>';
+        echo '<div class="col">';
+        ?>
+        <div class="btn1 cancel-edit">Cancelar</div>
+        <?php
+        echo '</div>';
+        echo '</div>';
+        echo $this->form()->closeTag($form);       
+        ?>
+        <a href="#titulo_top">Ir arriba</a>
+    </div>
+</div>
+<?php
+include("public/menu.php");
+require_once("public/rutas.php");
+?>
+<link rel="stylesheet" href="<?php echo $GLOBALS["ruta_servidor"] . 'css/estilos_arriba/estilos_arriba.css'; ?>">
+<link rel="stylesheet" href="<?php echo $GLOBALS["ruta_servidor"] . 'js/ui/jquery-ui.min.css'; ?>">
+<link rel="stylesheet" href="<?php echo $GLOBALS["ruta_servidor"] . 'js/ui/jquery-ui.theme.min.css'; ?>">
+<link rel="stylesheet" href="<?php echo $GLOBALS["ruta_servidor"] . 'js/ui/jquery-ui.structure.min.css'; ?>">
+<div class="col col100">
+    <div class="filter-semi">
+        <div class="filter-semi-left"><a class="btn" href="<?php echo $this->basePath() ?>/application/semillerosinv/index"><i class="icon-arrow-left"></i> Regresar</a></div>            
+        <div class="filter-semi-right">
+            <div class="btn transition pointer semi_edit"><i class="fa fa-pencil" style="margin-right: 5px;"></i>Editar datos básicos semillero</div>
+        </div>
+    </div>    
+</div>
+<div class="col col100 noshadow">
+    <div class="col col100 nopadding">
+        <div id="tabs">
+            <ul>
+                <li><a href="#Areas">Áreas de actuación</a></li>
+                <li><a href="#Integrantes">Integrantes</a></li>
+                <li><a href="#Eventos">Participación en eventos</a></li>
+                <li><a href="#Grupos">Grupos de investigación al que se encuentra articulado el semillero</a></li>
+                <li><a href="#Articulos">Artículos</a></li>
+                <li><a href="#Libros">Libros</a></li>
+                <li><a href="#Capitulos">Capítulos de libros</a></li>
+                <li><a href="#Otras">Otras producciones de investigación</a></li>
+                <li><a href="#Otros">Otros documentos</a></li>
+                <li><a href="#Proyectos_internos">Proyectos de investigación internos</a></li>
+                <li><a href="#Reconocimientos">Reconocimientos</a></li>
+                <li><a href="#Material">Material colaborativo gratuito</a></li>
+                <li><a href="#Identificadores">Identificadores de Investigación</a></li>
+                <li><a href="#Divulgacion">Divulgación</a></li>
+                <li><a href="#Formacion">Formación</a></li>
+            </ul>
+            <div id="Areas">
+                <legend>Áreas de actuación</legend>
+   <a class="btn" href="<?php echo $this->basePath() ?>/application/areasemillero/index/<?php echo $id;?>">Agregar</a>
+    <br> <br>
+    <?php
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    echo "<th style='width: 80%;'>Temática - Líneas de investigacion</th>";
+    echo "<th style='width: 10%;'>Descargar</th>";
+    echo '<th style="width: 10%;">Ver/Editar</th>';
+    echo "<th style='width: 10%;'>Eliminar</th>";
+    echo '<tr>';
+
+    foreach ($this->areas as $int) {
+        echo '<tr>';
+            echo '<td>';
+            echo $int["tematica"];
+            echo '</td>';
+            echo '<td style="text-align:center;">';
+                if($int["archivo"]!=""){
+                    ?>    
+                        <a class="btn" href="<?php echo $this->basePath()?>/application/areasemillero/bajar/<?php echo $id;?>/<?php echo $int["id"];?>"><i class="fa fa-download"></i></a>
+                    <?php
+                }
+            echo '</td>';
+            echo '<td style="text-align:center;">';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/areasemillero/index/<?php echo $id;?>/<?php echo $int["id"];?>"><i class="fa fa-pencil"></i></a>
+            <?php
+            echo '</td>';
+            echo '<td style="text-align:center;">';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/areasemillero/del/<?php echo $int["id"];?>/<?php echo $id;?>"><i class="fa fa-trash"></i></a>
+
+            <?php
+            echo '</td>';
+        echo '</tr>';
+    }
+    echo '</tr>';
+    echo '</table>';
+    echo '</div>';
+?>
+            </div>
+            <div id="Integrantes">
+                <legend>Integrantes</legend>
+   <a class="btn" href="<?php echo $this->basePath() ?>/application/integrantessemillero/index/<?php echo $id;?>">Agregar</a>
+    <br> <br>
+    <?php
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    echo "<th style='width: 30%;'>Nombre del integrante</th>";
+    echo "<th style='width: 15%;'>Tipo de vinculación</th>";
+    echo "<th style='width: 15%;'>Fecha inicio de vinculación</th>";
+    echo "<th style='width: 15%;'>Fecha fin de vinculación</th>";
+    echo "<th style='width: 15%;'>Rol participación</th>";
+    echo "<th style='width: 5%;'>Estado</th>";
+    echo "<th style='width: 10%;'>Descargar</th>";
+    echo '<th style="width: 10%;">Buscar productos</th>';
+    echo "<th style='width: 10%;'>Editar</th>";
+    echo "<th style='width: 10%;'>Eliminar</th>";
+    echo '<tr>';
+
+    foreach ($this->integrantessemillero as $int) {
+        echo '<tr>';
+            echo '<td>';
+            foreach ($this->usuarios as $usuario) {
+                if($usuario["id_usuario"]==$int["integrante"]){
+                    echo $usuario["primer_nombre"] ." ". $usuario["segundo_nombre"] ." ". $usuario["primer_apellido"] ." ". $usuario["segundo_apellido"];    
+                }    
+            }
+            echo '</td>';
+
+            echo '<td>';
+            foreach ($this->vf2 as $val) {
+                if($val["id_valor_flexible"]==$int["tipo_vinculacion"]){
+                    echo $val["descripcion_valor"];
+                }
+            }
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["fecha_inicio"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["fecha_fin"];
+            echo '</td>';
+
+            echo '<td>';
+            foreach ($this->vf2 as $val) {
+                if($val["id_valor_flexible"] == $int["rol_participacion"]){
+                    echo $val["descripcion_valor"];
+                }
+            }
+            echo '</td>';
+            echo '<td>';
+            foreach ($this->vf2 as $val) {
+                if($val["id_valor_flexible"] == $int["estado"]){
+                    echo $val["descripcion_valor"];
+                }
+            }
+            echo '</td>';
+            echo '<td style="text-align:center;">';
+                if($int["archivo"]!=""){
+                    ?>    
+                        <a class="btn" href="<?php echo $this->basePath()?>/application/integrantessemillero/bajar/<?php echo $id;?>/<?php echo $int["id"];?>"><i class="fa fa-download"></i></a>
+                    <?php
+                }
+            echo '</td>';
+            echo '<td style="text-align:center;">';
+                ?>
+                    <a class="btn" href="<?php echo $this->basePath() ?>/application/hvinvestigador/index/<?php echo  $int["integrante"]; ?>/1/<?php echo $id;?>/3"><i class="fa fa-search"></i></a>
+                <?php
+            echo '</td>';
+            echo '<td style="text-align:center;">';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/integrantessemillero/index/<?php echo $id;?>/<?php echo $int["id"];?>"><i class="fa fa-pencil"></i></a>
+            <?php
+            echo '</td>';
+            echo '<td style="text-align:center;">';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/integrantessemillero/del/<?php echo $int["id"];?>/<?php echo $id;?>"><i class="fa fa-trash"></i></a>
+            <?php
+            echo '</td>';
+        echo '</tr>';
+    }
+    echo '</tr>';
+    echo '</table>';
+    echo '</div>';
+?>
+            </div>
+            <div id="Eventos">
+                <legend>Participación en eventos</legend>
+   <a class="btn" href="<?php echo $this->basePath() ?>/application/participacioneventos/index/<?php echo $id;?>">Agregar</a>
+    <br> <br>
+    <?php
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    echo "<th style='width: 30%;'>Nombre del evento</th>";
+    echo "<th style='width: 15%;'>Lugar del evento</th>";
+    echo "<th style='width: 15%;'>Tipo de participación</th>";
+    echo "<th style='width: 15%;'>Fecha del evento</th>";
+    echo "<th style='width: 15%;'>Descargar archivo</th>";
+    echo '<th style="width: 10%;">Ver/Editar</th>';
+    echo "<th style='width: 10%;'>Eliminar</th>";
+    echo '<tr>';
+
+    foreach ($this->participacioneventos as $int) {
+        echo '<tr>';
+            echo '<td>';
+            echo $int["nombre"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["lugar"];
+            echo '</td>';
+
+            echo '<td>';
+            foreach ($this->vf2 as $val) {
+                if($val["id_valor_flexible"]==$int["tipo_participacion"]){
+                    echo $val["descripcion_valor"];
+                }
+            }
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["fecha"];
+            echo '</td>';
+
+            echo '<td>';
+            if($int["archivo"]!=""){
+                ?>    
+                    <a class="btn" href="<?php echo $this->basePath()?>/application/participacioneventos/bajar/<?php echo $int["id_archivo"];?>/<?php echo $id;?>"><i class="fa fa-download"></i></a>
+                <?php
+            }else{
+                echo 'Sin archivo';
+            }
+            echo '</td>';
+
+            echo '<td style="text-align:center;">';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/participacioneventos/index/<?php echo $id;?>/<?php echo $int["id_archivo"];?>"><i class="fa fa-pencil"></i></a>
+            <?php
+            echo '</td>';
+         
+            echo '<td style="text-align:center;">';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/participacioneventos/del/<?php echo $int["id_archivo"];?>/<?php echo $id;?>"><i class="fa fa-trash"></i></a>
+            <?php
+            echo '</td>';
+        echo '</tr>';
+    }
+    echo '</tr>';
+    echo '</table>';
+    echo '</div>';
+?>
+            </div>
+            <div id="Grupos">
+                <legend>Grupos de investigación al que se encuentra articulado el semillero</legend>
+    <a class="btn" href="<?php echo $this->basePath() ?>/application/grupossemillero/index/<?php echo $id;?>">Agregar</a>
+    <br> <br>
+    <?php
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    echo "<th style='width: 30%;'>Nombre del grupo</th>";
+    echo "<th style='width: 15%;'>Código</th>";
+    echo "<th style='width: 15%;'>Líder</th>";
+    echo "<th style='width: 30%;'>Descripción</th>";
+    echo "<th style='width: 10%;'>Descargar</th>";
+    echo '<th style="width: 5%;">Cargar documento</th>';
+    echo "<th style='width: 10%;'>Ver/Editar</th>";
+    echo "<th style='width: 10%;'>Eliminar</th>";
+    echo '<tr>';
+
+    foreach ($this->grupossemillero as $int) {
+        foreach ($this->grupostotal as $grupo) {
+            if($int["id_grupo"]==$grupo["id_grupo_inv"]){
+                 echo '<tr>';
+                    echo '<td>';
+                    echo $grupo["nombre_grupo"];
+                    echo '</td>';
+
+                    echo '<td>';
+                    echo $grupo["cod_grupo"];
+                    echo '</td>';
+
+                    echo '<td>';
+                    foreach ($this->usuarios as $usuario) {
+                        if($usuario["id_usuario"]==$grupo["id_lider"]){
+                            echo $usuario["primer_nombre"] ." ". $usuario["segundo_nombre"] ." ". $usuario["primer_apellido"] ." ". $usuario["segundo_apellido"];    
+                        }
+                        
+                    }
+                    echo '</td>';
+                    echo '<td>';
+                    echo $grupo["descripcion"];
+                    echo '</td>';
+                    echo '<td style="text-align:center;">';
+                    if($int["archivo"]!=""){
+                        ?>    
+                            <a class="btn" href="<?php echo $this->basePath()?>/application/grupossemillero/bajar/<?php echo $id;?>/<?php echo $int["id"];?>"><i class="fa fa-download"></i></a>
+                        <?php
+                    }
+                    echo '</td>';
+                    echo '<td style="text-align:center;">';
+                    ?>
+                        <a class="btn" href="<?php echo $this->basePath() ?>/application/grupossemillero/index/<?php echo $id;?>/<?php echo $int["id"];?>/1"><i class="fa fa-plus"></i></a>
+                    <?php
+                    echo '</td>';
+                    echo '<td style="text-align:center;">';
+                    ?>
+                        <a class="btn" href="<?php echo $this->basePath() ?>/application/grupossemillero/index/<?php echo $id;?>/<?php echo $int["id"];?>"><i class="fa fa-pencil"></i></a>
+                    <?php
+                    echo '</td>';
+                    echo '<td style="text-align:center;">';
+                    ?>
+                        <a class="btn" href="<?php echo $this->basePath() ?>/application/grupossemillero/del/<?php echo $int["id"];?>/<?php echo $id;?>"><i class="fa fa-trash"></i></a>
+                    <?php
+                    echo '</td>';
+                 echo '</tr>';
+            }
+        }
+    }
+    echo '</tr>';
+    echo '</table>';
+    echo '</div>';
+?>
+            </div>
+            <div id="Articulos">
+                <legend>Artículos</legend>
+    <a class="btn" href="<?php echo $this->basePath() ?>/application/articulossemillero/index/<?php echo $id;?>">Agregar</a>
+    <br> <br>
+    <?php
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    echo "<th style='width: 10%;'>Nombre revista</th>";
+    echo "<th style='width: 9%;'>Nombre articulo</th>";
+    echo "<th style='width: 9%;'>Categorización</th>";
+    echo "<th style='width: 4%;'>Año</th>";
+    echo "<th style='width: 4%;'>Mes</th>";
+    echo "<th style='width: 5%;'>País</th>";
+    echo "<th style='width: 5%;'>Ciudad</th>";
+    echo "<th style='width: 5%;'>ISSN/e-ISSN</th>";
+    echo "<th style='width: 8%;'>No. de páginas</th>";
+    echo "<th style='width: 5%;'>Página inicio</th>";
+    echo "<th style='width: 5%;'>Página fin</th>";
+    echo "<th style='width: 5%;'>Fascículo</th>";
+    echo "<th style='width: 5%;'>Volumen</th>";
+    echo "<th style='width: 5%;'>No. de serie</th>";
+    echo "<th style='width: 11%;'>Autor(es)</th>";
+    echo "<th style='width: 5%;'>Descargar archivo</th>";
+    echo "<th style='width: 5%;'>Agregar autor</th>";
+    echo '<th style="width: 10%;">Ver/Editar</th>';
+    echo "<th style='width: 5%;'>Eliminar</th>";
+    echo '<tr>';
+
+    foreach ($this->articulos as $int) {
+        echo '<tr>';
+            echo '<td>';
+            echo $int["nombre_revista"];
+            echo '</td>';
+        
+            echo '<td>';
+            echo $int["nombre_articulo"];
+            echo '</td>';
+
+            echo '<td>';
+            foreach ($this->vf2 as $val) {
+                if($val["id_valor_flexible"]==$int["categoria"]){
+                    echo $val["descripcion_valor"];
+                }
+            }
+            echo '</td>';
+        
+            echo '<td>';
+            echo $int["ano"];
+            echo '</td>';
+        
+            echo '<td>';
+            switch ($int["mes"]) {
+                case 1:
+                    echo "Enero";
+                    break;
+                case 2:
+                    echo "Febrero";
+                    break;
+                case 3:
+                    echo "Marzo";
+                    break;
+                case 4:
+                    echo "Abril";
+                    break;
+                case 5:
+                    echo "Mayo";
+                    break;
+                case 6:
+                    echo "Junio";
+                    break;
+                case 7:
+                    echo "Julio";
+                    break;
+                case 8:
+                    echo "Agosto";
+                    break;
+                case 9:
+                    echo "Septiembre";
+                    break;
+                case 10:
+                    echo "Octubre";
+                    break;
+                case 11:
+                    echo "Noviembre";
+                    break;
+                case 12:
+                    echo "Diciembre";
+                    break;
+            }
+            echo '</td>';
+        
+            echo '<td>';
+            echo $int["pais"];
+            echo '</td>';
+        
+            echo '<td>';
+            echo $int["ciudad"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["issn"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["paginas"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["pagina_inicio"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["pagina_fin"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["fasciculo"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["volumen"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["serie"];
+            echo '</td>';
+
+            echo '<td>';
+            $autores="";
+            foreach ($this->usuarios as $usa) {
+                if ($usa["id_usuario"] == $int["id_autor"]) {
+                    $autores .= trim($usa["primer_nombre"]).' '.trim($usa["segundo_nombre"]).' '.trim($usa["primer_apellido"]).' '.trim($usa["segundo_apellido"])." - ";
+                }
+            }
+            foreach ($this->autoressemillero as $autor) {
+                if($autor["seccion"]=="1" && $autor["id_objeto"]==$int["id"]){
+                    foreach ($this->usuarios as $usuario) {
+                        if($usuario["id_usuario"]==$autor["id_usuario"]){
+                            $autores .= $usuario["primer_nombre"] . $usuario["primer_apellido"] . $usuario["segundo_apellido"] . " - ";    
+                        }    
+                    }
+                }
+            }
+            echo $autores;
+            echo '</td>';
+
+            echo '<td>';
+            if($int["archivo"]!=""){
+                ?>    
+                    <a class="btn" href="<?php echo $this->basePath()?>/application/articulossemillero/bajar/<?php echo $int["id"];?>/<?php echo $id;?>"><i class="fa fa-download"></i></a>
+                <?php
+            }
+            echo '</td>';
+            
+            echo '<td>';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/agregarautorsemillero/index/<?php echo $int["id"];?>/<?php echo $id;?>/1"><i class="fa fa-plus"></i></a>
+
+            <?php
+            echo '</td>';
+            echo '<td style="text-align:center;">';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/articulossemillero/index/<?php echo $id;?>/<?php echo $int["id"];?>"><i class="fa fa-pencil"></i></a>
+            <?php
+            echo '</td>';
+            echo '<td style="text-align:center;">';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/articulossemillero/del/<?php echo $int["id"];?>/<?php echo $id;?>/1"><i class="fa fa-trash"></i></a>
+
+            <?php
+            echo '</td>';
+        echo '</tr>';
+    }
+    //Articulos usuario
+    foreach($this->dataDocumentos as $documento){
+        if($documento["tipo_documento"]=="articulo"){
+            foreach ($this->Articuloshv as $art) {
+                if($art["id_gi_articulo"] == $documento["id_documento"]){
+                    echo '<tr>';
+                    echo '<td>';
+                    echo $art["nombre_revista"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $art["nombre_articulo"];
+                    echo '</td>';
+                    echo '<td>';
+                    foreach ($this->vf2 as $vl) {
+                        if ($vl["id_valor_flexible"] == $art["categoria"]) {
+                            echo $vl["descripcion_valor"];
+                        }
+                    }
+                    echo '</td>';
+                    echo '<td>';
+                    echo $art["ano"];
+                    echo '</td>';
+                    echo '<td>';
+                    switch ($art["mes"]) {
+                            case 1:
+                                echo "Enero";
+                                break;
+                            case 2:
+                                echo "Febrero";
+                                break;
+                            case 3:
+                                echo "Marzo";
+                                break;
+                            case 4:
+                                echo "Abril";
+                                break;
+                            case 5:
+                                echo "Mayo";
+                                break;
+                            case 6:
+                                echo "Junio";
+                                break;
+                            case 7:
+                                echo "Julio";
+                                break;
+                            case 8:
+                                echo "Agosto";
+                                break;
+                            case 9:
+                                echo "Septiembre";
+                                break;
+                            case 10:
+                                echo "Octubre";
+                                break;
+                            case 11:
+                                echo "Noviembre";
+                                break;
+                            case 12:
+                                echo "Diciembre";
+                                break;
+                        }
+                    echo '</td>';
+                    echo '<td>';
+                    foreach ($this->vf2 as $vl) {
+                        if ($vl["id_valor_flexible"] == $art["id_pais"]) {
+                            $art["id_pais"] = $vl["descripcion_valor"];
+                        }
+                    }
+                    echo $art["id_pais"];
+                    echo '</td>';
+                    echo '<td>';
+                    foreach ($this->vf2 as $vl) {
+                        if ($vl["id_valor_flexible"] == $art["id_ciudad"]) {
+                            $art["id_pais"] = $vl["descripcion_valor"];
+                        }
+                    }
+                    echo $art["id_ciudad"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $art["issn"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $art["num_paginas"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $art["pagina_inicio"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $art["pagina_fin"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $art["fasciculo"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $art["volumen"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $art["serie"];
+                    echo '</td>';
+                    $autorAux="";
+                    foreach ($this->usuarios as $usa) {
+                        if ($usa["id_usuario"] == $art["id_autor"]) {
+                            
+                            $autorAux .= trim($usa["primer_nombre"]).' '.trim($usa["segundo_nombre"]).' '.trim($usa["primer_apellido"]).' '.trim($usa["segundo_apellido"])." - ";
+                        }
+                    }
+                    foreach ($this->autoressemillero as $aut) {
+                        if ($art["id_gi_articulo"] == $aut["id_padre"] && trim($aut["nombre_padre"]) == 'Articuloshv') {
+                            foreach ($this->usuarios as $ua) {
+                                if ($ua["id_usuario"] == $aut["id_usuario"]) {
+                                    $autorAux .= trim($ua["primer_nombre"]).' '.trim($ua["segundo_nombre"]).' '.trim($ua["primer_apellido"]).' '.trim($ua["segundo_apellido"])." - ";
+                                }
+                            }
+                        }
+                    }
+                    echo '<td>';
+                    echo $autorAux;
+                    echo '</td>';
+                    echo '<td>';
+                        if($art["archivo"]!=""){
+                            ?>    
+                                <a class="btn" href="<?php echo $this->basePath()?>/application/articuloshv/bajar/<?php echo $art["id_gi_articulo"];?>/<?php echo $art["id_usuario"];?>"><i class="fa fa-download"></i></a>
+                    <?php    }
+                    echo '</td>';  
+                    echo '<td>';
+                    echo '</td>';
+                    echo '<td>';
+                    echo '</td>';
+                    echo '<td>';
+                    echo '</td>';
+                    echo '</tr>';
+                }
+            }
+        }
+    }//Articulos usuario  
+    echo '</tr>';
+    echo '</table>';
+    echo '</div>';
+?>
+            </div>
+            <div id="Libros">
+                <legend>Libros</legend>
+    <a class="btn" href="<?php echo $this->basePath() ?>/application/librossemillero/index/<?php echo $id;?>">Agregar</a>
+    <br> <br>
+    <?php
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    echo "<th style='width: 8%;'>Título del libro</th>";
+    echo "<th style='width: 7%;'>Tipo de libro</th>";
+    echo "<th style='width: 4%;'>No. de Páginas</th>";
+    echo "<th style='width: 4%;'>Año</th>";
+    echo "<th style='width: 4%;'>Mes</th>";
+    echo "<th style='width: 4%;'>País de publicación</th>";
+    echo "<th style='width: 4%;'>Ciudad de publicación</th>";
+    echo "<th style='width: 4%;'>Serie</th>";
+    echo "<th style='width: 6%;'>Editorial</th>";
+    echo "<th style='width: 6%;'>No. de Edición</th>";
+    echo "<th style='width: 8%;'>ISBN ó e-ISBN</th>";
+    echo "<th style='width: 8%;'>Medio de divulgación</th>";
+    echo "<th style='width: 10%;'>Autor(es)</th>";
+    echo "<th style='width: 5%;'>Descargar archivo</th>";
+    echo "<th style='width: 5%;'>Agregar autor</th>";
+    echo '<th style="width: 5%;">Ver/Editar</th>';
+    echo "<th style='width: 5%;'>Eliminar</th>";
+    echo '<tr>';
+
+    foreach ($this->libros as $int) {
+        echo '<tr>';
+            echo '<td>';
+            echo $int["titulo"];
+            echo '</td>';
+
+            echo '<td>';
+                foreach ($this->vf2 as $vl) {
+                    if ($vl["id_valor_flexible"] == $int["tipo_libro"]) {
+                        echo $vl["descripcion_valor"];
+                    }
+                }
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["paginas"];
+            echo '</td>';
+        
+            echo '<td>';
+            switch ($int["mes"]) {
+                case 1:
+                    echo "Enero";
+                    break;
+                case 2:
+                    echo "Febrero";
+                    break;
+                case 3:
+                    echo "Marzo";
+                    break;
+                case 4:
+                    echo "Abril";
+                    break;
+                case 5:
+                    echo "Mayo";
+                    break;
+                case 6:
+                    echo "Junio";
+                    break;
+                case 7:
+                    echo "Julio";
+                    break;
+                case 8:
+                    echo "Agosto";
+                    break;
+                case 9:
+                    echo "Septiembre";
+                    break;
+                case 10:
+                    echo "Octubre";
+                    break;
+                case 11:
+                    echo "Noviembre";
+                    break;
+                case 12:
+                    echo "Diciembre";
+                    break;
+            }
+            echo '</td>';
+        
+            echo '<td>';
+            echo $int["mes"];
+            echo '</td>';
+        
+            echo '<td>';
+            echo $int["pais"];
+            echo '</td>';
+        
+            echo '<td>';
+            echo $int["ciudad"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["serie"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["editorial"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["edicion"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["isbn"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["medio_divulgacion"];
+            echo '</td>';
+
+            echo '<td>';
+            $autores="";
+            foreach ($this->usuarios as $usa) {
+                if ($usa["id_usuario"] == $int["id_autor"]) {
+                    $autores .= trim($usa["primer_nombre"]).' '.trim($usa["segundo_nombre"]).' '.trim($usa["primer_apellido"]).' '.trim($usa["segundo_apellido"])." - ";
+                }
+            }
+            foreach ($this->autoressemillero as $autor) {
+                if($autor["seccion"]=="2" && $autor["id_objeto"]==$int["id"]){
+                    foreach ($this->usuarios as $usuario) {
+                        if($usuario["id_usuario"]==$autor["id_usuario"]){
+                            $autores .= $usuario["primer_nombre"] . $usuario["primer_apellido"] . $usuario["segundo_apellido"] . " - ";    
+                        }    
+                    }
+                }
+            }
+            echo $autores;
+            echo '</td>';
+
+            echo '<td>';
+            if($int["archivo"]!=""){
+                ?>    
+                    <a class="btn" href="<?php echo $this->basePath()?>/application/librossemillero/bajar/<?php echo $int["id"];?>/<?php echo $id;?>"><i class="fa fa-download"></i></a>
+                <?php
+            }
+            echo '</td>';
+            
+            echo '<td>';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/agregarautorsemillero/index/<?php echo $int["id"];?>/<?php echo $id;?>/2"><i class="fa fa-plus"></i></a>
+
+            <?php
+            echo '</td>';
+
+            echo '<td style="text-align:center;">';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/librossemillero/index/<?php echo $id;?>/<?php echo $int["id"];?>"><i class="fa fa-pencil"></i></a>
+            <?php
+            echo '</td>';
+
+            echo '<td style="text-align:center;">';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/librossemillero/del/<?php echo $int["id"];?>/<?php echo $id;?>"><i class="fa fa-trash"></i></a>
+            <?php
+            echo '</td>';
+        echo '</tr>';
+    }
+    //Libros usuario
+    foreach($this->dataDocumentos as $documento){
+        if($documento["tipo_documento"]=="libro"){
+            foreach ($this->libroshv as $lib) {
+                if($lib["id_gi_libro"] == $documento["id_documento"]){
+                    echo '<tr>';
+                    echo '<td>';
+                    echo $lib["titulo_libro"];
+                    echo '</td>';
+
+                    echo '<td>';
+                        foreach ($this->vf2 as $vl) {
+                            if ($vl["id_valor_flexible"] == $lib["tipo_libro"]) {
+                                echo $vl["descripcion_valor"];
+                            }
+                        }
+                    echo '</td>';
+                    
+                    echo '<td>';
+                    echo $lib["num_paginas"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $lib["ano"];
+                    echo '</td>';
+                    echo '<td>';
+                    switch ($lib["mes"]) {
+                            case 1:
+                                echo "Enero";
+                                break;
+                            case 2:
+                                echo "Febrero";
+                                break;
+                            case 3:
+                                echo "Marzo";
+                                break;
+                            case 4:
+                                echo "Abril";
+                                break;
+                            case 5:
+                                echo "Mayo";
+                                break;
+                            case 6:
+                                echo "Junio";
+                                break;
+                            case 7:
+                                echo "Julio";
+                                break;
+                            case 8:
+                                echo "Agosto";
+                                break;
+                            case 9:
+                                echo "Septiembre";
+                                break;
+                            case 10:
+                                echo "Octubre";
+                                break;
+                            case 11:
+                                echo "Noviembre";
+                                break;
+                            case 12:
+                                echo "Diciembre";
+                                break;
+                        }
+                    echo '</td>';
+                    echo '<td>';
+                    echo $lib["pais"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $lib["ciudad"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $lib["serie"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $lib["editorial"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $lib["edicion"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $lib["isbn"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $lib["medio_divulgacion"];
+                    echo '</td>';
+                    $autorAux="";
+                    foreach ($this->usuarios as $usa) {
+                        if ($usa["id_usuario"] == $lib["id_autor"]) {    
+                            $autorAux .= trim($usa["primer_nombre"]).' '.trim($usa["segundo_nombre"]).' '.trim($usa["primer_apellido"]).' '.trim($usa["segundo_apellido"])." - ";
+                        }
+                    }
+                    foreach ($this->autoressemillero as $aut) {
+                        if ($lib["id_gi_libro"] == $aut["id_padre"] && trim($aut["nombre_padre"]) == 'Libroshv') {
+                            foreach ($this->usuarios as $ua) {
+                                if ($ua["id_usuario"] == $aut["id_usuario"]) {
+                                    $autorAux .= trim($ua["primer_nombre"]).' '.trim($ua["segundo_nombre"]).' '.trim($ua["primer_apellido"]).' '.trim($ua["segundo_apellido"])." - ";
+                                }
+                            }
+                        }
+                    }
+                    echo '<td>';
+                    echo $autorAux;
+                    echo '</td>';    
+                    echo '<td>';
+                        if($lib["archivo"]!=""){
+                            ?>    
+                                <a class="btn" href="<?php echo $this->basePath()?>/application/libroshv/bajar/<?php echo $lib["id_gi_libro"];?>/<?php echo $lib["id_usuario"];?>"><i class="fa fa-download"></i></a>
+                            <?php
+                        }
+                    echo '</td>'; 
+                    echo '<td>';
+                    echo '</td>';    
+                    echo '<td>';
+                    echo '</td>';    
+                    echo '<td>';
+                    echo '</td>';    
+                    echo '</tr>';
+                }
+            }
+        }
+    }//Libros usuario  
+    echo '</tr>';
+    echo '</table>';
+    echo '</div>';
+?>
+            </div>
+            <div id="Capitulos">
+                <legend>Capítulos de libros</legend>
+    <a class="btn" href="<?php echo $this->basePath() ?>/application/capitulossemillero/index/<?php echo $id;?>">Agregar</a>
+    <br> <br>
+    <?php
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    echo "<th style='width: 5%;'>Título del libro</th>";
+    echo "<th style='width: 4%;'>Año</th>";
+    echo "<th style='width: 3%;'>Mes</th>";
+    echo "<th style='width: 5%;'>País de publicación</th>";
+    echo "<th style='width: 5%;'>Ciudad de publicación</th>";
+    echo "<th style='width: 4%;'>Serie</th>";
+    echo "<th style='width: 5%;'>Editorial</th>";
+    echo "<th style='width: 5%;'>No. de Edición</th>";
+    echo "<th style='width: 6%;'>ISBN ó e-ISBN</th>";
+    echo "<th style='width: 6%;'>Medio de divulgación</th>";
+    echo "<th style='width: 6%;'>Título del capítulo</th>";
+    echo "<th style='width: 3%;'>No. de capítulo</th>";
+    echo "<th style='width: 4%;'>Páginas del capítulo</th>";
+    echo "<th style='width: 3%;'>Página inicio</th>";
+    echo "<th style='width: 3%;'>Página fin</th>";
+    echo "<th style='width: 7%;'>Autor(es)</th>";
+    echo "<th style='width: 5%;'>Descargar archivo</th>";
+    echo "<th style='width: 5%;'>Agregar autor</th>";
+    echo '<th style="width: 5%;">Ver/Editar</th>';
+    echo "<th style='width: 5%;'>Eliminar</th>";
+    echo '<tr>';
+
+    foreach ($this->capitulos as $int) {
+        echo '<tr>';
+            echo '<td>';
+            echo $int["titulo"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["ano"];
+            echo '</td>';
+        
+            echo '<td>';
+            switch ($int["mes"]) {
+                case 1:
+                    echo "Enero";
+                    break;
+                case 2:
+                    echo "Febrero";
+                    break;
+                case 3:
+                    echo "Marzo";
+                    break;
+                case 4:
+                    echo "Abril";
+                    break;
+                case 5:
+                    echo "Mayo";
+                    break;
+                case 6:
+                    echo "Junio";
+                    break;
+                case 7:
+                    echo "Julio";
+                    break;
+                case 8:
+                    echo "Agosto";
+                    break;
+                case 9:
+                    echo "Septiembre";
+                    break;
+                case 10:
+                    echo "Octubre";
+                    break;
+                case 11:
+                    echo "Noviembre";
+                    break;
+                case 12:
+                    echo "Diciembre";
+                    break;
+            }
+            echo '</td>';
+        
+            echo '<td>';
+            echo $int["pais"];
+            echo '</td>';
+        
+            echo '<td>';
+            echo $int["ciudad"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["serie"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["editorial"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["edicion"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["isbn"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["medio_divulgacion"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["titulo_capitulo"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["numero_capitulo"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["paginas_capitulo"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["pagina_inicio"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["pagina_fin"];
+            echo '</td>';
+
+            echo '<td>';
+            $autores="";
+            foreach ($this->usuarios as $usa) {
+                if ($usa["id_usuario"] == $int["id_autor"]) {
+                    $autores .= trim($usa["primer_nombre"]).' '.trim($usa["segundo_nombre"]).' '.trim($usa["primer_apellido"]).' '.trim($usa["segundo_apellido"])." - ";
+                }
+            }
+            foreach ($this->autoressemillero as $autor) {
+                if($autor["seccion"]=="3" && $autor["id_objeto"]==$int["id"]){
+                    foreach ($this->usuarios as $usuario) {
+                        if($usuario["id_usuario"]==$autor["id_usuario"]){
+                            $autores .= $usuario["primer_nombre"] . $usuario["primer_apellido"] . $usuario["segundo_apellido"] . " - ";    
+                        }    
+                    }
+                }
+            }
+            echo $autores;
+            echo '</td>';
+
+            echo '<td>';
+            if($int["archivo"]!=""){
+                ?>    
+                    <a class="btn" href="<?php echo $this->basePath()?>/application/capitulossemillero/bajar/<?php echo $int["id"];?>/<?php echo $id;?>"><i class="fa fa-download"></i></a>
+                <?php
+            }
+            echo '</td>';
+            
+            echo '<td>';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/agregarautorsemillero/index/<?php echo $int["id"];?>/<?php echo $id;?>/3"><i class="fa fa-plus"></i></a>
+
+            <?php
+            echo '</td>';
+
+            echo '<td style="text-align:center;">';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/capitulossemillero/index/<?php echo $id;?>/<?php echo $int["id"];?>"><i class="fa fa-pencil"></i></a>
+            <?php
+            echo '</td>';
+
+            echo '<td style="text-align:center;">';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/capitulossemillero/del/<?php echo $int["id"];?>/<?php echo $id;?>"><i class="fa fa-trash"></i></a>
+
+            <?php
+            echo '</td>';
+        echo '</tr>';
+    }
+    //Capitulo de libros usuario
+    foreach($this->dataDocumentos as $documento){
+        if($documento["tipo_documento"]=="capitulo"){
+            foreach ($this->capituloshv as $int) {
+                if($int["id"] == $documento["id_documento"]){
+                    echo '<tr>';
+                        echo '<td>';
+                        echo $int["titulo"];
+                        echo '</td>';
+
+                        echo '<td>';
+                        echo $int["ano"];
+                        echo '</td>';
+                    
+                        echo '<td>';
+                        switch ($int["mes"]) {
+                            case 1:
+                                echo "Enero";
+                                break;
+                            case 2:
+                                echo "Febrero";
+                                break;
+                            case 3:
+                                echo "Marzo";
+                                break;
+                            case 4:
+                                echo "Abril";
+                                break;
+                            case 5:
+                                echo "Mayo";
+                                break;
+                            case 6:
+                                echo "Junio";
+                                break;
+                            case 7:
+                                echo "Julio";
+                                break;
+                            case 8:
+                                echo "Agosto";
+                                break;
+                            case 9:
+                                echo "Septiembre";
+                                break;
+                            case 10:
+                                echo "Octubre";
+                                break;
+                            case 11:
+                                echo "Noviembre";
+                                break;
+                            case 12:
+                                echo "Diciembre";
+                                break;
+                        }
+                        echo '</td>';
+                    
+                        echo '<td>';
+                        echo $int["pais"];
+                        echo '</td>';
+                    
+                        echo '<td>';
+                        echo $int["ciudad"];
+                        echo '</td>';
+
+                        echo '<td>';
+                        echo $int["serie"];
+                        echo '</td>';
+
+                        echo '<td>';
+                        echo $int["editorial"];
+                        echo '</td>';
+
+                        echo '<td>';
+                        echo $int["edicion"];
+                        echo '</td>';
+
+                        echo '<td>';
+                        echo $int["isbn"];
+                        echo '</td>';
+
+                        echo '<td>';
+                        echo $int["medio_divulgacion"];
+                        echo '</td>';
+
+                        echo '<td>';
+                        echo $int["titulo_capitulo"];
+                        echo '</td>';
+
+                        echo '<td>';
+                        echo $int["numero_capitulo"];
+                        echo '</td>';
+
+                        echo '<td>';
+                        echo $int["paginas_capitulo"];
+                        echo '</td>';
+
+                        echo '<td>';
+                        echo $int["pagina_inicio"];
+                        echo '</td>';
+
+                        echo '<td>';
+                        echo $int["pagina_fin"];
+                        echo '</td>';
+
+                        echo '<td>';
+                        $autores="";
+                        foreach ($this->usuarios as $usa) {
+                            if ($usa["id_usuario"] == $int["id_autor"]) {
+                                $autores .= trim($usa["primer_nombre"]).' '.trim($usa["segundo_nombre"]).' '.trim($usa["primer_apellido"]).' '.trim($usa["segundo_apellido"])." - ";
+                            }
+                        }
+                        foreach ($this->autoresusuario as $autor) {
+                            if($autor["seccion"]=="3" && $autor["id_objeto"]==$int["id"]){
+                                foreach ($this->usuarios as $usuario) {
+                                    if($usuario["id_usuario"]==$autor["id_usuario"]){
+                                        $autores .= $usuario["primer_nombre"]." ".$usuario["segundo_nombre"]." ".$usuario["primer_apellido"]." ".$usuario["segundo_apellido"]." - ";    
+                                    }    
+                                }
+                            }
+                        }
+                        echo $autores;
+                        echo '</td>';
+                        echo '<td>';
+                            if($int["archivo"]!=""){
+                                ?>    
+                                    <a class="btn" href="<?php echo $this->basePath()?>/application/capitulosusuario/bajar/<?php echo $int["id"];?>/<?php echo $int["id_usuario"];?>"><i class="fa fa-download"></i></a>
+                        <?php    }
+                        echo '</td>'; 
+                        echo '<td>';
+                        echo '</td>';
+                        echo '<td>';
+                        echo '</td>';
+                        echo '<td>';
+                        echo '</td>';
+                    echo '</tr>';
+                }
+            }
+        }
+    }//Capitulo de libros usuario
+    echo '</tr>';
+    echo '</table>';
+    echo '</div>';
+?>
+            </div>
+            <div id="Otras">
+                <legend>Otras producciones de investigación</legend>
+    <a class="btn" href="<?php echo $this->basePath() ?>/application/produccionesinvsemillero/index/<?php echo $id;?>">Agregar</a>
+    <br> <br>
+    <?php
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    echo "<th style='width: 10%;'>Nombre producto</th>";
+    echo "<th style='width: 8%;'>Descripción producto</th>";
+    echo "<th style='width: 7%;'>Tipo producto</th>";
+    echo "<th style='width: 3%;'>Año</th>";
+    echo "<th style='width: 3%;'>Mes</th>";
+    echo "<th style='width: 4%;'>Pais</th>";
+    echo "<th style='width: 5%;'>Ciudad</th>";
+    echo "<th style='width: 10%;'>Instituciones participantes</th>";
+    echo "<th style='width: 15%;'>Registro</th>";
+    echo "<th style='width: 10%;'>Otra información</th>";
+    echo "<th style='width: 10%;'>Autor(es)</th>";
+    echo "<th style='width: 5%;'>Descargar archivo</th>";
+    echo "<th style='width: 5%;'>Agregar autor</th>";
+    echo '<th style="width: 5%;">Ver/Editar</th>';
+    echo "<th style='width: 5%;'>Eliminar</th>";
+    echo '<tr>';
+
+    foreach ($this->produccionesinv as $int) {
+        echo '<tr>';
+            echo '<td>';
+            echo $int["nombre"];
+            echo '</td>';
+        
+            echo '<td>';
+            echo $int["descripcion"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["tipo"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["ano"];
+            echo '</td>';
+
+            echo '<td>';
+            switch ($int["mes"]) {
+                case 1:
+                    echo "Enero";
+                    break;
+                case 2:
+                    echo "Febrero";
+                    break;
+                case 3:
+                    echo "Marzo";
+                    break;
+                case 4:
+                    echo "Abril";
+                    break;
+                case 5:
+                    echo "Mayo";
+                    break;
+                case 6:
+                    echo "Junio";
+                    break;
+                case 7:
+                    echo "Julio";
+                    break;
+                case 8:
+                    echo "Agosto";
+                    break;
+                case 9:
+                    echo "Septiembre";
+                    break;
+                case 10:
+                    echo "Octubre";
+                    break;
+                case 11:
+                    echo "Noviembre";
+                    break;
+                case 12:
+                    echo "Diciembre";
+                    break;
+            }
+            echo '</td>';
+        
+            echo '<td>';
+            echo $int["pais"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["ciudad"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["instituciones"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["registro"];
+            echo '</td>';
+        
+            echo '<td>';
+            echo $int["otra_informacion"];
+            echo '</td>';
+
+            echo '<td>';
+            $autores="";
+            foreach ($this->usuarios as $usa) {
+                if ($usa["id_usuario"] == $int["id_autor"]) {
+                    $autores .= trim($usa["primer_nombre"]).' '.trim($usa["segundo_nombre"]).' '.trim($usa["primer_apellido"]).' '.trim($usa["segundo_apellido"])." - ";
+                }
+            }
+            foreach ($this->autoressemillero as $autor) {
+                if($autor["seccion"]=="4" && $autor["id_objeto"]==$int["id"]){
+                    foreach ($this->usuarios as $usuario) {
+                        if($usuario["id_usuario"]==$autor["id_usuario"]){
+                            $autores .= $usuario["primer_nombre"] . $usuario["primer_apellido"] . $usuario["segundo_apellido"] . " - ";    
+                        }    
+                    }
+                }
+            }
+            echo $autores;
+            echo '</td>';
+
+            echo '<td>';
+            if($int["archivo"]!=""){
+                ?>    
+                    <a class="btn" href="<?php echo $this->basePath()?>/application/produccionesinvsemillero/bajar/<?php echo $int["id"];?>/<?php echo $id;?>"><i class="fa fa-download"></i></a>
+                <?php
+            }
+            echo '</td>';
+            
+            echo '<td style="text-align:center;">';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/agregarautorsemillero/index/<?php echo $int["id"];?>/<?php echo $id;?>/4"><i class="fa fa-plus"></i></a>
+
+            <?php
+            echo '</td>';
+
+            echo '<td style="text-align:center;">';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/produccionesinvsemillero/index/<?php echo $id;?>/<?php echo $int["id"];?>"><i class="fa fa-pencil"></i></a>
+            <?php
+            echo '</td>';
+
+            echo '<td style="text-align:center;">';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/produccionesinvsemillero/del/<?php echo $int["id"];?>/<?php echo $id;?>"><i class="fa fa-trash"></i></a>
+
+            <?php
+            echo '</td>';
+        echo '</tr>';
+    }
+    //Otras producciones usuario
+    foreach($this->dataDocumentos as $documento){
+        if($documento["tipo_documento"]=="producciones"){
+            foreach ($this->Otrasproduccioneshv as $ot) {
+                if($ot["id_otra_prod"] == $documento["id_documento"]){
+                    echo '<tr>';
+                    echo '<td>';
+                    echo $ot["nombre_producto"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $ot["descripcion_producto"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $ot["tipo_producto"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $ot["ano"];
+                    echo '</td>';
+                    echo '<td>';
+                    switch ($ot["mes"]) {
+                        case 1:
+                            echo "Enero";
+                            break;
+                        case 2:
+                            echo "Febrero";
+                            break;
+                        case 3:
+                            echo "Marzo";
+                            break;
+                        case 4:
+                            echo "Abril";
+                            break;
+                        case 5:
+                            echo "Mayo";
+                            break;
+                        case 6:
+                            echo "Junio";
+                            break;
+                        case 7:
+                            echo "Julio";
+                            break;
+                        case 8:
+                            echo "Agosto";
+                            break;
+                        case 9:
+                            echo "Septiembre";
+                            break;
+                        case 10:
+                            echo "Octubre";
+                            break;
+                        case 11:
+                            echo "Noviembre";
+                            break;
+                        case 12:
+                            echo "Diciembre";
+                            break;
+                    }
+                    echo '</td>';
+                    echo '</td>';
+                    echo '<td>';
+                    foreach ($this->vf2 as $vl) {
+                        if ($vl["id_valor_flexible"] == $ot["id_pais"]) {
+                            $ot["id_pais"] = $vl["descripcion_valor"];
+                        }
+                    }
+                    echo $ot["id_pais"];
+                    echo '</td>';
+                    echo '<td>';
+                    foreach ($this->vf2 as $vl) {
+                        if ($vl["id_valor_flexible"] == $ot["id_ciudad"]) {
+                            $ot["id_pais"] = $vl["descripcion_valor"];
+                        }
+                    }
+                    echo $ot["id_ciudad"];
+                    echo '</td>';
+                    echo '</td>';
+                    echo '<td>';
+                    echo $ot["instituciones"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $ot["registro"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $ot["otra_info"];
+                    echo '</td>';
+                    $autorAux="";
+                    foreach ($this->usuarios as $usa) {
+                        if ($usa["id_usuario"] == $ot["id_autor"]) {    
+                            $autorAux .= trim($usa["primer_nombre"]).' '.trim($usa["segundo_nombre"]).' '.trim($usa["primer_apellido"]).' '.trim($usa["segundo_apellido"])." - ";
+                        }
+                    }
+                    foreach ($this->autoressemillero as $aut) {
+                        if ($ot["id_otra_prod"] == $aut["id_padre"] && trim($aut["nombre_padre"]) == 'otra_prodhv') {
+                            foreach ($this->usuarios as $ua) {
+                                if ($ua["id_usuario"] == $aut["id_usuario"]) {
+                                    $autorAux .= trim($ua["primer_nombre"]).' '.trim($ua["segundo_nombre"]).' '.trim($ua["primer_apellido"]).' '.trim($ua["segundo_apellido"])." - ";
+                                }
+                            }
+                        }
+                    }
+                    echo '<td>';
+                    echo $autorAux;
+                    echo '</td>';
+                    echo '<td>';
+                        if($ot["archivo"]!=""){
+                            ?>    
+                                <a class="btn" href="<?php echo $this->basePath()?>/application/otrasproduccioneshv/bajar/<?php echo $ot["id_otra_prod"];?>/<?php echo $ot["id_usuario"];?>"><i class="fa fa-download"></i></a>
+                    <?php    }
+                    echo '</td>';  
+                     echo '<td>';
+                    echo '</td>';
+                     echo '<td>';
+                    echo '</td>';
+                     echo '<td>';
+                    echo '</td>';
+                    echo '</tr>';
+                }
+            }  
+        }
+    }//Otras producciones usuario
+    echo '</tr>';
+    echo '</table>';
+    echo '</div>';
+?>
+            </div>
+            <div id="Otros">
+                <legend>Otros documentos</legend>
+    <a class="btn" href="<?php echo $this->basePath() ?>/application/documentosbibliograficossemillero/index/<?php echo $id;?>">Agregar</a>
+    <br> <br>
+    <?php
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    echo "<th style='width: 6%;'>Nombre</th>";
+    echo "<th style='width: 3%;'>No. Páginas</th>";
+    echo "<th style='width: 3%;'>Año</th>";
+    echo "<th style='width: 3%;'>Mes</th>";
+    echo "<th style='width: 4%;'>Pais</th>";
+    echo "<th style='width: 4%;'>Ciudad</th>";
+    echo "<th style='width: 14%;'>Indexación</th>";
+    echo "<th style='width: 13%;'>Instituciones participantes</th>";
+    echo "<th style='width: 5%;'>URL</th>";
+    echo "<th style='width: 13%;'>Descripción</th>";
+    echo "<th style='width: 11%;'>Medio de divulgación</th>";
+    echo "<th style='width: 6%;'>Autor(es)</th>";
+    echo "<th style='width: 5%;'>Descargar archivo</th>";
+    echo "<th style='width: 5%;'>Agregar autor</th>";
+    echo '<th style="width: 5%;">Ver/Editar</th>';
+    echo "<th style='width: 5%;'>Eliminar</th>";
+    echo '<tr>';
+
+    foreach ($this->documentosbliograficos as $int) {
+        echo '<tr>';
+            echo '<td>';
+            echo $int["nombre"];
+            echo '</td>';
+        
+            echo '<td>';
+            echo $int["numero_paginas"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["ano"];
+            echo '</td>';
+
+            echo '<td>';
+            switch ($int["mes"]) {
+                case 1:
+                    echo "Enero";
+                    break;
+                case 2:
+                    echo "Febrero";
+                    break;
+                case 3:
+                    echo "Marzo";
+                    break;
+                case 4:
+                    echo "Abril";
+                    break;
+                case 5:
+                    echo "Mayo";
+                    break;
+                case 6:
+                    echo "Junio";
+                    break;
+                case 7:
+                    echo "Julio";
+                    break;
+                case 8:
+                    echo "Agosto";
+                    break;
+                case 9:
+                    echo "Septiembre";
+                    break;
+                case 10:
+                    echo "Octubre";
+                    break;
+                case 11:
+                    echo "Noviembre";
+                    break;
+                case 12:
+                    echo "Diciembre";
+                    break;
+            }
+            echo '</td>';
+        
+            echo '<td>';
+            echo $int["pais"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["ciudad"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["numero_indexacion"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["instituciones"];
+            echo '</td>';
+        
+            echo '<td>';
+            echo $int["url"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["descripcion"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["medio_divulgacion"];
+            echo '</td>';
+
+            echo '<td>';
+            $autores="";
+            foreach ($this->usuarios as $usa) {
+                if ($usa["id_usuario"] == $int["id_autor"]) {
+                    $autores .= trim($usa["primer_nombre"]).' '.trim($usa["segundo_nombre"]).' '.trim($usa["primer_apellido"]).' '.trim($usa["segundo_apellido"])." - ";
+                }
+            }
+            foreach ($this->autoressemillero as $autor) {
+                if($autor["seccion"]=="5" && $autor["id_objeto"]==$int["id"]){
+                    foreach ($this->usuarios as $usuario) {
+                        if($usuario["id_usuario"]==$autor["id_usuario"]){
+                            $autores .= $usuario["primer_nombre"] . $usuario["primer_apellido"] . $usuario["segundo_apellido"] . " - ";    
+                        }    
+                    }
+                }
+            }
+            echo $autores;
+            echo '</td>';
+
+            echo '<td>';
+            if($int["archivo"]!=""){
+                ?>    
+                    <a class="btn" href="<?php echo $this->basePath()?>/application/documentosbibliograficossemillero/bajar/<?php echo $int["id"];?>/<?php echo $id;?>"><i class="fa fa-download"></i></a>
+                <?php
+            }
+            echo '</td>';
+            
+            echo '<td style="text-align:center;">';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/agregarautorsemillero/index/<?php echo $int["id"];?>/<?php echo $id;?>/5"><i class="fa fa-plus"></i></a>
+
+            <?php
+            echo '</td>';
+
+            echo '<td style="text-align:center;">';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/documentosbibliograficossemillero/index/<?php echo $id;?>/<?php echo $int["id"];?>"><i class="fa fa-pencil"></i></a>
+            <?php
+            echo '</td>';
+
+            echo '<td style="text-align:center;">';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/documentosbibliograficossemillero/del/<?php echo $int["id"];?>/<?php echo $id;?>"><i class="fa fa-trash"></i></a>
+            <?php
+            echo '</td>';
+        echo '</tr>';
+    }
+
+    //Otros documentos usuario
+    foreach($this->dataDocumentos as $documento){
+        if($documento["tipo_documento"]=="documentos"){
+            foreach ($this->Bibliograficoshv as $bli) {
+                if($bli["id_bibliografico"] == $documento["id_documento"]){
+                    echo '<tr>';
+                    echo '<td>';
+                    echo $bli["nombre_documento"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $bli["numero_paginas"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $bli["ano"];
+                    echo '</td>';
+                    echo '<td>';
+                    switch ($bli["mes"]) {
+                        case 1:
+                            echo "Enero";
+                            break;
+                        case 2:
+                            echo "Febrero";
+                            break;
+                        case 3:
+                            echo "Marzo";
+                            break;
+                        case 4:
+                            echo "Abril";
+                            break;
+                        case 5:
+                            echo "Mayo";
+                            break;
+                        case 6:
+                            echo "Junio";
+                            break;
+                        case 7:
+                            echo "Julio";
+                            break;
+                        case 8:
+                            echo "Agosto";
+                            break;
+                        case 9:
+                            echo "Septiembre";
+                            break;
+                        case 10:
+                            echo "Octubre";
+                            break;
+                        case 11:
+                            echo "Noviembre";
+                            break;
+                        case 12:
+                            echo "Diciembre";
+                            break;
+                    }
+                    echo '</td>';
+                    echo '<td>';
+                    echo $bli["pais"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $bli["ciudad"];
+                    echo '</td>';        
+                    echo '<td>';
+                    echo $bli["num_indexacion"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $bli["instituciones"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $bli["url"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $bli["descripcion"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $bli["medio_divulgacion"];
+                    echo '</td>';
+                    $autorAux="";
+                    foreach ($this->usuarios as $usa) {
+                        if ($usa["id_usuario"] == $bli["id_autor"]) {    
+                            $autorAux .= trim($usa["primer_nombre"]).' '.trim($usa["segundo_nombre"]).' '.trim($usa["primer_apellido"]).' '.trim($usa["segundo_apellido"])." - ";
+                        }
+                    }
+                    foreach ($this->autoressemillero as $aut) {
+                        if ($bli["id_bibliografico"] == $aut["id_padre"] && trim($aut["nombre_padre"]) == 'bibliograficohv') {
+                            foreach ($this->usuarios as $ua) {
+                                if ($ua["id_usuario"] == $aut["id_usuario"]) {
+                                    $autorAux .= trim($ua["primer_nombre"]).' '.trim($ua["segundo_nombre"]).' '.trim($ua["primer_apellido"]).' '.trim($ua["segundo_apellido"])." - ";
+                                }
+                            }
+                        }
+                    }
+                    echo '<td>';
+                    echo $autorAux;
+                    echo '</td>';
+                    echo '<td>';
+                        if($bli["archivo"]!=""){
+                            ?>    
+                                <a href="<?php echo $this->basePath()?>/application/bibliograficoshv/bajar/<?php echo $bli["id_bibliografico"];?>/<?php echo $bli["id_usuario"];?>"><i class="fa fa-download"></i></a>
+                    <?php    }
+                    echo '</td>';
+                    echo '<td>';
+                    echo '</td>';
+                    echo '<td>';
+                    echo '</td>';
+                    echo '<td>';
+                    echo '</td>';
+                    echo '</tr>';
+                }
+            }
+        }
+    }//Otros documentos usuario
+    echo '</tr>';
+    echo '</table>';
+    echo '</div>';
+?>
+            </div>
+            <div id="Proyectos_internos">
+                <legend>Proyectos de investigación internos</legend>
+    <a class="btn" href="<?php echo $this->basePath() ?>/application/proyectosintsemi/index/<?php echo $id;?>">Agregar</a> <br> <br>
+    <?php
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    echo "<th style='width: 5%;'>Código del proyecto</th>";
+    echo "<th style='width: 5%;'>Nombre del proyecto</th>";
+    echo "<th style='width: 5%;'>Investigador principal</th>";
+    echo "<th style='width: 5%;'>Duración</th>";
+    echo "<th style='width: 5%;'>Unidad académica</th>";
+    echo "<th style='width: 15%;'>Dependencia académica</th>";
+    echo "<th style='width: 15%;'>Resumen ejecutivo</th>";
+    echo "<th style='width: 20%;'>Objetivo general</th>";
+    echo "<th style='width: 10%;'>Equipo de trabajo</th>";
+    echo "<th style='width: 10%;'>Descargar</th>";
+    echo '<th style="width: 5%;">Cargar documento</th>';
+    echo '<th style="width: 5%;">Ver/Editar</th>';
+    echo "<th style='width: 5%;'>Eliminar proyecto</th>";
+    echo '</tr>';
+    foreach ($this->proyectosint as $proyint) {
+        foreach ($this->proyectos as $proyectosT) {
+            if($proyint["id_proyecto"]==$proyectosT["id_proyecto"]){
+                   echo '<tr>';
+                    echo '<td>';
+                    echo $proyectosT["codigo_proy"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $proyectosT["nombre_proy"];
+                    echo '</td>';
+                    echo '<td>';
+                    foreach ($this->usuarios as $ua) {
+                        if ($ua["id_usuario"] == $proyectosT["id_investigador"]) {
+                            echo trim($ua["primer_nombre"]) . ' ' . trim($ua["segundo_nombre"]). ' ' . trim($ua["primer_apellido"]). ' ' . trim($ua["segundo_apellido"]);
+                        }
+                    }
+                    echo '</td>';
+                    echo '<td>';
+                    echo $proyectosT["duracion"];
+                    echo '</td>';
+                    echo '<td>';
+                    foreach ($this->vf2 as $vl) {
+                        if ($vl["id_valor_flexible"] == $proyectosT["id_unidad_academica"]) {
+                            $proyectosT["id_unidad_academica"] = $vl["descripcion_valor"];
+                        }
+                    }
+                    echo $proyectosT["id_unidad_academica"];
+                    echo '</td>';
+                    echo '<td>';
+                    foreach ($this->vf2 as $vl) {
+                        if ($vl["id_valor_flexible"] == $proyectosT["id_dependencia_academica"]) {
+                            $proyectosT["id_dependencia_academica"] = $vl["descripcion_valor"];
+                        }
+                    }
+                    echo $proyectosT["id_dependencia_academica"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $proyectosT["resumen_ejecutivo"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo $proyectosT["objetivo_general"];
+                    echo '</td>';
+                    echo '<td>';
+                    echo '<table style="border-style: hidden;">';
+                    $rol="";
+                    foreach ($this->tablaequipo as $auts) {
+                        if ($proyectosT["id_proyecto"] == $auts["id_proyecto"]) {
+                            foreach ($this->vf2 as $v) {
+                                if ($v["id_valor_flexible"] == $auts["id_rol"]) {
+                                    $rol = $v["descripcion_valor"];
+                                }
+                            }
+                            foreach ($this->usuarios as $ua) {
+                                if ($ua["id_usuario"] == $auts["id_integrante"]) {
+                                    echo '<tr><td>'.trim($ua["primer_nombre"]) . ' ' . trim($ua["segundo_nombre"]). ' ' . trim($ua["primer_apellido"]). ' ' . trim($ua["segundo_apellido"]) . '</td><td>'.$rol.'</td>';
+                                    echo '</tr>';
+                                }
+                            }
+                        }
+                    }
+                    echo '</table></td>';
+                    echo '</td>';
+                    echo '<td style="text-align:center;">';
+                        if($proyint["archivo"]!=""){
+                            ?>    
+                                <a class="btn" href="<?php echo $this->basePath()?>/application/proyectosintsemi/bajar/<?php echo $id;?>/<?php echo $proyint["id"];?>"><i class="fa fa-download"></i></a>
+                            <?php
+                        }
+                    echo '</td>';
+                    echo '<td style="text-align:center;">';
+                    ?>
+                        <a class="btn" href="<?php echo $this->basePath() ?>/application/proyectosintsemi/index/<?php echo $id;?>/<?php echo $proyint["id"];?>/1"><i class="fa fa-plus"></i></a>
+                    <?php
+                    echo '</td>';
+                    echo '<td style="text-align:center;">';
+                    ?>
+                        <a class="btn" href="<?php echo $this->basePath() ?>/application/proyectosintsemi/index/<?php echo $id;?>/<?php echo $proyint["id"];?>/0"><i class="fa fa-pencil"></i></a>
+                    <?php
+                    echo '</td>';
+                    echo '<td>';
+                     ?>
+                    <a class="btn"
+                            href="<?php echo $this->basePath() ?>/application/proyectosintsemi/del/<?php echo $proyint["id"];?>/<?php echo $proyint["id_grupo_inv"];?>"><i class="fa fa-trash"></i></a>
+                    <?php
+                    echo '</td>';
+            }
+        }
+    }
+    //Proyectos internos usuario
+    foreach($this->dataDocumentos as $documento){
+        if($documento["tipo_documento"]=="internos"){
+            foreach ($this->Proyectosintusua as $proyint) {
+                if($proyint["id"] == $documento["id_documento"]){
+                    foreach ($this->proyectos as $proyectosT) {
+                        if($proyint["id_proyecto"]==$proyectosT["id_proyecto"]){
+                               echo '<tr>';
+                                echo '<td>';
+                                echo $proyectosT["codigo_proy"];
+                                echo '</td>';
+                                echo '<td>';
+                                echo $proyectosT["nombre_proy"];
+                                echo '</td>';
+                                echo '<td>';
+                                foreach ($this->usuarios as $ua) {
+                                    if ($ua["id_usuario"] == $proyectosT["id_investigador"]) {
+                                        echo trim($ua["primer_nombre"]) . ' ' . trim($ua["segundo_nombre"]). ' ' . trim($ua["primer_apellido"]). ' ' . trim($ua["segundo_apellido"]);
+                                    }
+                                }
+                                echo '</td>';
+                                echo '<td>';
+                                echo $proyectosT["duracion"];
+                                echo '</td>';
+                                echo '<td>';
+                                foreach ($this->vf2 as $vl) {
+                                    if ($vl["id_valor_flexible"] == $proyectosT["id_unidad_academica"]) {
+                                        $proyectosT["id_unidad_academica"] = $vl["descripcion_valor"];
+                                    }
+                                }
+                                echo $proyectosT["id_unidad_academica"];
+                                echo '</td>';
+                                echo '<td>';
+                                foreach ($this->vf2 as $vl) {
+                                    if ($vl["id_valor_flexible"] == $proyectosT["id_dependencia_academica"]) {
+                                        $proyectosT["id_dependencia_academica"] = $vl["descripcion_valor"];
+                                    }
+                                }
+                                echo $proyectosT["id_dependencia_academica"];
+                                echo '</td>';
+                                echo '<td>';
+                                echo $proyectosT["resumen_ejecutivo"];
+                                echo '</td>';
+                                echo '<td>';
+                                echo $proyectosT["objetivo_general"];
+                                echo '</td>';
+                                echo '<td>';
+                                echo '<table style="border-style: hidden;">';
+                                $rol="";
+                                foreach ($this->tablaequipo as $auts) {
+                                    if ($proyectosT["id_proyecto"] == $auts["id_proyecto"]) {
+                                        foreach ($this->valflex as $v) {
+                                            if ($v["id_valor_flexible"] == $auts["id_rol"]) {
+                                                $rol = $v["descripcion_valor"];
+                                            }
+                                        }
+                                        foreach ($this->usuarios as $ua) {
+                                            if ($ua["id_usuario"] == $auts["id_integrante"]) {
+                                                echo '<tr><td>'.trim($ua["primer_nombre"]) . ' ' . trim($ua["segundo_nombre"]). ' ' . trim($ua["primer_apellido"]). ' ' . trim($ua["segundo_apellido"]). '</td><td>'.$rol.'</td>';
+                                                echo '</tr>';
+                                            }
+                                        }
+                                    }
+                                }
+                                echo '</table></td>';
+                                echo '<td style="text-align:center;">';
+                                    if($proyint["archivo"]!=""){
+                                        ?>    
+                                            <a class="btn" href="<?php echo $this->basePath()?>/application/proyectosintusua/bajar/<?php echo $documento["id_usuario"];?>/<?php echo $proyint["id"];?>"><i class="fa fa-download"></i></a>
+                                        <?php
+                                    }
+                                echo '</td>';
+                                echo '<td>';
+                                echo '</td>';
+                                echo '<td>';
+                                echo '</td>';
+                        }
+                    }
+                }
+            }
+        }
+    }//Proyectos internos usuario
+    echo '</tr>';
+    echo '</table>';
+    echo '</div>';
+    ?>
+            </div>
+            <div id="Reconocimientos">
+                <legend>Reconocimientos</legend>
+   <a class="btn" href="<?php echo $this->basePath() ?>/application/reconocimientossemillero/index/<?php echo $id;?>">Agregar</a>
+    <br> <br>
+    <?php
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    echo "<th style='width: 15%;'>Nombre del reconocimiento</th>";
+    echo "<th style='width: 15%;'>No. de acto administrativo</th>";
+    echo "<th style='width: 20%;'>Descripción</th>";
+    echo "<th style='width: 15%;'>Fecha</th>";
+    echo "<th style='width: 15%;'>Valor</th>";
+    echo "<th style='width: 10%;'>Descargar</th>";
+    echo '<th style="width: 10%;">Ver/Editar</th>';
+    echo "<th style='width: 10%;'>Eliminar</th>";
+    echo '<tr>';
+
+    foreach ($this->reconocimientos as $int) {
+        echo '<tr>';
+            echo '<td>';
+            echo $int["nombre"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["numero_acto"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["descripcion"];
+            echo '</td>';
+
+            echo '<td>';
+            echo $int["fecha"];
+            echo '</td>';
+
+            echo '<td>';
+            echo "$".number_format($int["valor"],0);
+            echo '</td>';
+
+            echo '<td style="text-align:center;">';
+                if($int["archivo"]!=""){
+                    ?>    
+                        <a class="btn" href="<?php echo $this->basePath()?>/application/reconocimientossemillero/bajar/<?php echo $id;?>/<?php echo $int["id"];?>"><i class="fa fa-download"></i></a>
+                    <?php
+                }
+            echo '</td>';
+
+            echo '<td style="text-align:center;">';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/reconocimientossemillero/index/<?php echo $id;?>/<?php echo $int["id"];?>"><i class="fa fa-pencil"></i></a>
+            <?php
+            echo '</td>';
+
+            echo '<td style="text-align:center;">';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/reconocimientossemillero/del/<?php echo $int["id"];?>/<?php echo $id;?>/1"><i class="fa fa-trash"></i></a>
+
+            <?php
+            echo '</td>';
+        echo '</tr>';
+    }
+    echo '</tr>';
+    echo '</table>';
+    echo '</div>';
+?>
+            </div>
+            <div id="Material">
+                <legend>Material colaborativo gratuito</legend>
+    <a class="btn" href="<?php echo $this->basePath() ?>/application/archivossemillero/index/<?php echo $id;?>">Agregar</a>
+    <br> <br>
+    <?php
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    echo "<th style='width: 40%;'>Tipo de archivo</th>";
+    echo "<th style='width: 40%;'>Descargar</th>";
+    echo '<th style="width: 10%;">Ver/Editar</th>';
+    echo "<th style='width: 10%;'>Eliminar</th>";
+    echo '<tr>';
+    foreach ($this->archivossemillero as $int) {
+        echo '<tr>';
+            echo '<td>';
+            foreach ($this->vf as $val) {
+                if($val["id_valor_flexible"]==$int["id_tipo_archivo"]){
+                    echo $val["descripcion_valor"];
+                }
+            }
+            echo '</td>';
+        
+            echo '<td>';
+            ?>    
+                <a class="btn" href="<?php echo $this->basePath()?>/application/archivossemillero/bajar/<?php echo $int["id_archivo"];?>/<?php echo $id;?>"><i class="fa fa-download"></i></a>
+            <?php
+            echo '</td>';
+
+            echo '<td style="text-align:center;">';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/archivossemillero/index/<?php echo $id;?>/<?php echo $int["id_archivo"];?>"><i class="fa fa-pencil"></i></a>
+            <?php
+            echo '</td>';
+
+            echo '<td style="text-align:center;">';
+            ?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/archivossemillero/del/<?php echo $int["id_archivo"];?>/<?php echo $id;?>"><i class="fa fa-trash"></i></a>
+            <?php
+            echo '</td>';
+        echo '</tr>';
+    }
+
+
+    echo '</tr>';
+    echo '</table>';
+    echo '</div>';
+?>
+            </div>
+
+            <div id="Identificadores">
+                <legend>Identificadores de Investigación</legend>
+                    <a class="btn" href="<?php echo $this->basePath() ?>/application/identificadoressemi/index/<?php echo $id;?>">Agregar</a><br><br>
+                    <?php
+                    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+                    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                    echo '<thead>';
+                    echo "<th style='width: 5%;'>ID</th>";
+                    echo "<th style='width: 20%;'>Nombre registrado</th>";
+                    echo '<th style="width: 5%;">Tipo de identificador</th>';
+                    echo "<th style='width: 10%;'>Tipo de categoría</th>";
+                    echo "<th style='width: 5%;'>Fecha de registro</th>";
+                    echo "<th style='width: 15%;'>Dirección web</th>";
+                    echo "<th style='width: 5%;'>Ciudad</th>";
+                    echo "<th style='width: 20%;'>Descripción</th>";
+                    echo "<th style='width: 5%;'>Descargar archivo</th>";
+                    echo '<th style="width: 5%;">Ver/Editar</th>';
+                    echo "<th style='width: 5%;'>Eliminar proyecto</th>";
+                    echo '<tr>';
+                    foreach ($this->identificadores as $int) {
+                        echo '<tr>';
+                            echo '<td>';
+                                echo $int["id_field"];
+                            echo '</td>';
+                            echo '<td>';
+                                echo $int["nombre"];
+                            echo '</td>';
+                            echo '<td>';
+                                foreach ($this->vf2 as $val) {
+                                    if($val["id_valor_flexible"]==$int["id_tipoidentificador"]){
+                                        echo $val["descripcion_valor"];
+                                    }
+                                }
+                            echo '</td>';
+                            echo '<td>';
+                                foreach ($this->vf2 as $val) {
+                                    if($val["id_valor_flexible"]==$int["id_tipocategoria"]){
+                                        echo $val["descripcion_valor"];
+                                    }
+                                }
+                            echo '</td>';
+                            echo '<td>';
+                                echo $int["fecha_registro"];
+                            echo '</td>';
+                            echo '<td>';
+                                echo $int["web"];
+                            echo '</td>';
+                            echo '<td>';
+                                echo $int["ciudad"];
+                            echo '</td>';
+                            echo '<td>';
+                                echo $int["descripcion"];
+                            echo '</td>';                     
+                            echo '<td>';
+                            if($int["archivo"]!=""){
+                                ?>    
+                                    <a class="btn" href="<?php echo $this->basePath()?>/application/identificadoressemi/bajar/<?php echo $int["id_identificador"];?>/<?php echo $id;?>"><i class="fa fa-download"></i></a>
+                                <?php
+                            }
+                            echo '</td>';
+                            echo '<td style="text-align:center;">';
+                            ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/identificadoressemi/index/<?php echo $id;?>/<?php echo $int["id_identificador"];?>"><i class="fa fa-pencil"></i></a>
+                            <?php
+                            echo '</td>';
+
+                            echo '<td style="text-align:center;">';
+                            ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/identificadoressemi/del/<?php echo $int["id_identificador"];?>/<?php echo $id;?>"><i class="fa fa-trash"></i></a>
+
+                            <?php
+                            echo '</td>';
+                        echo '</tr>';
+                    }
+
+                    echo '</tr>';
+                    echo '</table>';
+                    echo '</div>';
+                ?>
+            </div>
+            <div id="Divulgacion">
+                <legend>Divulgación</legend>
+                    <a class="btn" href="<?php echo $this->basePath() ?>/application/eventossemi/index/<?php echo $id;?>">Agregar</a><br><br>
+                    <?php
+                    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+                    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                    echo '<thead>';
+                    echo "<th style='width: 15%;'>Nombre de trabajo</th>";
+                    echo "<th style='width: 15%;'>Tipo de evento</th>";
+                    echo "<th style='width: 15%;'>Evento</th>";
+                    echo '<th style="width: 15%;">Tipo de participación</th>';
+                    echo "<th style='width: 15%;'>Nombre de trabajo</th>";
+                    echo "<th style='width: 10%;'>Tipo de medio</th>";
+                    echo "<th style='width: 15%;'>Medio de divulgación</th>";
+                    echo "<th style='width: 5%;'>Descargar archivo</th>";
+                    echo '<th style="width: 5%;">Ver/Editar</th>';
+                    echo "<th style='width: 5%;'>Eliminar proyecto</th>";
+                    echo '<tr>';
+                    foreach ($this->eventos as $int) {
+                        echo '<tr>';
+                            echo '<td>';
+                                echo $int["nombre_trabajo"];
+                            echo '</td>';
+                            echo '<td>';
+                                foreach ($this->vf2 as $val) {
+                                    if($val["id_valor_flexible"]==$int["id_tipoevento"]){
+                                        echo $val["descripcion_valor"];
+                                    }
+                                }
+                            echo '</td>';
+                            echo '<td>';
+                                echo $int["nombre_evento"];
+                            echo '</td>';
+                            echo '<td>';
+                                foreach ($this->vf2 as $val) {
+                                    if($val["id_valor_flexible"]==$int["id_tipoparticipacion"]){
+                                        echo $val["descripcion_valor"];
+                                    }
+                                }
+                            echo '</td>';
+                            echo '<td>';
+                                echo $int["nombre_trabajo_medio"];
+                            echo '</td>';
+                            echo '<td>';
+                                foreach ($this->vf2 as $val) {
+                                    if($val["id_valor_flexible"]==$int["id_tipomedio"]){
+                                        echo $val["descripcion_valor"];
+                                    }
+                                }
+                            echo '</td>';
+                            echo '<td>';
+                                echo $int["medio_divulgacion"];
+                            echo '</td>';                   
+                            echo '<td>';
+                            if($int["archivo"]!=""){
+                                ?>    
+                                    <a class="btn" href="<?php echo $this->basePath()?>/application/eventossemi/bajar/<?php echo $int["id_evento"];?>/<?php echo $id;?>"><i class="fa fa-download"></i></a>
+                                <?php
+                            }
+                            echo '</td>';
+                            echo '<td style="text-align:center;">';
+                            ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/eventossemi/index/<?php echo $id;?>/<?php echo $int["id_evento"];?>"><i class="fa fa-pencil"></i></a>
+                            <?php
+                            echo '</td>';
+
+                            echo '<td style="text-align:center;">';
+                            ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/eventossemi/del/<?php echo $int["id_evento"];?>/<?php echo $id;?>"><i class="fa fa-trash"></i></a>
+
+                            <?php
+                            echo '</td>';
+                        echo '</tr>';
+                    }
+
+                    echo '</tr>';
+                    echo '</table>';
+                    echo '</div>';
+                ?>
+            </div>
+            <div id="Formacion">
+                <legend>Formación</legend>
+                    <a class="btn" href="<?php echo $this->basePath() ?>/application/trabajogradosemi/index/<?php echo $id;?>">Agregar</a><br><br>
+                    <?php
+                    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+                    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                    echo '<thead>';
+                    echo "<th style='width: 15%;'>Trabajo de grado</th>";
+                    echo "<th style='width: 10%;'>Tipo de trabajo</th>";
+                    echo '<th style="width: 10%;">Tipo de participación</th>';
+                    echo "<th style='width: 10%;'>Estado</th>";
+                    echo "<th style='width: 10%;'>Proyecto de Inv.</th>";
+                    echo "<th style='width: 10%;'>Tipo de formación</th>";
+                    echo "<th style='width: 10%;'>Semillero</th>";
+                    echo "<th style='width: 10%;'>Tipo de participación</th>";
+                    echo "<th style='width: 5%;'>Descargar archivo</th>";
+                    echo '<th style="width: 5%;">Ver/Editar</th>';
+                    echo "<th style='width: 5%;'>Eliminar proyecto</th>";
+                    echo '<tr>';
+                    foreach ($this->formacion as $int) {
+                        echo '<tr>';
+                            echo '<td>';
+                                echo $int["nombre_trabajo"];
+                            echo '</td>';
+                            echo '<td>';
+                                foreach ($this->vf2 as $val) {
+                                    if($val["id_valor_flexible"]==$int["id_tipotrabajo"]){
+                                        echo $val["descripcion_valor"];
+                                    }
+                                }
+                            echo '</td>';
+                            echo '<td>';
+                                foreach ($this->vf2 as $val) {
+                                    if($val["id_valor_flexible"]==$int["id_tipoparticipacion"]){
+                                        echo $val["descripcion_valor"];
+                                    }
+                                }
+                            echo '</td>';
+                            echo '<td>';
+                                foreach ($this->vf2 as $val) {
+                                    if($val["id_valor_flexible"]==$int["id_estadotipotrabajo"]){
+                                        echo $val["descripcion_valor"];
+                                    }
+                                }
+                            echo '</td>';
+                            echo '<td>';
+                                echo $int["nombre_proyecto"];
+                            echo '</td>';
+                            echo '<td>';
+                                foreach ($this->vf2 as $val) {
+                                    if($val["id_valor_flexible"]==$int["id_formacioninvestigador"]){
+                                        echo $val["descripcion_valor"];
+                                    }
+                                }
+                            echo '</td>';
+                            echo '<td>';
+                                foreach ($this->semilleros as $val) {
+                                    if($val["id"]==$int["id_semillero"]){
+                                        echo $val["codigo"]."-".$val["nombre"];
+                                    }
+                                }
+                            echo '</td>';
+                             echo '<td>';
+                                foreach ($this->vf2 as $val) {
+                                    if($val["id_valor_flexible"]==$int["id_rolparticipacion"]){
+                                        echo $val["descripcion_valor"];
+                                    }
+                                }
+                            echo '</td>';             
+                            echo '<td>';
+                            if($int["archivo"]!=""){
+                                ?>    
+                                    <a class="btn" href="<?php echo $this->basePath()?>/application/trabajogradosemi/bajar/<?php echo $int["id_trabajogrado"];?>/<?php echo $id;?>"><i class="fa fa-download"></i></a>
+                                <?php
+                            }
+                            echo '</td>';
+                            echo '<td style="text-align:center;">';
+                            ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/trabajogradosemi/index/<?php echo $id;?>/<?php echo $int["id_trabajogrado"];?>"><i class="fa fa-pencil"></i></a>
+                            <?php
+                            echo '</td>';
+
+                            echo '<td style="text-align:center;">';
+                            ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/trabajogradosemi/del/<?php echo $int["id_trabajogrado"];?>/<?php echo $id;?>"><i class="fa fa-trash"></i></a>
+
+                            <?php
+                            echo '</td>';
+                        echo '</tr>';
+                    }
+
+                    echo '</tr>';
+                    echo '</table>';
+                    echo '</div>';
+                ?>
+            </div>
+         </div>
+     </div>
+</div>
+<script src="<?php echo $GLOBALS["ruta_servidor"] . 'js/ui/jquery-ui.min.js'; ?>"></script>
+<script>
+    $("#tabs").tabs();
+</script>
+<script>
+    $(".semi_edit").click(function() {
+        $(".edit-slide").css("left", "0%");
+    });
+    $(".close-edit").click(function() {
+        $(".edit-slide").css("left", "-100%");
+    });
+    $(".cancel-edit").click(function() {
+        $(".edit-slide").css("left", "-100%");
+    });
+</script>

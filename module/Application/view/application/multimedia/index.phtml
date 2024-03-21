@@ -1,0 +1,51 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+								<?php
+							    	echo $this->titulo;
+							    ?>
+							</h3>
+						</div>
+					</div>
+				</div>
+				</br>
+
+<?php
+$form = $this->form;
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo '<h5>';
+echo $this->flashMessenger()->render();
+echo '</h5>';
+
+echo '<div class="twelve columns">';
+echo '<p>';
+echo '<p>';
+echo $this->formlabel($form->get('url'));
+echo $this->formelement($form->get('url'));
+
+echo '<p>';
+echo $this->formelement($form->get('submit'));
+echo '</div>';
+
+
+
+echo '<div>';
+
+echo '</div>';
+
+echo $this->form()->closeTag($form);
+?>				
+</div><!-- Cierre div six columns --> 
+			</div>
+		</div>
+	</div>
+</div>
+

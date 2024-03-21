@@ -1,0 +1,779 @@
+<style>
+    .filter-cons input[type="text"],select{
+        width: 100%;
+    }
+    .filter-cons {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .filter-cons-left {float: left;}
+    .filter-cons-right {float:right;}
+    .filter-cons .btn {width: 275px;}
+    .filter-cons .dropdown {display: inline;}
+    .filter-cons .dropdown-menu {width: 300px;top: 32px;padding: 10px;}
+    .dropdown-menu-inner {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .dropdown-menu-right {left:-140px !important;}
+</style>
+<?php include("public/menu.php"); ?>
+<div class="col col100">
+    <div class="filter-cons">
+        <div class="filter-cons-left"><h4><?php echo $this->titulo; ?></h4></div>
+        <div class="filter-cons-right">
+            <a class="btn" style="margin-right: 8px;" href="<?php echo $this->basePath() ?>/application/consulconvocatoria/index"><i class="icon-arrow-left"></i> Regresar</a>
+            <a class="btn" style="margin-right: 8px;" href="<?php echo $this->basePath() ?>/application/gestionrequi/index/<?php echo $this->id; ?>"><i class="fa fa-close" style="margin-right: 5px;"></i>Borrar filtro</a>
+            <div class="dropdown">
+                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="margin-right: 8px;"><i class="fa fa-filter" style="margin-right: 5px;"></i>Filtro</button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <div class="dropdown-menu-inner">
+                        <?php                               
+                        $form = $this->form;
+                        $form->prepare ();
+                        $form->setAttributes(array(
+                            'action' => $this->url . '/application/gestionrequi/index/' . $this->id,
+                            'method' => 'post'
+                        ));
+                        echo $this->form ()->openTag ( $form );
+                        echo '<h6>'.$this->flashMessenger ()->render ().'</h6>';
+                        echo $this->formlabel($form->get('id_aplicar'));
+                        echo $this->formelement($form->get('id_aplicar'));
+                        echo $this->formlabel($form->get('nombre_proy'));
+                        echo $this->formelement($form->get('nombre_proy'));
+                        echo $this->formelement($form->get('submit'));
+                        echo $this->form ()->closeTag ( $form );
+                        ?>
+                    </div>                      
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div class="twelve columns">
+    				<?php
+                        $conteopropuestas = 0;
+                        $conets = 0;
+                        if($this->tipoConvo == "m"){
+                            foreach ($this->datos2 as $dato) {
+                                $conteopropuestas = $conteopropuestas + 1;
+                                if($dato["estado_aprobacionm"]== "Aprobado"){
+                                    $conets = $conets + 1;
+                                }
+                            }
+                        }else{
+                           foreach ($this->datos as $dato) {
+                                $conteopropuestas = $conteopropuestas + 1;
+                                if($dato["id_estado"]==1){
+                                    $conets = $conets + 1;
+                                }
+                            } 
+                        }
+                        echo '<h5>';
+                        echo 'Tiene ' . $conteopropuestas . ' propuestas, de las cuales ' . $conets . ' estan aprobadas';
+                        echo '</h5>';
+
+                        foreach ($this->datos as $dato) {
+                            $contr = $contcr = $contnr = 0;
+                            $contnullo = 0;
+                            $contnullor = 0;
+                            foreach ($this->req as $req) {
+                                if ($req["id_aplicar"] == $dato["id_aplicar"]) {
+                                    $contr = $contr + 1;
+                                    if ($req["id_ponderacion2"] == "C") {
+                                        $contcr = $contcr + 1;
+                                    } elseif ($req["id_ponderacion2"] == "N") {
+                                        $contnr = $contnr + 1;
+                                    }else {
+                                        $contnullor = $contnullor + 1;
+                                    }
+                                }
+                            }
+
+                            $cont = $contc = $contn = 0;
+                            foreach ($this->docreq as $doc) {
+                                if ($doc["id_aplicar"] == $dato["id_aplicar"]) {
+                                    $cont = $cont + 1;
+                                    if ($doc["id_ponderacion2"] == "C ") {
+                                        $contc = $contc + 1;
+                                    }elseif (trim($doc["id_ponderacion2"]) == "N")  {
+                                        $contn = $contn + 1;
+                                    }else{
+                                        $contnullo = $contnullo + 1;
+                                    }
+                                }
+                            }
+
+                            
+                            $conte = $contce = $contne = 0;
+                            foreach ($this->evaluar as $eval) {
+                                if ($eval["id_aplicar"] == $dato["id_aplicar"]) {
+                                    $conte = $conte + 1;
+                                    if ($eval["id_estado"] == "1") {
+                                        $contce = $contce + 1;
+                                    } else {
+                                        $contne = $contne + 1;
+                                    }
+                                }
+                            }
+                            
+                            $cumpletotal = $conte + $cont + $contr;
+                            $nocumple = $contne + $contn + $contnr;
+                            $sicumple = $contce + $contc + $contcr;
+                            $nulloCumple = $contnullo + $contnullor;
+
+                            echo "<div style='overflow-x:auto; width: 100%;'>";
+                            echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                            echo '<thead>';
+                            echo '<th style="width:10%; color:white;">ID propuesta</th>';
+                            echo '<th style="width:10%; color:white;">Nombre propuesta</th>';
+                            echo '<th style="width:10%; color:white;">Nombre del proponente</th>';
+                            echo '<th style="width:10%; color:white;">Nombre del evaluador</th>';
+                            echo '<th style="width:15%; color:white;">Asignar evaluador</th>';
+                            echo '<th style="width:15%; color:white;">Gestión de requisitos</th>';
+                            echo '<th style="width:15%; color:white;">Ver propuesta</th>';
+                            
+                            if ($cumpletotal == $sicumple) {
+                                echo '<th style="width:15%">Aprobar propuesta</th>';
+                            }
+                            echo '</thead>';
+                            echo '<tbody>';
+                            echo '<tr>';
+
+                            if ($cumpletotal == $sicumple) {
+                                echo '<td  bgcolor="green">';
+                                echo $dato["id_aplicar"];
+                                echo '</td>';
+                                echo '<td  bgcolor="green">';
+                                echo $dato["nombre_proy"];
+                                echo '</td>';
+                                echo '<td  bgcolor="green">';
+                                foreach ($this->usuario as $uds) {
+                                    if ($uds["id_usuario"] == $dato["id_investigador"]) {
+                                        echo $uds["primer_nombre"] . ' ' .$uds["segundo_nombre"] . ' ' . $uds["primer_apellido"]. ' ' . $uds["segundo_apellido"];
+                                    }
+                                }
+                                echo '</td>';
+                                echo '<td bgcolor="green">';
+                                foreach ($this->evaluador as $evaluador) {
+                                    if($evaluador["id_aplicar"] == $dato["id_aplicar"]){
+                                         foreach ($this->usuario as $uds) {
+                                            if ($uds["id_usuario"] == $evaluador["id_usuario"]) {
+                                                echo $uds["primer_nombre"] . ' ' .$uds["segundo_nombre"] . ' ' . $uds["primer_apellido"]. ' ' . $uds["segundo_apellido"].'</br>';
+                                            }
+                                        }
+                                    }
+                                }
+                                echo '</td>';
+                                echo '<td  bgcolor="green">';
+                    ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/asignareval/index/<?php echo $dato["id_aplicar"];?>">Asignar evaluador</a>
+                    <?php
+                                echo '</td>';
+                                echo '<td  bgcolor="green">';
+                    ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/gestionproy/index/<?php echo $dato["id_aplicar"];?>">Gestión  de requisitos</a>
+                    <?php
+                                echo '</td>';
+                                echo '<td  bgcolor="green">';
+                                if($this->tipoConvo==="i"){
+                                    ?>
+                                                <a class="btn" href="<?php echo $this->basePath() ?>/application/editaraplicari/index/<?php echo $dato["id_aplicar"];?>">Ver propuesta</a>
+                                    <?php
+                                }else{
+                                    ?>
+                                                <a class="btn" href="<?php echo $this->basePath() ?>/application/editaraplicar/index/<?php echo $dato["id_aplicar"];?>">Ver propuesta</a>
+                                    <?php
+                                }
+                                echo '</td>';
+                                echo '<td  bgcolor="green">';
+                                if ($dato["id_estado"] != 1) {
+                                   
+                                    ?>
+                                        <a class="btn" href="<?php echo $this->basePath() ?>/application/gestionrequi/asignar/<?php echo $dato["id_aplicar"];?>/<?php echo $this->id ?>">Aprobar <br>propuesta de investigación </a>
+                                    <?php
+                                } else {
+                                    echo 'Esta propuesta ya fue aprobada.';
+                                }
+                                echo '</td>';
+                            }elseif ($cumpletotal == $nulloCumple) {
+                                echo '<td  bgcolor="#94C2D8">';
+                                echo $dato["id_aplicar"];
+                                echo '</td>';
+                                echo '<td  bgcolor="#94C2D8">';
+                                echo $dato["nombre_proy"];
+                                echo '</td>';
+                                echo '<td  bgcolor="#94C2D8">';
+                                foreach ($this->usuario as $uds) {
+                                    if ($uds["id_usuario"] == $dato["id_investigador"]) {
+                                        echo $uds["primer_nombre"] . ' ' .$uds["segundo_nombre"] . ' ' . $uds["primer_apellido"]. ' ' . $uds["segundo_apellido"];
+                                    }
+                                }
+                                echo '</td>';
+                                echo '<td bgcolor="#94C2D8">';
+                                foreach ($this->evaluador as $evaluador) {
+                                    if($evaluador["id_aplicar"] == $dato["id_aplicar"]){
+                                         foreach ($this->usuario as $uds) {
+                                            if ($uds["id_usuario"] == $evaluador["id_usuario"]) {
+                                                echo $uds["primer_nombre"] . ' ' .$uds["segundo_nombre"] . ' ' . $uds["primer_apellido"]. ' ' . $uds["segundo_apellido"].'</br>';
+                                            }
+                                        }
+                                    }
+                                }
+                                echo '</td>';
+                                echo '<td  bgcolor="#94C2D8">';
+                    ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/asignareval/index/<?php echo $dato["id_aplicar"];?>">Asignar evaluador</a>
+                    <?php
+                                echo '</td>';
+                                echo '<td  bgcolor="#94C2D8">';
+                    ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/gestionproy/index/<?php echo $dato["id_aplicar"];?>">Gestión de requisitos</a>
+                    <?php
+                                echo '</td>';
+                                echo '<td  bgcolor="#94C2D8">';
+                                if($this->tipoConvo==="i"){
+                                    ?>
+                                                <a class="btn" href="<?php echo $this->basePath() ?>/application/editaraplicari/index/<?php echo $dato["id_aplicar"];?>">Ver propuesta</a>
+                                    <?php
+                                }else{
+                                    ?>
+                                                <a class="btn" href="<?php echo $this->basePath() ?>/application/editaraplicar/index/<?php echo $dato["id_aplicar"];?>">Ver propuesta</a>
+                                    <?php
+                                }
+                                echo '</td>';
+                            }elseif ($cumpletotal == $nocumple) {
+                                echo '<td  bgcolor="red">';
+                                echo $dato["id_aplicar"];
+                                echo '</td>';
+                                echo '<td  bgcolor="red">';
+                                echo $dato["nombre_proy"];
+                                echo '</td>';
+                                echo '<td  bgcolor="red">';
+                                foreach ($this->usuario as $uds) {
+                                    if ($uds["id_usuario"] == $dato["id_investigador"]) {
+                                        echo $uds["primer_nombre"] . ' ' .$uds["segundo_nombre"] . ' ' . $uds["primer_apellido"]. ' ' . $uds["segundo_apellido"];
+                                    }
+                                }
+                                echo '</td>';
+                                echo '<td bgcolor="red">';
+                                foreach ($this->evaluador as $evaluador) {
+                                    if($evaluador["id_aplicar"] == $dato["id_aplicar"]){
+                                         foreach ($this->usuario as $uds) {
+                                            if ($uds["id_usuario"] == $evaluador["id_usuario"]) {
+                                                echo $uds["primer_nombre"] . ' ' .$uds["segundo_nombre"] . ' ' . $uds["primer_apellido"]. ' ' . $uds["segundo_apellido"].'</br>';
+                                            }
+                                        }
+                                    }
+                                }
+                                echo '</td>';
+                                echo '<td  bgcolor="red">';
+                    ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/asignareval/index/<?php echo $dato["id_aplicar"];?>">Asignar evaluador</a>
+                    <?php
+                                echo '</td>';
+                                echo '<td  bgcolor="red">';
+                    ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/gestionproy/index/<?php echo $dato["id_aplicar"];?>">Gestión de requisitos</a>
+                    <?php
+                                echo '</td>';
+                                echo '<td  bgcolor="red">';
+                                if($this->tipoConvo==="i"){
+                                    ?>
+                                                <a class="btn" href="<?php echo $this->basePath() ?>/application/editaraplicari/index/<?php echo $dato["id_aplicar"];?>">Ver propuesta</a>
+                                    <?php
+                                }else{
+                                    ?>
+                                                <a class="btn" href="<?php echo $this->basePath() ?>/application/editaraplicar/index/<?php echo $dato["id_aplicar"];?>">Ver propuesta</a>
+                                    <?php
+                                }
+                                echo '</td>';
+                            }else {
+                                echo '<td  bgcolor="yellow">';
+                                echo $dato["id_aplicar"];
+                                echo '</td>';
+                                echo '<td bgcolor="yellow">';
+                                echo $dato["nombre_proy"];
+                                echo '</td>';
+                                echo '<td  bgcolor="yellow">';
+                                foreach ($this->usuario as $uds) {
+                                    if ($uds["id_usuario"] == $dato["id_investigador"]) {
+                                        echo $uds["primer_nombre"] . ' ' .$uds["segundo_nombre"] . ' ' . $uds["primer_apellido"]. ' ' . $uds["segundo_apellido"];
+                                    }
+                                }
+                                echo '</td>';
+                                 echo '<td bgcolor="yellow">';
+                                foreach ($this->evaluador as $evaluador) {
+                                    if($evaluador["id_aplicar"] == $dato["id_aplicar"]){
+                                         foreach ($this->usuario as $uds) {
+                                            if ($uds["id_usuario"] == $evaluador["id_usuario"]) {
+                                                echo $uds["primer_nombre"] . ' ' .$uds["segundo_nombre"] . ' ' . $uds["primer_apellido"]. ' ' . $uds["segundo_apellido"].'</br>';
+                                            }
+                                        }
+                                    }
+                                }
+                                echo '<td  bgcolor="yellow">';
+                    ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/asignareval/index/<?php echo $dato["id_aplicar"];?>">Asignar evaluador</a>
+                    <?php
+                                echo '</td>';
+                                echo '<td bgcolor="yellow">';
+                    ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/gestionproy/index/<?php echo $dato["id_aplicar"];?>">Gestión de requisitos</a>
+                    <?php
+                                echo '</td>';
+                                echo '<td bgcolor="yellow">';
+                                if($this->tipoConvo==="i"){
+                                    ?>
+                                                <a class="btn" href="<?php echo $this->basePath() ?>/application/editaraplicari/index/<?php echo $dato["id_aplicar"];?>">Ver propuesta</a>
+                                    <?php
+                                }else{
+                                    ?>
+                                                <a class="btn" href="<?php echo $this->basePath() ?>/application/editaraplicar/index/<?php echo $dato["id_aplicar"];?>">Ver propuesta</a>
+                                    <?php
+                                }
+                                echo '</td>';
+                            }
+                            echo '</tr>';
+                            echo '</tbody>';
+                            echo '</table>';
+                            echo '</div>';
+                            echo '</br>';
+                        }
+                        
+                        foreach ($this->datos2 as $dato2) {
+                            $contnullo = 0;
+                            $contnullor = 0;
+                            $contr = $contcr = $contnr = 0;
+                            foreach ($this->req as $req) {
+                                if ($req["id_aplicar"] == $dato2["id_aplicar"]) {
+                                    $contr = $contr + 1;
+                                    if ($req["id_ponderacion2"] == "C") {
+                                        $contcr = $contcr + 1;
+                                    } elseif ($req["id_ponderacion2"] == "N") {
+                                        $contnr = $contnr + 1;
+                                    } else {
+                                        $contnullor = $contnullor + 1;
+                                    }
+                                }
+                            }
+
+                            $cont = $contc = $contn = 0;
+                            foreach ($this->docreq as $doc) {
+                                if ($doc["id_aplicar"] == $dato2["id_aplicar"]) {
+                                    $cont = $cont + 1;
+                                    if (trim($doc["id_ponderacion2"]) == "C") {
+                                        $contc = $contc + 1;
+                                    } elseif (trim($doc["id_ponderacion2"]) == "N")  {
+                                        $contn = $contn + 1;
+                                    }else{
+                                        $contnullo = $contnullo + 1;
+                                    }
+                                }
+                            }
+
+                            $cumpletotal = $cont + $contr;
+                            $nocumple = $contn + $contnr;
+                            $sicumple = $contc + $contcr;
+                            $nulloCumple = $contnullo + $contnullor;
+                            $conteo = 0;
+                            $nombreProyectoTitulo = "";
+
+                            foreach ($this->pi as $py) {
+                                if ($py["id_proyecto_inv"] == $dato2["id_proyecto"]) {
+                                    $nombreProyectoTitulo = $py["nombre_proyecto"];
+                                    foreach ($this->contm as $cm) {
+                                        if ($cm["id_proyecto"] == $dato2["id_proyecto"]) {
+                                            $conteo = $conteo + 1;
+                                        }
+                                    }
+                                    $cant_pl = $py["cantidad_plazas"] - $conteo;
+                                }
+                            }
+                            if($this->consulta == 1 ){
+                                if($this->dataBus["id_aplicar"] != ""){
+                                    if($dato2["id_aplicar"] != $this->dataBus["id_aplicar"]){
+                                        continue;
+                                    }
+                                }
+
+                                if($this->dataBus["nombre_proy"] != ""){ 
+                                    if(strpos(strtoupper($nombreProyectoTitulo), strtoupper($this->dataBus["nombre_proy"])) === FALSE){
+                                        continue;
+                                    }
+                                     
+                                }
+
+                                
+                            }
+                            echo '<br>';
+                            echo '<h5>';
+                            echo 'Nombre del proyecto: ' . str_replace("-/-"," ",$nombreProyectoTitulo) .'. Número de plazas proyecto: ' . $cant_pl;
+                            echo '</h5>';
+                            echo '<br>';
+                            echo "<div style='overflow-x:auto; width: 100%;'>";
+                            echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                            echo '<th style="width:10%; color:white;">ID inscripción monitoria</th>';
+                            echo '<th style="width:15%; color:white;">Código del proyecto</th>';
+                            echo '<th style="width:30%; color:white;">Nombre del proyecto / Semillero de investigación / Grupo de estudio</th>';
+                            echo '<th style="width:10%; color:white;">Monitor</th>';
+                            echo '<th style="width:10%; color:white;">Gestión requisitos</th>';
+                            echo '<th style="width:15%; color:white;">Ver-inscripción - hoja de vida del aspirante a monitor</th>';
+                            echo '<th style="width:10%; color:white;">Cumplimiento de requisitos</th>';
+                            echo '</thead>';
+                            echo '<tbody>';
+                            echo '<tr>';
+                            $conteo = 0;
+                            if($dato2["estado_aprobacionm"]=="Aprobado"){
+                                echo '<td  bgcolor="green">';
+                                echo $dato2["id_aplicar"];
+                                echo '</td>';
+                                echo '<td  bgcolor="green">';
+                                foreach ($this->pi as $py) {
+                                    if ($py["id_proyecto_inv"] == $dato2["id_proyecto"]) {
+                                        foreach ($this->contm as $cm) {
+                                            if ($cm["id_proyecto"] == $dato2["id_proyecto"]) {
+                                                $conteo = $conteo + 1;
+                                            }
+                                        }
+                                    }
+                                    if ($py["id_proyecto_inv"] == $dato2["id_proyecto"]) {
+                                        $pos = strrpos($py["nombre_proyecto"], "-");
+                                        echo substr($py["nombre_proyecto"], 0, $pos-2);
+                                    }
+                                }
+                                echo '</td>';
+                                echo '<td  bgcolor="green">';
+                                foreach ($this->pi as $py) {
+                                    if ($py["id_proyecto_inv"] == $dato2["id_proyecto"]) {
+                                        foreach ($this->contm as $cm) {
+                                            if ($cm["id_proyecto"] == $dato2["id_proyecto"]) {
+                                                $conteo = $conteo + 1;
+                                            }
+                                        }
+                                    }
+                                    if ($py["id_proyecto_inv"] == $dato2["id_proyecto"]) {
+                                        $pos = strrpos($py["nombre_proyecto"], "-");
+                                        $cant = strlen($py["nombre_proyecto"]);
+                                        echo substr($py["nombre_proyecto"], $pos+1, $cant);
+                                    }
+                                }
+                                echo '</td>';
+                            }elseif($dato2["estado_aprobacionm"]=="No aprobado"){
+                                echo '<td  bgcolor="gray">';
+                                echo $dato2["id_aplicar"];
+                                echo '</td>';
+                                echo '<td  bgcolor="gray">';
+                                foreach ($this->pi as $py) {
+                                    if ($py["id_proyecto_inv"] == $dato2["id_proyecto"]) {
+                                        foreach ($this->contm as $cm) {
+                                            if ($cm["id_proyecto"] == $dato2["id_proyecto"]) {
+                                                $conteo = $conteo + 1;
+                                            }
+                                        }
+                                    }
+                                    if ($py["id_proyecto_inv"] == $dato2["id_proyecto"]) {
+                                        $pos = strrpos($py["nombre_proyecto"], "-");
+                                        echo substr($py["nombre_proyecto"], 0, $pos-2);
+                                    }
+                                }
+                                echo '</td>';
+                                echo '<td  bgcolor="gray">';
+                                foreach ($this->pi as $py) {
+                                    if ($py["id_proyecto_inv"] == $dato2["id_proyecto"]) {
+                                        foreach ($this->contm as $cm) {
+                                            if ($cm["id_proyecto"] == $dato2["id_proyecto"]) {
+                                                $conteo = $conteo + 1;
+                                            }
+                                        }
+                                    }
+                                    if ($py["id_proyecto_inv"] == $dato2["id_proyecto"]) {
+                                        $pos = strrpos($py["nombre_proyecto"], "-");
+                                        $cant = strlen($py["nombre_proyecto"]);
+                                        echo substr($py["nombre_proyecto"], $pos+1, $cant);
+                                    }
+                                }
+                                echo '</td>';
+                            }elseif ($cumpletotal == $sicumple) {
+                                echo '<td  bgcolor="yellow">';
+                                echo $dato2["id_aplicar"];
+                                echo '</td>';
+                                echo '<td  bgcolor="yellow">';
+                                foreach ($this->pi as $py) {
+                                    if ($py["id_proyecto_inv"] == $dato2["id_proyecto"]) {
+                                        foreach ($this->contm as $cm) {
+                                            if ($cm["id_proyecto"] == $dato2["id_proyecto"]) {
+                                                $conteo = $conteo + 1;
+                                            }
+                                        }
+                                    }
+                                    if ($py["id_proyecto_inv"] == $dato2["id_proyecto"]) {
+                                        $pos = strrpos($py["nombre_proyecto"], "-");
+                                        echo substr($py["nombre_proyecto"], 0, $pos-2);
+                                    }
+                                }
+                                echo '</td>';
+                                echo '<td  bgcolor="yellow">';
+                                foreach ($this->pi as $py) {
+                                    if ($py["id_proyecto_inv"] == $dato2["id_proyecto"]) {
+                                        foreach ($this->contm as $cm) {
+                                            if ($cm["id_proyecto"] == $dato2["id_proyecto"]) {
+                                                $conteo = $conteo + 1;
+                                            }
+                                        }
+                                    }
+                                    if ($py["id_proyecto_inv"] == $dato2["id_proyecto"]) {
+                                        $pos = strrpos($py["nombre_proyecto"], "-");
+                                        $cant = strlen($py["nombre_proyecto"]);
+                                        echo substr($py["nombre_proyecto"], $pos+1, $cant);
+                                    }
+                                }
+                                echo '</td>';
+                            }elseif ($cumpletotal == $nocumple) {
+                                echo '<td  bgcolor="red">';
+                                echo $dato2["id_aplicar"] ;
+                                echo '</td>';
+                                echo '<td  bgcolor="red">';
+                                foreach ($this->pi as $py) {
+                                    if ($py["id_proyecto_inv"] == $dato2["id_proyecto"]) {    
+                                        $pos = strrpos($py["nombre_proyecto"], "-");
+                                        echo substr($py["nombre_proyecto"], 0, $pos-2);;
+                                    }
+                                }
+                                echo '</td>';
+                                echo '<td  bgcolor="red">';
+                                foreach ($this->pi as $py) {
+                                    if ($py["id_proyecto_inv"] == $dato2["id_proyecto"]) {    
+                                        $pos = strrpos($py["nombre_proyecto"], "-");
+                                        $cant = strlen($py["nombre_proyecto"]);
+                                        echo substr($py["nombre_proyecto"], $pos+1, $cant);
+                                    }
+                                }
+                                echo '</td>';
+                            }elseif ($cumpletotal == $nulloCumple) {
+                                echo '<td  bgcolor="#94C2D8">';
+                                echo $dato2["id_aplicar"];
+                                echo '</td>';
+                                echo '<td  bgcolor="#94C2D8">';
+                                foreach ($this->pi as $py) {
+                                    if ($py["id_proyecto_inv"] == $dato2["id_proyecto"]) {    
+                                        $pos = strrpos($py["nombre_proyecto"], "-");
+                                        echo substr($py["nombre_proyecto"], 0, $pos-2);;
+                                    }
+                                }
+                                echo '</td>';
+                                echo '<td  bgcolor="#94C2D8">';
+                                foreach ($this->pi as $py) {
+                                    if ($py["id_proyecto_inv"] == $dato2["id_proyecto"]) {    
+                                        $pos = strrpos($py["nombre_proyecto"], "-");
+                                        $cant = strlen($py["nombre_proyecto"]);
+                                        echo substr($py["nombre_proyecto"], $pos+1, $cant);
+                                    }
+                                }
+                                echo '</td>';
+
+                            }else {
+                                echo '<td  bgcolor="yellow">';
+                                echo $dato2["id_aplicar"];
+                                echo '</td>';
+                                echo '<td  bgcolor="yellow">';
+                                foreach ($this->pi as $py) {
+                                    if ($py["id_proyecto_inv"] == $dato2["id_proyecto"]) {    
+                                        $pos = strrpos($py["nombre_proyecto"], "-");
+                                        echo substr($py["nombre_proyecto"], 0, $pos-2);;
+                                    }
+                                }
+                                echo '</td>';
+                                echo '<td  bgcolor="yellow">';
+                                foreach ($this->pi as $py) {
+                                    if ($py["id_proyecto_inv"] == $dato2["id_proyecto"]) {    
+                                        $pos = strrpos($py["nombre_proyecto"], "-");
+                                        $cant = strlen($py["nombre_proyecto"]);
+                                        echo substr($py["nombre_proyecto"], $pos+1, $cant);
+                                    }
+                                }
+                                echo '</td>';
+                            }
+
+                            if($dato2["estado_aprobacionm"]=="Aprobado"){
+                                echo '<td  bgcolor="green">';
+                                foreach ($this->usuario as $ud) {
+                                    if ($ud["id_usuario"] == $dato2["id_usuario"]) {
+                                        echo $ud["primer_nombre"].' '.$ud["segundo_nombre"]." ".$ud["primer_apellido"].' '.$ud["segundo_apellido"];
+                                    }
+                                }
+                                echo '</td>';
+                            }elseif($dato2["estado_aprobacionm"]=="No aprobado"){
+                                echo '<td  bgcolor="gray">';
+                                foreach ($this->usuario as $ud) {
+                                    if ($ud["id_usuario"] == $dato2["id_usuario"]) {
+                                        echo $ud["primer_nombre"].' '.$ud["segundo_nombre"]." ".$ud["primer_apellido"].' '.$ud["segundo_apellido"];
+                                    }
+                                }
+                                echo '</td>';
+                            }elseif ($cumpletotal == $sicumple){
+                                echo '<td  bgcolor="yellow">';
+                                foreach ($this->usuario as $ud) {
+                                    if ($ud["id_usuario"] == $dato2["id_usuario"]) {
+                                        echo $ud["primer_nombre"].' '.$ud["segundo_nombre"]." ".$ud["primer_apellido"].' '.$ud["segundo_apellido"];
+                                    }
+                                }
+                                echo '</td>';
+                            } elseif ($cumpletotal == $nocumple) {
+                                echo '<td  bgcolor="red">';
+                                foreach ($this->usuario as $ud) {
+                                    if ($ud["id_usuario"] == $dato2["id_usuario"]) {
+                                        echo $ud["primer_nombre"].' '.$ud["segundo_nombre"]." ".$ud["primer_apellido"].' '.$ud["segundo_apellido"];
+                                    }
+                                }
+                                echo '</td>';
+                            } elseif ($cumpletotal == $nulloCumple) {
+                                echo '<td  bgcolor="#94C2D8">';
+                                foreach ($this->usuario as $ud) {
+                                    if ($ud["id_usuario"] == $dato2["id_usuario"]) {
+                                        echo $ud["primer_nombre"].' '.$ud["segundo_nombre"]." ".$ud["primer_apellido"].' '.$ud["segundo_apellido"];
+                                    }
+                                }
+                                echo '</td>';
+                            }else {
+                                echo '<td  bgcolor="yellow">';
+                                foreach ($this->usuario as $ud) {
+                                    if ($ud["id_usuario"] == $dato2["id_usuario"]) {
+                                        echo $ud["primer_nombre"].' '.$ud["segundo_nombre"]." ".$ud["primer_apellido"].' '.$ud["segundo_apellido"];
+                                    }
+                                }
+                                echo '</td>';
+                            }
+
+                            if($dato2["estado_aprobacionm"]=="Aprobado"){
+                                echo '<td  bgcolor="green" style="text-align: center;">';
+                    ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/gestionproym/index/<?php echo $dato2["id_aplicar"];?>/<?php echo $id;?>">Gestión de requisitos</a>
+                    <?php
+                                echo '</td>';
+                            }elseif($dato2["estado_aprobacionm"]=="No aprobado"){
+                                echo '<td  bgcolor="gray" style="text-align: center;">';
+                    ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/gestionproym/index/<?php echo $dato2["id_aplicar"];?>/<?php echo $id;?>">Gestión de requisitos</a>
+                    <?php
+                                echo '</td>';
+                            }elseif ($cumpletotal == $sicumple) {
+                                echo '<td  bgcolor="yellow" style="text-align: center;">';
+                    ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/gestionproym/index/<?php echo $dato2["id_aplicar"];?>/<?php echo $id;?>">Gestión de requisitos</a>
+                    <?php
+                                echo '</td>';
+                            }elseif ($cumpletotal == $nocumple) {
+                                echo '<td  bgcolor="red" style="text-align: center;">';
+                    ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/gestionproym/index/<?php echo $dato2["id_aplicar"];?>/<?php echo $id;?>">Gestión de requisitos</a>
+                    <?php
+                                echo '</td>';
+                            } elseif ($cumpletotal == $nulloCumple) {
+                                echo '<td  bgcolor="#94C2D8" style="text-align: center;">';
+                    ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/gestionproym/index/<?php echo $dato2["id_aplicar"];?>/<?php echo $id;?>">Gestión de requisitos</a>
+                    <?php
+                                echo '</td>';
+                            }else {
+                                echo '<td  bgcolor="yellow" style="text-align: center;">';
+                    ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/gestionproym/index/<?php echo $dato2["id_aplicar"];?>/<?php echo $id;?>">Gestión de requisitos</a>
+                    <?php
+                                echo '</td>';
+                            }
+                            
+                            if($dato2["estado_aprobacionm"]=="Aprobado"){
+                                echo '<td  bgcolor="green" style="text-align: center;">';
+                    ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/editaraplicarm/index/<?php echo $dato2["id_aplicar"];?>">Ver</a>
+                    <?php
+                                echo '</td>';
+                            }elseif($dato2["estado_aprobacionm"]=="No aprobado"){
+                                echo '<td  bgcolor="gray" style="text-align: center;">';
+                    ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/editaraplicarm/index/<?php echo $dato2["id_aplicar"];?>">Ver</a>
+                    <?php
+                                echo '</td>';
+                            }elseif ($cumpletotal == $sicumple) {
+                                echo '<td  bgcolor="yellow" style="text-align: center;">';
+                    ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/editaraplicarm/index/<?php echo $dato2["id_aplicar"];?>">Ver</a>
+                    <?php
+                                echo '</td>';
+                            }elseif ($cumpletotal == $nocumple) {
+                                echo '<td  bgcolor="red" style="text-align: center;">';
+                    ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/editaraplicarm/index/<?php echo $dato2["id_aplicar"];?>">Ver</a>
+                    <?php
+                                echo '</td>';
+                            } elseif ($cumpletotal == $nulloCumple) {
+                                 echo '<td  bgcolor="#94C2D8" style="text-align: center;">';
+                    ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/editaraplicarm/index/<?php echo $dato2["id_aplicar"];?>">Ver</a>
+                    <?php
+                                echo '</td>';
+                            } else {
+                                echo '<td  bgcolor="yellow" style="text-align: center;">';
+                    ?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/editaraplicarm/index/<?php echo $dato2["id_aplicar"];?>">Ver</a>
+                    <?php
+                                echo '</td>';
+                            }
+
+                            if($dato2["estado_aprobacionm"]=="Aprobado"){
+                                echo '<td  bgcolor="green" style="text-align: center;">';
+                                if ($conteo <= $py["cantidad_plazas"]) {
+                                    
+                                ?>
+                                     <a class="btn" href="<?php echo $this->basePath() ?>/application/gestionrequi/aprobarm/<?php echo $dato2["id_aplicar"];?>/<?php echo $this->id ?>">Aprobar monitor</a>
+                                <?php
+                                }
+                                echo'</td>';
+                            }elseif($dato2["estado_aprobacionm"]=="No aprobado"){
+                                echo '<td  bgcolor="gray" style="text-align: center;">';
+                                if ($conteo <= $py["cantidad_plazas"]) {
+                                    
+                                ?>
+                                     <a class="btn" href="<?php echo $this->basePath() ?>/application/gestionrequi/aprobarm/<?php echo $dato2["id_aplicar"];?>/<?php echo $this->id ?>">Aprobar monitor</a>
+                                <?php
+                                }
+                                echo'</td>';
+                            }elseif ($cumpletotal == $sicumple) {
+                                echo '<td  bgcolor="yellow" style="text-align: center;">';
+                                if ($conteo <= $py["cantidad_plazas"]) {
+                                    /*<a class="btn" href="<?php echo $this->basePath() ?>/application/gestionrequi/aprobarm/<?php echo $dato2["id_aplicar"];?>/<?php echo $this->id ?>">Aprobar monitor</a>
+                                    */
+                                ?>
+                                     <a class="btn" href="<?php echo $this->basePath() ?>/application/gestionrequi/aprobarm/<?php echo $dato2["id_aplicar"];?>/<?php echo $this->id ?>">Aprobar monitor</a>
+                                <?php
+                                }
+                                echo'</td>';
+                            }elseif($cumpletotal==$nocumple){
+                                echo '<td  bgcolor="red" style="text-align: center;">';
+                                ?>
+                                    <a class="btn" href="<?php echo $this->basePath() ?>/application/gestionrequi/aprobarm/<?php echo $dato2["id_aplicar"];?>/<?php echo $this->id ?>">Aprobar monitor</a>
+                                <?php
+                                echo'</td>';
+                            }elseif ($cumpletotal == $nulloCumple) {
+                                echo '<td  bgcolor="#94C2D8" style="text-align: center;">';
+                                ?>
+                                    <a class="btn" href="<?php echo $this->basePath() ?>/application/gestionrequi/aprobarm/<?php echo $dato2["id_aplicar"];?>/<?php echo $this->id ?>">Aprobar monitor</a>
+                                <?php
+                                echo'</td>';
+                            }else{
+                                echo '<td  bgcolor="yellow" style="text-align: center;">';
+                                echo'</td>';
+                            }
+                            echo '</tr>';
+                            echo '</tbody>';
+                            echo '</table>';
+                            echo '</div>';
+                            echo '</br>';
+                        }
+                    ?>
+                    </br>
+                </div>
+			</div>
+		</div>
+	</div>
+</div>

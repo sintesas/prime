@@ -1,0 +1,1066 @@
+<?php
+if(!$this->consulta){
+
+    include("public/menu.php"); 
+?>
+    <div id="wrapper_1">
+        <div id="container_1">
+            <div class="row2">
+                <div class="nine3 columns">
+                    <div id="centersectiontitle">
+                        <div class="twelve columns">
+                            <div class="sidebartitle">
+                                <h3>
+                                    <?php
+                                        echo $this->titulo;
+                                    ?>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="six columns">
+                        <a href="<?php echo $this->basePath() ?>/application/reportes/index">
+                            <i class="icon-arrow-left"></i> Regresar
+                        </a>
+                    </div>
+  
+    <?php
+    $form = $this->form;
+    $form->prepare();
+
+    echo $this->form()->openTag($form);
+    echo '<div class="twelve columns">';
+    echo '<br />';
+    echo '</div>';
+    
+    echo '<div class="six columns">';
+    echo '<p>';
+    echo $this->formlabel($form->get('codigo'));
+    echo $this->formelement($form->get('codigo'));
+
+    echo '<p>';
+    echo $this->formlabel($form->get('ano'));
+    echo $this->formelement($form->get('ano'));
+
+    echo '<p>';
+    echo $this->formlabel($form->get('nombre'));
+    echo $this->formelement($form->get('nombre'));
+
+    echo '</br>';
+    echo $this->formelement($form->get('submit'));
+
+    echo '</div>';
+
+    echo '<div class="six columns">';
+    echo '<p>';
+    echo $this->formlabel($form->get('lider'));
+    echo $this->formelement($form->get('lider'));
+
+    echo '<p>';
+    echo $this->formlabel($form->get('clasificacion'));
+    echo $this->formelement($form->get('clasificacion'));
+
+    echo '<p>';
+    echo $this->formlabel($form->get('estado'));
+    echo $this->formelement($form->get('estado'));
+    
+    echo '</div>';
+    echo $this->form()->closeTag($form);
+?>              
+
+
+                </div><!-- Cierre div six columns --> 
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+
+}else{
+    require_once('vendor/PHPExcel/PHPExcel.php');
+    require_once('vendor/PHPExcel/PHPExcel/Reader/Excel2007.php');
+
+    $objPHPExcel = new PHPExcel();
+
+    $objPHPExcel->getProperties()
+    ->setCreator("PrimeCIUP")
+    ->setLastModifiedBy("PrimeCIUP")
+    ->setTitle("Reporte grupos PrimeCIUP")
+    ->setSubject("Listado grupos de investigación")
+    ->setDescription("Listado grupos de investigación")
+    ->setKeywords("Excel Office 2007 openxml php")
+    ->setCategory("PrimeCiup");
+
+    if(count($this->datos)<=0){
+        $objPHPExcel->setActiveSheetIndex(0)
+        ->setCellValue('A1', 'No se encontraron resultados.');
+
+        // Save Excel 2007 file
+        #echo date('H:i:s') . " Write to Excel2007 format\n";
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        ob_end_clean();
+        // We'll be outputting an excel file
+        header('Content-type: application/vnd.ms-excel');
+        // It will be called file.xls
+        header('Content-Disposition: attachment; filename="redes.xlsx"');
+        $objWriter->save('php://output');
+        exit;
+    }else{
+        $objPHPExcel->setActiveSheetIndex(0)
+        ->setCellValue('A1', 'ID grupo')
+        ->setCellValue('B1', 'Nombre')
+        ->setCellValue('C1', 'Coordinador')
+        ->setCellValue('D1', 'Email coordinador')
+        ->setCellValue('E1', 'Unidad académica')
+        ->setCellValue('F1', 'Dependencia académica')
+        ->setCellValue('G1', 'Programa académico')
+        ->setCellValue('H1', 'Dirección postal')
+        ->setCellValue('I1', 'Estado')
+        ->setCellValue('J1', 'Clasificación')
+        ->setCellValue('K1', 'Código grupo')
+        ->setCellValue('L1', 'Fecha creación')
+        ->setCellValue('M1', 'Pais')
+        ->setCellValue('N1', 'Ciudad')
+        ->setCellValue('O1', 'Teléfono')
+        ->setCellValue('P1', 'Email')
+        ->setCellValue('Q1', 'URL')
+        ->setCellValue('R1', 'Campo de investigación')
+        ->setCellValue('S1', 'Visión')
+        ->setCellValue('T1', 'Misión')
+        ->setCellValue('U1', 'Retos')
+        ->setCellValue('V1', 'Estado del arte')
+        ->setCellValue('W1', 'Descripción')
+        ->setCellValue('X1', 'Descriptores')
+        ->setCellValue('Y1', 'Plan estrategico')
+        ->setCellValue('Z1', 'Plan de acción')
+        ->setCellValue('AA1', 'Sectores de aplicación');
+
+        $celda = 2;
+        foreach($this->datos as $dato){
+            $objPHPExcel->setActiveSheetIndex(0);
+            
+            $objPHPExcel->getActiveSheet()
+            ->setCellValue('A'. $celda, trim($dato["id_grupo_inv"]))
+            ->setCellValue('B'. $celda, trim($dato["nombre_grupo"]));
+
+            foreach ($this->usuarios as $us) {
+                if ($dato["id_lider"] == $us["id_usuario"]) {
+                    $objPHPExcel->getActiveSheet()
+                    ->setCellValue('C'. $celda, trim($us["primer_nombre"]).' '.trim($us["segundo_nombre"]).' '.trim($us["primer_apellido"]).' '.trim($us["segundo_apellido"]));
+                    $objPHPExcel->getActiveSheet()->setCellValue('D'. $celda, trim($us["email"]));
+                }
+            }
+
+            foreach ($this->valflex as $us) {
+                if ($dato["id_unidad_academica"] == $us["id_valor_flexible"]) {
+                    $objPHPExcel->getActiveSheet()->setCellValue('E'. $celda, trim($us["descripcion_valor"]));
+                }
+            }
+
+            foreach ($this->valflex as $us) {
+                if ($dato["id_dependencia_academica"] == $us["id_valor_flexible"]) {
+                    $objPHPExcel->getActiveSheet()->setCellValue('F'. $celda, trim($us["descripcion_valor"]));
+                }
+            }
+
+            foreach ($this->valflex as $us) {
+                if ($dato["id_programa_academico"] == $us["id_valor_flexible"]) {
+                    $objPHPExcel->getActiveSheet()->setCellValue('G'. $celda, trim($us["descripcion_valor"]));
+                }
+            }
+
+            $objPHPExcel->getActiveSheet()
+            ->setCellValue('H'. $celda, trim($dato["dir_postal"]))
+            ->setCellValue('I'. $celda, trim($dato["estado"]));
+
+            foreach ($this->valflex as $us) {
+                if ($dato["id_clasificacion"] == $us["id_valor_flexible"]) {
+                    $objPHPExcel->getActiveSheet()->setCellValue('J'. $celda, trim($us["descripcion_valor"]));
+                }
+            }
+
+            $objPHPExcel->getActiveSheet()
+            ->setCellValue('K'. $celda, trim($dato["cod_grupo"]))
+            ->setCellValue('L'. $celda, trim($dato["fecha_creacion_grupo"]))
+            ->setCellValue('M'. $celda, trim($dato["id_pais"]))
+            ->setCellValue('N'. $celda, trim($dato["id_ciudad"]))
+            ->setCellValue('O'. $celda, trim($dato["telefono"]))
+            ->setCellValue('P'. $celda, trim($dato["email"]))
+            ->setCellValue('Q'. $celda, trim($dato["url"]));
+
+            foreach ($this->valflex as $us) {
+                if ($dato["id_campo_investigacion"] == $us["id_valor_flexible"]) {
+                    $objPHPExcel->getActiveSheet()->setCellValue('R'. $celda, trim($us["descripcion_valor"]));
+                }
+            }
+
+            $objPHPExcel->getActiveSheet()
+            ->setCellValue('S'. $celda, trim($dato["vision"]))
+            ->setCellValue('T'. $celda, trim($dato["mision"]))
+            ->setCellValue('U'. $celda, trim($dato["retos"]))
+            ->setCellValue('V'. $celda, trim($dato["estado_arte"]))
+            ->setCellValue('W'. $celda, trim($dato["descripcion"]))
+            ->setCellValue('X'. $celda, trim($dato["descriptores"]))
+            ->setCellValue('Y'. $celda, trim($dato["plan_estrategico"]))
+            ->setCellValue('Z'. $celda, trim($dato["plan_accion"]))
+            ->setCellValue('AA'. $celda, trim($dato["sectores_aplicacion"]));
+            $celda++;
+        }
+        $objPHPExcel->getActiveSheet()->setTitle('Datos básicos');
+
+        $objPHPExcel->createSheet(1);
+        $objPHPExcel->setActiveSheetIndex(1);
+        $objPHPExcel->getActiveSheet()->setTitle('Líneas de investigación');
+
+        $objPHPExcel->getActiveSheet()
+        ->setCellValue('A1', 'ID Grupo')
+        ->setCellValue('B1', 'Nombre')
+        ->setCellValue('C1', 'Código')
+        ->setCellValue('D1', 'Nombre')
+        ->setCellValue('E1', 'Objetivo')
+        ->setCellValue('F1', 'Efectos')
+        ->setCellValue('G1', 'Logros');
+
+        $celda = 2;
+        foreach($this->datos as $dato){
+            foreach ($this->lineas as $semi) {
+                if ($dato["id_grupo_inv"] == $semi["id_grupo_inv"]) {
+                    $objPHPExcel->getActiveSheet()
+                    ->setCellValue('A'. $celda, trim($dato["id_grupo_inv"]))
+                    ->setCellValue('B'. $celda, trim($dato["nombre_grupo"]))
+                    ->setCellValue('C'. $celda, trim($dato["cod_grupo"]))
+                    ->setCellValue('D'. $celda, trim($semi["nombre_linea"]))
+                    ->setCellValue('E'. $celda, trim($semi["objetivo"]))
+                    ->setCellValue('F'. $celda, trim($semi["efectos"]))
+                    ->setCellValue('G'. $celda, trim($semi["logros"]));
+                    $celda++;
+                }
+            }
+        }
+
+        $objPHPExcel->createSheet(2);
+        $objPHPExcel->setActiveSheetIndex(2);
+        $objPHPExcel->getActiveSheet()->setTitle('Grupos relacionados');
+
+        $objPHPExcel->getActiveSheet()
+        ->setCellValue('A1', 'ID Grupo')
+        ->setCellValue('B1', 'Nombre')
+        ->setCellValue('C1', 'Código')
+        ->setCellValue('D1', 'Nombre')
+        ->setCellValue('E1', 'Lider')
+        ->setCellValue('F1', 'Clasificación')
+        ->setCellValue('G1', 'Descripción');
+
+        $celda = 2;
+        foreach($this->datos as $dato){
+            foreach ($this->gruposrelacionados as $semi) {
+                if ($dato["id_grupo_inv"] == $semi["id_grupo_inv"]) {
+                    foreach($this->datos as $grupos){
+                        if ($grupos["id_grupo_inv"] == $semi["id_grupo"]) {
+                            $objPHPExcel->getActiveSheet()
+                            ->setCellValue('A'. $celda, trim($dato["id_grupo_inv"]))
+                            ->setCellValue('B'. $celda, trim($dato["nombre_grupo"]))
+                            ->setCellValue('C'. $celda, trim($dato["cod_grupo"]))
+                            ->setCellValue('D'. $celda, trim($grupos["nombre_grupo"]));
+                            foreach ($this->usuarios as $us) {
+                                if ($grupos["id_lider"] == $us["id_usuario"]) {
+                                    $objPHPExcel->getActiveSheet()
+                                    ->setCellValue('E'. $celda, trim($us["primer_nombre"]).' '.trim($us["segundo_nombre"]).' '.trim($us["primer_apellido"]).' '.trim($us["segundo_apellido"]));
+                                }
+                            }
+
+                            foreach ($this->valflex as $us) {
+                                if ($grupos["id_clasificacion"] == $us["id_valor_flexible"]) {
+                                    $objPHPExcel->getActiveSheet()->setCellValue('F'. $celda, trim($us["descripcion_valor"]));
+                                }
+                            }
+
+                            $objPHPExcel->getActiveSheet()
+                            ->setCellValue('G'. $celda, trim($grupos["descripcion"]));
+                            $celda++;
+                        }
+                    }
+                }
+            }
+        }
+
+        $objPHPExcel->createSheet(3);
+        $objPHPExcel->setActiveSheetIndex(3);
+        $objPHPExcel->getActiveSheet()->setTitle('Redes del grupo');
+
+        $objPHPExcel->getActiveSheet()
+        ->setCellValue('A1', 'ID Grupo')
+        ->setCellValue('B1', 'Nombre')
+        ->setCellValue('C1', 'Código')
+        ->setCellValue('D1', 'Nombre')
+        ->setCellValue('E1', 'Código')
+        ->setCellValue('F1', 'Coordinador 1')
+        ->setCellValue('G1', 'Coordinador 2')
+        ->setCellValue('H1', 'Descripción');
+
+        $celda = 2;
+        foreach($this->datos as $dato){
+            foreach ($this->redes as $semi) {
+                if ($dato["id_grupo_inv"] == $semi["id_grupo_inv"]) {
+                    foreach ($this->redinvestigacion as $redinv) {
+                        if ($semi["id_red"] == $redinv["id"]) {
+                            $objPHPExcel->getActiveSheet()
+                            ->setCellValue('A'. $celda, trim($dato["id_grupo_inv"]))
+                            ->setCellValue('B'. $celda, trim($dato["nombre_grupo"]))
+                            ->setCellValue('C'. $celda, trim($dato["cod_grupo"]))
+                            ->setCellValue('D'. $celda, trim($redinv["nombre"]))
+                            ->setCellValue('E'. $celda, trim($redinv["codigo"]));
+
+                            foreach ($this->usuarios as $us) {
+                                if ($redinv["coordinador_uno"] == $us["id_usuario"]) {
+                                    $objPHPExcel->getActiveSheet()
+                                    ->setCellValue('F'. $celda, trim($us["primer_nombre"]).' '.trim($us["segundo_nombre"]).' '.trim($us["primer_apellido"]).' '.trim($us["segundo_apellido"]));
+                                }
+                            }
+
+                            foreach ($this->usuarios as $us) {
+                                if ($redinv["coordinador_dos"] == $us["id_usuario"]) {
+                                    $objPHPExcel->getActiveSheet()
+                                    ->setCellValue('G'. $celda, trim($us["primer_nombre"]).' '.trim($us["segundo_nombre"]).' '.trim($us["primer_apellido"]).' '.trim($us["segundo_apellido"]));
+                                }
+                            }
+
+                            $objPHPExcel->getActiveSheet()
+                            ->setCellValue('G'. $celda, trim($redinv["descripcion"]));
+                            $celda++;
+                        }
+                    }
+                }
+            }
+        }
+        
+        $objPHPExcel->createSheet(4);
+        $objPHPExcel->setActiveSheetIndex(4);
+        $objPHPExcel->getActiveSheet()->setTitle('Asociaciones');
+
+        $objPHPExcel->getActiveSheet()
+        ->setCellValue('A1', 'ID Grupo')
+        ->setCellValue('B1', 'Nombre')
+        ->setCellValue('C1', 'Código')
+        ->setCellValue('D1', 'Nombre');
+
+        $celda = 2;
+        foreach($this->datos as $dato){
+            foreach ($this->asociaciones as $semi) {
+                if ($dato["id_grupo_inv"] == $semi["id_grupo_inv"]) {
+                    $objPHPExcel->getActiveSheet()
+                    ->setCellValue('A'. $celda, trim($dato["id_grupo_inv"]))
+                    ->setCellValue('B'. $celda, trim($dato["nombre_grupo"]))
+                    ->setCellValue('C'. $celda, trim($dato["cod_grupo"]))
+                    ->setCellValue('D'. $celda, trim($semi["nombre_asociacion"]));
+                    $celda++;
+                }
+            }
+        }
+
+        $objPHPExcel->createSheet(5);
+        $objPHPExcel->setActiveSheetIndex(5);
+        $objPHPExcel->getActiveSheet()->setTitle('Reconocimientos');
+        
+        $objPHPExcel->getActiveSheet()
+        ->setCellValue('A1', 'ID Grupo')
+        ->setCellValue('B1', 'Nombre')
+        ->setCellValue('C1', 'Código')
+        ->setCellValue('D1', 'Nombre del reconocimiento')
+        ->setCellValue('E1', 'No. de acto administrativo')
+        ->setCellValue('F1', 'Descripción')
+        ->setCellValue('G1', 'Fecha')
+        ->setCellValue('H1', 'Valor');
+
+        $celda = 2;
+        foreach($this->datos as $dato){
+            foreach ($this->reconocimientos as $reconocimiento) {
+                if ($dato["id_grupo_inv"] == $reconocimiento["id_grupo_inv"]) {
+                    $objPHPExcel->getActiveSheet()
+                    ->setCellValue('A'. $celda, trim($dato["id_grupo_inv"]))
+                    ->setCellValue('B'. $celda, trim($dato["nombre_grupo"]))
+                    ->setCellValue('C'. $celda, trim($dato["cod_grupo"]))
+                    ->setCellValue('D'. $celda, trim($reconocimiento["nombre"]))
+                    ->setCellValue('E'. $celda, trim($reconocimiento["numero_acto"]))
+                    ->setCellValue('F'. $celda, trim($reconocimiento["descripcion"]))
+                    ->setCellValue('G'. $celda, trim($reconocimiento["fecha"]))
+                    ->setCellValue('h'. $celda, trim($reconocimiento["valor"]));
+
+                    $celda++;
+                }
+            }
+        }
+
+        $objPHPExcel->createSheet(6);
+        $objPHPExcel->setActiveSheetIndex(6);
+        $objPHPExcel->getActiveSheet()->setTitle('Semilleros y colectivos');
+
+        $objPHPExcel->getActiveSheet()
+        ->setCellValue('A1', 'ID Grupo')
+        ->setCellValue('B1', 'Nombre')
+        ->setCellValue('C1', 'Código')
+        ->setCellValue('D1', 'Nombre')
+        ->setCellValue('E1', 'Código')
+        ->setCellValue('F1', 'Coordinador 1')
+        ->setCellValue('G1', 'Coordinador 2')
+        ->setCellValue('H1', 'Actividades');
+
+        $celda = 2;
+        foreach($this->datos as $dato){
+            foreach ($this->semilleros as $semi) {
+                if ($dato["id_grupo_inv"] == $semi["id_grupo_inv"]) {
+                    foreach ($this->semillerosinvestigacion as $seminv) {
+                        if ($semi["id_semillero"] == $seminv["id"]) {
+                            $objPHPExcel->getActiveSheet()
+                            ->setCellValue('A'. $celda, trim($dato["id_grupo_inv"]))
+                            ->setCellValue('B'. $celda, trim($dato["nombre_grupo"]))
+                            ->setCellValue('C'. $celda, trim($dato["cod_grupo"]))
+                            ->setCellValue('D'. $celda, trim($seminv["nombre"]))
+                            ->setCellValue('E'. $celda, trim($seminv["codigo"]));
+
+                            foreach ($this->usuarios as $us) {
+                                if ($seminv["coordinador_uno"] == $us["id_usuario"]) {
+                                    $objPHPExcel->getActiveSheet()
+                                    ->setCellValue('F'. $celda, trim($us["primer_nombre"]).' '.trim($us["segundo_nombre"]).' '.trim($us["primer_apellido"]).' '.trim($us["segundo_apellido"]));
+                                }
+                            }
+
+                            foreach ($this->usuarios as $us) {
+                                if ($seminv["coordinador_dos"] == $us["id_usuario"]) {
+                                    $objPHPExcel->getActiveSheet()
+                                    ->setCellValue('G'. $celda, trim($us["primer_nombre"]).' '.trim($us["segundo_nombre"]).' '.trim($us["primer_apellido"]).' '.trim($us["segundo_apellido"]));
+                                }
+                            }
+
+                            $objPHPExcel->getActiveSheet()
+                            ->setCellValue('H'. $celda, trim($seminv["actividades"]));
+                            $celda++;
+                        }
+                    }
+                }
+            }
+        }
+
+        $objPHPExcel->createSheet(7);
+        $objPHPExcel->setActiveSheetIndex(7);
+        $objPHPExcel->getActiveSheet()->setTitle('Instituciones');
+
+        $objPHPExcel->getActiveSheet()
+        ->setCellValue('A1', 'ID Grupo')
+        ->setCellValue('B1', 'Nombre')
+        ->setCellValue('C1', 'Código')
+        ->setCellValue('D1', 'Nombre');
+
+        $celda = 2;
+        foreach($this->datos as $dato){
+            foreach ($this->instituciones as $semi) {
+                if ($dato["id_grupo_inv"] == $semi["id_grupo_inv"]) {
+                    $objPHPExcel->getActiveSheet()
+                    ->setCellValue('A'. $celda, trim($dato["id_grupo_inv"]))
+                    ->setCellValue('B'. $celda, trim($dato["nombre_grupo"]))
+                    ->setCellValue('C'. $celda, trim($dato["cod_grupo"]));
+
+                    foreach ($this->valflex as $us) {
+                        if ($semi["descripcion"] == $us["id_valor_flexible"]) {
+                            $objPHPExcel->getActiveSheet()->setCellValue('D'. $celda, trim($us["descripcion_valor"]));
+                        }
+                    }
+                    $celda++;
+                }
+            }
+        }
+
+        $objPHPExcel->createSheet(8);
+        $objPHPExcel->setActiveSheetIndex(8);
+        $objPHPExcel->getActiveSheet()->setTitle('Artículos');
+        
+        $objPHPExcel->getActiveSheet()
+        ->setCellValue('A1', 'ID Grupo')
+        ->setCellValue('B1', 'Nombre')
+        ->setCellValue('C1', 'Código')
+        ->setCellValue('D1', 'Nombre revista')
+        ->setCellValue('E1', 'Nombre articulo')
+        ->setCellValue('F1', 'Categorización')
+        ->setCellValue('G1', 'Año')
+        ->setCellValue('H1', 'Mes')
+        ->setCellValue('I1', 'País')
+        ->setCellValue('J1', 'Ciudad')
+        ->setCellValue('K1', 'ISSN/e-ISSN')
+        ->setCellValue('L1', 'No. de páginas')
+        ->setCellValue('M1', 'Página inicio')
+        ->setCellValue('N1', 'Página fin')
+        ->setCellValue('O1', 'Fascículo')
+        ->setCellValue('P1', 'Volumen')
+        ->setCellValue('Q1', 'No. de serie');
+
+        $celda = 2;
+        foreach($this->datos as $dato){
+            foreach ($this->articulos as $articulo) {
+                if ($dato["id_grupo_inv"] == $articulo["id_grupo_inv"]) {
+                    $objPHPExcel->getActiveSheet()
+                    ->setCellValue('A'. $celda, trim($dato["id_grupo_inv"]))
+                    ->setCellValue('B'. $celda, trim($dato["nombre_grupo"]))
+                    ->setCellValue('C'. $celda, trim($dato["cod_grupo"]))
+                    ->setCellValue('D'. $celda, trim($articulo["nombre_revista"]))
+                    ->setCellValue('E'. $celda, trim($articulo["nombre_articulo"]));
+
+                    foreach ($this->valflex as $us) {
+                        if ($articulo["categoria"] == $us["id_valor_flexible"]) {
+                            $objPHPExcel->getActiveSheet()->setCellValue('F'. $celda, trim($us["descripcion_valor"]));
+                        }
+                    }
+                    
+                    $objPHPExcel->getActiveSheet()
+                    ->setCellValue('G'. $celda, trim($articulo["ano"]));
+
+                    $mes="";
+                    switch ($articulo["mes"]) {
+                        case 1:
+                            $mes = "Enero";
+                            break;
+                        case 2:
+                            $mes = "Febrero";
+                            break;
+                        case 3:
+                            $mes = "Marzo";
+                            break;
+                        case 4:
+                            $mes = "Abril";
+                            break;
+                        case 5:
+                            $mes = "Mayo";
+                            break;
+                        case 6:
+                            $mes = "Junio";
+                            break;
+                        case 7:
+                            $mes = "Julio";
+                            break;
+                        case 8:
+                            $mes = "Agosto";
+                            break;
+                        case 9:
+                            $mes = "Septiembre";
+                            break;
+                        case 10:
+                            $mes = "Octubre";
+                            break;
+                        case 11:
+                            $mes = "Noviembre";
+                            break;
+                        case 12:
+                            $mes = "Diciembre";
+                            break;
+                    }
+
+                    $objPHPExcel->getActiveSheet()
+                    ->setCellValue('H'. $celda, $mes)
+                    ->setCellValue('I'. $celda, trim($articulo["pais"]))
+                    ->setCellValue('J'. $celda, trim($articulo["ciudad"]))
+                    ->setCellValue('K'. $celda, trim($articulo["issn"]))
+                    ->setCellValue('L'. $celda, trim($articulo["paginas"]))
+                    ->setCellValue('M'. $celda, trim($articulo["pagina_inicio"]))
+                    ->setCellValue('N'. $celda, trim($articulo["pagina_fin"]))
+                    ->setCellValue('O'. $celda, trim($articulo["fasciculo"]))
+                    ->setCellValue('P'. $celda, trim($articulo["volumen"]))
+                    ->setCellValue('Q'. $celda, trim($articulo["serie"]));
+                    $celda++;
+                }
+            }
+        }
+
+        $objPHPExcel->createSheet(9);
+        $objPHPExcel->setActiveSheetIndex(9);
+        $objPHPExcel->getActiveSheet()->setTitle('Libros');
+        
+        $objPHPExcel->getActiveSheet()
+        ->setCellValue('A1', 'ID Grupo')
+        ->setCellValue('B1', 'Nombre')
+        ->setCellValue('C1', 'Código')
+        ->setCellValue('D1', 'Título del libro')
+        ->setCellValue('E1', 'No. de Páginas')
+        ->setCellValue('F1', 'Año')
+        ->setCellValue('G1', 'Mes')
+        ->setCellValue('H1', 'País de publicación')
+        ->setCellValue('I1', 'Ciudad de publicación')
+        ->setCellValue('J1', 'Serie')
+        ->setCellValue('K1', 'Editorial')
+        ->setCellValue('L1', 'No. de Edición')
+        ->setCellValue('M1', 'ISBN ó e-ISBN')
+        ->setCellValue('N1', 'Medio de divulgación');
+
+        $celda = 2;
+        foreach($this->datos as $dato){
+            foreach ($this->libros as $libro) {
+                if ($dato["id_grupo_inv"] == $libro["id_grupo_inv"]) {
+                    $objPHPExcel->getActiveSheet()
+                    ->setCellValue('A'. $celda, trim($dato["id_grupo_inv"]))
+                    ->setCellValue('B'. $celda, trim($dato["nombre_grupo"]))
+                    ->setCellValue('C'. $celda, trim($dato["cod_grupo"]))
+                    ->setCellValue('D'. $celda, trim($libro["titulo"]))
+                    ->setCellValue('E'. $celda, trim($libro["paginas"]))
+                    ->setCellValue('F'. $celda, trim($libro["ano"]));
+
+                    $mes="";
+                    switch ($libro["mes"]) {
+                        case 1:
+                            $mes = "Enero";
+                            break;
+                        case 2:
+                            $mes = "Febrero";
+                            break;
+                        case 3:
+                            $mes = "Marzo";
+                            break;
+                        case 4:
+                            $mes = "Abril";
+                            break;
+                        case 5:
+                            $mes = "Mayo";
+                            break;
+                        case 6:
+                            $mes = "Junio";
+                            break;
+                        case 7:
+                            $mes = "Julio";
+                            break;
+                        case 8:
+                            $mes = "Agosto";
+                            break;
+                        case 9:
+                            $mes = "Septiembre";
+                            break;
+                        case 10:
+                            $mes = "Octubre";
+                            break;
+                        case 11:
+                            $mes = "Noviembre";
+                            break;
+                        case 12:
+                            $mes = "Diciembre";
+                            break;
+                    }
+
+                    $objPHPExcel->getActiveSheet()
+                    ->setCellValue('G'. $celda, $mes)
+                    ->setCellValue('H'. $celda, trim($libro["pais"]))
+                    ->setCellValue('I'. $celda, trim($libro["ciudad"]))
+                    ->setCellValue('J'. $celda, trim($libro["serie"]))
+                    ->setCellValue('K'. $celda, trim($libro["editorial"]))
+                    ->setCellValue('L'. $celda, trim($libro["edicion"]))
+                    ->setCellValue('M'. $celda, trim($libro["isbn"]))
+                    ->setCellValue('N'. $celda, trim($libro["medio_divulgacion"]));
+                    $celda++;
+                }
+            }
+        }
+
+        $objPHPExcel->createSheet(10);
+        $objPHPExcel->setActiveSheetIndex(10);
+        $objPHPExcel->getActiveSheet()->setTitle('Capítulos de libros');
+        
+        $objPHPExcel->getActiveSheet()
+        ->setCellValue('A1', 'ID Grupo')
+        ->setCellValue('B1', 'Nombre')
+        ->setCellValue('C1', 'Código')
+        ->setCellValue('D1', 'Título del libro')
+        ->setCellValue('E1', 'Año')
+        ->setCellValue('F1', 'Mes')
+        ->setCellValue('G1', 'País de publicación')
+        ->setCellValue('H1', 'Ciudad de publicación')
+        ->setCellValue('I1', 'Serie')
+        ->setCellValue('J1', 'Editorial')
+        ->setCellValue('K1', 'No. de Edición')
+        ->setCellValue('L1', 'ISBN ó e-ISBN')
+        ->setCellValue('M1', 'Medio de divulgación')
+        ->setCellValue('N1', 'Título del capítulo')
+        ->setCellValue('O1', 'No. de capítulo')
+        ->setCellValue('P1', 'Páginas del capítulo')
+        ->setCellValue('Q1', 'Página inicio')
+        ->setCellValue('R1', 'Página fin');
+
+        $celda = 2;
+        foreach($this->datos as $dato){
+            foreach ($this->capitulos as $capitulo) {
+                if ($dato["id_grupo_inv"] == $capitulo["id_grupo"]) {
+                    $objPHPExcel->getActiveSheet()
+                    ->setCellValue('A'. $celda, trim($dato["id_grupo_inv"]))
+                    ->setCellValue('B'. $celda, trim($dato["nombre_grupo"]))
+                    ->setCellValue('C'. $celda, trim($dato["cod_grupo"]))
+                    ->setCellValue('D'. $celda, trim($capitulo["titulo"]))
+                    ->setCellValue('E'. $celda, trim($capitulo["ano"]));
+
+                    $mes="";
+                    switch ($capitulo["mes"]) {
+                        case 1:
+                            $mes = "Enero";
+                            break;
+                        case 2:
+                            $mes = "Febrero";
+                            break;
+                        case 3:
+                            $mes = "Marzo";
+                            break;
+                        case 4:
+                            $mes = "Abril";
+                            break;
+                        case 5:
+                            $mes = "Mayo";
+                            break;
+                        case 6:
+                            $mes = "Junio";
+                            break;
+                        case 7:
+                            $mes = "Julio";
+                            break;
+                        case 8:
+                            $mes = "Agosto";
+                            break;
+                        case 9:
+                            $mes = "Septiembre";
+                            break;
+                        case 10:
+                            $mes = "Octubre";
+                            break;
+                        case 11:
+                            $mes = "Noviembre";
+                            break;
+                        case 12:
+                            $mes = "Diciembre";
+                            break;
+                    }
+
+                    $objPHPExcel->getActiveSheet()
+                    ->setCellValue('F'. $celda, $mes)
+                    ->setCellValue('G'. $celda, trim($capitulo["pais"]))
+                    ->setCellValue('H'. $celda, trim($capitulo["ciudad"]))
+                    ->setCellValue('I'. $celda, trim($capitulo["serie"]))
+                    ->setCellValue('J'. $celda, trim($capitulo["editorial"]))
+                    ->setCellValue('K'. $celda, trim($capitulo["edicion"]))
+                    ->setCellValue('L'. $celda, trim($capitulo["isbn"]))
+                    ->setCellValue('M'. $celda, trim($capitulo["medio_divulgacion"]))
+                    ->setCellValue('N'. $celda, trim($capitulo["titulo_capitulo"]))
+                    ->setCellValue('O'. $celda, trim($capitulo["numero_capitulo"]))
+                    ->setCellValue('P'. $celda, trim($capitulo["paginas_capitulo"]))
+                    ->setCellValue('Q'. $celda, trim($capitulo["pagina_inicio"]))
+                    ->setCellValue('R'. $celda, trim($capitulo["pagina_fin"]));
+                    $celda++;
+                }
+            }
+        }
+
+        $objPHPExcel->createSheet(11);
+        $objPHPExcel->setActiveSheetIndex(11);
+        $objPHPExcel->getActiveSheet()->setTitle('Otras producciones');
+        
+        $objPHPExcel->getActiveSheet()
+        ->setCellValue('A1', 'ID Grupo')
+        ->setCellValue('B1', 'Nombre')
+        ->setCellValue('C1', 'Código')
+        ->setCellValue('D1', 'Nombre producto')
+        ->setCellValue('E1', 'Descripción producto')
+        ->setCellValue('F1', 'Tipo producto')
+        ->setCellValue('G1', 'Año')
+        ->setCellValue('H1', 'Mes')
+        ->setCellValue('I1', 'Pais')
+        ->setCellValue('J1', 'Ciudad')
+        ->setCellValue('K1', 'Instituciones participantes')
+        ->setCellValue('L1', 'Registro')
+        ->setCellValue('M1', 'Otra información');
+
+        $celda = 2;
+        foreach($this->datos as $dato){
+            foreach ($this->otrasproducciones as $produccion) {
+                if ($dato["id_grupo_inv"] == $produccion["id_grupo_inv"]) {
+                    $objPHPExcel->getActiveSheet()
+                    ->setCellValue('A'. $celda, trim($dato["id_grupo_inv"]))
+                    ->setCellValue('B'. $celda, trim($dato["nombre_grupo"]))
+                    ->setCellValue('C'. $celda, trim($dato["cod_grupo"]))
+                    ->setCellValue('D'. $celda, trim($produccion["nombre_producto"]))
+                    ->setCellValue('E'. $celda, trim($produccion["descripcion_producto"]))
+                    ->setCellValue('F'. $celda, trim($produccion["tipo_producto"]))
+                    ->setCellValue('G'. $celda, trim($produccion["ano"]));
+
+                    $mes="";
+                    switch ($produccion["mes"]) {
+                        case 1:
+                            $mes = "Enero";
+                            break;
+                        case 2:
+                            $mes = "Febrero";
+                            break;
+                        case 3:
+                            $mes = "Marzo";
+                            break;
+                        case 4:
+                            $mes = "Abril";
+                            break;
+                        case 5:
+                            $mes = "Mayo";
+                            break;
+                        case 6:
+                            $mes = "Junio";
+                            break;
+                        case 7:
+                            $mes = "Julio";
+                            break;
+                        case 8:
+                            $mes = "Agosto";
+                            break;
+                        case 9:
+                            $mes = "Septiembre";
+                            break;
+                        case 10:
+                            $mes = "Octubre";
+                            break;
+                        case 11:
+                            $mes = "Noviembre";
+                            break;
+                        case 12:
+                            $mes = "Diciembre";
+                            break;
+                    }
+
+                    $objPHPExcel->getActiveSheet()
+                    ->setCellValue('H'. $celda, $mes)
+                    ->setCellValue('I'. $celda, trim($produccion["id_pais"]))
+                    ->setCellValue('J'. $celda, trim($produccion["id_ciudad"]))
+                    ->setCellValue('K'. $celda, trim($produccion["instituciones"]))
+                    ->setCellValue('L'. $celda, trim($produccion["registro"]))
+                    ->setCellValue('M'. $celda, trim($produccion["otra_info"]));
+                    $celda++;
+                }
+            }
+        }
+
+        $objPHPExcel->createSheet(12);
+        $objPHPExcel->setActiveSheetIndex(12);
+        $objPHPExcel->getActiveSheet()->setTitle('Otros documentos');
+        
+        $objPHPExcel->getActiveSheet()
+        ->setCellValue('A1', 'ID Grupo')
+        ->setCellValue('B1', 'Nombre')
+        ->setCellValue('C1', 'Código')
+        ->setCellValue('D1', 'Nombre')
+        ->setCellValue('E1', 'No. Páginas')
+        ->setCellValue('F1', 'Año')
+        ->setCellValue('G1', 'Mes')
+        ->setCellValue('H1', 'Pais')
+        ->setCellValue('I1', 'Ciudad')
+        ->setCellValue('J1', 'Indexación')
+        ->setCellValue('K1', 'Instituciones participantes')
+        ->setCellValue('L1', 'URL')
+        ->setCellValue('M1', 'Descripción')
+        ->setCellValue('N1', 'Medio de divulgación');
+
+        $celda = 2;
+        foreach($this->datos as $dato){
+            foreach ($this->bibliograficos as $documento) {
+                if ($dato["id_grupo_inv"] == $documento["id_grupo_inv"]) {
+                    $objPHPExcel->getActiveSheet()
+                    ->setCellValue('A'. $celda, trim($dato["id_grupo_inv"]))
+                    ->setCellValue('B'. $celda, trim($dato["nombre_grupo"]))
+                    ->setCellValue('C'. $celda, trim($dato["cod_grupo"]))
+                    ->setCellValue('D'. $celda, trim($documento["nombre"]))
+                    ->setCellValue('E'. $celda, trim($documento["numero_paginas"]))
+                    ->setCellValue('F'. $celda, trim($documento["ano"]));
+
+                    $mes="";
+                    switch ($documento["mes"]) {
+                        case 1:
+                            $mes = "Enero";
+                            break;
+                        case 2:
+                            $mes = "Febrero";
+                            break;
+                        case 3:
+                            $mes = "Marzo";
+                            break;
+                        case 4:
+                            $mes = "Abril";
+                            break;
+                        case 5:
+                            $mes = "Mayo";
+                            break;
+                        case 6:
+                            $mes = "Junio";
+                            break;
+                        case 7:
+                            $mes = "Julio";
+                            break;
+                        case 8:
+                            $mes = "Agosto";
+                            break;
+                        case 9:
+                            $mes = "Septiembre";
+                            break;
+                        case 10:
+                            $mes = "Octubre";
+                            break;
+                        case 11:
+                            $mes = "Noviembre";
+                            break;
+                        case 12:
+                            $mes = "Diciembre";
+                            break;
+                    }
+
+                    $objPHPExcel->getActiveSheet()
+                    ->setCellValue('G'. $celda, $mes)
+                    ->setCellValue('H'. $celda, trim($documento["pais"]))
+                    ->setCellValue('I'. $celda, trim($documento["ciudad"]))
+                    ->setCellValue('J'. $celda, trim($documento["num_indexacion"]))
+                    ->setCellValue('K'. $celda, trim($documento["instituciones"]))
+                    ->setCellValue('L'. $celda, trim($documento["url"]))
+                    ->setCellValue('M'. $celda, trim($documento["descripcion"]))
+                    ->setCellValue('N'. $celda, trim($documento["medio_divulgacion"]));
+                    $celda++;
+                }
+            }
+        }
+
+        $objPHPExcel->createSheet(13);
+        $objPHPExcel->setActiveSheetIndex(13);
+        $objPHPExcel->getActiveSheet()->setTitle('Proyectos Inv. externos');
+        
+        $objPHPExcel->getActiveSheet()
+        ->setCellValue('A1', 'ID Grupo')
+        ->setCellValue('B1', 'Nombre')
+        ->setCellValue('C1', 'Código')
+        ->setCellValue('D1', 'Código del proyecto')
+        ->setCellValue('E1', 'Nombre del proyecto')
+        ->setCellValue('F1', 'Fecha inicio')
+        ->setCellValue('G1', 'Fecha fin')
+        ->setCellValue('H1', 'Resumen ejecutivo')
+        ->setCellValue('I1', 'Objetivo general')
+        ->setCellValue('J1', 'Productos derivados');
+        $celda = 2;
+        foreach($this->datos as $dato){
+            foreach ($this->proyext as $semi) {
+                if ($dato["id_grupo_inv"] == $semi["id_grupo_inv"]) {
+                    $objPHPExcel->getActiveSheet()
+                    ->setCellValue('A'. $celda, trim($dato["id_grupo_inv"]))
+                    ->setCellValue('B'. $celda, trim($dato["nombre_grupo"]))
+                    ->setCellValue('C'. $celda, trim($dato["cod_grupo"]))
+                    ->setCellValue('D'. $celda, trim($semi["codigo_proyecto"]))
+                    ->setCellValue('E'. $celda, trim($semi["nombre_proyecto"]))
+                    ->setCellValue('F'. $celda, trim($semi["fecha_inicio"]))
+                    ->setCellValue('G'. $celda, trim($semi["fecha_fin"]))
+                    ->setCellValue('H'. $celda, trim($semi["resumen_ejecutivo"]))
+                    ->setCellValue('I'. $celda, trim($semi["objetivo_general"]))
+                    ->setCellValue('J'. $celda, trim($semi["productos_derivados"]));
+                    $celda++;
+                }
+            }
+        }
+
+        $objPHPExcel->createSheet(14);
+        $objPHPExcel->setActiveSheetIndex(14);
+        $objPHPExcel->getActiveSheet()->setTitle('Proyectos Inv. internos');
+        
+        $objPHPExcel->getActiveSheet()
+        ->setCellValue('A1', 'ID Grupo')
+        ->setCellValue('B1', 'Nombre')
+        ->setCellValue('C1', 'Código')
+        ->setCellValue('D1', 'Código del proyecto')
+        ->setCellValue('E1', 'Nombre del proyecto')
+        ->setCellValue('F1', 'Investigador principal')
+        ->setCellValue('G1', 'Duración')
+        ->setCellValue('H1', 'Unidad académica')
+        ->setCellValue('I1', 'Dependencia académica')
+        ->setCellValue('J1', 'Resumen ejecutivo')
+        ->setCellValue('K1', 'Objetivo general');
+
+        $celda = 2;
+        foreach($this->datos as $dato){
+            foreach ($this->proyectosint as $proyectoInt) {
+                if ($dato["id_grupo_inv"] == $proyectoInt["id_grupo_inv"]) {
+                    foreach ($this->proyectos as $proyectosT) {
+                        if($proyectoInt["id_proyecto"]==$proyectosT["id_proyecto"]){
+
+                            $objPHPExcel->getActiveSheet()
+                            ->setCellValue('A'. $celda, trim($dato["id_grupo_inv"]))
+                            ->setCellValue('B'. $celda, trim($dato["nombre_grupo"]))
+                            ->setCellValue('C'. $celda, trim($dato["cod_grupo"]))
+                            ->setCellValue('D'. $celda, trim($proyectosT["codigo_proy"]))
+                            ->setCellValue('E'. $celda, trim($proyectosT["nombre_proy"]));
+
+                            foreach ($this->usuarios as $us) {
+                                if ($proyectosT["id_investigador"] == $us["id_usuario"]) {
+                                    $objPHPExcel->getActiveSheet()
+                                    ->setCellValue('F'. $celda, trim($us["primer_nombre"]).' '.trim($us["segundo_nombre"]).' '.trim($us["primer_apellido"]).' '.trim($us["segundo_apellido"]));
+                                }
+                            }
+
+                            $objPHPExcel->getActiveSheet()
+                            ->setCellValue('G'. $celda, trim($proyectosT["duracion"]));
+
+                            foreach ($this->valflex as $us) {
+                                if ($proyectosT["id_unidad_academica"] == $us["id_valor_flexible"]) {
+                                    $objPHPExcel->getActiveSheet()->setCellValue('H'. $celda, trim($us["descripcion_valor"]));
+                                }
+                            }
+
+                            foreach ($this->valflex as $us) {
+                                if ($proyectosT["id_dependencia_academica"] == $us["id_valor_flexible"]) {
+                                    $objPHPExcel->getActiveSheet()->setCellValue('I'. $celda, trim($us["descripcion_valor"]));
+                                }
+                            }
+
+                            $objPHPExcel->getActiveSheet()
+                            ->setCellValue('J'. $celda, trim($proyectosT["resumen_ejecutivo"]))
+                            ->setCellValue('K'. $celda, trim($proyectosT["objetivo_general"]));
+                            $celda++;
+                        }
+                    }
+                }
+            }
+        }
+
+        $objPHPExcel->createSheet(15);
+        $objPHPExcel->setActiveSheetIndex(15);
+        $objPHPExcel->getActiveSheet()->setTitle('Producción académica');
+        
+        $objPHPExcel->getActiveSheet()
+        ->setCellValue('A1', 'ID Grupo')
+        ->setCellValue('B1', 'Nombre')
+        ->setCellValue('C1', 'Código')
+        ->setCellValue('D1', 'Tipo de archivo')
+        ->setCellValue('E1', 'Nombre del archivo');
+
+        $celda = 2;
+        foreach($this->datos as $dato){
+            foreach ($this->archivos as $archivo) {
+                if ($dato["id_grupo_inv"] == $archivo["id_grupo_inv"]) {
+                    $objPHPExcel->getActiveSheet()
+                    ->setCellValue('A'. $celda, trim($dato["id_grupo_inv"]))
+                    ->setCellValue('B'. $celda, trim($dato["nombre_grupo"]))
+                    ->setCellValue('C'. $celda, trim($dato["cod_grupo"]));  
+
+                    foreach ($this->valflex as $us) {
+                        if ($archivo["id_tipo_archivo"] == $us["id_valor_flexible"]) {
+                            $objPHPExcel->getActiveSheet()->setCellValue('D'. $celda, trim($us["descripcion_valor"]));
+                        }
+                    }
+
+                    $objPHPExcel->getActiveSheet()
+                    ->setCellValue('E'. $celda, trim($archivo["archivo"]));
+                    $celda++;
+                }
+            }
+        }  
+    }
+
+    $objPHPExcel->setActiveSheetIndex(0);
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment;filename="grupos.xlsx"');
+    header('Cache-Control: max-age=0');
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    ob_end_clean();
+    $objWriter->save('php://output');
+    exit;
+
+}
+
+
+?>

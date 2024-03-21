@@ -1,0 +1,85 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+    echo $this->titulos;
+    ?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<div class="six columns">
+					<a
+						href="<?php echo $this->basePath() ?>/application/reportes/index">
+						<i class="icon-arrow-left"></i> Regresar
+					</a>
+				<?php
+    $form = $this->form;
+    $form->prepare();
+    
+    $form->setAttributes(array(
+        'action' => $this->url . '/application/reporteinvpre/index',
+        'method' => 'post'
+    ));
+    echo $this->form()->openTag($form);
+    echo '<h6>';
+    echo $this->flashMessenger()->render();
+    echo '</h6>';
+    echo '<br>';
+    echo '<fieldset>';
+    echo '<legend>Variables globales de la convocatoria</legend>';
+    echo '<p>';
+    echo $this->formlabel($form->get('ano'));
+    echo $this->formelement($form->get('ano'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_convocatoria'));
+    echo $this->formelement($form->get('id_convocatoria'));
+    echo '<p>';
+    echo $this->formlabel($form->get('nombre'));
+    echo $this->formelement($form->get('nombre'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_tipo_conv'));
+    echo $this->formelement($form->get('id_tipo_conv'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_estado'));
+    echo $this->formelement($form->get('id_estado'));
+    echo '<p>';
+    echo '</fieldset>';
+    echo '<fieldset>';
+    echo '<legend>Variables excluyentes</legend>';
+    echo '<p>';
+    echo $this->formlabel($form->get('propuestas_proyectos'));
+    echo $this->formelement($form->get('propuestas_proyectos'));
+    echo '<p>';
+    echo $this->formlabel($form->get('tipo_reporte'));
+    echo $this->formelement($form->get('tipo_reporte'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_unidad_academica'));
+    echo $this->formelement($form->get('id_unidad_academica'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_dependencia_academica'));
+    echo $this->formelement($form->get('id_dependencia_academica'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_programa_academico'));
+    echo $this->formelement($form->get('id_programa_academico'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_categoria'));
+    echo $this->formelement($form->get('id_categoria'));
+    echo '</fieldset>';
+    echo '<br>';
+    echo $this->formelement($form->get('submit'));
+    echo '<br>';
+    echo '<br>';
+    echo $this->form()->closeTag($form);
+    ?>
+	<br>
+        </div>
+	</div>
+</div>

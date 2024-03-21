@@ -1,0 +1,114 @@
+<style>
+    .filter-tipo input[type="text"],select{
+        width: 100%;
+    }
+    .filter-tipo {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .filter-tipo-left {float: left;}
+    .filter-tipo-right {float:right;}
+    .filter-tipo .btn {width: 275px;}
+    .filter-tipo .dropdown {display: inline;}
+    .filter-tipo .dropdown-menu {width: 300px;top: 32px;padding: 10px;}
+    .dropdown-menu-inner {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .content-form-inner {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .content-form-inner { border: 0; border-radius: 8px; }
+    .content-form-inner .btn {width: 275px;}
+</style>
+<?php include("public/menu.php"); ?>
+<div class="col col100 noshadow">
+	<div class="content-form-inner">
+		<?php
+        echo '<div class="twelve columns" style="padding-bottom: 10px;">';
+        echo '<h3>'.$this->titulo.'</h3>';
+        echo '</div>';
+        $form = $this->form;
+		$form->prepare();
+		$form->setAttributes(array(
+			'action'=> $this->url.'/application/agregarvalflex/index/'.$id,
+			'method' => 'post'
+        ));
+		echo $this->form()->openTag($form);
+
+		echo '<div class="four columns">';
+        echo '<div class="form-group">';
+		echo $this->formlabel($form->get('descripcion_valor'));
+		echo $this->formelement($form->get('descripcion_valor'));
+		echo '</div>';
+        echo '</div>';
+
+        echo '<div class="four columns">';
+        echo '<div class="form-group">';
+		echo $this->formlabel($form->get('valor_flexible_padre_id'));
+		echo $this->formelement($form->get('valor_flexible_padre_id'));
+		echo '</div>';
+        echo '</div>';
+
+        echo '<div class="four columns">';
+        echo '<div class="form-group">';
+		echo $this->formlabel($form->get('activo'));
+		echo $this->formelement($form->get('activo'));;
+		echo '</div>';
+        echo '</div>';
+
+        echo '<div style="float: right; padding: 0 15px 5px 5px;">';
+        echo '<a class="btn" style="margin-right: 10px;" href="'.$this->basePath().'/application/tipovalores/index">Regresar</a>';
+        if($this->id != 69){
+        	echo $this->formelement($form->get('submit'));
+    	}
+        echo '<a class="btn" style="margin-left: 10px;" href="'.$this->basePath().'/application/index/index">Cancelar</a>';
+        echo '</div>';
+
+        echo $this->form()->closeTag($form);
+        ?>
+	</div>
+</div>
+<div class="col col100 noshadow">
+	<div style='overflow-y:auto; max-height:4000px; width: 100%;'>
+				<?php
+				echo '<table class="table" style="width: 100%; max-width: 100%;">';
+				echo '<thead>';
+				echo '<th style="width:5%;">Descripción</th>';
+				echo '<th style="width:5%;">Padre</th>';
+				echo '<th style="width:5%;">Activo</th>';
+				echo '<th style="width:5%;">Editar</th>';
+				echo '<th style="width:5%;">Eliminar</th>';
+				echo '</thead>';
+				echo '<tbody>';
+				foreach ($this->datos as $dato){
+				echo '<tr>';
+				echo '<td>';
+				echo $dato["descripcion_valor"];
+				echo'</td>';
+				echo '<td>';
+				foreach ($this->datos2 as $dato2){
+				if($dato2["id_valor_flexible"]==$dato["valor_flexible_padre_id"]){
+				echo $dato2["descripcion_valor"];
+				}}
+				echo'</td>';
+				echo '<td>';
+				if ($dato["activo"]=='S' || $dato["activo"]=='s' ){
+						echo 'Si';
+					};
+				if ($dato["activo"]=='N' || $dato["activo"]=='n' ){
+						echo 'No';
+					};
+				echo'</td>';
+				echo '<td>';
+				?>
+					<a class="btn"  href="<?php echo $this->basePath() ?>/application/editarvalflex/index/<?php echo $dato["id_valor_flexible"];?>"><i class="fa fa-pencil"></i></a>
+				<?php
+				echo'</td>';
+				echo '<td>';
+					if($this->id != 69 && $this->id != 70){
+						?>
+							<a class="btn" href="<?php echo $this->basePath() ?>/application/agregarvalflex/eliminar/<?php echo $dato["id_valor_flexible"];?>"><i class="fa fa-trash"></i></a>
+						<?php
+					}
+				echo'</td>';
+				echo '</tr>';
+				}
+				
+				echo '</tr>';
+				echo '</table>';
+				?>
+	</div>
+</div>

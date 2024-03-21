@@ -1,0 +1,95 @@
+
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+    echo $this->titulo;
+    ?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<div class="seven columns">
+					<a
+						href="<?php echo $this->basePath() ?>/application/reportes/index">
+						<i class="icon-arrow-left"></i> Regresar
+					</a><br> <br>
+				<?php
+    $form = $this->form;
+    $form->prepare();
+    
+    $form->setAttributes(array(
+        'action' => $this->url . '/application/excelmonitores/index',
+        'method' => 'post'
+    ));
+    echo $this->form()->openTag($form);
+    echo '<p>';
+    echo $this->formlabel($form->get('id_convocatoria'));
+    echo $this->formelement($form->get('id_convocatoria'));
+    echo '<p>';
+    echo $this->formlabel($form->get('ano'));
+    echo $this->formelement($form->get('ano'));
+    echo '<p>';
+    echo $this->formlabel($form->get('facultad'));
+    echo $this->formelement($form->get('facultad'));
+    echo '<p>';
+    echo $this->formlabel($form->get('programa'));
+    echo $this->formelement($form->get('programa'));
+    echo '<p>';
+    echo $this->formlabel($form->get('todos'));
+    echo $this->formelement($form->get('todos'));
+    echo '<p>';
+    echo $this->formlabel($form->get('inscritos'));
+    echo $this->formelement($form->get('inscritos'));
+    echo '<p>';
+    echo $this->formlabel($form->get('aprobados'));
+    echo $this->formelement($form->get('aprobados'));
+
+    
+    echo '<p>';
+    echo $this->formelement($form->get('submit'));
+    echo '<br>';
+    
+    echo $this->form()->closeTag($form);
+    ?>
+				<br>
+
+
+				<?php
+    
+    if ($this->consulta == 1) {
+        if ($this->facultad == null) {
+            $this->facultad = '0';
+        }
+        if ($this->id_convocatoria == null) {
+            $this->id_convocatoria = '0';
+        }
+        if ($this->ano == null) {
+            $this->ano = '0';
+        }
+        
+        if ($this->programa == null) {
+            $this->programa = '0';
+        }
+
+        if ($this->todos == null) {
+            $this->todos = '0';
+        }
+        ?>
+<a class="btn"
+						href="<?php echo $this->basePath() ?>/application/excelmonitores/report/<?php echo $this->facultad ?>/<?php echo $this->programa;?>/<?php echo $this->aprobados;?>/<?php echo $this->inscritos;?>/<?php echo $this->id_convocatoria;?>/<?php echo $this->ano;?>/<?php echo $this->todos;?>">Reporte</a>
+<?php
+    }
+    ?>
+
+</div>
+			</div>
+		</div>
+	</div>
+</div>

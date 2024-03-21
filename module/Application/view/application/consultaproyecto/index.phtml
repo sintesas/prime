@@ -1,0 +1,148 @@
+<style>
+    .filter-cons input[type="text"],select{
+        width: 100%;
+    }
+    .filter-cons {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .filter-cons-left {float: left;}
+    .filter-cons-right {float:right;}
+    .filter-cons .btn {width: 275px;}
+    .filter-cons .dropdown {display: inline;}
+    .filter-cons .dropdown-menu {width: 300px;top: 32px;padding: 10px;}
+    .dropdown-menu-inner {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .dropdown-menu-right {left:-140px !important;}
+</style>
+<?php include("public/menu.php"); ?>
+<div class="col col100">
+    <div class="filter-cons">
+        <div class="filter-cons-left"><h4><?php echo $this->titulo; ?></h4></div>
+        <div class="filter-cons-right">
+            <a class="btn" style="margin-right: 8px;" href="<?php echo $this->basePath() ?>/application/consultaproyecto/index"><i class="fa fa-close" style="margin-right: 5px;"></i>Borrar filtro</a>
+            <div class="dropdown">
+                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="margin-right: 8px;"><i class="fa fa-filter" style="margin-right: 5px;"></i>Filtro</button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <div class="dropdown-menu-inner">
+                        <?php                               
+                        $form = $this->form;
+                        $form->prepare ();
+                        $form->setAttributes(array(
+                            'action' => $this->url . '/application/consultaproyecto/index',
+                            'method' => 'post'
+                        ));
+                        echo $this->form ()->openTag ( $form );
+                        echo '<h6>'.$this->flashMessenger ()->render ().'</h6>';
+                        echo $this->formlabel($form->get('id_proyecto'));
+                        echo $this->formelement($form->get('id_proyecto'));
+                        echo $this->formlabel($form->get('codigo_proy'));
+                        echo $this->formelement($form->get('codigo_proy'));
+                        echo $this->formlabel($form->get('nombre_proy'));
+                        echo $this->formelement($form->get('nombre_proy'));
+                        echo $this->formlabel($form->get('tipo_proyecto'));
+                        echo $this->formelement($form->get('tipo_proyecto'));
+                        echo $this->formelement($form->get('submit'));
+                        echo $this->form ()->closeTag ( $form );
+                        ?>
+                    </div>                      
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php if ($this->consulta == 1) { ?>
+	<?php
+		$band=true; 
+		foreach ( $this->datos as $dato ) { ?>
+		<?php if ($dato ["id_investigador"] == $this->id_usuario || $this->menu == 1) { $band=false; ?>
+			<div class="col col100 noshadow">
+				<div style='overflow-y:auto; max-height:4000px; width: 100%;'>
+					<table class="table" style="width: 100%; max-width: 100%;">
+						<thead>
+							<tr>
+								<th style="width:5%;">Código del Proyecto</th>
+								<th style="width:10%;">Nombre del Proyecto</th>
+								<th style="width:5%;">Lider de proyecto</th>
+								<th style="width:5%;">Tipo de proyecto</th>
+								<th style="width:5%;">Convocatoria</th>
+								<th style="width:15%;">Objetivo general</th>
+								<th style="width:40%;">Resumen ejecutivo</th>
+								<th style="width:5%;">Estado del proyecto</th>
+								<th style="width:5%;">Editar Proyecto</th>
+								<th style="width:5%;">Gestión Presupuestal</th>
+							</tr>
+						</thead>
+						<tbody>			
+							<tr>
+								<td><?php echo $dato ["codigo_proy"]; ?></td>
+								<td><?php echo $dato ["nombre_proy"]; ?></td>
+								<td>
+									<?php
+										foreach ($this->usuario as $usuario) {
+		                                    if($usuario["id_usuario"]==$dato ["id_investigador"]){
+		                                        echo $usuario["primer_nombre"]." ".$usuario["segundo_nombre"]." ".$usuario["primer_apellido"]." ".$usuario["segundo_apellido"];    
+		                                    }    
+		                                }  
+									?>
+								</td>
+								<td>
+									<?php
+										if($dato ["tipo_conv"] == "I"){
+											echo "Interno"; 
+										}else if($dato ["tipo_conv"] == "E"){
+											echo "Externo-cofinanciado"; 
+										}else if($dato ["tipo_conv"] == "S"){
+											echo "Especial"; 
+										}
+									?>	
+								</td>
+								<td>
+									<?php
+									if($dato["id_convocatoria"]!=""){
+										foreach ($this->convocatorias as $convocatoria) {
+											if($dato["id_convocatoria"]==$convocatoria ["id_convocatoria"]){
+												echo $convocatoria ["titulo"];
+											}
+										}
+									}
+									?>
+								</td>
+								<td><?php echo $dato ["objetivo_general"]; ?></td>
+								<td style="text-align: justify !important;"><?php echo $dato ["resumen_ejecutivo"]; ?></td>
+								<td>
+									<?php
+										if($dato ["id_estado"] == 1){
+											echo "Creado"; 
+										}else if($dato ["id_estado"] == 2){
+											echo "Aprobado"; 
+										}else if($dato ["id_estado"] == 3){
+											echo "Cerrado"; 
+										}else if($dato ["id_estado"] == 4){
+											echo "Archivado"; 
+										}
+									?>	
+								</td>
+								<td>
+									<a class="btn" href="<?php echo $this->basePath() ?>/application/editarproyecto/index/<?php echo $dato["id_proyecto"];?>"><i class="fa fa-pencil"></i></a>
+								</td>
+								<td>
+									<a class="btn" href="<?php echo $this->basePath() ?>/application/prueba/index/<?php echo $dato["id_proyecto"];?>/<?php echo $dato["codigo_proy"];?>">Gestión
+										presupuestal</a>
+								</td>
+							</tr>			
+						</tbody>
+					</table>
+				</div>
+			</div>
+		<?php }?>
+	<?php } 
+		if($band){
+			if($this->data["id_proyecto"]){
+				echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos proyectos con este ID</h3></div>';
+			}else if($this->data["codigo_proy"]){
+				echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos proyectos con este código</h3></div>';
+			}else if($this->data["nombre_proy"]){
+				echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos proyectos con este nombre</h3></div>';
+			}else{
+				echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos proyectos con este parametro de búsqueda</h3></div>';
+			}
+		}
+	?>
+<?php }?>

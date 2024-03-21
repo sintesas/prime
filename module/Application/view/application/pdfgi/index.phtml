@@ -1,0 +1,920 @@
+<?php if ($this->pdf == 'S') { ?>
+
+<!-- Estilos -->
+
+<style type="text/css">
+.container {
+	width: 573px;
+	margin: auto;
+	padding: 10px;
+	border: 0px solid #000;
+}
+
+body {
+	font-family: Arial, sans-serif;
+}
+
+html {
+	margin: 10px;
+	padding: 10px;
+}
+
+body {
+	font-family: dejavu sans, Arial;
+	font-size: 0.85em;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.font-xxl {
+	font-size: 2em;
+}
+
+.font-l {
+	font-size: 1.5em;
+}
+
+.font-n {
+	font-size: 0.8em;
+}
+
+.font-s {
+	font-size: 0.6em;
+}
+
+.font-middle {
+	text-align: center;
+}
+
+.page-wrap {
+	padding: 0px;
+	margin: 0px;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 5px 1px 5px 1px;
+}
+
+td, th {
+	border: 1px solid black;
+	padding: 1px 1px 1px 1px;
+}
+
+.brdr-top {
+	border-top: 1px solid black;
+}
+
+.brdr-bottom {
+	border-bottom: 1px solid black;
+}
+
+.brdr-left {
+	border-left: 1px solid black;
+}
+
+.brdr-right {
+	border-right: 1px solid black;
+}
+
+.bordreless td, .bordreless th {
+	border: 0px thin #ffffff;
+}
+</style>
+
+<div class="container" style="margin: 20px 20px 30px 30px;">
+	<p>_______________________________________________________________</p>
+	<h1>GRUPOS DE INVESTIGACIÓN</h1>
+	<p>_______________________________________________________________</p>
+									
+									
+<?php
+    if ($this->consulta == 1) {
+        foreach ($this->datos as $dato) { ?>
+            
+    <br>
+    <br>     
+	<p>_______________________________________________________________</p>
+	<p align="justify">Nombre del grupo: <?php echo utf8_decode($dato["nombre_grupo"]); ?></p>
+	<p align="justify">Código del grupo: <?php echo utf8_decode($dato["id_lider"]); ?></p>
+	<p align="justify">Fecha creación del grupo: <?php echo utf8_decode($dato["fecha_creacion"]); ?></p>
+	<p align="justify">Categoría: <?php
+            
+            foreach ($this->valflex as $vflex) {
+                if ($vflex["id_valor_flexible"] == $dato["id_clasificacion"]) {
+                    echo utf8_decode($vflex["descripcion_valor"]);
+                }
+            }
+            ?></p>
+	<p align="justify">Unidad: <?php
+            
+            foreach ($this->valflex as $vflex) {
+                if ($vflex["id_valor_flexible"] == $dato["id_unidad_academica"]) {
+                    echo utf8_decode($vflex["descripcion_valor"]);
+                }
+            }
+            ?></p>
+	<p align="justify">Dependencia: <?php
+            
+            foreach ($this->valflex as $vflex) {
+                if ($vflex["id_valor_flexible"] == $dato["id_dependencia_academica"]) {
+                    echo utf8_decode($vflex["descripcion_valor"]);
+                }
+            }
+            ?></p>
+
+    <p align="justify">Programa: <?php
+            
+            foreach ($this->valflex as $vflex) {
+                if ($vflex["id_valor_flexible"] == $dato["id_programa_academico"]) {
+                    echo utf8_decode($vflex["descripcion_valor"]);
+                }
+            }
+            ?></p>
+
+	<p align="justify">Campo de investigación: <?php
+            
+            foreach ($this->valflex as $vflex) {
+                if ($vflex["id_valor_flexible"] == $dato["id_campo_investigacion"]) {
+                    echo utf8_decode($vflex["descripcion_valor"]);
+                }
+            }
+            ?></p>
+
+
+	<p align="justify">Plan de acción: <?php echo utf8_decode($dato["plan_accion"]); ?></p>
+	<p align="justify">Email: <?php echo utf8_decode($dato["email"]); ?></p>
+	<p align="justify">Teléfono: <?php echo utf8_decode($dato["telefono"]); ?></p>
+	<p align="justify">Dirección postal: <?php echo utf8_decode($dato["dir_postal"]); ?></p>
+	<p align="justify">Plan estratégico: <?php echo utf8_decode($dato["plan_estrategico"]); ?></p>
+	<p align="justify">Sectores de aplicación: <?php echo utf8_decode($dato["sectores_aplicacion"]); ?></p>
+    <p align="justify">Retos: <?php echo utf8_decode($dato["retos"]); ?></p>
+	<p align="justify">Estado del arte: <?php echo utf8_decode($dato["estado_arte"]); ?></p>
+    <p align="justify">Descripción del grupo: <?php echo utf8_decode($dato["descripcion"]); ?></p>
+
+
+	<p align="justify">Misión: <?php echo utf8_decode($dato["mision"]); ?></p>
+	<p align="justify">Visión: <?php echo utf8_decode($dato["vision"]); ?></p>
+	<p align="justify">Descriptores: <?php echo utf8_decode($dato["descriptores"]); ?></p>
+
+	<div class="page-wrap">
+<?php
+            
+            if ($this->info["lineas"] != '0') {
+                    echo '<p>_______________________________________________________________</p>';
+                ?><h2>Líneas de investigación</h2><?php
+                    echo '<p>_______________________________________________________________</p>';
+                ?>
+                
+<br>
+		<table>
+			<tbody>
+				<tr>
+					<td class="bold" style="width:10%">Nombre línea</td>
+                    <td class="bold" style="width:30%">Objetivo</td>
+                    <td class="bold" style="width:30%">Efectos</td>
+                    <td class="bold" style="width:30%">Logros</td>
+				</tr> 
+<?php
+                
+                foreach ($this->datos2 as $dato2) {
+                    if ($dato2["id_grupo_inv"] == $dato["id_grupo_inv"]) {
+                        ?>
+            <tr>
+				<td>
+					<?php echo utf8_decode($dato2["nombre_linea"]); ?>
+                </td>
+                <td>
+                    <?php echo utf8_decode($dato2["objetivo"]); ?>
+                </td>
+                <td>
+                    <?php echo utf8_decode($dato2["efectos"]); ?>
+                </td>
+                <td>
+                    <?php echo utf8_decode($dato2["logros"]); ?>
+                </td>
+
+				</tr>
+<?php
+                    }
+                }
+                ?>
+        </tbody>
+		</table>
+		
+<?php
+            }
+            
+            echo '</table>';
+            
+            if ($this->info["proyectosext"] != '0') {
+                 echo '<br><p>_______________________________________________________________</p>';
+                ?><h2>Proyectos externos</h2><?php
+                    echo '<p>_______________________________________________________________</p>';
+            ?>
+<br>
+		<table>
+			<tbody>
+				<tr>
+                    <td class="bold" style="width:10%">Código proyecto</td>
+					<td class="bold" style="width:10%">Nombre proyecto</td>
+                    <td class="bold" style="width:10%">Tipo de proyecto</td>
+                    <td class="bold" style="width:5%">Fecha inicio</td>
+                    <td class="bold" style="width:5%">Fecha fin</td>
+					<td class="bold" style="width:15%">Objetivo proyecto</td>
+					<td class="bold" style="width:15%">Resumen ejecutivo</td>
+					<td class="bold" style="width:15%">Equipo trabajo</td>
+                    <td class="bold" style="width:10%">Productos derivados</td>
+
+				</tr> 
+<?php
+                
+                foreach ($this->datos4 as $dato4) {
+                    if ($dato4["id_grupo_inv"] == $dato["id_grupo_inv"]) {
+                        ?>
+            <tr>
+				<td>
+					<?php echo utf8_decode($dato4["codigo_proyecto"]); ?>
+                </td>
+                <td>
+                    <?php echo utf8_decode($dato4["nombre_proyecto"]); ?>
+                </td>
+                <td>
+                    <?php echo utf8_decode($dato4["tipo_proyecto"]); ?>
+                </td>
+                 <td>
+                    <?php echo utf8_decode($dato4["fecha_inicio"]); ?>
+                </td>
+                 <td>
+                    <?php echo utf8_decode($dato4["fecha_fin"]); ?>
+                </td>
+				<td>
+					<?php echo utf8_decode($dato4["objetivo_general"]); ?>
+                </td>
+				<td>
+					<?php echo utf8_decode($dato4["resumen_ejecutivo"]); ?>
+                </td>
+				<td>
+                    <?php 
+                        foreach ($this->datos10 as $auts) {
+                            if ($dato4["id_proyecto_ext"] == $auts["id_padre"] && trim($auts["nombre_padre"]) == 'proy_ext'){
+                                foreach ($this->valflex as $v) {
+                                    if ($v["id_valor_flexible"] == $auts["id_rol"]) {
+                                        $rol = $v["descripcion_valor"];
+                                    }
+                                }
+                                foreach ($this->usuarios as $ua) {
+                                    if ($ua["id_usuario"] == $auts["id_usuario"]) {
+                                        echo utf8_decode(trim($ua["primer_nombre"]) . ' ' . trim($ua["primer_apellido"] . ' - '.$rol."<br><br>"));
+                                    }
+                                }
+                            }
+                        }
+                    ?>
+                </td>
+                <td>
+                    <?php echo utf8_decode($dato4["productos_derivados"]); ?>
+                </td>
+			</tr>
+<?php
+                    }
+                }
+                ?>
+        </tbody>
+		</table>
+		
+<?php
+            }
+            
+            if ($this->info["redes"] != '0') {
+                 echo '<p>_______________________________________________________________</p>';
+                        ?><h2>Redes de grupo</h2><?php
+                        echo '<p>_______________________________________________________________</p>';
+                        ?>
+                
+<br>
+		<table>
+			<tbody>
+				<tr>
+					<td class="bold">Nombre de la red</td>
+
+				</tr> 
+<?php
+                
+                foreach ($this->datos5 as $dato5) {
+                    if ($dato5["id_grupo_inv"] == $dato["id_grupo_inv"]) {
+                        ?>
+            <tr>
+					<td>
+
+
+					<?php echo utf8_decode($dato5["nombre_red"]); ?>
+
+</td>
+
+
+
+				</tr>
+<?php
+                    }
+                }
+                ?>
+        </tbody>
+		</table>
+		
+<?php
+            }
+            
+            if ($this->info["integrantes"] != '0') {
+                 echo '<p>_______________________________________________________________</p>';
+                        ?><h2>Integrantes</h2><?php
+                        echo '<p>_______________________________________________________________</p>';
+                        
+                ?>
+<br>
+		<table>
+			<tbody>
+				<tr>
+					<td class="bold">Nombre del Integrante</td>
+				</tr> 
+				<?php foreach ($this->datos9 as $dato9) {
+                    if ($dato9["id_grupo_inv"] == $dato["id_grupo_inv"]) { ?>
+           		<tr>
+					<td>
+						<?php foreach ($this->usuarios as $usuarios) {
+						
+						    if ($dato9["id_integrante"] == $usuarios["id_usuario"]) {						       
+						        echo utf8_decode($usuarios["primer_nombre"] . $usuarios["primer_apellido"]);						        
+						    } 						
+						}?>
+					</td>
+				</tr>
+			<?php } } ?>
+        </tbody>
+		</table>
+		
+<?php
+            }
+            
+            if ($this->info["reconocimientos"] != '0') {
+                 echo '<p>_______________________________________________________________</p>';
+                        ?><h2>Reconocimientos</h2><?php
+                        echo '<p>_______________________________________________________________</p>';
+                        
+                ?>
+<br>
+		<table>
+			<tbody>
+				<tr>
+					<td class="bold">Descripción</td>
+					<td class="bold">Semestre</td>
+					<td class="bold">Número de acto administrativo</td>
+					<td class="bold">Valor</td>
+
+				</tr> 
+<?php
+                
+                foreach ($this->datos6 as $dato6) {
+                    if ($dato6["id_grupo_inv"] == $dato["id_grupo_inv"]) {
+                        ?>
+            <tr>
+					<td>
+
+
+					<?php echo utf8_decode($dato6["descripcion"]); ?>
+
+</td>
+					<td>
+
+
+					<?php echo utf8_decode($dato6["semestre"]); ?>
+
+</td>
+					<td>
+
+
+					<?php echo utf8_decode($dato6["num_acto"]); ?>
+
+</td>
+					<td>
+
+
+					<?php echo utf8_decode(number_format($dato6["valor"])); ?>
+
+</td>
+
+
+
+				</tr>
+<?php
+                    }
+                }
+                ?>
+        </tbody>
+		</table>
+		
+<?php
+            }
+            
+            if ($this->info["bibliograficos"] != '0') {
+                
+                foreach ($this->datos8 as $dato8) {
+                    
+                    if ($dato8["id_grupo_inv"] == $dato["id_grupo_inv"]) {
+                        echo '<p>_______________________________________________________________</p>';
+                        ?><h2>Documentos bibliográficos</h2><?php
+                        echo '<p>_______________________________________________________________</p>';
+                        ?>
+
+
+<p align="justify">Nombre del documento: <?php echo utf8_decode($dato8["nombre_documento"]); ?></p>
+		<p align="justify">Año: <?php echo utf8_decode($dato8["ano"]); ?></p>
+		<p align="justify">Mes: <?php echo utf8_decode($dato8["mes"]); ?></p>
+		<p align="justify">Número de páginas: <?php echo utf8_decode($dato8["numero_paginas"]); ?></p>
+		<p align="justify">URL: <?php echo utf8_decode($dato8["url"]); ?></p>
+		<p align="justify">Medio de divulgación: <?php echo utf8_decode($dato8["medio_divulgacion"]); ?></p>
+		<p align="justify">Descripción: <?php echo utf8_decode($dato8["descripcion"]); ?></p>
+        <p align="justify">Instituciones participantes: <?php echo utf8_decode($dato8["instituciones"]); ?></p>
+        <p align="justify">Número de indexación: <?php echo utf8_decode($dato8["num_indexacion"]); ?></p>
+        <p align="justify">Autor: <?php 
+        foreach ($this->usuarios as $usa) {
+            if ($usa["id_usuario"] == $dato8["id_autor"]) {
+                echo utf8_decode(trim($usa["primer_nombre"]) . ' ' . trim($usa["primer_apellido"]));
+            }
+        }
+        ?></p>
+         <p align="justify">Coautores:</br> <?php 
+           echo '<br>';
+            foreach ($this->datos10 as $aut) {
+               if($dato8["id_bibliografico"] == $aut["id_padre"] && trim($aut["nombre_padre"]) == 'bibliografico'){
+                    foreach ($this->usuarios as $ua) {
+                        if ($ua["id_usuario"] == $aut["id_usuario"]) {
+                            echo utf8_decode(trim($ua["primer_nombre"]) . ' ' . trim($ua["primer_apellido"]));
+                            echo '<br>';
+                        }
+                    }
+               }
+            }
+        ?></p>
+		<br>
+        	
+<?php
+                    }
+                }
+            }
+            
+            if ($this->info["articulos"] != '0') {
+                
+                foreach ($this->datos7 as $dato7) {
+                    if ($dato7["id_grupo_inv"] == $dato["id_grupo_inv"]) {
+                        echo '<p>_______________________________________________________________</p>';
+                        ?><h2>Artículos</h2><?php
+                        echo '<p>_______________________________________________________________</p>';
+                        ?>
+        <p align="justify">Nombre de la revista: <?php echo utf8_decode($dato7["nombre_revista"]); ?></p>
+        <p align="justify">Nombre del artículo: <?php echo utf8_decode($dato7["nombre_articulo"]); ?></p>
+		<p align="justify">País: <?php
+            foreach ($this->valflex as $vl) {
+                if ($vl["id_valor_flexible"] == $dato7["id_pais"]) {
+                    echo utf8_decode($vl["descripcion_valor"]);
+                }
+            }
+        ?></p>
+        <p align="justify">Departamento: <?php
+            foreach ($this->valflex as $vl) {
+                if ($vl["id_valor_flexible"] == $dato7["id_departamento"]) {
+                    echo utf8_decode($vl["descripcion_valor"]);
+                }
+            }
+        ?></p>
+        <p align="justify">Ciudad: <?php
+            foreach ($this->valflex as $vl) {
+                if ($vl["id_valor_flexible"] == $dato7["id_ciudad"]) {
+                    echo utf8_decode($vl["descripcion_valor"]);
+                }
+            }
+        ?></p>
+        <p align="justify">Año: <?php echo utf8_decode($dato7["ano"]); ?></p>
+        <p align="justify">Mes: <?php echo utf8_decode($dato7["mes"]); ?></p>
+        <p align="justify">ISSN: <?php echo utf8_decode($dato7["issn"]); ?></p>
+        <p align="justify">Volumen: <?php echo utf8_decode($dato7["volumen"]); ?></p>
+		<p align="justify">Página inicial: <?php echo utf8_decode($dato7["pagina_inicio"]); ?></p>
+		<p align="justify">Página final: <?php echo utf8_decode($dato7["pagina_fin"]); ?></p>
+		<p align="justify">Serie: <?php echo utf8_decode($dato7["serie"]); ?></p>
+		<p align="justify">Fascículo: <?php echo utf8_decode($dato7["fasciculo"]); ?></p>
+        <p align="justify">Página del artículo: <?php echo utf8_decode($dato7["paginas"]); ?></p>
+        <p align="justify">Página de inicio: <?php echo utf8_decode($dato7["pagina_inicio"]); ?></p>
+		<p align="justify">Página de fin: <?php echo utf8_decode($dato7["pagina_fin"]); ?></p>
+        <p align="justify">#Páginas: <?php echo utf8_decode($dato7["num_paginas"]); ?></p>
+		<p align="justify">Autor: <?php 
+            foreach ($this->usuarios as $usa) {
+                if ($usa["id_usuario"] == $dato7["id_autor"]) {
+                    echo utf8_decode(trim($usa["primer_nombre"]) . ' ' . trim($usa["primer_apellido"]));
+                }
+            } 
+        ?></p>
+        <p align="justify">Coautores:</br> <?php 
+           echo '<br>';
+            foreach ($this->datos10 as $aut) {
+               if($dato7["id_gi_articulo"] == $aut["id_padre"] && trim($aut["nombre_padre"]) == 'Articulos'){
+                    foreach ($this->usuarios as $ua) {
+                        if ($ua["id_usuario"] == $aut["id_usuario"]) {
+                            echo utf8_decode(trim($ua["primer_nombre"]) . ' ' . trim($ua["primer_apellido"]));
+                            echo '<br>';
+                        }
+                    }
+               }
+            }
+        ?></p>
+		<br>
+        <br>
+			        	
+<?php
+                    }
+                }
+            }
+            
+            if ($this->info["libros"] != '0') {
+                echo '<p>_______________________________________________________________</p>';
+                ?><h2>Libros</h2><?php
+                echo '<p>_______________________________________________________________</p>';
+                
+                ?>
+<br>
+		<table>
+			<tbody>
+				<tr>
+					<td class="bold">Título del libro o Título del capítulo</td>
+					<td class="bold">Autor</td>
+					<td class="bold">Fecha</td>
+					<td class="bold">Editorial</td>
+                    <td class="bold">Página inicio y Fin del capítulo</td>
+                    <td class="bold">Número de paginas del capítulo</td>
+                    <td class="bold">Serie</td>
+                    <td class="bold">Edición</td>
+                    <td class="bold">ISBN/e-ISBN</td>
+                    <td class="bold">Lugar de publicación</td>
+                    <td class="bold">Medio divulgación</td>
+                    <td class="bold">Capítulo del libro</td>
+                    <td class="bold">Coautores</td>
+				</tr> 
+<?php
+                foreach ($this->datos3 as $dato3) {
+                    if ($dato3["id_grupo_inv"] == $dato["id_grupo_inv"]) {
+                        ?>
+            <tr>
+				<td>
+					<?php echo utf8_decode($dato3["titulo_libro"]); ?>
+                </td>
+				<td>
+					<?php 
+                        foreach ($this->usuarios as $usa) {
+                            if ($usa["id_usuario"] == $dato3["id_autor"]) {
+                                echo utf8_decode(trim($usa["primer_nombre"]) . ' ' . trim($usa["primer_apellido"]));
+                            }
+                        }
+                    ?>
+                </td>
+				<td>
+					<?php echo utf8_decode($dato3["fecha"]); ?>
+                </td>
+				<td>
+					<?php echo utf8_decode($dato3["editorial"]); ?>
+                </td>
+                <td>
+                    <?php echo utf8_decode($dato3["paginas"]); ?>
+                </td>
+                <td>
+                    <?php echo utf8_decode($dato3["num_paginas"]); ?>
+                </td>
+                <td>
+                    <?php echo utf8_decode($dato3["serie"]); ?>
+                </td>
+                <td>
+                    <?php echo utf8_decode($dato3["edicion"]); ?>
+                </td>
+                <td>
+                    <?php echo utf8_decode($dato3["isbn"]); ?>
+                </td>
+                <td>
+                    <?php echo utf8_decode($dato3["lugar_publicacion"]); ?>
+                </td>
+                <td>
+                    <?php echo utf8_decode($dato3["medio_divulgacion"]); ?>
+                </td>
+                 <td>
+                    <?php echo utf8_decode($dato3["capitulo_libro"]); ?>
+                </td>
+                 <td>
+                    <?php 
+                        foreach ($this->datos10 as $aut) {
+                           if($dato3["id_gi_libro"] == $aut["id_padre"] && trim($aut["nombre_padre"]) == 'Libros'){
+                                foreach ($this->usuarios as $ua) {
+                                    if ($ua["id_usuario"] == $aut["id_usuario"]) {
+                                        echo utf8_decode(trim($ua["primer_nombre"]) . ' ' . trim($ua["primer_apellido"]));
+                                        echo '<br><br>';
+                                    }
+                                }
+                           }
+                        }
+                    ?>
+                </td>
+			</tr>
+<?php
+                    }
+                }
+                ?>
+        </tbody>
+		</table>
+		
+<?php
+            }
+        }
+        echo '<p>_______________________________________________________________</p>';
+        echo '<br>';
+        echo '<br>';
+    }
+    
+    echo '</div>';
+    echo '</div>';
+    ?>
+    
+<?php } else { ?>
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+			<div id="container_1">
+				<div class="row2">
+					<div class="nine3 columns">
+						<div id="centersectiontitle">
+							<div class="twelve columns">
+								<div class="sidebartitle">
+									<h3>
+                        				<?php
+    echo utf8_decode($this->titulo);
+    ?>
+                        				</h3>
+								</div>
+							</div>
+
+
+
+						</div>
+
+						<di	v class="seven columns">
+							<a
+								href="<?php echo $this->basePath() ?>/application/reportes/index">
+								<i class="icon-arrow-left"></i> Regresar
+							</a><br> <br>
+														
+				<?php
+    $form = $this->form;
+    $form->prepare();
+    
+    $form->setAttributes(array(
+        'action' => $this->url . '/application/pdfgi/index',
+        'method' => 'post'
+    ));
+    echo $this->form()->openTag($form);
+    echo '<p>';
+    echo $this->formlabel($form->get('nombre_grupo'));
+    echo $this->formelement($form->get('nombre_grupo'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_unidad_academica'));
+    echo $this->formelement($form->get('id_unidad_academica'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_dependencia_academica'));
+    echo $this->formelement($form->get('id_dependencia_academica'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_programa_academico'));
+    echo $this->formelement($form->get('id_programa_academico'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_lineas'));
+    echo $this->formelement($form->get('id_lineas'));
+    echo '<p>';
+    echo $this->formlabel($form->get('libros'));
+    echo $this->formelement($form->get('libros'));
+    echo '<p>';
+    echo $this->formlabel($form->get('integrantes'));
+    echo $this->formelement($form->get('integrantes'));
+    echo '<p>';
+    echo $this->formlabel($form->get('lineas'));
+    echo $this->formelement($form->get('lineas'));
+    echo '<p>';
+    echo $this->formlabel($form->get('redes'));
+    echo $this->formelement($form->get('redes'));
+    echo '<p>';
+    echo $this->formlabel($form->get('reconocimientos'));
+    echo $this->formelement($form->get('reconocimientos'));
+    echo '<p>';
+    echo $this->formlabel($form->get('articulos'));
+    echo $this->formelement($form->get('articulos'));
+    echo '<p>';
+    echo $this->formlabel($form->get('proyectosext'));
+    echo $this->formelement($form->get('proyectosext'));
+    echo '<p>';
+    echo $this->formlabel($form->get('bibliograficos'));
+    echo $this->formelement($form->get('bibliograficos'));
+    echo '<p>';
+    echo $this->formelement($form->get('submit'));
+    echo '<br>';
+    
+    echo $this->form()->closeTag($form);
+    ?>
+				<br>
+
+
+				<?php
+    
+    if ($this->consulta == 1) {
+        
+        foreach ($this->datos as $dato) {
+            echo '<table class="table">';
+            echo '<thead>';
+            echo '<th>Nombre Grupo</th>';
+            echo '<th>Fecha CreaciÃ³n</th>';
+            echo '<th>CategorÃ­a</th>';
+            echo '<th>Unidad</th>';
+            echo '<th>Dependencia</th>';
+            echo '<th>Programa</th>';
+            echo '<th>Email</th>';
+            echo '<th>Descriptores</th>';
+            echo '<th>DescripciÃ³n</th>';
+            echo '</thead>';
+            echo '<tbody>';
+            echo '<td>';
+            echo utf8_decode($dato["nombre_grupo"]);
+            echo '</td>';
+            echo '<td>';
+            echo utf8_decode($dato["fecha_creacion"]);
+            echo '</td>';
+            echo '<td>';
+            foreach ($this->valflex as $vflex) {
+                if ($vflex["id_valor_flexible"] == $dato["id_clasificacion"]) {
+                    echo utf8_decode($vflex["descripcion_valor"]);
+                }
+            }
+            echo '</td>';
+            echo '<td>';
+            foreach ($this->valflex as $vflex) {
+                if ($vflex["id_valor_flexible"] == $dato["id_unidad_academica"]) {
+                    echo utf8_decode($vflex["descripcion_valor"]);
+                }
+            }
+            echo '</td>';
+            echo '<td>';
+            foreach ($this->valflex as $vflex) {
+                if ($vflex["id_valor_flexible"] == $dato["id_dependencia_academica"]) {
+                    echo utf8_decode($vflex["descripcion_valor"]);
+                }
+            }
+            echo '</td>';
+            echo '<td>';
+            foreach ($this->valflex as $vflex) {
+                if ($vflex["id_valor_flexible"] == $dato["id_programa_academico"]) {
+                    echo utf8_decode($vflex["descripcion_valor"]);
+                }
+            }
+            echo '</td>';
+            echo '<td>';
+            echo utf8_decode($dato["email"]);
+            echo '</td>';
+            echo '<td>';
+            echo utf8_decode($dato["descriptores"]);
+            echo '</td>';
+            echo '<td>';
+            echo utf8_decode($dato["descripcion"]);
+            echo '</td>';
+            echo '</tr>';
+            if ($this->info["lineas"] != '0') {
+                echo '<table class="table">';
+                echo '<thead>';
+                echo '<th>LÃ­neas</th>';
+                echo '</thead>';
+                echo '<tbody>';
+                foreach ($this->datos2 as $dato2) {
+                    if ($dato2["id_grupo_inv"] == $dato["id_grupo_inv"]) {
+                        echo '<tr>';
+                        echo '<td>';
+                        echo utf8_decode($dato2["nombre_linea"]);
+                        echo '</td>';
+                        
+                        echo '</tbody>';
+                    }
+                }
+                echo '</table>';
+            }
+            if ($this->info["proyectosext"] != '0') {
+                echo '<table class="table">';
+                echo '<thead>';
+                echo '<th>Nombre Proyecto</th>';
+                echo '<th>Objetivo Proyecto</th>';
+                echo '<th>Resumen Ejecutivo</th>';
+                echo '<th>Equipo Trabajo</th>';
+                echo '</thead>';
+                echo '<tbody>';
+                foreach ($this->datos4 as $dato4) {
+                    if ($dato4["id_grupo_inv"] == $dato["id_grupo_inv"]) {
+                        echo '<tr>';
+                        echo '<td>';
+                        echo utf8_decode($dato4["codigo_proyecto"]);
+                        echo '</td>';
+                        echo '<td>';
+                        echo utf8_decode($dato4["objetivo_general"]);
+                        echo '</td>';
+                        echo '<td>';
+                        echo utf8_decode($dato4["resumen_ejecutivo"]);
+                        echo '</td>';
+                        echo '<td>';
+                        echo utf8_decode($dato4["equipo_trabajo"]);
+                        echo '</td>';
+                        echo '</tbody>';
+                    }
+                }
+                echo '</table>';
+            }
+            
+            if ($this->info["redes"] != '0') {
+                echo '<table class="table">';
+                echo '<thead>';
+                echo '<th>Nombre de la Red</th>';
+                echo '</thead>';
+                echo '<tbody>';
+                foreach ($this->datos5 as $dato5) {
+                    if ($dato5["id_grupo_inv"] == $dato["id_grupo_inv"]) {
+                        echo '<tr>';
+                        echo '<td>';
+                        echo utf8_decode($dato5["nombre_red"]);
+                        echo '</td>';
+                        
+                        echo '</tbody>';
+                    }
+                }
+                echo '</table>';
+            }
+            
+            if ($this->info["integrantes"] != '0') {
+                echo '<table class="table">';
+                echo '<thead>';
+                echo '<th>Nombre del Integrante</th>';
+                echo '</thead>';
+                echo '<tbody>';
+                foreach ($this->datos9 as $dato9) {
+                    if ($dato9["id_grupo_inv"] == $dato["id_grupo_inv"]) {
+                        echo '<tr>';
+                        echo '<td>';
+                        echo utf8_decode($dato9["id_integrante"]);
+                        echo '</td>';
+                        
+                        echo '</tbody>';
+                    }
+                }
+                echo '</table>';
+            }
+            
+            if ($this->info["libros"] != '0') {
+                echo '<table class="table">';
+                echo '<thead>';
+                echo '<th>Nombre Libro</th>';
+                echo '<th>Autores</th>';
+                echo '<th>Fecha</th>';
+                echo '<th>Editorial</th>';
+                echo '</thead>';
+                echo '<tbody>';
+                foreach ($this->datos3 as $dato3) {
+                    if ($dato3["id_grupo_inv"] == $dato["id_grupo_inv"]) {
+                        echo '<tr>';
+                        echo '<td>';
+                        echo utf8_decode($dato3["titulo_libro"]);
+                        echo '</td>';
+                        echo '<td>';
+                        echo utf8_decode($dato3["autores"]);
+                        echo '</td>';
+                        echo '<td>';
+                        echo utf8_decode($dato3["fecha"]);
+                        echo '</td>';
+                        echo '<td>';
+                        echo utf8_decode($dato3["editorial"]);
+                        echo '</td>';
+                        
+                        echo '</tbody>';
+                    }
+                }
+                echo '</table>';
+            }
+            echo '</table>';
+        }
+    }
+    
+    ?>
+
+
+</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+<?php } ?>  

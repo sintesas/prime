@@ -1,0 +1,76 @@
+<style>
+    textarea {
+        height: 100px;
+        width: 100%;
+        max-width: 100%;
+
+    }
+</style> 
+
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+								<?php
+							    	echo $this->titulo;
+							    ?>
+							</h3>
+						</div>
+					</div>
+				</div>
+				<div class="six columns">
+					<a href="<?php echo $this->basePath() ?>/application/editaraplicari/index/<?php echo $this->id; ?>">
+						<i class="icon-arrow-left"></i> Regresar
+					</a>
+				</div>
+				</br>
+				</br>
+				</br>
+				</br>
+				</br>
+
+<?php
+$form = $this->form;
+$form->prepare();
+
+echo $this->form()->openTag($form);
+
+echo '<div class="twelve columns">';
+echo '<p>';
+echo $this->formlabel($form->get('tipo_vinculacion'));
+echo $this->formelement($form->get('tipo_vinculacion'));
+
+echo '<p>';
+echo $this->formlabel($form->get('personas'));
+echo $this->formelement($form->get('personas'));
+
+echo '<p>';
+echo $this->formlabel($form->get('objeto'));
+echo $this->formelement($form->get('objeto'));
+
+echo '<p>';
+echo $this->formlabel($form->get('justificacion'));
+echo $this->formelement($form->get('justificacion'));
+
+echo '<p>';
+echo $this->formlabel($form->get('valor'));
+echo $this->formelement($form->get('valor'));
+
+echo '<p>';
+echo $this->formelement($form->get('submit'));
+echo '</div>';
+
+echo $this->form()->closeTag($form);
+?>				
+
+
+</div><!-- Cierre div six columns --> 
+			</div>
+		</div>
+	</div>
+</div>

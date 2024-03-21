@@ -1,0 +1,64 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+    echo $this->titulo;
+    ?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<div class="twelve columns">
+				<a
+					href="<?php echo $this->basePath() ?>/application/convocatoria/index">
+					<i class="icon-arrow-left"></i> Regresar
+				</a>	
+				<?php
+    $form = $this->form;
+    $form->prepare();
+    
+    $form->setAttributes(array(
+        'action' => $this->url . '/application/convocatorias/index/' . $this->id,
+        'method' => 'post'
+    ));
+    echo $this->form()->openTag($form);
+    echo '<p>';
+    echo $this->formlabel($form->get('titulo'));
+    echo $this->formelement($form->get('titulo'));
+    echo '<p>';
+    echo $this->formlabel($form->get('descripcion'));
+    echo $this->formelement($form->get('descripcion'));
+    echo '<p>';
+    echo $this->formlabel($form->get('observaciones'));
+    echo $this->formelement($form->get('observaciones'));
+    echo '<p>';
+    echo $this->formlabel($form->get('fecha_apertura'));
+    echo $this->formelement($form->get('fecha_apertura'));
+    echo '<p>';
+    echo $this->formlabel($form->get('fecha_cierre'));
+    echo $this->formelement($form->get('fecha_cierre'));
+    echo '<p>';
+    echo $this->formlabel($form->get('cronograma'));
+    echo $this->formelement($form->get('cronograma'));
+    echo '<p>';
+    echo $this->formelement($form->get('submit'));
+    echo '<br>';
+    
+    echo $this->form()->closeTag($form);
+    ?>
+				<br>
+
+				<?php
+    
+    ?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,149 @@
+<?php include("public/menu.php"); ?>
+<?php if($this->id3==0){ ?>
+	<style>
+		.filter-group input[type="text"],select{
+			width: 100%;
+		}
+		.filter-group {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+		.filter-group-left {float: left;}
+		.filter-group-right {float:right;}
+		.filter-group .btn {width: 275px;}
+		.filter-group .dropdown {display: inline;}
+		.filter-group .dropdown-menu {width: 300px;top: 32px;padding: 10px;}
+		.dropdown-menu-inner {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+		.dropdown-menu-right {left:-140px !important;}
+	</style>
+	<script type="text/javascript">
+		$(function () {
+		    var opts = $('#id_autor option').map(function () {
+		        return [[this.value, $(this).text()]];
+		    });
+		    $('#filtro_autor').keyup(function () {
+		    	console.log(2);
+		        var rxp = new RegExp($('#filtro_autor').val(), 'i');
+		        var optlist = $('#id_autor').empty();
+		        opts.each(function () {
+		            if (rxp.test(this[1])) {
+		                optlist.append($('<option/>').attr('value', this[0]).text(this[1]));
+		            }
+		        });
+
+		    });
+		});
+	</script>
+	<div class="col col100">
+		<div class="filter-group">
+			<div class="filter-group-left"><h4><?php echo $this->titulo; ?></h4></div>
+			<div class="filter-group-right">
+				<a class="btn" href="<?php echo $this->basePath() ?>/application/editarsemilleroinv/index/<?php echo $this->id?>"><i class="icon-arrow-left"></i> Regresar</a>
+				<a class="btn" style="margin-right: 8px;" href="<?php echo $this->basePath() ?>/application/grupossemillero/index/<?php echo $this->id?>/<?php echo $id2;?>"><i class="fa fa-close" style="margin-right: 5px;"></i>Borrar filtro</a>
+				<div class="dropdown">
+					<button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="margin-right: 8px;"><i class="fa fa-filter" style="margin-right: 5px;"></i>Filtro</button>
+					<div class="dropdown-menu dropdown-menu-right">
+						<div class="dropdown-menu-inner">
+							<?php								
+							$form = $this->form;
+							$form->prepare ();
+							echo $this->form ()->openTag ( $form );
+							echo '<h6>'.$this->flashMessenger ()->render ().'</h6>';
+							echo $this->formlabel($form->get('codigo'));
+							echo $this->formelement($form->get('codigo'));
+							echo $this->formlabel($form->get('nombre'));
+							echo $this->formelement($form->get('nombre'));
+							echo $this->formlabel($form->get('filtro_autor'));
+							echo $this->formelement($form->get('filtro_autor'));
+							echo $this->formlabel($form->get('id_autor'));
+							echo $this->formelement($form->get('id_autor'));
+							echo $this->formlabel($form->get('unidad_academica'));
+							echo $this->formelement($form->get('unidad_academica'));
+							echo $this->formlabel($form->get('dependencia_academica'));
+							echo $this->formelement($form->get('dependencia_academica'));
+							echo $this->formlabel($form->get('programa_academico'));
+							echo $this->formelement($form->get('programa_academico'));
+							echo $this->formelement($form->get('submit'));
+	 						echo $this->form ()->closeTag ( $form );
+	 						?>
+						</div>						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col col100 noshadow">
+		<div style='overflow-y:auto; max-height:4000px; width: 100%;'>
+			<table class="table" style="width: 100%; max-width: 100%;">
+				<thead>
+					<tr>
+						<th style="width:5%">Grupo de Investigación</th>
+						<th style="width:5%">Agregar</th>
+					</tr>
+				</thead>
+				<tbody>
+				<?php foreach ( $this->grupos as $dato ) : ?>
+					<tr>
+						<td><?php echo $dato["nombre_grupo"]; ?></td>
+						<td>
+							<a class="btn" href="<?php echo $this->basePath() ?>/application/grupossemillero/add/<?php echo $dato ["id_grupo_inv"];?>/<?php echo $id;?>/<?php echo $id2;?>"><?php echo ($this->id2 == 0) ? '<i class="fa fa-plus"></i>' : '<i class="fa fa-pencil"></i>'; ?></a>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+<?php }else{ ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+							<?php
+					    		echo $this->titulo;
+					    	?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<div class="twelve columns">
+
+					<a
+						href="<?php echo $this->basePath() ?>/application/editarsemilleroinv/index/<?php echo $this->id; ?>">
+						<i class="icon-arrow-left"></i> Regresar
+					</a>
+
+	<?php
+echo '<br>';
+echo '<br>';
+
+$form = $this->form;
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo '<div class="twelve columns" >';
+echo '<p>';
+echo $this->formlabel($form->get('image-file'));
+echo $this->formelement($form->get('image-file'));
+
+echo '<p>';
+echo '<br>';
+echo $this->formelement($form->get('cargar'));
+echo '</div" >';
+echo $this->form()->closeTag($form);
+echo '<br>';
+echo '<br>';
+?>			
+<legend></legend>
+</div>
+
+</br>
+</br>
+</br>
+			</div>
+		</div>
+	</div>
+</div>
+<?php } ?>

@@ -1,0 +1,118 @@
+<?php
+echo $this->doctype();
+/*
+setcookie("uni_o", "1");
+setcookie("campo_o", "1");
+setcookie("dep_u", "1");
+*/
+if (defined('RUNNING_FROM_ROOT')) {
+	$this->plugin('basePath')->setBasePath($this->basePath() . '/public');
+}
+require_once("public/rutas.php");
+?>
+<html lang="es">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="<?php echo $GLOBALS["ruta_servidor"] . 'css/estilos_arriba/estilos_arriba.css'; ?>">
+	<link rel="stylesheet" href="<?php echo $GLOBALS["ruta_servidor"] . 'include/font-awesome/css/font-awesome.min.css'; ?>">
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+	<script src="<?php echo $GLOBALS["ruta_servidor"] . 'js/arriba.js'; ?>"></script>
+	<script type="application/x-javascript">
+		addEventListener("load", function() {
+			setTimeout(hideURLbar, 0);
+		}, false);
+
+		function hideURLbar() {
+			window.scrollTo(0, 1);
+		}
+	</script>
+	<?php echo $this->headTitle('UPN ' . $this->translate('CIUP'))->setSeparator(' - ')->setAutoEscape(false) ?>
+	<?php
+	echo $this->headMeta()
+		->appendName('viewport', 'width=device-width, initial-scale=1.0')
+		->appendHttpEquiv('X-UA-Compatible', 'IE=edge') ?>
+	<!-- Le styles -->
+	<?php
+	echo $this->headLink(array(
+		'rel' => 'shortcut icon',
+		'type' => 'image/vnd.microsoft.icon',
+		'href' => $this->basePath() . '/img/favicon2.ico'
+	))
+		->prependStylesheet($this->basePath() . '/css/style_oscar.css')
+		->prependStylesheet($this->basePath() . '/css/bootstrap2.css')
+		->prependStylesheet($this->basePath() . '/css/bootstrap.css')
+		->prependStylesheet($this->basePath() . '/css/normalize.css')
+		->prependStylesheet($this->basePath() . '/css/estilo_2.css')
+		->prependStylesheet($this->basePath() . '/css/style.css')
+	?>
+	<!-- Scripts -->
+	<?php
+	echo $this->headScript()->appendFile($this->basePath() . '/js/html5shiv.js', 'text/javascript', array('conditional' => 'lt IE 9'));
+	?>
+	<script src="<?php echo $this->basePath(); ?>/js/jquery-1.11.0.min.js"></script>
+	<script type="text/javascript" src="<?php echo $this->basePath(); ?>/js/easing.js"></script>
+	<script src="//cdn.jsdelivr.net/webshim/1.14.5/polyfiller.js"></script>
+	<script>
+		webshims.setOptions('forms-ext', {types: 'date'});
+		webshims.polyfill('forms forms-ext');
+	</script>
+</head>
+
+<body>
+	<!-- Include Nav and menu -->
+	<?php echo $this->content; ?>
+	</div> <!-- End from content -->
+	</div> <!-- End from content -->
+
+
+	<footer>
+		<?php 
+			$arrContextOptions=array(
+    			"ssl"=>array(
+        			"verify_peer"=>false,
+        			"verify_peer_name"=>false,
+    			),
+			);  
+
+			$footer = file_get_contents("https://estilos.upn.edu.co/userfiles/json/gov_co_foo.json", false, stream_context_create($arrContextOptions));
+			$footers=json_decode($footer);
+		?>
+		<div><?php echo $footers->footer;?></div>
+		<section id="footer_gov">
+			<?php 
+				$footer_gov=file_get_contents("https://estilos.upn.edu.co/userfiles/json/gov_co_inf.json", false, stream_context_create($arrContextOptions));
+				$footers_gov=json_decode($footer_gov);
+				echo $footers_gov->footer;
+			?>
+		</section>
+		
+	</footer>
+	<span class="ir-arriba"></span>
+	<script>
+		$(".menue-item").hover(function() {
+			$(this).find(".submenu_web").fadeIn();
+		}, function() {
+			$(this).find(".submenu_web").fadeOut();
+		});
+		$(".user_card").click(function() {
+			$(".menu-slide").css("right", "0%");
+		});
+		$(".close-menu").click(function() {
+			$(".menu-slide").css("right", "-100%");
+		});
+		$(".login_user").click(function() {
+			$(".login_box").css("display", "table");
+		});
+		$(".close_login").click(function() {
+			$(".login_box").fadeOut();
+		});
+	</script>
+	<?php echo $this->inlineScript() ?>
+	<!-- JAVASCRIPTS 
+================================================== -->
+	<!-- Javascript files placed here for faster loading -->
+</body>
+
+</html>

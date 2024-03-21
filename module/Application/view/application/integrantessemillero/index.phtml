@@ -1,0 +1,104 @@
+
+
+<script type="text/javascript">
+	$(function () {
+	    var opts = $('#integrante option').map(function () {
+	        return [[this.value, $(this).text()]];
+	    });
+	    $('#id_integrante').keyup(function () {
+	    	console.log(2);
+	        var rxp = new RegExp($('#id_integrante').val(), 'i');
+	        var optlist = $('#integrante').empty();
+	        opts.each(function () {
+	            if (rxp.test(this[1])) {
+	                optlist.append($('<option/>').attr('value', this[0]).text(this[1]));
+	            }
+	        });
+
+	    });
+	});
+</script>
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+								<?php
+							    	echo $this->titulo;
+							    ?>
+							</h3>
+						</div>
+					</div>
+				</div>
+				<div class="six columns">
+					<a href="<?php echo $this->basePath() ?>/application/editarsemilleroinv/index/<?php echo $this->semillero; ?>">
+						<i class="icon-arrow-left"></i> Regresar
+					</a>
+				</div>
+				</br>
+				</br>
+				</br>
+				</br>
+				</br>
+
+<?php
+$form = $this->form;
+$form->prepare();
+
+echo $this->form()->openTag($form);
+
+echo '<div class="six columns">';
+echo '<p>';
+echo $this->formlabel($form->get('id_integrante'));
+echo $this->formelement($form->get('id_integrante'));
+echo '</br>';
+echo $this->formelement($form->get('integrante'));
+
+echo '<p>';
+echo $this->formlabel($form->get('tipo_vinculacion'));
+echo $this->formelement($form->get('tipo_vinculacion'));
+
+echo '<p>';
+echo '<br>';
+echo $this->formlabel($form->get('image-file'));
+echo $this->formelement($form->get('image-file'));
+echo '</div>';
+
+echo '<div class="six columns">';
+echo '<p>';
+echo $this->formlabel($form->get('fecha_inicio'));
+echo $this->formelement($form->get('fecha_inicio'));
+
+echo '<div class="twelve columns" style="padding: 0px;">';
+	echo '<div class="six columns" style="padding: 0px;">';
+		echo '<p>';
+		echo $this->formlabel($form->get('fecha_fin'));
+		echo $this->formelement($form->get('fecha_fin'));
+	echo '</div>';
+	echo '<div class="six columns">';
+		echo '<p>';
+		echo $this->formlabel($form->get('estado'));
+		echo $this->formelement($form->get('estado'));
+	echo '</div>';
+echo '</div>';
+
+echo '<p>';
+echo $this->formlabel($form->get('rol_participacion'));
+echo $this->formelement($form->get('rol_participacion'));
+echo '<p>';
+echo $this->formelement($form->get('submit'));
+echo '</div>';
+
+echo $this->form()->closeTag($form);
+?>				
+
+
+</div><!-- Cierre div six columns --> 
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,78 @@
+<style>
+    textarea {
+        height: 100px;
+        width: 100%;
+        max-width: 100%;
+
+    }
+    .marginBoton{
+        margin-left: 20px;
+    }
+
+    legend{
+        margin: 0px;
+    }
+
+    .alineadoDerecha {
+        float: right;
+    }
+</style> 
+
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+    echo $this->titulo;
+    ?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<div class="twelve columns">
+
+					<a
+						href="<?php echo $this->basePath() ?>/application/editarsemilleroinv/index/<?php echo $this->semillero; ?>">
+						<i class="icon-arrow-left"></i> Regresar
+					</a>
+
+	<?php
+echo '<br>';
+echo '<br>';
+
+$form = $this->form;
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo '<div class="twelve columns" >';
+echo '</p>';
+echo $this->formlabel($form->get('tematica'));
+echo $this->formelement($form->get('tematica'));
+echo '<br>';
+echo '<p>';
+echo $this->formlabel($form->get('image-file'));
+echo $this->formelement($form->get('image-file'));
+
+echo '<p>';
+echo '<br>';
+echo '<div class="alineadoDerecha">';
+echo $this->formelement($form->get('submit'));
+echo '</div" >';
+echo '</div" >';
+echo $this->form()->closeTag($form);
+echo '<br>';
+?>			
+</div>
+
+</br>
+</br>
+</br>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,196 @@
+<style>
+	.filter-semi input[type="text"],select{
+		width: 100%;
+	}
+	.filter-semi {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+	.filter-semi-left {float: left;}
+	.filter-semi-right {float:right;}
+	.filter-semi .btn {width: 275px;}
+	.filter-semi .dropdown {display: inline;}
+	.filter-semi .dropdown-menu {width: 340px;top: 32px;padding: 10px;}
+	.dropdown-menu-inner {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+</style>
+<?php include("public/menu.php"); ?>
+<div class="col col100">
+	<div class="filter-semi">
+		<div class="filter-semi-left"><h4><?php echo $this->titulo; ?></h4></div>
+		<div class="filter-semi-right">
+			<a class="btn" style="margin-right: 8px;" href="<?php echo $this->basePath() ?>/application/semillerosinv/index"><i class="fa fa-close" style="margin-right: 5px;"></i>Borrar filtro</a>
+			<div class="dropdown">
+				<button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="margin-right: 8px;"><i class="fa fa-filter" style="margin-right: 5px;"></i>Filtro</button>
+				<div class="dropdown-menu dropdown-menu-right">
+					<div class="dropdown-menu-inner">
+						<?php								
+						$form = $this->form;
+						$form->prepare ();
+						$form->setAttributes(array(
+							'action' => 'index',
+							'method' => 'post' 
+						));
+						echo $this->form ()->openTag ( $form );
+						echo '<h6>'.$this->flashMessenger ()->render ().'</h6>';
+						echo $this->formlabel ( $form->get('nombre'));
+						echo $this->formelement ( $form->get('nombre'));
+						echo $this->formlabel ( $form->get ( 'codigo' ) );
+						echo $this->formelement ( $form->get ( 'codigo' ) );						
+						echo $this->formelement ( $form->get ( 'submit' ) );
+ 						echo $this->form ()->closeTag ( $form );
+ 						?>
+					</div>						
+				</div>
+			</div>
+			<a class="btn" href="<?php echo $this->basePath() ?>/application/crearsemillerosinv/index"><i class="fa fa-users" style="margin-right: 5px;"></i>Crear Semillero</a>
+		</div>
+	</div>
+</div>
+
+<div class="col col100 noshadow">
+	<div style='overflow-y:auto; max-height:4000px; width: 100%;'>
+		<table class="table" style="width: 100%; max-width: 100%;">
+			<thead>
+				<tr>
+					<th style="width:5%">Nombre del Semillero / Otros procesos de formación</th>
+					<th style="width:5%">Código</th>
+					<th style="width:5%">Fecha de creaci&#243;n</th>
+					<th style="width:5%">Unidad académica</th>
+					<th style="width:5%">Dependecia</th>
+					<th style="width:5%">Programa</th>
+					<th style="width:5%">Coordinador 1</th>
+					<th style="width:5%">Email Coordinador 1</th>
+					<th style="width:5%">Coordinador 2</th>
+					<th style="width:5%">Email Coordinador 2</th>
+					<th style="width:5%">Estado</th>
+					<th style="width:5%">Acciones</th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php 
+				$band=true;
+				foreach ( $this->datosSemilleros as $dato ) : ?>
+
+				<?php
+				if (($this->id_user == $dato ["coordinador_uno"]) || ($this->id_user == $dato ["coordinador_dos"]) || ($this->menu == 1) ) {
+					if (strcmp($dato ["estado"],"I") === 0 && $this->menu!=1){
+		 				continue;
+					}
+					$band=false;
+				?>
+				<tr>
+					<td><?php echo $dato ["nombre"]; ?></td>
+					<td><?php echo $dato ["codigo"]; ?></td>
+					<td>
+						<?php 
+						$fecha = explode(" ", $dato ["fecha_creacion"]);
+						echo $fecha[0]; 
+						?>							
+					</td>
+					<td>
+						<?php
+						foreach ( $this->d_val as $vf ) {
+							if ($vf ["id_valor_flexible"] == $dato ["id_unidad_academica"]) {
+								echo $vf ["descripcion_valor"];
+							}
+						}
+						?>
+					</td>
+					<td>
+						<?php
+						foreach ( $this->d_val as $vf ) {
+							if ($vf ["id_valor_flexible"] == $dato ["id_dependencia_academica"]) {
+								echo $vf ["descripcion_valor"];
+							}
+						}
+						?>
+					</td>
+					<td>
+						<?php
+						foreach ( $this->d_val as $vf ) {
+							if ($vf ["id_valor_flexible"] == $dato ["id_programa_academico"]) {
+								echo $vf ["descripcion_valor"];
+							}
+						}
+						?>
+					</td>
+					<td>
+						<?php 
+							if($dato ["coordinador_uno"] == "0"){
+								echo "Sin asignar";
+							}else{
+								foreach ( $this->d_user as $vf ) {
+									if ($vf ["id_usuario"] == $dato ["coordinador_uno"]) {
+										echo $vf ["primer_nombre"]." ".$vf ["segundo_nombre"]." ".$vf ["primer_apellido"] . ' ' . $vf ["segundo_apellido"];
+									}
+								}
+							}
+						?>
+					</td>
+					<td>
+						<?php 
+							if($dato ["coordinador_uno"] == "0"){
+									echo "";
+							}else{
+								foreach ( $this->d_user as $vf ) {
+									if ($vf ["id_usuario"] == $dato ["coordinador_uno"]) {
+										echo $vf ["email"];
+									}
+								}
+							}
+						?>
+					</td>
+					<td>
+						<?php 
+						if($dato ["coordinador_dos"] == "0" || $dato ["coordinador_dos"] == null){
+								echo "Sin asignar";
+						}else{
+							foreach ( $this->d_user as $vf ) {
+								if ($vf ["id_usuario"] == $dato ["coordinador_dos"]) {
+									echo $vf ["primer_nombre"]." ".$vf ["segundo_nombre"]." ".$vf ["primer_apellido"] . ' ' . $vf ["segundo_apellido"];
+								}
+							}
+						}
+						
+						?>
+					</td>
+					<td>
+						<?php 
+							if($dato ["coordinador_dos"] == "0" || $dato ["coordinador_dos"] == null){
+									echo "";
+							}else{
+								foreach ( $this->d_user as $vf ) {
+									if ($vf ["id_usuario"] == $dato ["coordinador_dos"]) {
+										echo $vf ["email"];
+									}
+								}
+							}
+						?>
+					</td>
+					<td>
+						<?php
+						if ($dato ["estado"] == 'A') {
+							echo 'Activo';
+						}
+						else {
+							echo 'Inactivo';
+						}
+						?>
+					</td>
+					<td>
+						<a class="btn" href="<?php echo $this->basePath() ?>/application/editarsemilleroinv/index/<?php echo $dato["id"]?>"><i class="fa fa-pencil"></i></a>
+					</td>
+				</tr>
+				<?php } ?>
+			<?php endforeach; ?>
+			</tbody>
+		</table>
+		<?php 
+			if($band){
+				if($this->data["nombre"]){
+					echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos semilleros con este nombre</h3></div>';
+				}else{
+					echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos semilleros con este códígo</h3></div>';
+				}
+			}
+
+		?>
+	</div>
+</div>

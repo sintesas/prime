@@ -1,0 +1,57 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+    echo $this->titulo;
+    ?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<div class="four columns">
+				<a
+					href="<?php echo $this->basePath() ?>/application/editaraplicari/index/<?php echo $this->id2 ?>">
+					<i class="icon-arrow-left"></i> Regresar
+				</a>
+	<?php
+$form = $this->form;
+$form->prepare();
+$form->setAttributes(array(
+    'action' => $this->url . '/application/editartablafin/index/' . $this->id . '/' . $this->id2,
+    'method' => 'post'
+));
+echo $this->form()->openTag($form);
+echo '<h6>';
+echo $this->flashMessenger()->render();
+echo '</h6>';
+echo '<p>';
+echo $this->formlabel($form->get('id_rubro_o'));
+echo $this->formelement($form->get('id_rubro_o'));
+echo '<p>';
+echo $this->formlabel($form->get('id_fuente_o'));
+echo $this->formelement($form->get('id_fuente_o'));
+echo '<p>';
+echo $this->formlabel($form->get('valor'));
+echo $this->formelement($form->get('valor'));
+echo '<br>';
+echo '<br>';
+
+echo $this->formelement($form->get('submit'));
+?>
+
+<?php
+echo '<br>';
+
+echo $this->form()->closeTag($form);
+?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,62 @@
+<style> body { font-family: Arial, sans-serif; } 
+.container { width:573px; 
+	     margin: auto; 
+             padding: 10px; 
+             border:0px solid #000; }
+.table {
+	background-color:rgba(0,93,162, 1);
+	width:100%;
+	border-collapse:collapse;
+	
+ }
+.table thead > tr > th { 
+	text-align:center; 
+	font-weight:bold;
+	color: #FFFFFF;
+	font-family: Arial;
+	border: 1px solid #CCCCCC;
+}
+
+.table tbody > tr > td { 
+	text-align:center; 
+	border: 1px solid #CCCCCC;
+}
+
+.table tbody > tr:nth-child(even) {
+    background-color: #c4e9fc;
+	color: #333333;
+	font-family: Arial;
+}
+.table tbody > tr:nth-child(odd) {
+    background-color: #EFEFEF;
+	color: #333333;
+	font-family: Arial;
+} </style> 
+
+<div class="container"> 
+<h1>I am a PDF!</h1>
+<p><?php echo $this->var1 ?></p> 
+<p><?php echo $this->var2 ?></p> 
+<p><?php echo $this->var3 ?></p> 
+
+<?php
+					echo '<table class="table">';
+					echo '<thead>';
+					echo '<th>Líneas</th>';
+					echo '</thead>';
+echo '<tbody>';
+					foreach ($this->linea as $dato2){
+
+					echo '<tr>';
+					echo '<td>';
+					echo $dato2["nombre_linea"];
+					echo'</td>';
+}
+					echo '</tr>';
+echo '</tbody>';
+					
+					echo '</table>';
+
+?>
+
+</div> 

@@ -1,0 +1,317 @@
+<style>
+    .filter-cons input[type="text"],select{
+        width: 100%;
+    }
+    .filter-cons {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .filter-cons-left {float: left;}
+    .filter-cons-right {float:right;}
+    .filter-cons .btn {width: 275px;}
+    .filter-cons .dropdown {display: inline;}
+    .filter-cons .dropdown-menu {width: 300px;top: 32px;padding: 10px;}
+    .dropdown-menu-inner {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .dropdown-menu-right {left:-140px !important;}
+</style>
+<?php include("public/menu.php"); ?>
+<div class="col col100">
+    <div class="filter-cons">
+        <div class="filter-cons-left"><h4><?php echo $this->titulo; ?></h4></div>
+        <div class="filter-cons-right">
+            <a class="btn" style="margin-right: 8px;" href="<?php echo $this->basePath() ?>/application/consultaprocesom/index"><i class="fa fa-close" style="margin-right: 5px;"></i>Borrar filtro</a>
+            <div class="dropdown">
+                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="margin-right: 8px;"><i class="fa fa-filter" style="margin-right: 5px;"></i>Filtro</button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <div class="dropdown-menu-inner">
+                        <?php                               
+                        $form = $this->form;
+                        $form->prepare ();
+                        $form->setAttributes(array(
+                            'action' => 'index',
+                            'method' => 'post'
+                        ));
+                        echo $this->form ()->openTag ( $form );
+                        echo '<h6>'.$this->flashMessenger ()->render ().'</h6>';
+                        echo $this->formlabel($form->get('id_convocatoria'));
+                        echo $this->formelement($form->get('id_convocatoria'));
+                        echo $this->formlabel($form->get('codigo_proyecto'));
+                        echo $this->formelement($form->get('codigo_proyecto'));
+                        echo $this->formlabel($form->get('nombre_proyecto'));
+                        echo $this->formelement($form->get('nombre_proyecto'));
+                        echo $this->formelement($form->get('submit'));
+                        echo $this->form ()->closeTag ( $form );
+                        ?>
+                    </div>                      
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col col100 noshadow">
+<?php
+echo "<label style='color: red;'>Accione el botón &quot;Filtro&quot; y luego el botón &quot;Buscar&quot; para consultar su proceso</label>";
+echo "<br />";
+echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+				echo '<table class="table" style="width: 100%; max-width: 100%;">';
+				echo "<thead>";
+				echo "<th style='width: 10%;'>#</th>";
+				echo "<th style='width: 10%;'>ID convocatoria</th>";
+				echo "<th style='width: 10%;'>Código proyecto</th>";
+				echo "<th style='width: 10%;'>Nombre del proyecto / Semillero de investigación</th>";
+				echo "<th style='width: 10%;'>Investigador principal / Coordinadores</th>";
+				echo "<th style='width: 10%;'>Número de plazas disponible</th>";
+				echo "<th style='width: 10%;'>Total plazas disponibles de la convocatoria</th>";
+				echo "<th style='width: 10%;'>Monitor inscrito elegible</th>";
+				echo "<th style='width: 10%;'>Ver inscripción</th>";
+				echo "<th style='width: 10%;'>Etapa de requisitos de inscripción</th>";
+				echo "<th style='width: 5%;'>Entrevista</th>";
+				echo "<th style='width: 10%;'>Resultado evaluación</th>";
+				echo "<th style='width: 10%;'>Seleccionar monitor</th>";
+				echo "<th style='width: 5%;'>Resultado del proceso</th>";
+				echo '</thead>';
+				echo '<tbody>';
+				$cont_number = 1;
+				//print_r($this->datosAplicarm[0]["i"]);
+				$band = true;
+				if($this->datosAplicarm != null){
+					foreach ( $this->datosAplicarm as $dato ) {
+						$codProyecto="";
+				        $nombProyecto="";
+				        $InvesProyecto="";
+				        $NumPlazasProyecto="";
+				        $idProyecto = "";
+				        $NumPlazasDisponible = "";
+				        $NumPlazasDisponibleConvo = 0;
+				        $NumPlazasConvo=0;
+
+				        foreach ($proyinvest as $proInvesti) {
+				        	if($dato["id_proyecto"] == $proInvesti["id_proyecto_inv"]){
+				        		$codProyecto = strstr($proInvesti ["nombre_proyecto"], '-/-', true);
+				        		foreach ($prT as $proyeT){
+				        			if($codProyecto == trim($proyeT["codigo_proy"])){
+				        				$nombProyecto=$proyeT["nombre_proy"];
+								        $InvesProyecto=$proyeT["id_investigador"];
+								        $NumPlazasProyecto=$proInvesti["cantidad_plazas"];
+								        $idProyecto = $proInvesti["id_proyecto_inv"];
+								        $NumPlazasDisponible = $proInvesti["plazas_disponibles"];
+								        if($NumPlazasDisponible === NULL){
+								        	$NumPlazasDisponible = $proInvesti["cantidad_plazas"];
+								        }
+				        			}	
+				        		}
+				        	}
+
+				        	if( $dato["id_convocatoria"] == $proInvesti["id_convocatoria"] ){
+
+								$NumPlazasConvo += (int)$proInvesti["cantidad_plazas"];	
+								//if($dato["id_convocatoria"]=="271"){ echo "+".$cont_number;}
+
+								if($proInvesti["plazas_disponibles"] === ""){
+									//if($dato["id_convocatoria"]=="271"){echo "entra else:".$proInvesti["plazas_disponibles"]."//";}
+									$NumPlazasDisponibleConvo += (int)$proInvesti["cantidad_plazas"];
+								}else{
+									//if($dato["id_convocatoria"]=="271"){ echo "entra if:".$proInvesti["plazas_disponibles"]."//";}
+									$NumPlazasDisponibleConvo += (int)$proInvesti["plazas_disponibles"];	
+								}
+				        	}
+				        }
+
+				        if($this->id_user == $dato["id_usuario"] || $this->menu == 1 || $this->id_user == $InvesProyecto){
+
+			        	}else{
+			        		continue;
+			        	}
+				        
+				        if ($NumPlazasProyecto == "" || $dato["id_usuario"]==null){
+				           	continue;
+						}
+
+						if ($this->buscar=="Si"){
+							if($this->dataBuscar["id_convocatoria"] != "" && $dato["id_convocatoria"] != $this->dataBuscar["id_convocatoria"]){
+								continue;
+							}
+							if($this->dataBuscar["codigo_proyecto"] != "" && strpos(strtoupper($codProyecto), strtoupper($this->dataBuscar["codigo_proyecto"]))===FALSE){
+								continue;
+							}
+							if($this->dataBuscar["nombre_proyecto"] != "" && strpos(strtoupper($nombProyecto), strtoupper($this->dataBuscar["nombre_proyecto"]))===FALSE){
+								continue;
+							}
+							
+						}
+
+						echo '<tr bgcolor="yellow">';
+						if($dato["estado_aprobacionm"] == ""){
+							echo '<tr>';
+						}else{
+							if($dato["estado_aprobacionm"] == "Aprobado"){
+								echo '<tr>';
+							}else{
+								echo '<tr bgcolor="gray">';
+							}
+						}
+
+						echo '<td>';
+						echo $cont_number;
+						$cont_number=$cont_number+1;
+						echo '</td>';
+						echo '<td>';
+						echo $dato["id_convocatoria"];
+						echo '</td>';
+						echo '<td>';
+						echo $codProyecto;
+						echo '</td>';
+						echo '<td>';
+						echo $nombProyecto;
+						echo '</td>';
+						echo '<td style="text-align:center;">';
+						foreach ($this->usu as $usuaT) {
+                            if($usuaT["id_usuario"] == $InvesProyecto){
+                                echo trim($usuaT["primer_nombre"])." ".trim($usuaT["segundo_nombre"])." ".trim($usuaT["primer_apellido"])." ".trim($usuaT["segundo_apellido"]);
+                            }
+                        }
+						echo '</td>';
+						echo '<td style="text-align:center;">';
+						echo $NumPlazasDisponible." de ".$NumPlazasProyecto;
+						echo '</td>';
+						echo '<td style="text-align:center;">';
+						echo $NumPlazasDisponibleConvo." de ".$NumPlazasConvo;
+						echo '</td>';
+						echo '<td>';
+						foreach ($this->usu as $usuaT) {
+                            if($usuaT["id_usuario"] == $dato["id_usuario"]){
+                                echo trim($usuaT["primer_nombre"])." ".trim($usuaT["segundo_nombre"])." ".trim($usuaT["primer_apellido"])." ".trim($usuaT["segundo_apellido"]);
+                            }
+                        }
+                        echo '</td>';
+                        echo '<td style="text-align:center;">';
+                        	$fcierre = "";
+                        	$hcierre = "";
+                        	$estadoConvo="";
+	                        foreach ($this->convo as $convoT) {
+	                            if($convoT["id_convocatoria"] == $dato["id_convocatoria"]){
+	                               $fcierre = trim($convoT["fecha_cierre"]);
+	                               $hcierre = trim($convoT["hora_cierre"]);
+	                               $estadoConvo = trim($convoT["id_estado"]);
+	                            }
+	                        }
+
+	                        date_default_timezone_set('America/Bogota');
+	                        $fecha_actual = strtotime(date("d-m-Y H:i:00"));
+							$fecha_convo = strtotime($fcierre." ".$hcierre);
+	
+							if($fecha_actual < $fecha_convo){
+								if($this->menu == 1 || $this->id_user ==  $dato["id_usuario"]){
+									?>
+										<a class="btn" href="<?php echo $this->basePath() ?>/application/editaraplicarm/index/<?php echo $dato["id_aplicar"]?>/0/0/1"><i class="fa fa-pencil"></i></a>
+									<?php 
+								}else{
+									if($this->id_user ==  $InvesProyecto){
+										?>
+											<a class="btn" href="<?php echo $this->basePath() ?>/application/editaraplicarm/index/<?php echo $dato["id_aplicar"]?>/0/1/1"><i class="fa fa-pencil"></i></a>
+										<?php
+									}
+								}
+							}else{
+								if($this->menu == 1){
+									?>
+										<a class="btn" href="<?php echo $this->basePath() ?>/application/editaraplicarm/index/<?php echo $dato["id_aplicar"]?>/0/0/1"><i class="fa fa-pencil"></i></a>
+									<?php 
+								}else{
+									?>
+										<a class="btn" href="<?php echo $this->basePath() ?>/application/editaraplicarm/index/<?php echo $dato["id_aplicar"]?>/0/1/1"><i class="fa fa-pencil"></i></a>
+									<?php 
+								}
+							}
+
+                        	
+						echo '</td>';
+						echo '<td style="text-align:center;">';
+						if($dato["estado_aprobacionm"] == ""){
+							echo "Pendiente";
+						}else{
+							if($dato["estado_aprobacionm"] == "Aprobado"){
+								echo "Cumple requisitos de inscripción";
+							}else{
+								echo "No cumple requisitos de inscripción";
+							}
+						}
+						echo '</td>';
+
+						echo '<td style="text-align:center;">';
+							if($dato["estado_aprobacionm"] == "Aprobado"){
+								if($this->menu == 1 || $this->id_user == $InvesProyecto){
+									?>
+										<a class="btn" href="<?php echo $this->basePath() ?>/application/entrevistam/index/<?php echo $dato["id_aplicar"]?>">Entrevistar</a>
+									<?php 
+								}
+							}
+						echo '</td>';
+						echo '<td style="text-align:center;">';
+						$suma_pr = 0;
+                        $cont_pr = 0;
+                        foreach ($this->evalCri as $evaluarCriT) {
+                            if($evaluarCriT["id_aplicar"] == $dato["id_aplicar"]){
+                                $suma_pr = $suma_pr + floatval($evaluarCriT["evaluacion_cuantitativa"]);
+                                $cont_pr = $cont_pr + 1; 
+                            }
+                        }
+                        
+                        if($cont_pr == 0){
+					        echo "0";
+					    }else{
+					        echo round($suma_pr/$cont_pr, 2);    
+					    }
+						
+						echo '</td>';
+
+						if($NumPlazasDisponible==0 && $dato["estado_seleccionado"]===NULL){
+							$seleccionado=0;
+						}else{
+							if($dato["estado_seleccionado"]=="No seleccionado"){
+								$seleccionado = 0;
+							}else{
+								$seleccionado = 1;
+							}
+						}
+						echo '<td style="text-align:center;">';
+							if($dato["estado_aprobacionm"] == "Aprobado"){
+								if($dato["fecha_entrevista"] != null){
+									if($this->menu == 1 || $this->id_user == $InvesProyecto){
+										//if($NumPlazasDisponible > 0){
+										if($estadoConvo=="H"){//Archivada
+											echo 'La convocatoria está archivada.';
+										}else{
+											?>
+												<a class="btn" href="<?php echo $this->basePath() ?>/application/entrevistam/seleccionarm/<?php echo $dato["id_aplicar"]; ?>/<?php echo $NumPlazasDisponible; ?>/<?php echo $idProyecto; ?>/<?php echo $seleccionado; ?>">Seleccionar</a>
+											<?php
+										}
+										//}else{
+										//	echo 'El proyecto no cuenta con plazas disponibles.';	
+										//}
+									}
+								}
+							}
+						echo '</td>';
+						echo '<td style="text-align:center;">';
+							if($NumPlazasDisponible==0 && $dato["estado_seleccionado"]===NULL){
+								echo "<strong>NO SELECCIONADO</strong>";
+							}else{
+								echo "<strong>".strtoupper($dato["estado_seleccionado"])."</strong>";	
+							}
+						echo '</td>';
+						$band = false;
+					}
+				}
+				echo '</tr>';
+				echo '</table>';
+				if($band && count($this->dataBuscar)>0){
+					if($this->dataBuscar["id_convocatoria"]){
+						echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos procesos para este id de convocatoria</h3></div>';
+					}else if($this->dataBuscar["codigo_proyecto"]){
+						echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos procesos para este código de proyecto</h3></div>';
+					}else{
+						echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos procesos con este nombre de proyecto</h3></div>';
+					}
+				}
+				echo '</div>';
+?>
+</div>
+

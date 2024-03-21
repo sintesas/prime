@@ -1,0 +1,45 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+    echo $this->titulo;
+    ?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<div class="four columns">
+				<?php
+    $form = $this->form;
+    $form->prepare();
+    echo $this->form()->openTag($form);
+    
+    ?>
+    <a href="<?php echo $this->basePath() ?>/application/gestionarsolicitudes/index"><i class="icon-arrow-left"></i> Regresar</a><br><br>
+    <?php
+            
+    echo $this->formlabel($form->get('id_estado'));
+    echo $this->formelement($form->get('id_estado'));
+    echo '<br>';
+    echo $this->formlabel($form->get('image-file'));
+    echo $this->formelement($form->get('image-file'));
+    echo '<br>';
+    echo $this->formlabel($form->get('observacion'));
+    echo $this->formelement($form->get('observacion'));
+    echo '<br>';
+    
+    echo '<br>';
+    
+    echo $this->formelement($form->get('submit'));
+    
+    echo $this->form()->closeTag($form);
+				?>
+</div>
+			</div>
+		</div>

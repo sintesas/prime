@@ -1,0 +1,30 @@
+<style>
+	.filter-mod {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+	.filter-mod-left {float: left;}
+	.filter-mod-right {float: right;}
+</style>
+<?php include("public/menu.php"); ?>
+<div class="col col100">
+	<div class="filter-mod">
+		<div class="filter-mod-left"><h4><?php echo $this->titulo; ?></h4></div>
+		<div class="filter-mod-right"><a class="btn" href="<?php echo $this->basePath() ?>/application/gestionpantallas/index"><i class="fa fa-arrow-left"></i> Regresar</a></div>
+	</div>
+</div>
+<div class="col col100 noshadow">
+	<div style='overflow-y:auto; max-height:4000px; width: 100%;'>
+		<table class="table" style="width: 100%; max-width: 100%;">
+			<thead>
+				<tr>
+					<th>Nombre del módulo</th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php foreach ($this->modulos as $modulo) {	?>
+				<tr>
+					<td><?php echo $modulo ["nombre"]; ?></td>
+				</tr>
+			<?php } ?>
+			</tbody>
+		</table>	
+	</div>
+</div>

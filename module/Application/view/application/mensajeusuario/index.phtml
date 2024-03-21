@@ -1,0 +1,82 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+<div class="row2">
+	<div class="nine3 columns">
+		<div id="centersectiontitle">
+			<div class="twelve columns">
+				<div class="sidebartitle"><h3>
+				<?php
+					echo $this->titulo;
+				?>
+				</h3>
+			</div>
+		</div>
+	</div>
+<div class="twelve columns">
+				<?php
+				$form = $this->form;
+				$form->prepare();
+
+echo '<h6>';
+echo $this->flashMessenger()->render();
+echo '</h6>';
+				echo $this->form()->openTag($form);
+				echo '<p>';
+?>
+<a class="btn" href="<?php echo $this->basePath() ?>/application/mensajeusuario/buscar">Lista Correo</a>
+<a class="btn" href="<?php echo $this->basePath() ?>/application/mensajeusuario/eliminar">Eliminar Lista</a>
+<a class="btn" href="<?php echo $this->basePath() ?>/application/mensajeusuario/roles">Mensaje Roles</a>
+<?php
+
+echo '<div class="col col100 noshadow">';
+echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+echo '<table class="table" style="width: 100%; max-width: 100%;">';
+echo '<thead>';
+echo '<th>Correos</th>';
+				echo '<th>Eliminar</th>';
+
+echo '</thead>';
+echo '</tbody>';
+foreach ($this->datos as $dato){
+echo '<tr>';
+echo '<td>';
+echo $dato["EMAILS"];
+echo'</td>';
+echo '<td>';
+if($this->menu==1){
+?>
+	<a class="btn"  href="<?php echo $this->basePath() ?>/application/mensajeusuario/eliminar/<?php echo $dato["ID_LISTA_EMAIL"];?>"> Eliminar</a>
+<?php
+}
+echo'</td>';
+echo '</tr>';
+}
+echo '</tr>';
+echo '</tbody>';
+echo '</table>';
+echo '</div>';
+echo '</div>';
+echo '</div>';
+echo '<div class="four columns">';
+				echo $this->formlabel($form->get('asunto'));
+				echo $this->formelement($form->get('asunto'));
+echo '</div>';
+echo '<div class="twelve columns">';
+				echo $this->formlabel($form->get('mensaje'));
+				echo $this->formelement($form->get('mensaje'));
+echo '</div>';
+echo '<div class="six columns" style="float: left;">';
+				echo '<br>';
+				echo $this->formlabel($form->get('image-file'));
+				echo $this->formelement($form->get('image-file'));
+				echo '<br>';
+				echo $this->formelement($form->get('submit'));
+?>
+<a style="margin-left: 15px;" class="btn" href="<?php echo $this->basePath() ?>/application/index/index">Cancelar</a>
+<?php
+				echo $this->form()->closeTag($form);
+				?>
+</div>
+</div></div></div>
+	

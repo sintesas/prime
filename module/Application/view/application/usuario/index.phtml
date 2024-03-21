@@ -1,0 +1,197 @@
+<style>
+	.filter-user input,select {width: 100%;}
+	.filter-user {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+	.filter-user-left {float: left;}
+	.filter-user-right {float: right;}
+	.filter-user .btn {width: 275px;}
+	.filter-user .dropdown {display: inline;}
+	.filter-user .dropdown-menu {width: 300px;top: 32px;padding: 10px;}
+	.dropdown-menu-inner {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+	.img-user { margin: 0 auto; margin-bottom: 10px; }	
+</style>
+<script>
+	$(function() {
+		var opts = $('#id_grupo_inv option').map(function() {
+			return [
+				[this.value, $(this).text()]
+			];
+		});
+		$('#someinput').keyup(function() {
+			var rxp = new RegExp($('#someinput').val(), 'i');
+			var optlist = $('#id_grupo_inv').empty();
+			opts.each(function() {
+				if (rxp.test(this[1])) {
+					optlist.append($('<option/>').attr('value', this[0]).text(this[1]));
+				}
+			});
+
+		});
+
+	});
+</script>
+<?php
+include("public/menu.php");
+require_once("public/rutas.php");
+?>
+<div class="col col100">
+	<div class="filter-user">
+		<div class="filter-user-left"><h4><?php echo $this->titulo; ?></h4></div>
+		<div class="filter-user-right">
+			<a class="btn" style="margin-right: 8px;" href="<?php echo $this->basePath() ?>/application/usuario/index"><i class="fa fa-close" style="margin-right: 5px;"></i>Borrar filtro</a>
+			<div class="dropdown">
+				<button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="margin-right: 8px;"><i class="fa fa-filter" style="margin-right: 5px;"></i>Filtro</button>
+				<div class="dropdown-menu dropdown-menu-right">
+					<div class="dropdown-menu-inner">
+						<?php
+						echo '<h6>'.$this->flashMessenger()->render().'</h6>';
+						$form = $this->form;
+						$form->prepare();
+						$form->setAttributes(array(
+						'action' => 'index',
+						'method' => 'post',
+						'id' => 'form_sending'
+						));
+						echo $this->form()->openTag($form);
+						echo $this->formlabel($form->get('id_usu'));
+						echo $this->formelement($form->get('id_usu'));
+						echo $this->formlabel($form->get('documento'));
+						echo $this->formelement($form->get('documento'));
+						echo $this->formlabel($form->get('nombre'));
+						echo $this->formelement($form->get('nombre'));
+						echo $this->formlabel($form->get('apellido'));
+						echo $this->formelement($form->get('apellido'));
+						echo $this->formlabel($form->get('usuario'));
+						echo $this->formelement($form->get('usuario'));
+						echo $this->formlabel($form->get('rol_usuario'));
+						echo $this->formelement($form->get('rol_usuario'));
+						echo $this->formlabel($form->get('id_grupo_inv'));
+						echo $this->formelement($form->get('id_grupo_inv'));
+						echo $this->formlabel($form->get('id_estado'));
+						echo $this->formelement($form->get('id_estado'));
+						?>
+						<div class="menuside-item">
+							<div class="btn-search"><i class="fa fa-search" style="margin-right: 5px;"></i>Buscar</div>
+						</div>
+						<?php
+						//echo $this->formelement($form->get('submit'));
+						echo $this->form()->closeTag($form);
+						?>
+					</div>
+				</div>
+			</div>
+			<a class="btn" href="<?php echo $this->basePath() ?>/application/crearusuario/index"><i class="fa fa-user-plus" style="margin-right: 5px;"></i>Crear usuario</a>						
+		</div>
+	</div>
+</div>
+<div class="col col100 noshadow">
+	<?php if(count($this->paginator) > 0) { ?>
+		<center>
+			<?php 
+				echo $this->paginationControl($this->paginator, 'sliding', 'partials/paginatorusuario',array('id' => $this->menu, 'dataPost' => $this->dataPost));
+			?>
+		</center>
+		<div style='overflow-y:auto; max-height:4000px; width: 100%;'>
+			<div class="results resultsh clearfix">
+				<div class="result-item itemh" style="min-width:10%">Nombre(s)</div>
+				<div class="result-item itemh" style="min-width:10%">Apellido(s)</div>
+				<div class="result-item itemh" style="min-width:20%">Usuario</div>
+				<div class="result-item itemh" style="min-width:10%">No. documento</div>
+				<div class="result-item itemh" style="min-width:10%">Rol asignado</div>
+				<div class="result-item itemh" style="min-width:10%">Grupo de investigación</div>
+				<div class="result-item itemh" style="min-width:10%">Estado</div>
+				<div class="result-item itemh" style="min-width:10%">Acciones</div>
+			</div>
+			<?php foreach ($this->paginator as $user) : ?>
+				<div class="results clearfix">
+					<div class="result-item" style="min-width:10%"><?= $user->primer_nombre.' '.$user->segundo_nombre ?></div>
+					<div class="result-item" style="min-width:10%"><?= $user->primer_apellido.' '.$user->segundo_apellido ?></div>
+					<div class="result-item" style="min-width:20%"><?= $user->usuario ?></div>
+					<div class="result-item" style="min-width:10%"><?= $user->documento ?></div>
+					<div class="result-item" style="min-width:10%">
+						<?php
+							foreach ($this->datos2 as $dat){
+								if ($dat["id_usuario"]==$user->id_usuario){
+									foreach ($this->datos3 as $d){
+										if ($dat["id_rol"]==$d["id_rol"]){
+											echo $this->escapeHtml($d["descripcion"]);
+										}
+									}
+								}
+							}
+						?>
+					</div>
+					<div class="result-item" style="min-width:10%">
+						<?php
+							$totalGrupos="-";
+							foreach ($this->grupostotal as $groupT){
+								if ($groupT["id_lider"] == $user->id_usuario){
+									if(strpos($totalGrupos,"-".$groupT["id_grupo_inv"]."-") === false){
+										echo $groupT["nombre_grupo"]."</br>";
+										$totalGrupos .= $groupT["id_grupo_inv"]."-";	
+									}
+								}
+							}
+							foreach ($this->integrantes as $intT){
+								if ($intT["id_integrante"] == $user->id_usuario){
+									foreach ($this->grupostotal as $groupT){
+										if ($groupT["id_grupo_inv"] == $intT["id_grupo_inv"]){
+											if(strpos($totalGrupos, "-".$groupT["id_grupo_inv"]."-") === false){
+												echo $groupT["nombre_grupo"]."</br>";
+												$totalGrupos .= $groupT["id_grupo_inv"]."-";	
+											}		
+										}
+									}
+								}
+							}	
+						?>
+					</div>
+					<div class="result-item" style="min-width:10%">
+						<?php
+							if($user->id_estado == "S") echo "Activo";
+							else if($user->id_estado == "N") echo "Inactivo";
+							else if($user->id_estado == "B") echo "Bloqueado";
+							else echo "Bloqueado Foros";
+						?>		
+					</div>
+					<div class="result-item" style="min-width:10%">
+						<?php if ($this->menu == 1) { ?>
+							<div class="action edit" title="Editar usuario"><a class="btn" href="<?php echo $this->basePath() ?>/application/editarusuario/index/<?php echo $user->id_usuario; ?>"><i class="fa fa-pencil" aria-hidden="true"></i></a></div>
+							<div class="action delete" title="Cambiar Contraseña"><a class="btn" href="<?php echo $this->basePath() ?>/application/cambiarcontrausuario/index/<?php echo $user->id_usuario; ?>"><i class="fa fa-refresh" aria-hidden="true"></i></a></div>
+						<?php } ?>
+						<div class="action edit" title="Cambiar Usuario"><a class="btn" href="<?php echo $this->basePath() ?>/application/cambiarusuario/index/<?php echo $user->id_usuario; ?>"><i class="fa fa-user" aria-hidden="true"></i></a></div>
+					</div>
+				</div>
+			<?php endforeach; ?>
+			</table>
+		</div>
+		<center>
+			<?php 
+				echo $this->paginationControl($this->paginator, 'sliding', 'partials/paginatorusuario',array('id' => $this->menu, 'dataPost' => $this->dataPost));
+			?>
+		</center>
+	<?php }else {
+			if($this->campos["id_usu"]){
+				echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos Usuarios con este ID</h3></div>';
+			}else if($this->campos["documento"]){
+				echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos Usuarios con este número de documento</h3></div>';
+			}else if($this->campos["nombre"]){
+				echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos Usuarios con este nombre</h3></div>';
+			}else if($this->campos["apellido"]){
+				echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos Usuarios con este Apellido</h3></div>';
+			}else if($this->campos["usuario"]){
+				echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos Usuarios con este Usuario</h3></div>';
+			}else{
+				echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos Usuarios con los parametros de búsqueda ingresados</h3></div>';
+			}			
+		}
+	?>
+</div>
+<script>
+	$(".btn-search").click(function() {
+		$(this).html('<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i> Buscando...');
+		$(".inner_results_prev").html('<img src="<?php echo $this->basePath() ?>/public/images/images_oscar/load.gif" style="width:15%;">');
+		setTimeout(() => {
+			$("#form_sending").submit();
+		}, 1000);
+	});	
+</script>

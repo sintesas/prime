@@ -1,0 +1,1034 @@
+<style>
+    textarea {
+        height: 100px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .btn {
+        color: white !important;
+    }
+
+    .alineadoDerecha {
+        float: right;
+    }
+
+    .nopadding {
+        padding: 0;
+        margin: 0;
+    }
+    td, th {
+        padding: 0;
+        font-size: 10px;
+    }
+    .filter-cons {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .filter-cons-left {float: left;}
+    .filter-cons-right {float:right;}
+    .filter-cons .btn {width: 275px;}
+    .filter-cons-right div.btn {max-width: 230px !important;width: 230px;}
+</style>
+<meta charset="UTF-8">
+<div class="edit-slide transition">
+    <div class="close-edit" id="titulo_top"><i class="fa fa-times" aria-hidden="true"></i></div>
+    <div class="content-edit-slide">
+        <div class="titulo_top"><h3><?php echo $this->titulo; ?></h3></div>
+        <a href="<?php echo $this->basePath() ?>/application/editarproyecto/index/<?php echo $this->id;?>"><i class="fa fa-arrow-left"></i> Regresar</a><br><br>
+        <?php
+        $form = $this->form;
+        $form->prepare();
+        if (trim($this->ver) == "fechas") {
+        $form->setAttributes(array(
+            'action' => $this->url . '/application/editarconvocatoriai/index/' . $this->id . '/' . $this->ver,
+            'method' => 'post'
+        ));
+        } elseif ($this->ver == "ver") {
+        $form->setAttributes(array(
+            'action' => $this->url . '/application/editarconvocatoriai/index/' . $this->id . '/' . $this->ver,
+            'method' => 'post'
+        ));
+        } else {
+        $form->setAttributes(array(
+            'action' => $this->url . '/application/editarconvocatoriai/index/' . $this->id,
+            'method' => 'post'
+        ));
+        }
+        echo $this->form ()->openTag ( $form );
+        echo '<h6>';
+        echo $this->flashMessenger ()->render ();
+        echo '</h6>';
+        echo $this->formlabel($form->get('id_convocatoria'));
+        echo $this->formelement($form->get('id_convocatoria'));
+        echo $this->formlabel($form->get('titulo'));
+        echo $this->formelement($form->get('titulo'));
+        echo $this->formlabel($form->get('descripcion'));
+        echo $this->formelement($form->get('descripcion'));
+        echo $this->formlabel($form->get('observaciones'));
+        echo $this->formelement($form->get('observaciones'));
+        echo $this->formlabel($form->get('fecha_apertura'));
+        echo $this->formelement($form->get('fecha_apertura1'));
+        if ($this->ver != 'ver') {
+            echo $this->formelement($form->get('fecha_apertura'));
+        }
+        echo $this->formlabel($form->get('hora_apertura'));
+        echo $this->formelement($form->get('hora_apertura'));
+        echo $this->formlabel($form->get('fecha_cierre'));
+        echo $this->formelement($form->get('fecha_cierre1'));
+        if ($this->ver != 'ver') {
+            echo $this->formelement($form->get('fecha_cierre'));
+        }
+        echo $this->formlabel($form->get('hora_cierre'));
+        echo $this->formelement($form->get('hora_cierre'));        
+        if (trim($this->tipo) == "e") {
+            echo $this->formlabel($form->get('id_entidad'));
+            echo $this->formelement($form->get('id_entidad'));
+        }
+        
+        
+        echo $this->formlabel($form->get('id_estado'));
+        echo $this->formelement($form->get('id_estado'));
+        echo '<div class="content-edit-slide-button">';            
+        echo '<div class="col">';
+        if ($this->ver != 'ver') {
+            if (trim($this->estado) == "B" || trim($this->estado) == "A" || trim($this->estado) == "R" || trim($this->estado) == "P") {
+                echo $this->formelement($form->get('submit'));
+            }
+        }
+        echo '</div>';
+        echo '<div class="col">';       
+        ?>
+        <div class="btn1 cancel-edit">Cancelar</div>
+        <?php
+        echo '</div>';
+        echo '</div>';
+        echo $this->form()->closeTag($form);       
+        ?>
+        <a href="#titulo_top">Ir arriba</a>
+    </div>
+</div>
+<?php
+include("public/menu.php");
+require_once("public/rutas.php");
+?>
+<link rel="stylesheet" href="<?php echo $GLOBALS["ruta_servidor"] . 'css/estilos_arriba/estilos_arriba.css'; ?>">
+<link rel="stylesheet" href="<?php echo $GLOBALS["ruta_servidor"] . 'js/ui/jquery-ui.min.css'; ?>">
+<link rel="stylesheet" href="<?php echo $GLOBALS["ruta_servidor"] . 'js/ui/jquery-ui.theme.min.css'; ?>">
+<link rel="stylesheet" href="<?php echo $GLOBALS["ruta_servidor"] . 'js/ui/jquery-ui.structure.min.css'; ?>">
+<div class="col col100">
+    <div class="filter-cons">
+        <div class="filter-cons-left"><a class="btn" href="<?php echo $this->basePath() ?>/application/consulconvocatoria/index"><i class="fa fa-arrow-left" style="margin-right: 5px;"></i>Regresar</a></div>
+        <div class="filter-cons-right">
+            <?php if ($this->ver != 'ver') { ?>
+            <a class="btn" style="margin-right: 8px;" href="<?php echo $this->basePath() ?>/application/editarconvocatoriai/index/<?php echo $id;?>/ver" target="_blank"><i class="fa fa-eye" style="margin-right: 5px;"></i>Previsualizar</a>
+            <?php } ?>
+            <a class="btn" style="margin-right: 8px;" href="<?php echo $this->basePath() ?>/application/copiarconvocatoria/index/<?php echo $id;?>" target="_blank"><i class="fa fa-copy" style="margin-right: 5px;"></i>Copiar</a>
+            <div class="btn transition pointer cons_edit"><i class="fa fa-pencil" style="margin-right: 5px;"></i>Editar convocatoria interna</div>
+        </div>
+    </div>    
+</div>
+<script>
+    $(".cons_edit").click(function() {
+        $(".edit-slide").css("left", "0%");
+    });
+    $(".close-edit").click(function() {
+        $(".edit-slide").css("left", "-100%");
+    });
+    $(".cancel-edit").click(function() {
+        $(".edit-slide").css("left", "-100%");
+    });
+</script>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+                        <!-- <ul id="menu_gral">
+                                    <ul>
+                                        <li><a href="#">Secciones</a>
+                                            <ul>
+                                                <?php 
+                                                    if(trim($this->tipo) == "m"){
+                                                        echo '<li><a href="#ProyectosInvestigacion">Proyectos de investigación</a></li>';
+                                                    }
+                                                ?>
+                                                <li><a href="#CronogramaConvocatoria">Cronograma de la convocatoria</a></li>
+                                                <li><a href="#CriteriosEvaluacion">Criterios de evaluación para entrevista</a></li>
+                                                <li><a href="#RequisitosConvocatoria">Requisitos de la convocatoria</a></li>
+                                                <?php 
+                                                    if(trim($this->tipo) != "m"){
+                                                        echo '<li><a href="#AspectosConvocatoria">Aspectos a evaluar en la convocatoria</a></li>';
+                                                    }
+                                                ?>
+                                                <li><a href="#DocumentosConvocatoria">Documentos requeridos de la convocatoria</a></li>
+                                                <li><a href="#RolesConvocatoria">Roles que pueden aplicar</a></li>
+                                                <?php 
+                                                    if(trim($this->tipo) != "m"){
+                                                        echo '<li><a href="#TablaFinanciacion">Tabla de financiación</a></li>';
+                                                    }
+                                                ?>
+                                                <li><a href="#DocumentacionConvocatoria">Documentación relacionada a la convocatoria</a></li>
+                                                <li><a href="#URLConvocatoria">URLs de la convocatoria</a></li>
+                                                <li><a href="#CamposInformacion">Campos de información adicionales</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </ul> -->
+						</div>
+				</div>
+
+				<?php
+    ?>
+<?php
+    if (trim($this->tipo) == "m") {
+        ?>
+				<br>
+					<fieldset>
+                        <a name='ProyectosInvestigacion'></a>
+						<legend>Plazas disponibles - Proyectos de Investigación</legend>
+<?php
+        if ($this->ver != 'ver') {
+            if (trim($this->estado) == "B" || trim($this->estado) == "A") {
+                ?>
+				<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/proyectosinv/index/<?php echo $id;?>">Agregar
+							proyecto</a>
+<?php
+            }
+        }
+        ?>
+				<br> <br>
+				<?php
+                $sum = 0;
+                foreach ($this->proy as $proy) {
+                    $sum+=$proy["cantidad_plazas"];
+                }
+        echo "<label style='font-size: 17px; color: red;'>Total plazas:".$sum." </label>";
+        echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+        echo '<table class="table" style="width: 100%; max-width: 100%;">';       
+        echo '<thead>';
+        echo '<th style="width:5%;">Código del proyecto</th>';
+        echo '<th style="width:25%;">Nombre del proyecto / Semillero de investigación / Grupo de estudio</th>';
+        echo '<th style="width:25%;">Investigador principal / Coordinador(es)</th>';
+        echo '<th style="width:25%;">Número de plazas</th>';
+        //echo '<th style="width:25%;">Fecha límite soportes</th>';
+        echo '<th style="width:25%;">Eliminar proyecto</th>';
+        echo '</thead>';
+        echo '<tbody>';
+        foreach ($this->proy as $proy) {
+            echo '<tr>';
+            echo '<td>';
+            $codProyecto = strstr($proy["nombre_proyecto"], '-/-', true);
+            echo $codProyecto;
+            echo '</td>';
+            echo '<td>';
+            echo substr(strstr($proy["nombre_proyecto"], '-/-'),3,strlen(strstr($proy["nombre_proyecto"], '-/-')));
+            echo '</td>';
+            echo '<td>';
+
+            foreach ($prT as $proyeT){
+                if($codProyecto == trim($proyeT["codigo_proy"])){
+                    foreach ($this->usu as $usua){
+                        if($proyeT["id_investigador"] == $usua["id_usuario"]){
+                            echo trim($usua["primer_nombre"])." ".trim($usua["segundo_nombre"])." ".trim($usua["primer_apellido"])." ".trim($usua["segundo_apellido"]);
+                        }
+                    }
+                    break;
+                }
+            }
+            echo '</td>';
+            echo '<td style="font-size: 20PX;">';
+            echo $proy["cantidad_plazas"];
+            echo '</td>';
+            /*
+            echo '<td>';
+            echo $proy["fecha_lim_soporte"];
+            echo '</td>';
+            */
+            echo '<td>';
+            if ($this->ver != 'ver' && $this->ver != 'fechas') {
+                if (trim($this->estado) == "B" || trim($this->estado) == "A") {
+                    ?>
+					<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/proyectosinv/del/<?php echo $proy["id_proyecto_inv"];?>/<?php echo $proy["id_convocatoria"];?>">Eliminar
+							Proyecto</a>
+
+				<?php
+                }
+            }
+            echo '</td>';
+            echo '</tr>';
+        }
+        
+        echo '</tr>';
+        echo '</table>';
+        echo '</div>';
+        ?>
+</fieldset>
+<?php
+    }
+    if (trim($this->datos[0]["cronograma"]) == "S") {
+    ?>
+				<br>
+					<fieldset>
+                    <a name='CronogramaConvocatoria'></a>
+						<legend>Cronograma de la convocatoria</legend>
+<?php
+if ($this->ver != 'ver' && $this->ver != 'fechas') {
+    if (trim($this->estado) == "B" || trim($this->estado) == "A") {
+        ?>
+				<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/cronograma/index/<?php echo $id;?>">Agregar
+							actividad</a>
+<?php
+    }
+}
+?>
+				<br>
+				<?php
+    
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';    
+    echo '<thead>';
+    echo '<th style="width:2% !important;">Consecutivo</th>';
+    echo '<th style="width:5%;">Nombre actividad</th>';
+    echo '<th style="width:5%;">Descripción</th>';
+    echo '<th style="width:5%;">Objetivo</th>';
+    echo '<th style="width:5%;">Fecha inicio</th>';
+    echo '<th style="width:5%;">Fecha fin</th>';
+    echo '<th style="width:5%;">Eliminar actividad</th>';
+    echo '</thead>';
+    echo '<tbody>';
+    
+    foreach ($this->Cronograma as $crono) {
+        echo '<tr>';
+        echo '<td>';
+        echo $crono["prioridad"];
+        echo '</td>';
+        echo '<td>';
+        echo $crono["nombre_actividad"];
+        echo '</td>';
+        echo '<td>';
+        echo $crono["descripcion"];
+        echo '</td>';
+        echo '<td>';
+        echo $crono["objetivo"];
+        echo '</td>';
+        echo '<td>';
+        echo $crono["fecha_inicio"];
+        
+        echo '</td>';
+        echo '<td>';
+        echo $crono["fecha_cierre"];
+        echo '</td>';
+        echo '<td>';
+        if ($this->ver != 'ver' && $this->ver != 'fechas') {
+            if (trim($this->estado) == "B" || trim($this->estado) == "A") {
+                ?>
+					<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/cronograma/del/<?php echo $crono["id_cronograma"];?>/<?php echo $crono["id_convocatoria"];?>">Eliminar
+							actividad</a>
+
+				<?php
+            }
+        }
+        echo '</td>';
+        echo '</tr>';
+    }
+    
+    echo '</tr>';
+    echo '</table>';
+    echo '</div>';
+    ?>
+</fieldset>
+
+    <?php
+        }
+        if (trim($this->tipo) == "m") {
+    ?>
+<br>
+                    <fieldset>
+                        <a name='CriteriosEvaluacion'></a>
+                        <legend>Criterios de evaluación para entrevista</legend>
+<?php
+if ($this->ver != 'ver' && $this->ver != 'fechas') {
+    if (trim($this->estado) == "B" || trim($this->estado) == "A") {
+        ?>
+                <a class="btn"
+                            href="<?php echo $this->basePath() ?>/application/criterioevaluacion/index/<?php echo $id;?>">Agregar
+                            criterio</a>
+<?php
+    }
+}
+?>
+                <br>
+                <?php
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';    
+    echo '<thead>';
+    echo '<th style="width:5%;">Criterio</th>';
+    echo '<th style="width:5%;">Eliminar</th>';
+    echo '</thead>';
+    echo '<tbody>';
+    
+    foreach ($this->criterioeval as $criterio) {
+        echo '<tr>';
+        echo '<td>';
+        echo $criterio["criterio"];
+        echo '</td>';
+        echo '<td>';
+        if ($this->ver != 'ver' && $this->ver != 'fechas') {
+            if (trim($this->estado) == "B" || trim($this->estado) == "A") {
+                ?>
+                    <a class="btn" href="<?php echo $this->basePath() ?>/application/criterioevaluacion/del/<?php echo $criterio["id"];?>/<?php echo $id; ?>">Eliminar criterio</a>
+                <?php
+            }
+        }
+        echo '</td>';
+        echo '</tr>';
+    }
+    
+    echo '</tr>';
+    echo '</table>';
+    echo '</div>';
+        ?>
+</fieldset>
+<?php
+    }
+?>
+        <?php
+            if (trim($this->datos[0]["tipo_conv"]) != "m") {
+        ?>
+
+
+                    <br>
+                    <fieldset>
+                        <a name='RequisitosConvocatoria'></a>
+                        <legend>Requisitos de la convocatoria</legend>
+<?php
+if ($this->ver != 'ver' && $this->ver != 'fechas') {
+    if (trim($this->estado) == "B" || trim($this->estado) == "A") {
+        ?>
+                <a class="btn"
+                            href="<?php echo $this->basePath() ?>/application/requisitos/index/<?php echo $id;?>">Agregar
+                            requisitos</a>
+<?php
+    }
+}
+?>
+                <br>
+                <?php
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';    
+    echo '<thead>';
+    echo '<th style="width:5%;">Nombre del requisito</th>';
+    echo '<th style="width:5%;">Descripción</th>';
+    echo '<th style="width:5%;">Observaciones</th>';
+    echo '<th style="width:5%;">Eliminar</th>';
+    echo '</thead>';
+    echo '<tbody>';
+    
+    foreach ($this->Requisitos as $requi) {
+        echo '<tr>';
+        echo '<td>';
+        foreach ($this->valflex as $vf) {
+            if ($vf["id_valor_flexible"] == $requi["id_tipo_requisito"]) {
+                echo $vf["descripcion_valor"];
+            }
+        }
+        echo '</td>';
+        echo '<td>';
+        echo $requi["descripcion"];
+        echo '</td>';
+        echo '<td>';
+        echo $requi["observaciones"];
+        echo '</td>';
+        
+        echo '<td>';
+        if ($this->ver != 'ver' && $this->ver != 'fechas') {
+            if (trim($this->estado) == "B" || trim($this->estado) == "A") {
+                ?>
+                    <a class="btn"
+                            href="<?php echo $this->basePath() ?>/application/requisitos/del/<?php echo $requi["id_requisito"];?>/<?php echo $requi["id_convocatoria"];?>">Eliminar
+                            Requisito</a>
+
+                <?php
+            }
+        }
+        echo '</td>';
+        echo '</tr>';
+    }
+    
+    echo '</tr>';
+    echo '</table>';
+    echo '</div>';
+?>
+
+</fieldset>
+
+        <?php
+            }
+        
+
+
+    if (trim($this->tipo) != "m") {
+        ?>
+					<br>
+					<fieldset>
+                        <a name='AspectosConvocatoria'></a>
+						<legend>Aspectos a evaluar de la convocatoria</legend>
+<?php
+        if ($this->ver != 'ver' && $this->ver != 'fechas') {
+            if (trim($this->estado) == "B" || trim($this->estado) == "A") {
+                ?>
+				<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/aspectoeval/index/<?php echo $id;?>">Agregar
+							<br>aspecto de evaluación
+						</a>
+<?php
+            }
+        }
+        ?>
+				<br>
+				<?php
+        echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+        echo '<table class="table" style="width: 100%; max-width: 100%;">';
+        echo '<thead>';
+        echo '<th style="width:20%;">Tipo aspecto evaluación</th>';
+        echo '<th style="width:60%;">Descripción</th>';
+        echo '<th style="width:10%;">Puntos de evaluación</th>';
+        echo '<th style="width:10%;">Eliminar aspecto</th>';
+        echo '</thead>';
+        echo '<tbody>';
+        
+        foreach ($this->Aspectoeval as $aspe) {
+            echo '<tr>';
+            echo '<td>';
+            foreach ($this->valflex as $vf) {
+                if ($vf["id_valor_flexible"] == $aspe["id_tipo_aspecto"]) {
+                    echo $vf["descripcion_valor"];
+                }
+            }
+            echo '</td>';
+            echo '<td>';
+            echo $aspe["descripcion"];
+            echo '</td>';
+            echo '<td>';
+            echo $aspe["ponderacion1"];
+            echo '</td>';
+            echo '<td>';
+            if ($this->ver != 'ver' && $this->ver != 'fechas') {
+                if (trim($this->estado) == "B" || trim($this->estado) == "A") {
+                    ?>
+					<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/aspectoeval/del/<?php echo $aspe["id_aspecto"];?>/<?php echo $aspe["id_convocatoria"];?>">Eliminar
+							Aspecto</a>
+
+				<?php
+                }
+            }
+            echo '</td>';
+            echo '</tr>';
+        }
+        
+        echo '</tr>';
+        echo '</table>';
+        echo '</div>';
+    }
+    ?>
+</fieldset>
+					<br>
+					<fieldset>
+                    <a name='DocumentosConvocatoria'></a>
+
+                    <?php
+                        if (trim($this->datos[0]["tipo_conv"]) == "m") {
+                            echo "<legend>Documentos requeridos (requisitos)</legend>";
+                        }else{
+                            echo "<legend>Documentos requeridos de la convocatoria</legend>";
+                        }
+                    ?>
+<?php
+if ($this->ver != 'ver' && $this->ver != 'fechas') {
+    if (trim($this->estado) == "B" || trim($this->estado) == "A") {
+        ?>
+				<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/requisitosdoc/index/<?php echo $id;?>">Agregar
+							<br>documento requerido
+						</a>
+<?php
+    }
+}
+?>
+				<br>
+				<?php
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    echo '<th style="width:5%;">Tipo documento</th>';
+    echo '<th style="width:5%;">Descripción</th>';
+    echo '<th style="width:5%;">Fecha límite</th>';
+    echo '<th style="width:5%;">Hora límite</th>';
+    echo '<th style="width:5%;">Responsable</th>';
+    echo '<th style="width:5%;">Editar</th>';
+    echo '<th style="width:5%;">Eliminar documento</th>';
+    echo '</thead>';
+    echo '<tbody>';
+    
+    foreach ($this->Requisitosdoc as $rdoc) {
+        echo '<tr>';
+        echo '<td>';
+        foreach ($this->valflex as $vf) {
+            if ($vf["id_valor_flexible"] == $rdoc["id_tipo_doc"]) {
+                echo $vf["descripcion_valor"];
+            }
+        }
+        echo '</td>';
+        echo '<td>';
+        echo $rdoc["descripcion"];
+        echo '</td>';
+        echo '<td>';
+        echo $rdoc["fecha_limite"];
+        echo '</td>';
+        echo '<td>';
+        echo $rdoc["hora_limite"];
+        echo '</td>';
+        echo '<td>';
+        if ($rdoc["responsable"] == 'E') {
+            echo 'Aplicante';
+        } else {
+            echo 'Administrador';
+        }
+        echo '</td>';
+
+        echo '<td>';
+        if ($this->ver != 'ver' && $this->ver != 'fechas') {
+            if ($this->menu == 1) {
+                if (trim($this->estado) == "B" || trim($this->estado) == "P" || trim($this->estado) == "A") {
+                    ?>
+                        <a class="btn" href="<?php echo $this->basePath() ?>/application/requisitosdoc/index/<?php echo $rdoc["id_convocatoria"];?>/<?php echo $this->ver;?>/<?php echo $rdoc["id_requisito_doc"];?>">Editar</a>
+                    <?php
+                }
+            }
+        }
+        echo '</td>';
+        echo '<td>';
+        if ($this->ver != 'ver' && $this->ver != 'fechas') {
+            if (trim($this->estado) == "B" || trim($this->estado) == "A") {
+                ?>
+					<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/requisitosdoc/del/<?php echo $rdoc["id_requisito_doc"];?>/<?php echo $rdoc["id_convocatoria"];?>">Eliminar
+							documento</a>
+
+				<?php
+            }
+        }
+        echo '</td>';
+        echo '</tr>';
+    }
+    echo '</tr>';
+    echo '</table>';
+    echo '</div>';
+    ?>
+</fieldset>
+<?php
+//if (trim($this->tipo) != "m") {
+    
+    ?>
+
+		<br>
+					<fieldset>
+                        <a name='RolesConvocatoria'></a>
+						<legend>Roles que pueden aplicar</legend>
+<?php
+    if ($this->ver != 'ver' && $this->ver != 'fechas') {
+        if (trim($this->estado) == "B" || trim($this->estado) == "A") {
+            ?>
+				<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/rolesconv/index/<?php echo $id;?>">Agregar
+							rol</a>
+<?php
+        }
+    }
+    ?>
+				<br>
+				<?php
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    echo '<th style="width:5%;">Rol</th>';
+    echo '<th style="width:5%;">Eliminar rol</th>';
+    echo '</thead>';
+    echo '<tbody>';
+    foreach ($this->Rolesconv as $rolconv) {
+        echo '<tr>';
+        echo '<td>';
+        foreach ($this->rolesuser as $rol) {
+            if ($rol["id_rol"] == $rolconv["id_rol"]) {
+                echo $rol["descripcion"];
+            }
+        }
+        echo '</td>';
+        echo '<td>';
+        if ($this->ver != 'ver' && $this->ver != 'fechas') {
+            if (trim($this->estado) == "B" || trim($this->estado) == "A") {
+                ?>
+					<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/rolesconv/del/<?php echo $rolconv["id_rol_conv"];?>/<?php echo $rolconv["id_convocatoria"];?>">Eliminar rol</a>
+
+				<?php
+            }
+        }
+        echo '</td>';
+        echo '</tr>';
+    }
+    echo '</tr>';
+    echo '</table>';
+    echo '</div>';
+    ?>
+</fieldset>
+					<br>
+                
+
+<?php
+//}
+if (trim($this->tipo) != "m") {
+    ?>
+         <fieldset>
+                    <a name='TablaFinanciacion'></a>
+					<legend>Tabla de financiación</legend>
+<?php
+    if ($this->ver != 'ver' && $this->ver != 'fechas') {
+        if (trim($this->estado) == "B" || trim($this->estado) == "A") {
+            ?>
+				<a class="btn"
+						href="<?php echo $this->basePath() ?>/application/tablafin/index/<?php echo $id;?>">Agregar
+						item a la tabla</a>
+<?php
+        }
+    }
+    ?>
+				<br>
+				<?php
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%; border: 1px solid !important;">';
+    echo '<thead>';
+    foreach ($this->Tablafinm as $tfinm) {
+        echo '<tr>';
+            echo '<th colspan="4" style="color: white; border: 1px solid !important;">';
+                foreach ($this->valflex as $vf) {
+                    if ($vf["id_valor_flexible"] == $tfinm["id_fuente"]) {
+                        echo $vf["descripcion_valor"];
+                    }
+                }
+            echo '</th>';
+        echo '</tr>';
+        echo '<tr>';
+            echo '<th style="width:5%;color: white; border: 1px solid !important;">Rubro</th>';
+            echo '<th style="width:5%;color: white; border: 1px solid !important;">Descripción</th>';
+            echo '<th style="width:5%;color: white; border: 1px solid !important;">Observaciones</th>';
+            echo '<th style="width:5%;color: white; border: 1px solid !important;"></th>';
+        echo '</thead>';
+        echo '<tbody>';
+        
+        foreach ($this->Tablafin as $tfin) {
+            if ($tfinm["id_fuente"] == $tfin["id_fuente"]) {
+                echo '<tr>';
+                echo '<td>';
+                foreach ($this->valflex as $vf) {
+                    if ($vf["id_valor_flexible"] == $tfin["id_rubro"]) {
+                        echo $vf["descripcion_valor"];
+                    }
+                }
+                echo '</td>';
+                
+                echo '<td>';
+                echo $tfin["descripcion"];
+                echo '</td>';
+                echo '<td>';
+                echo $tfin["observaciones"];
+                echo '</td>';
+                echo '<td>';
+                if ($this->ver != 'ver' && $this->ver != 'fechas') {
+                    if (trim($this->estado) == "B" || trim($this->estado) == "A") {
+                        ?>
+					<a class="btn"
+						href="<?php echo $this->basePath() ?>/application/tablafin/del/<?php echo $tfin["id_financiacion"];?>/<?php echo $tfin["id_convocatoria"];?>">Eliminar
+						Registro</a>
+
+				<?php
+                    }
+                }
+                echo '</td>';
+                
+                echo '</tr>';
+            }
+        }
+    }
+    echo '</tbody>';
+    echo '</table>';
+    echo '</div>';
+    echo '</fieldset>';
+}
+?>
+		<br>
+					<fieldset>
+                        <a name="DocumentacionConvocatoria"></a>
+						<legend>Documentación relacionada a la convocatoria</legend>
+<?php
+if ($this->ver != 'ver' && $this->ver != 'fechas') {
+    if (trim($this->estado) == "B" || trim($this->estado) == "A" || trim($this->estado) == "R") {
+        ?>
+				<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/archivosconv/index/<?php echo $id;?>">Agregar
+							documentos</a>
+<?php
+    }
+}
+?>
+				<br>
+<?php
+echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+echo '<table class="table" style="width: 100%; max-width: 100%;">';
+echo '<thead>';
+echo '<th style="width:5%;">Tipo archivo</th>';
+echo '<th style="width:5%;">Archivo</th>';
+echo '<th style="width:5%;">Eliminar Archivo</th>';
+
+echo '</thead>';
+echo '<tbody>';
+
+foreach ($this->Archivosconv as $archi) {
+    echo '<tr>';
+    echo '<td>';
+    foreach ($this->valflex as $vf) {
+        if ($vf["id_valor_flexible"] == $archi["id_tipo_archivo"]) {
+            echo $vf["descripcion_valor"];
+        }
+    }
+    echo '</td>';
+    echo '<td>';
+    ?>
+<a class="btn"
+							href="<?php echo $this->basePath()?>/application/archivosconv/bajar/<?php echo $archi["id_archivo"];?>/<?php echo $id;?>"><i class="fa fa-download"></i></a> 
+<?php
+    
+    echo '</td>';
+    
+    echo '<td>';
+    if ($this->ver != 'ver' && $this->ver != 'fechas') {
+        if (trim($this->estado) == "B" || trim($this->estado) == "A" || trim($this->estado) == "R") {
+            ?>
+					<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/archivosconv/del/<?php echo $archi["id_archivo"];?>/<?php echo $archi["id_convocatoria"];?>"><i class="fa fa-trash"></i></a>
+
+				<?php
+        }
+    }
+    echo '</td>';
+    echo '</tr>';
+}
+
+echo '</tr>';
+echo '</tbody>';
+echo '</table>';
+echo '</div>';
+?>
+</fieldset>
+					<br>
+					<fieldset>
+                        <a name="URLConvocatoria"></a>
+						<legend>URLs de la convocatoria</legend>
+
+<?php
+if ($this->ver != 'ver' && $this->ver != 'fechas') {
+    if (trim($this->estado) == "B" || trim($this->estado) == "A" || trim($this->estado) == "R") {
+        ?>				<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/url/index/<?php echo $id;?>">Agregar
+							URL</a>
+
+<?php
+    }
+}
+?>	
+
+				<?php
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    echo '<th style="width:5%;">Nombre Url</th>';
+    echo '<th style="width:5%;">Url</th>';
+    echo '<th style="width:5%;">Descripción</th>';
+    echo '<th style="width:5%;">Eliminar URL</th>';
+    echo '</thead>';
+    echo '<tbody>';
+    
+    foreach ($this->Urls as $ur) {
+        echo '<tr>';
+        echo '<td>';
+        echo $ur["nom_url"];
+        echo '</td>';
+        echo '<td>';
+        
+        ?>
+<?php $ura='http://'.$ur["url"];  ?>
+			<a href="<?php echo $ura ?>" target="_blank">
+				<?php echo $ur["url"]; ?> 
+			</a>
+<?php
+        echo '</td>';
+        echo '<td>';
+        echo $ur["descripcion"];
+        echo '</td>';
+        echo '<td>';
+        if ($this->ver != 'ver' && $this->ver != 'fechas') {
+            if (trim($this->estado) == "B" || trim($this->estado) == "A" || trim($this->estado) == "R") {
+                ?>
+					<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/url/del/<?php echo $ur["id_url"];?>/<?php echo $ur["id_convocatoria"];?>">Eliminar
+							Url</a>
+
+				<?php
+            }
+        }
+        echo '</td>';
+        echo '</tr>';
+    }
+    
+    echo '</tr>';
+    echo '</tbody>';
+    echo '</table>';
+    echo '</div>';
+    ?>
+</fieldset>
+					<br>
+					<fieldset style="display: none;">
+                        <a name="CamposInformacion"></a>
+						<legend>Campos de información adicionales</legend>
+<?php
+if ($this->ver != 'ver' && $this->ver != 'fechas') {
+    if (trim($this->estado) == "B" || trim($this->estado) == "A") {
+        ?>
+				<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/camposadd/index/<?php echo $id;?>">Agregar
+							campos</a>
+<?php
+    }
+}
+?>
+				<br>				<?php
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';
+    echo '<thead>';
+    
+    echo '<th>Título</th>';
+    echo '<th>Descripción</th>';
+    echo '<th>Observaciones</th>';
+    echo '<th>Obligatorio (SI/NO)</th>';
+    echo '<th>Eliminar Campo</th>';
+    echo '</thead>';
+    echo '<tbody>';
+    
+    foreach ($this->campos as $cp) {
+        echo '<tr>';
+        echo '<td>';
+        echo $cp["titulo"];
+        echo '</td>';
+        echo '<td>';
+        echo $cp["descripcion"];
+        echo '</td>';
+        echo '<td>';
+        echo $cp["objetivo"];
+        echo '</td>';
+        echo '<td>';
+        if ($cp["obligatorio"] == 'S') {
+            echo 'Si';
+        } else {
+            echo 'No';
+        }
+        echo '</td>';
+        echo '<td>';
+        if ($this->ver != 'ver' && $this->ver != 'fechas') {
+            if (trim($this->estado) == "B" || trim($this->estado) == "A") {
+                ?>
+					<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/camposadd/del/<?php echo $cp["id_campo_add"];?>/<?php echo $cp["id_convocatoria"];?>">Eliminar
+							Campo</a>
+
+				<?php
+            }
+        }
+        echo '</td>';
+        echo '</tr>';
+    }
+    
+    echo '</tr>';
+    echo '</tbody>';
+    echo '</table>';
+    echo '</div>';
+    ?>
+</fieldset>
+<?php
+
+if (trim($this->tipo) == "m"){ 
+?>
+<br><br>
+                    <fieldset style="display: none;">
+                        <a name="CamposInformacion"></a>
+                        <legend>Aval de cumplimiento</legend>
+<?php
+if ($this->ver != 'ver' && $this->ver != 'fechas') {
+    if (trim($this->estado) == "B" || trim($this->estado) == "A") {
+        ?>
+                <a class="btn"
+                            href="<?php echo $this->basePath() ?>/application/avalcumpliconvo/index/<?php echo $id;?>">Agregar
+                            informe</a>
+<?php
+    }
+}
+?>
+                <br>                <?php
+     echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+            echo '<table class="table" style="width: 100%; max-width: 100%;" id="tablaProyectos">';
+                echo '<thead>';
+                    echo '<th style="width: 5%;">Nombre del informe</th>';
+                    echo '<th style="width: 5%;">Fecha limite</th>';
+                    echo '<th style="width: 5%;">Estado del informe</th>';
+                    echo '<th style="width: 5%;">Editar informe</th>';
+                echo '</thead>';
+                echo '<tbody>'; 
+                                 
+                foreach ($this->informesm as $informe) {
+                    echo '<tr>';
+                    echo '<td>';
+                    echo $informe["informe"];
+                    echo '</td>';
+                    echo '<td style="text-align:center;">';
+                    echo $informe["fecha_limite"];
+                    echo '</td>';
+                    echo '<td style="text-align:center;">';
+                    echo $informe["estado"];
+                    echo '</td>';
+                    echo '<td style="text-align:center;">';
+                    if($this->menu==1){
+                        ?> 
+                            <a class="btn" href="<?php echo $this->basePath() ?>/application/avalcumpliconvo/index/<?php echo $id;?>/<?php echo $informe["id"];?>">Editar</a>
+                        <?php
+                    }
+                    echo '</td>';
+                    echo '</tr>';
+                }   
+                                  
+                echo '</tbody>';
+        echo '</table>';
+    echo '</div>';
+    ?>
+</fieldset>
+
+<?php } ?>
+
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>

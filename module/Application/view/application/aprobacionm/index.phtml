@@ -1,0 +1,223 @@
+<style>
+    textarea {
+        height: 70px;
+        width: 100%;
+        max-width: 100%;
+
+    }
+</style> 
+
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+    echo $this->titulo;
+    ?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<div class="twelve columns">
+				<?php
+    $form = $this->form;
+    $form->prepare();
+    echo '<h6>';
+    echo $this->flashMessenger()->render();
+    echo '</h6>';
+    $form->setAttributes(array(
+        'action' => $this->url . '/application/aprobacionm/index/' . $this->id,
+        'method' => 'post'
+    ));
+    echo $this->form()->openTag($form);
+    ?>
+        <a href="<?php echo $this->basePath() ?>/application/consultamonitores/index"><i class="icon-arrow-left"></i> Regresar</a><br><br>
+    <?php
+    echo '<p>';
+    echo $this->formlabel($form->get('fecha_verificacion'));
+    echo $this->formelement($form->get('fecha_verificacion'));
+    echo '</div>';
+    echo '<div class="six columns">';
+    echo $this->formlabel($form->get('codProyecto'));
+    echo $this->formelement($form->get('codProyecto'));
+    echo '</div>';
+    echo '<div class="twelve columns">';
+    echo '<p>';
+    echo $this->formlabel($form->get('nombProyecto'));
+    echo $this->formelement($form->get('nombProyecto'));
+    echo "<h3>";
+    echo "DATOS DEL MONITOR";
+    echo "</h3>";
+    echo '</div>';
+    echo '<div class="six columns">';
+    echo '<p>';
+    echo $this->formlabel($form->get('primer_apellido'));
+    echo $this->formelement($form->get('primer_apellido'));
+    echo '<p>';
+    echo $this->formlabel($form->get('nombres'));
+    echo $this->formelement($form->get('nombres'));
+    echo '<p>';
+    echo $this->formlabel($form->get('cod_estudiante'));
+    echo $this->formelement($form->get('cod_estudiante'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_facultad'));
+    echo $this->formelement($form->get('id_facultad'));
+    echo '<p>';
+    echo $this->formlabel($form->get('direccion'));
+    echo $this->formelement($form->get('direccion'));
+    echo '<p>';
+    echo $this->formlabel($form->get('celular'));
+    echo $this->formelement($form->get('celular'));
+    echo '<p>';
+    echo $this->formlabel($form->get('promedio_ponderado'));
+    echo $this->formelement($form->get('promedio_ponderado'));
+    echo '<p>';
+    echo $this->formlabel($form->get('cumplimiento_conjunto'));
+    echo $this->formelement($form->get('cumplimiento_conjunto'));
+    echo '<p>';
+    echo $this->formlabel($form->get('semestre'));
+    echo $this->formelement($form->get('semestre'));
+    echo '</div>';
+    echo '<div class="six columns">';
+
+    echo '<p>';
+    echo $this->formlabel($form->get('segundo_apellido'));
+    echo $this->formelement($form->get('segundo_apellido'));
+    echo '<p>';
+    echo $this->formlabel($form->get('fecha_nacimiento'));
+    echo $this->formelement($form->get('fecha_nacimiento'));
+    echo '<p>';
+    echo $this->formlabel($form->get('identificacion'));
+    echo $this->formelement($form->get('identificacion'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_programa_curricular'));
+    echo $this->formelement($form->get('id_programa_curricular'));
+    echo '<p>';
+    echo $this->formlabel($form->get('telefono'));
+    echo $this->formelement($form->get('telefono'));
+    echo '<p>';
+    echo $this->formlabel($form->get('email'));
+    echo $this->formelement($form->get('email'));
+    echo '<p>';
+    echo $this->formlabel($form->get('creditos_aprobados'));
+    echo $this->formelement($form->get('creditos_aprobados'));
+    echo '<p>';
+    echo $this->formlabel($form->get('creditos_programa'));
+    echo $this->formelement($form->get('creditos_programa'));
+    echo '<p>';
+    echo $this->formlabel($form->get('estado_aprobacion'));
+    echo $this->formelement($form->get('estado_aprobacion'));
+    echo "</div>";
+    echo '<div class="twelve columns">';
+    echo $this->formlabel($form->get('obervaciones_aprobacion'));
+    echo $this->formelement($form->get('obervaciones_aprobacion'));
+    echo "</br>";
+    echo "</br>";
+    echo '<p>';
+    if($this->menu==1){
+        echo $this->formelement($form->get('submit'));
+    }
+    ?>
+    </br>
+    </br>
+    <fieldset style="display: none;">
+        <legend style="margin-bottom:0px;">Aval de cumplimiento</legend>
+        <?php
+            
+        echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+            echo '<table class="table" style="width: 100%; max-width: 100%;" id="tablaProyectos">';
+                echo '<thead>';
+                    echo '<th style="width: 15%;">Nombre del informe</th>';
+                    echo '<th style="width: 10%;">Fecha limite</th>';
+                    echo '<th style="width: 10%;">Documento del informe</th>';
+                    echo '<th style="width: 10%;">Estado del informe</th>';
+                    echo '<th style="width: 25%;">Observaciones</th>';
+                    echo '<th style="width: 10%;">Editar estado del informe</th>';
+                    echo '<th style="width: 10%;">Adjuntar informe</th>';
+                echo '</thead>';
+                echo '<tbody>'; 
+                                 
+                foreach ($this->informesm as $informe) {
+                    $informeApliP=array("estado"=>"", "archivo"=>"", "observaciones"=>"");
+                    foreach ($this->informesmaplicacion as $informeApli) {
+                        if($informe["id"]==$informeApli["id_avalcumpliconvo"]){ 
+                            $informeApliP = $informeApli;
+                        }
+                    }
+
+                    if($informeApliP["estado"]=="Cumple"){
+                       echo '<tr style="background-color:green;">'; 
+                    }elseif ($informeApliP["estado"]=="No cumple") {
+                        echo '<tr style="background-color:red;">';
+                    }else{
+                        echo '<tr style="background-color:yellow;">';
+                    }
+                        echo '<td>';
+                        echo $informe["informe"];
+                        echo '</td>';
+                        echo '<td style="text-align:center;">';
+                        echo $informe["fecha_limite"];
+                        echo '</td>';
+                        echo '<td>';
+                        if($informeApliP["archivo"] != ""){
+                            ?>
+                                <a href="<?php echo $this->basePath()?>/application/archivosinformem/bajar/<?php echo $informe["id"];?>/<?php echo $id;?>">Bajar archivo </a> 
+                            <?php
+                            echo " - ".$informeApliP["archivo"];
+                        }else{
+                            echo "";
+                        }
+
+                        echo '</td>';
+                        echo '<td style="text-align:center;">';
+                        echo $informeApliP["estado"];
+                        echo '</td>';
+                        echo '<td>';
+                        echo $informeApliP["observaciones"];  
+                        echo '</td>';
+                        if($this->menu==1){
+                            echo '<td style="text-align:center;">';
+                                ?>
+                                    <a class="btn" href="<?php echo $this->basePath() ?>/application/editarinformem/index/<?php echo $informe["id"];?>/<?php echo $id;?>">Editar estado</a>
+                                <?php
+                            echo '</td>';
+                        }
+                        else{
+                            echo '<td style="text-align:center;">';
+                            echo "";
+                            echo '</td>';
+                        }
+                        echo '<td style="text-align:center;">';
+                             date_default_timezone_set('America/Bogota');
+                            $fecha_actual = strtotime(date("d-m-Y H:i:00"));
+                            $fecha_convo = strtotime($informe["fecha_limite"]." 00:00:00");
+                            if($fecha_actual < $fecha_convo){
+                                ?>
+                                    <a class="btn" href="<?php echo $this->basePath() ?>/application/archivosinformem/index/<?php echo $informe["id"];?>/<?php echo $id;?>">Subir</a>
+                                <?php
+                            }
+                        echo '</td>';
+                    echo '</tr>';
+                }   
+                                  
+                echo '</tbody>';
+        echo '</table>';
+    echo '</div>';
+    ?>
+    </fieldset>
+    
+<?php
+    echo "</br>";
+    echo "<h4>";
+    echo $this->form()->closeTag($form);
+    echo "</div>";
+    ?>
+			</div>
+		</div>
+	</div>
+</div>

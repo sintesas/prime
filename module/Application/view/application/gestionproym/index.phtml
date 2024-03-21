@@ -1,0 +1,216 @@
+<style>
+    textarea {
+        height: 100px;
+        width: 100%;
+        max-width: 100%;
+
+    }
+</style> 
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+    echo $this->titulo ." ".$this->nombreCompleto;
+    ?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<div class="twelve columns">
+				<a
+					href="<?php echo $this->basePath() ?>/application/gestionrequi/index/<?php echo $id2;?>">
+					<i class="icon-arrow-left"></i> Regresar
+				</a>		
+				<?php
+    $form = $this->form;
+    $form->prepare();
+    $error = trim($this->flashMessenger ()->render ());
+    if(strpos($error, "Requisitos por cumplir") > 0){
+        echo '<div style="color: red; font-size: 20px;">';
+        echo $error;
+        echo '</div>';
+    }else{
+        echo '<h6>';
+        echo $error;
+        echo '</h6>';
+    }
+    $form->setAttributes(array(
+        'action' => $this->url . '/application/gestionproym/index/' . $this->id,
+        'method' => 'post'
+    ));
+    echo $this->form()->openTag($form);
+    
+    echo $this->form()->closeTag($form);
+    ?>
+
+<!--    
+<fieldset>
+						<legend>Requisitos de la Convocatoria</legend>
+-->  
+				<?php
+/*
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';   
+    echo '<thead>';
+    echo '<th style="width: 35%;">Nombre del Requisito</th>';
+    echo '<th style="width: 35%;">Descripción</th>';
+    echo '<th style="width: 10%;">Estado</th>';
+    echo '<th style="width: 20%;">Editar estado</th>';
+    echo '</thead>';
+    echo '<tbody>';
+    
+    foreach ($this->Requisitos as $requi) {
+        echo '<tr>';
+        echo '<td>';
+        foreach ($this->valflex as $vf) {
+            if ($vf["id_valor_flexible"] == $requi["id_tipo_requisito"]) {
+                echo $vf["descripcion_valor"];
+            }
+        }
+        echo '</td>';
+        echo '<td>';
+        echo $requi["descripcion"];
+        echo '</td>';
+        echo '<td>';
+        if ($requi["id_ponderacion2"] == 'C') {
+            echo 'Cumple';
+        } else {
+            echo 'No Cumple';
+        }
+        echo '</td>';
+         echo '<td>';
+        echo '<center>';
+        if ($this->ver != 'ver' && $this->ver != 'fechas') {
+            ?>
+                <a class="btn"
+                        href="<?php echo $this->basePath() ?>/application/gestionproym/cumplimientoAp/<?php echo $requi["id_requisitoap"];?>/<?php echo $requi["id_aplicar"];?>/1/<?php echo $id2;?>">Cumple</a>
+               <a class="btn"
+                        href="<?php echo $this->basePath() ?>/application/gestionproym/cumplimientoAp/<?php echo $requi["id_requisitoap"];?>/<?php echo $requi["id_aplicar"];?>/2/<?php echo $id2;?>">No cumple</a>
+            <?php
+        }
+        echo '</center>';
+        echo '</td>';
+       
+        echo '</tr>';
+    }
+    
+    echo '</tbody>';
+    echo '</table>';
+    echo '</div>';
+    echo '</br>';
+    echo '</br>';
+*/
+?>
+<!--
+</fieldset>
+-->  
+</br>
+
+					<fieldset>
+						<legend>Documentos requeridos (requisitos)</legend>
+				<?php
+    echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+    echo '<table class="table" style="width: 100%; max-width: 100%;">';   
+    echo '<thead>';
+    echo "<th style='width: 25%;'>Tipo de documento</th>";
+    echo "<th style='width: 25%;'>Descripción</th>";
+    echo "<th style='width: 15%;'>Archivo</th>";
+    echo "<th style='width: 15%;'>Cumple</th>";
+    echo '</thead>';
+    echo '<tbody>'; 
+    foreach ($this->docreq as $dreq) {
+        echo '<tr>';
+        echo '<td>';
+        foreach ($this->requisitosdoc as $requisitosdocT) {
+            if ($requisitosdocT["id_requisito_doc"] == $dreq["id_requisito_doc"]) {
+                foreach ($this->valflex as $vf) {
+                    if ($vf["id_valor_flexible"] == $requisitosdocT["id_tipo_doc"]) {
+                        echo $vf["descripcion_valor"];
+                    }
+                }
+            }
+        }
+        echo '</td>';
+        echo '<td>';
+        echo $dreq["descripcion"];
+        echo '</td>';
+        echo '<td>';
+            if(strpos(mb_strtoupper($dreq["archivo"]), ".PNG")!==false || strpos(mb_strtoupper($dreq["archivo"]), ".JPG")!==false || strpos(mb_strtoupper($dreq["archivo"]), ".JPEG")!==false || strpos(mb_strtoupper($dreq["archivo"]), ".PDF")!==false){
+                ?>
+                    <a href="<?php echo $this->basePath()?>/application/requisitosapdoc/verArchivo/<?php echo $dreq["id_requisitoap_doc"];?>/<?php echo $id;?>" target="_blank">Ver archivo</a><br>
+                <?php
+            }
+            ?>
+                <a href="<?php echo $this->basePath()?>/application/requisitosapdoc/bajar/<?php echo $dreq["id_requisitoap_doc"];?>/<?php echo $id;?>" target="_blank">Bajar archivo: </a><?php echo $dreq["archivo"]; ?> 
+            <?php
+        echo '</td>';
+        echo '<td>';
+        if ($dreq["checked"] == 'C') {
+            ?>
+                <input type="checkbox" style="box-shadow: none !important;" onchange="window.location.href='<?php echo $this->basePath() ?>/application/gestionproym/cumplimientoApDoc/<?php echo $dreq["id_requisitoap_doc"];?>/<?php echo $dreq["id_aplicar"];?>/2/<?php echo $id2;?>'" checked>
+            <?php
+            /*
+            <div style="margin-left: 5px !important; font-size: 19px !important; color: #005B9C !important;" title="Cumple">
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                </div>
+            */
+        }else{
+            ?>
+                <input type="checkbox" style="box-shadow: none !important;" onchange="window.location.href='<?php echo $this->basePath() ?>/application/gestionproym/cumplimientoApDoc/<?php echo $dreq["id_requisitoap_doc"];?>/<?php echo $dreq["id_aplicar"];?>/1/<?php echo $id2;?>'">
+            <?php
+        }
+        echo '</td>';
+        /*
+        echo '<td>';
+        echo '<center>';
+        if ($this->ver != 'ver' && $this->ver != 'fechas') {
+            ?>
+                <a class="btn"
+                        href="<?php echo $this->basePath() ?>/application/gestionproym/cumplimientoApDoc/<?php echo $dreq["id_requisitoap_doc"];?>/<?php echo $dreq["id_aplicar"];?>/1/<?php echo $id2;?>">Cumple</a>
+               <a class="btn"
+                        href="<?php echo $this->basePath() ?>/application/gestionproym/cumplimientoApDoc/<?php echo $dreq["id_requisitoap_doc"];?>/<?php echo $dreq["id_aplicar"];?>/2/<?php echo $id2;?>">No cumple</a>
+            <?php
+        }
+        echo '</center>';
+        echo '</td>';
+        */
+        echo '</tr>';
+    }
+    
+    echo '</tbody>';
+    echo '</table>';
+    echo '</div>';
+    ?>
+</fieldset>
+</br>
+</br>
+        <?php
+            if ($this->ver != 'ver' && $this->ver != 'fechas'){
+        ?>
+                <a class="btn"
+                    href="<?php echo $this->basePath() ?>/application/gestionproym/cumplimientoApDoc/0/<?php echo $id;?>/1/<?php echo $id2;?>">Cumple</a>
+                <a class="btn"
+                    href="<?php echo $this->basePath() ?>/application/gestionproym/cumplimientoApDoc/0/<?php echo $id;?>/2/<?php echo $id2;?>">No cumple</a>
+        <?php
+            }else{
+        ?>
+                <a class="btn"
+                            href="<?php echo $this->basePath() ?>/application/gestionrequi/index/<?php echo $id2; ?>">Guardar</a>
+        <?php
+            }
+        ?>
+
+                
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

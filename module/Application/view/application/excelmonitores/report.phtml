@@ -1,0 +1,95 @@
+<?php
+$output = fopen('php://output', 'w');
+
+// create a file pointer connected to the output stream
+header('Content-Type: application/csv; charset=utf-8');
+header('Content-Disposition: attachment; filename=monitores.csv');
+
+fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
+fputcsv($output, array("Reporte de monitores"));
+fputcsv($output, array(""));
+fputcsv($output, array(""));
+
+if(count($this->datos)<=0){
+    fputcsv($output, array("No se encontraron resultados."),';');
+}else{
+    $encabezado = array();
+    $encabezado["1"] = "ID Aplicación";
+    $encabezado["2"] = "Código proyecto";
+    $encabezado["3"] = "Nombre proyecto";
+    $encabezado["4"] = "Nombre lider";
+    $encabezado["5"] = "Cédula monitor";
+    $encabezado["6"] = "Nombre monitor";
+    $encabezado["7"] = "Programa académico";
+    $encabezado["8"] = "Celular";
+    $encabezado["9"] = "Email";
+        $encabezado["10"] = "ID convocatoria";
+
+    fputcsv($output, $encabezado,';');
+    $encabezado = array();
+   
+    foreach ($this->datos as $row) {
+        $nomInv="";
+        if($this->aprobados==1){
+            if($row["estado_seleccionado"]!="Seleccionado"){
+                 continue;
+            }
+        }
+
+        if($this->ano!="0"){
+            if(strpos($row["fecha"], (string)$this->ano) === false){
+                 continue;
+            }
+        }
+
+        foreach ($this->datos3 as $us) {
+            if ($row["id_usuario"] == $us["id_usuario"]) {
+                $nomb = trim($us["primer_nombre"]).' '.trim($us["segundo_nombre"]).' '.trim($us["primer_apellido"]).' '.trim($us["segundo_apellido"]);
+                $cedula = $us["documento"];
+                $celular = $us["celular"];
+                $email = $us["email"];
+                $id_programa_academico = $us["id_programa_academico"];
+            }
+        }
+        
+        foreach ($this->datos4 as $pr) {
+            if ($row["id_proyecto"] == $pr["id_proyecto_inv"]) {
+                $proy = $pr["nombre_proyecto"];
+            }
+        }
+        $codProyecto = strstr(trim($proy), '-/-', true);
+        $nomProyecto = substr(strstr(trim($proy), '-/-'),3,strlen(strstr(trim($proy), '-/-'))); 
+        $nomInv="";
+        foreach ($prT as $proyeT){
+            if($codProyecto == trim($proyeT["codigo_proy"])){
+                foreach ($this->datos3 as $usua){
+                    if($proyeT["id_investigador"] == $usua["id_usuario"]){
+                        $nomInv = trim($usua["primer_nombre"])." ".trim($usua["segundo_nombre"])." ".trim($usua["primer_apellido"])." ".trim($usua["segundo_apellido"]);
+                    }
+                }
+            }
+        }
+
+        foreach ($programas as $progr){
+            if($progr["id_valor_flexible"] == $id_programa_academico){
+                $id_programa_academico = $progr["descripcion_valor"];
+            }
+        }
+        $encabezado = array();
+        $encabezado["1"] = trim($row["id_aplicar"]);
+        $encabezado["2"] = trim($codProyecto);
+        $encabezado["3"] = trim($nomProyecto);
+        $encabezado["4"] = trim($nomInv);
+        $encabezado["5"] = trim($cedula);
+        $encabezado["6"] = trim($nomb);
+        $encabezado["7"] = trim($id_programa_academico);
+        $encabezado["8"] = trim($celular);
+        $encabezado["9"] = trim($email);
+                $encabezado["10"] = trim($row["id_convocatoria"]);
+
+
+        fputcsv($output, $encabezado,';');
+    }
+}
+fclose($output);
+?>

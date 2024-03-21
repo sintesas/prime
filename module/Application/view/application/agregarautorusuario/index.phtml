@@ -1,0 +1,141 @@
+<style>
+    textarea {
+        height: 100px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .alineadoDerecha {
+        float: right;
+    }
+</style>
+<script type="text/javascript">
+	function showHint(str) {
+		var valthis = str.toLowerCase();
+	    var num = 0;
+
+	    $('select#id_autor>option').each(function () {
+	          var text = $(this).text().toLowerCase();
+	          if(text.indexOf(valthis) !== -1)  
+	              {$(this).show(); $(this).prop('selected',true);}
+	          else{$(this).hide();}
+	           });
+	}
+</script>
+
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+								<?php
+							    	echo $this->titulo;
+							    ?>
+							</h3>
+						</div>
+					</div>
+				</div>
+				<div class="six columns">
+					<a href="<?php echo $this->basePath() ?>/application/editarusuario/index/<?php echo $this->id2; ?>">
+						<i class="icon-arrow-left"></i> Regresar
+					</a>
+				</div>
+				</br>
+				</br>
+				</br>
+				</br>
+				</br>
+
+<?php
+$form = $this->form;
+$form->prepare();
+
+echo $this->form()->openTag($form);
+
+echo '<div class="six columns">';
+echo '<p>';
+echo $this->formlabel($form->get('documento'));
+echo $this->formelement($form->get('documento'));
+
+echo '<p>';
+echo $this->formlabel($form->get('nombre'));
+echo $this->formelement($form->get('nombre'));
+
+echo '<p>';
+echo $this->formlabel($form->get('apellido'));
+echo $this->formelement($form->get('apellido'));
+
+echo '<p>';
+echo $this->formlabel($form->get('usuario'));
+echo $this->formelement($form->get('usuario'));
+echo '</div>';
+
+echo '<div class="six columns">';
+echo '</br>';
+echo '</br>';
+echo '</br>';
+echo '</br>';
+echo '</br>';
+echo '</br>';
+echo '</br>';
+echo '</br>';
+echo '</br>';
+echo '</br>';
+echo '</br>';
+echo '</br>';
+echo '<p>';
+echo $this->formelement($form->get('submit'));
+?>
+	<a class="btn" href="<?php echo $this->basePath() ?>/application/editarusuario/index/<?php echo $this->id;?>">Cancelar</a>
+
+
+<?php
+echo '</div>';
+echo '</br>';
+echo '</br>';
+
+echo $this->form()->closeTag($form);
+echo '</br>';
+echo '</br>';
+echo '<div class="twelve columns">';
+echo "<div style='overflow-y:auto; max-height:410px; width: 100%;'>";
+echo '<table class="table" style="width: 100%; max-width: 100%;">';
+echo "<thead>";
+echo "<th style='width: 50%;'>Autor</th>";
+echo "<th style='width: 25%;'>Agregar</th>";
+echo "<th style='width: 25%;'>Eliminar</th>";
+echo '</thead>';
+echo '<tbody>';
+foreach ( $this->usuariosArray as $dato ) {
+	echo '<tr>';
+	echo '<td>';
+	echo $dato ["primer_nombre"]." ".$dato ["segundo_nombre"]." ".$dato ["primer_apellido"]." ".$dato ["segundo_apellido"];
+	echo '</td>';
+    echo '<td style="text-align:center;">';
+    ?>
+    	<a class="btn" href="<?php echo $this->basePath() ?>/application/agregarautorusuario/add/<?php echo $dato ["id_usuario"];?>/<?php echo $id;?>/<?php echo $id2;?>/<?php echo $id3;?>">Agregar</a>
+	<?php
+    echo '</td>';
+    echo '<td style="text-align:center;">';
+    ?>
+    	<a class="btn" href="<?php echo $this->basePath() ?>/application/agregarautorusuario/drop/<?php echo $dato ["id_usuario"];?>/<?php echo $id;?>/<?php echo $id2;?>/<?php echo $id3;?>">Eliminar</a>
+	<?php
+    echo '</td>';
+	echo '</tr>';
+	
+}
+echo '</table>';
+echo '</div>';
+echo '</br>';
+echo '<legend></legend>';
+
+?>	
+</div><!-- Cierre div six columns --> 
+			</div>
+		</div>
+	</div>
+</div>

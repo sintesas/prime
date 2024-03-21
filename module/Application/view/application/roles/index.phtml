@@ -1,0 +1,128 @@
+<style>
+	textarea {
+        height: 100px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .btn {
+        color: white !important;
+    }
+
+	.filter-rol {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .filter-rol-left {float: left;}
+    .filter-rol-right {float: right;}
+    .filter-rol .btn {width: 200px;}
+    /*.filter-rol-right div.btn {max-width: 230px !important;width: 230px;}*/
+</style>
+<div class="edit-slide transition">
+    <div class="close-edit"><i class="fa fa-times" aria-hidden="true"></i></div>
+    <div class="content-edit-slide">
+        <div><h3>Crear rol</h3></div><br/>
+        <?php
+        $form = $this->form;
+        $form->prepare();
+        echo $this->form()->openTag($form);
+        echo '<h6>'.$this->flashMessenger()->render().'</h6>';
+        echo $this->formlabel($form->get('descripcion'));
+        echo $this->formelement($form->get('descripcion'));
+        echo $this->formlabel($form->get('observaciones'));
+        echo $this->formelement($form->get('observaciones'));
+        echo $this->formlabel($form->get('opcion_pantalla'));
+        echo $this->formelement($form->get('opcion_pantalla'));
+        echo '<div class="content-edit-slide-button">';            
+        echo '<div class="col">';
+        echo $this->formelement($form->get('submit'));
+        echo '</div>';
+        echo '<div class="col">';
+        ?>
+        <a class="btn1 cancel-edit">Cancelar</a>
+        <?php
+        echo '</div>';
+        echo '</div>';
+        echo $this->form()->closeTag($form);        
+        ?>
+    </div>
+</div>
+<?php 
+include("public/menu.php");
+require_once("public/rutas.php");
+?>
+<link rel="stylesheet" href="<?php echo $GLOBALS["ruta_servidor"] . 'css/estilos_arriba/estilos_arriba.css'; ?>">
+<link rel="stylesheet" href="<?php echo $GLOBALS["ruta_servidor"] . 'js/ui/jquery-ui.min.css'; ?>">
+<link rel="stylesheet" href="<?php echo $GLOBALS["ruta_servidor"] . 'js/ui/jquery-ui.theme.min.css'; ?>">
+<link rel="stylesheet" href="<?php echo $GLOBALS["ruta_servidor"] . 'js/ui/jquery-ui.structure.min.css'; ?>">
+<div class="col col100">
+    <div class="filter-rol">
+        <div class="filter-rol-left"><h4><?php echo $this->titulo; ?></h4></div>
+        <div class="filter-rol-right">
+            <div class="btn transition pointer rol_edit"><i class="fa fa-users" style="margin-right: 5px;"></i>Crear rol</div>
+        </div>
+    </div>    
+</div>
+<div class="col col100 noshadow">
+	<div style='overflow-y:auto; max-height:4000px; width: 100%;'>
+		<table class="table" style="width: 100%; max-width: 100%;">
+            <thead>
+                <tr>
+                    <th style="width:5%">Nombre del rol</th>
+                    <th style="width:5%">Descripción</th>
+                    <th style="width:5%">Tipo de menú</th>
+                    <th style="width:5%">Permisos</th>
+                    <th style="width:5%">Usuario rol</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($this->datos as $dato) { ?>
+                <tr>
+                	<td><?php echo $dato ["descripcion"] ?></td>
+                	<td><?php echo $dato ["observaciones"] ?></td>
+                	<td>
+                		<?php
+                		if($dato["opcion_pantalla"]==1){
+    							echo'Admin';
+    					}else{
+    							echo'Limitado';
+    					}
+                		?>            				
+                	</td>
+                	<td>
+                		<?php
+                		if($dato["id_rol"]!="1" && $dato["id_rol"]!="0"){
+    						?>
+    						<a class="btn"  href="<?php echo $this->basePath() ?>/application/permisos/index/<?php echo $dato["id_rol"];?>"><i class="fa fa-plus"></i></a>
+    					<?php
+    					}
+                		?>
+                	</td>
+                	<td>
+                		<?php if($dato["id_rol"]!="0"){ ?>
+                			<a class="btn"  href="<?php echo $this->basePath() ?>/application/rolesusuario/index/<?php echo $dato["id_rol"];?>"><i class="fa fa-plus"></i></a>
+                		<?php
+                		}
+                		if($dato["id_rol"]!="1" && $dato["id_rol"]!="0"){
+                		?>
+                			<a class="btn"  href="<?php echo $this->basePath() ?>/application/editarroles/index/<?php echo $dato["id_rol"];?>"><i class="fa fa-pencil"></i></a>
+                			<a class="btn"  href="<?php echo $this->basePath() ?>/application/roles/eliminar/<?php echo $dato["id_rol"];?>"><i class="fa fa-trash"></i></a>
+                		<?php
+                		}
+                		?>
+                    </td>
+                </tr>
+            <?php } ?>
+            </tbody>
+        </table>
+	</div>
+</div>
+<script src="<?php echo $GLOBALS["ruta_servidor"] . 'js/ui/jquery-ui.min.js'; ?>"></script>
+<script>
+    $(".rol_edit").click(function() {
+        $(".edit-slide").css("left", "0%");
+    });
+    $(".close-edit").click(function() {
+        $(".edit-slide").css("left", "-100%");
+    });
+    $(".cancel-edit").click(function() {
+        $(".edit-slide").css("left", "-100%");
+    });
+</script>

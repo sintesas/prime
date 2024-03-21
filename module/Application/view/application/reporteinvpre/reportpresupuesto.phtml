@@ -1,0 +1,39 @@
+<?php
+	$output = fopen('php://output', 'w');
+	header('Content-Type: application/csv; charset=utf-8');
+	header('Content-Disposition: attachment; filename=ReporteConvocatoriaEquipo.csv');
+
+	fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
+	fputcsv($output, array("Reporte de convocatorias - Presupuesto"));
+	fputcsv($output, array(""));
+	fputcsv($output, array(""));
+
+	fputcsv($output, array('Proyecto/Propuesta','Nombre proyecto','Código proyecto','Vigencia','Rubro','Recursos de funcionamiento y/o contrapartida en especie','Recursos de inversión y/o contrapartida en efectivo','Recursos de coofinanciación y/o financiación de la entidad externa','Total', 'ID Convocatoria'),";");
+	
+	if(count($this->datos)==0){
+		fputcsv($output, array("No se encontraron resultados que coincidan con sus parámetros de búsqueda."));
+	}else{
+		$u=array();
+		$f=array();
+		foreach($this->datos as $d){
+			$recursos_funcionamiento = (trim($d["recursos_funcionamiento"]) == "") ? '0' : trim($d["recursos_funcionamiento"]);
+			$recursos_inversion = (trim($d["recursos_inversion"]) == "") ? '0' : trim($d["recursos_inversion"]);
+			$recursos_cofinanciacion = (trim($d["recursos_cofinanciacion"]) == "") ? '0' : trim($d["recursos_cofinanciacion"]);
+
+			$u=array(
+				'proyecto'=>trim($d["id_proyecto"]),
+				'nombre_proy'=>trim($d["nombre_proy"]),
+				'codigo_proy'=>trim($d["codigo_proy"]),
+				'periodo'=>trim($d["periodo"]),
+				'id_rubro'=>trim($d["id_rubro"]),
+				'recursos_funcionamiento'=>$recursos_funcionamiento,
+				'recursos_inversion'=>$recursos_inversion,
+				'recursos_cofinanciacion'=>$recursos_cofinanciacion,
+				'total'=>trim($d["total"]),
+				'id_convocatoria'=>trim($d["id_convocatoria"]),
+			);
+			fputcsv($output, $u,";");
+		}
+	}
+	fclose($output);
+?>

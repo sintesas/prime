@@ -1,0 +1,59 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+    echo $this->titulo;
+    ?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<div class="four columns">
+					<a
+						href="<?php echo $this->basePath() ?>/application/editarproyecto/index/<?php echo $this->id ?>">
+						<i class="icon-arrow-left"></i> Regresar
+					</a>
+				<?php
+    $form = $this->form;
+    $form->prepare();
+    
+    $form->setAttributes(array(
+        'action' => $this->url . '/application/informes/index/' . $this->id,
+        'method' => 'post'
+    ));
+    
+    echo $this->form()->openTag($form);
+    echo '<p>';
+    echo $this->formlabel($form->get('informe'));
+    echo $this->formelement($form->get('informe'));
+    echo '<p>';
+    echo $this->formlabel($form->get('fecha_limite'));
+    echo $this->formelement($form->get('fecha_limite'));
+    echo '<p>';
+
+    echo $this->formlabel($form->get('image-file'));
+	echo $this->formelement($form->get('image-file'));
+	echo '<p>';
+    
+    echo $this->formelement($form->get('submit'));
+    echo '<br>';
+    
+    echo $this->form()->closeTag($form);
+    echo '</fieldset>';
+    ?>
+				<br>
+
+				<?php
+    
+    ?>
+</div>
+			</div>
+		</div>
+	</div>
+</div>

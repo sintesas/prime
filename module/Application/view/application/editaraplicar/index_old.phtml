@@ -1,0 +1,688 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+            				    <?php echo $this->titulo; ?>
+            				</h3>
+						</div>
+					</div>
+				</div>
+				<div class="four columns">
+				    <script type="text/javascript">
+
+				    function myFunction() {
+					    alert('Entro!')
+                        var lineaInv = document.getElementById("id_linea_inv");
+                    
+                        for (i = 0; i < lineaInv.length; i++) {
+
+                            if(lineaInv.options[i].value != ''){
+                            	var option = lineaInv.options[i]; // item
+                                
+                                var id = lineaInv.options[i].value.split(/-/); // extrae el id del padre    
+                                var idPadreValorFlexible = id[1];
+                        
+                                //valida que el item de la iteracion es del grupo de informaci�n seleccionado
+                                if(idPadreValorFlexible == document.getElementById("id_campo").value){
+                                    option.style.display = "block";
+                                }else{
+                                	option.style.display = "none";
+                                }
+                        
+                                // Selecciona el placeholder por defecto en linea
+                                if(option.text == "Seleccione"){
+                                	option.selected = true;
+                                }
+                            }
+                        }
+				    }
+				    
+				    </script>
+				<?php
+    $form = $this->form;
+    $form->prepare();
+    
+    $form->setAttributes(array(
+        'onchange' => $this->url . '/application/editaraplicar/index/' . $this->id,
+        'method' => 'post'
+    ));
+    echo $this->form()->openTag($form);
+    echo '<h6>';
+    echo $this->flashMessenger()->render();
+    echo '</h6>';
+    
+    echo '<p>';
+    echo $this->formlabel($form->get('id_campo'));
+    echo $this->formelement($form->get('campo'));
+    echo $this->formelement($form->get('id_campo'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_linea_inv'));
+    echo $this->formelement($form->get('linea_inv'));
+    echo $this->formelement($form->get('id_linea_inv'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_unidad_academica'));
+    echo $this->formelement($form->get('unidad_academica'));
+    echo $this->formelement($form->get('id_unidad_academica'));
+    echo '<p>';
+    echo $this->formlabel($form->get('nombre_proy'));
+    echo $this->formelement($form->get('nombre_proy'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_investigador'));
+    echo $this->formelement($form->get('id_investigador'));
+    echo '<p>';
+    echo $this->formlabel($form->get('duracion'));
+    echo $this->formelement($form->get('duracion'));
+    echo $this->formelement($form->get('periodo'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_categoria'));
+    echo $this->formelement($form->get('categoria'));
+    echo $this->formelement($form->get('id_categoria'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_programa_inv'));
+    echo $this->formelement($form->get('programa_inv'));
+    echo $this->formelement($form->get('id_programa_inv'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_area_tematica'));
+    echo $this->formelement($form->get('area_tematica'));
+    echo $this->formelement($form->get('id_area_tematica'));
+    echo '<p>';
+    echo $this->formlabel($form->get('recursos_funcion'));
+    echo $this->formelement($form->get('recursos_funcion_desc'));
+    echo $this->formelement($form->get('recursos_funcion'));
+    echo '<p>';
+    echo $this->formlabel($form->get('recursos_inversion'));
+    echo $this->formelement($form->get('recursos_inversion_desc'));
+    echo $this->formelement($form->get('recursos_inversion'));
+    echo '<p>';
+    echo $this->formlabel($form->get('total_financia'));
+    echo $this->formelement($form->get('total_financia_desc'));
+    echo $this->formelement($form->get('total_financia'));
+    echo '<p>';
+    echo $this->formlabel($form->get('total_proy'));
+    echo $this->formelement($form->get('total_proy_desc'));
+    echo $this->formelement($form->get('total_proy'));
+    echo '<p>';
+    echo $this->formlabel($form->get('resumen_ejecutivo'));
+    echo $this->formelement($form->get('resumen_ejecutivo'));
+    echo '<p>';
+    echo $this->formlabel($form->get('objetivo_general'));
+    echo $this->formelement($form->get('objetivo_general'));
+    echo $this->form()->closeTag($form);
+    
+    ?>
+	<br>
+					<h6>Para terminar de aplicar a la convocatoria debe ingresar
+						completamente la informacion requerida en esta seccion.</h6>
+
+					<fieldset>
+						<legend>Cronograma del Proyecto</legend>
+        <?php
+        if ($this->ver != 'ver') {
+            if ($this->des != 0) {
+                ?>
+			     <a class="btn"
+							href="<?php echo $this->basePath() ?>/application/cronogramaap/index/<?php echo id;?>">Agregar
+							actividad</a>
+                <?php
+            }
+        }
+        ?>
+			<br> <br>
+			<?php
+
+echo '<table class="table">';
+echo '<thead>';
+echo '<th>Nombre Actividad</th>';
+echo '<th>Descripción</th>';
+echo '<th>Objetivo</th>';
+echo '<th>Fecha Inicio</th>';
+echo '<th>Fecha Cierre</th>';
+echo '<th>Eliminar Actividad</th>';
+echo '</thead>';
+echo '<tbody>';
+
+foreach ($this->Cronograma as $crono) {
+    echo '<tr>';
+    echo '<td>';
+    echo $crono["nombre_actividad"];
+    echo '</td>';
+    echo '<td>';
+    echo $crono["descripcion"];
+    echo '</td>';
+    echo '<td>';
+    echo $crono["objetivo"];
+    echo '</td>';
+    echo '<td>';
+    echo $crono["fecha_inicio"];
+    
+    echo '</td>';
+    echo '<td>';
+    echo $crono["fecha_cierre"];
+    echo '</td>';
+    echo '<td>';
+    if ($this->ver != 'ver') {
+        ?>
+					
+				<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/cronogramaap/del/<?php echo $crono["id_cronograma"];?>/<?php echo $crono["id_aplicar"];?>">Eliminar
+							Actividad</a>
+
+				<?php
+    }
+    echo '</td>';
+    echo '</tr>';
+}
+
+echo '</tr>';
+echo '</table>';
+?>
+<?php
+
+if ($this->Tablafinper != null) {
+    echo '<br>';
+    $per = 0;
+    
+    setlocale(LC_MONETARY, 'en_US');
+    ?>
+			<h5 class="sidebartitle">Tabla financiación</h5>
+				<?php
+    
+    foreach ($this->Tablafinper as $tbper) {
+        $per = $tbper["periodo"];
+    }
+    
+    for ($x = 1; $x <= $per; $x ++) {
+        echo '<table class="table">';
+        echo '<thead>';
+        echo '<th colspan="6">TABLA FINANCIACION (VIGENCIA ' . $x . ')</th>';
+        echo '</thead>';
+        echo '<tbody>';
+        echo '<tr align="center" valign="middle">';
+        echo '<th rowspan="2">RUBROS</th>';
+        echo '<th colspan="3">FUENTES</th>';
+        echo '<th rowspan="2">TOTAL</th>';
+        echo '</tr>';
+        echo '<tr align="center" valign="middle">';
+        echo '<th>RECURSOS DE FUNCIONAMIENTO</th>';
+        echo '<th>RECURSOS DE INVERSIÓN</th>';
+        echo '<th>RECURSOS DE COOFINANCIACIÓN</th>';
+        echo '</tr>';
+        $sum_78 = 0;
+        $sum_79 = 0;
+        $sum_80 = 0;
+        
+        foreach ($this->pr as $prueba) {
+            if ($prueba["periodo"] == $x) {
+                echo '<tr align="center" valign="middle">';
+                echo '<td>';
+                foreach ($this->valflex as $vf) {
+                    if ($vf["id_valor_flexible"] == $prueba["id_rubro"]) {
+                        echo $vf["descripcion_valor"];
+                    }
+                }
+                echo '</td>';
+                echo '<td>';
+                $sum_78 = $sum_78 + $prueba["recursos_funcionamiento"];
+                // ORIGINAL//echo '<center>'.money_format('%.0n',floor($prueba["recursos_funcionamiento"]));
+                echo '<center>' . floor($prueba["recursos_funcionamiento"]); // JLOPEZ
+                echo '<br>';
+                if ($prueba["id_funcionamiento"] != '0') {
+                    if ($this->ver != 'ver') {
+                        ?>
+					<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/editartablafin/index/<?php echo $prueba["id_funcionamiento"];?>/<?php echo $prueba["id_aplicar"];?>">Editar
+							Valor</a>
+
+				<?php
+                    }
+                }
+                echo '</td>';
+                echo '<td>';
+                $sum_79 = $sum_79 + $prueba["recursos_inversion"];
+                // ORIGINAL//echo '<center>'.money_format('%.0n',floor($prueba["recursos_inversion"]));
+                echo '<center>' . floor($prueba["recursos_inversion"]); // JLOPEZ
+                echo '<br>';
+                if ($prueba["id_inversion"] != '0') {
+                    if ($this->ver != 'ver') {
+                        ?>
+					<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/editartablafin/index/<?php echo $prueba["id_inversion"];?>/<?php echo $prueba["id_aplicar"];?>">Editar
+							Valor</a>
+
+				<?php
+                    }
+                }
+                echo '</td>';
+                echo '<td>';
+                $sum_80 = $sum_80 + $prueba["recursos_cofinanciacion"];
+                // ORIGINAL//echo '<center>'.money_format('%.0n',floor($prueba["recursos_cofinanciacion"]));
+                echo '<center>' . floor($prueba["recursos_cofinanciacion"]); // JLOPEZ
+                echo '<br>';
+                if ($prueba["id_cofinanciacion"] != '0') {
+                    if ($this->ver != 'ver') {
+                        ?>
+					<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/editartablafin/index/<?php echo $prueba["id_cofinanciacion"];?>/<?php echo $prueba["id_aplicar"];?>">Editar
+							Valor</a>
+
+				<?php
+                    }
+                }
+                echo '</td>';
+                echo '<td>';
+                // ORIGINAL//echo money_format('%.0n',floor($prueba["total"]));
+                echo floor($prueba["total"]); // JLOPEZ
+                echo '</td>';
+                echo '</tr>';
+            }
+        }
+        
+        echo '<tr>';
+        echo '<th>TOTAL</th>';
+        echo '<th>';
+        // ORIGINAL//echo money_format('%.0n',floor($sum_78));
+        echo floor($sum_78); // JLOPEZ
+        echo '</th>';
+        echo '<th>';
+        // ORIGINAL//echo money_format('%.0n',floor($sum_79));
+        echo floor($sum_79); // JLOPEZ
+        echo '</th>';
+        echo '<th>';
+        // ORIGINAL//echo money_format('%.0n',floor($sum_80));
+        echo floor($sum_80); // JLOPEZ
+        echo '</th>';
+        echo '<th>';
+        // ORIGINAL//echo money_format('%.0n',floor($sum_78+$sum_80+$sum_79));
+        echo floor($sum_78 + $sum_80 + $sum_79); // JLOPEZ
+        echo '</th>';
+        echo '</tr>';
+        echo '</tbody>';
+        echo '</table>';
+        echo '<br>';
+    }
+    
+    echo '<table class="table">';
+    echo '<thead>';
+    
+    echo '<TH>Descripcion</TH>';
+    echo '<TH>Valores total</TH>';
+    echo '</thead>';
+    echo '<tbody>';
+    foreach ($this->sumfuente as $fu) {
+        echo '<tr align="center" valign="middle">';
+        echo '<td>';
+        foreach ($this->valflex as $vf) {
+            if ($vf["id_valor_flexible"] == $fu["id_fuente"]) {
+                echo $vf["descripcion_valor"];
+            }
+        }
+        echo '</td>';
+        
+        echo '<td>';
+        // ORIGINAL//echo money_format('%.0n',floor($fu["total"]));
+        echo floor($fu["total"]); // JLOPEZ
+        echo '</td>';
+        echo '</tr>';
+    }
+    
+    foreach ($this->sumrubro as $ru) {
+        echo '<tr align="center" valign="middle">';
+        echo '<td>';
+        foreach ($this->valflex as $vf) {
+            if ($vf["id_valor_flexible"] == $ru["id_rubro"]) {
+                echo $vf["descripcion_valor"];
+            }
+        }
+        echo '</td>';
+        
+        echo '<td>';
+        // ORIGINAL//echo money_format('%.0n',floor($ru["total"]));
+        echo floor($ru["total"]); // JLOPEZ
+        echo '</td>';
+        echo '</tr>';
+    }
+    echo '<tr>';
+    echo '<th>TOTAL DEL PROYECTO</th>';
+    echo '<th>';
+    foreach ($this->sumtotal as $to) {
+        // ORIGINAL//echo money_format('%.0n',floor($to["total"]));
+        echo floor($to["total"]); // JLOPEZ
+    }
+    
+    echo '</th>';
+    echo '</tr>';
+    
+    echo '</tbody>';
+    echo '</table>';
+}
+?>
+
+<br>
+					</fieldset>
+
+
+
+					<fieldset>
+						<legend>Grupos de Investigación Participantes </legend>
+						<h6>Usted puede agregar cuantos grupos desee, mediante este
+							vinculo.</h6>
+<?php
+if ($this->ver != 'ver') {
+    ?>
+				<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/gruposparticipantes/index/<?php echo $id;?>">Agregar
+							Grupo</a>
+<?php
+}
+?>
+				<br> <br>
+				<?php
+    
+    echo '<table class="table">';
+    echo '<thead>';
+    echo '<th>Nombre del Grupo</th>';
+    echo '<th>Eliminar Grupo</th>';
+    echo '</tr>';
+    
+    foreach ($this->grupar as $grupar) {
+        echo '</thead>';
+        echo '<tbody>';
+        echo '<td>';
+        foreach ($this->gruinv as $grui) {
+            if ($grupar["id_grupo"] == $grui["id_grupo_inv"]) {
+                echo $grui["nombre_grupo"];
+            }
+        }
+        echo '</td>';
+        echo '<td>';
+        if ($this->ver != 'ver') {
+            ?>
+					<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/gruposparticipantes/del/<?php echo $grupar["id_grupo_rel"];?>/<?php echo $grupar["id_aplicar"];?>">Eliminar
+							Grupo</a>
+
+				<?php
+        }
+        echo '</td>';
+        echo '</tr>';
+    }
+    
+    echo '</tr>';
+    echo '</table>';
+    ?>
+		<br>
+					</fieldset>
+
+					<fieldset>
+						<legend>Tabla de Equipo de Trabajo </legend>
+
+						<h6>Para ingresar los datos faltantes (Rol, Numero de Hora
+							solicitadas y Tipo de Dedicacion) Ingrese al vinculo Editar
+							Integrante</h6>
+<?php
+if ($this->ver != 'ver') {
+    ?>
+				<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/tablaequipo/index/<?php echo $id;?>">Agregar
+							Integrante</a>
+<?php
+}
+?>
+				<br> <br>
+				<?php
+    
+    echo '<table class="table">';
+    echo '<thead>';
+    echo '<th>Nombre Completo</th>';
+    echo '<th>Documento de Identidad</th>';
+    echo '<th>Unidad Académica</th>';
+    echo '<th>Dependencia Académica</th>';
+    echo '<th>Rol en el proyecto</th>';
+    echo '<th>Tipo de Vinculación</th>';
+    echo '<th>Tipo de Dedicación</th>';
+    echo '<th>Horas solicitadas</th>';
+    echo '<th>Editar integrante</th>';
+    echo '<th>Eliminar integrante</th>';
+    echo '</thead>';
+    echo '<tbody>';
+    
+    foreach ($this->tablae as $tablae) {
+        echo '<tr>';
+        foreach ($this->usua as $us) {
+            if ($us["id_usuario"] == $tablae["id_integrante"]) {
+                $r = $us["documento"];
+                $nom = $us["primer_nombre"] . ' ' . $us["primer_apellido"];
+                $uni = $us["id_unidad_academica"];
+                $dep = $us["id_dependencia_academica"];
+                $tipv = $us["id_tipo_vinculacion"];
+            }
+        }
+        echo '<td>';
+        echo $nom;
+        echo '</td>';
+        echo '<td>';
+        echo $r;
+        echo '</td>';
+        echo '<td>';
+        foreach ($this->valflex as $vf) {
+            if ($uni == $vf["id_valor_flexible"]) {
+                echo $vf["descripcion_valor"];
+            }
+        }
+        echo '</td>';
+        echo '<td>';
+        foreach ($this->valflex as $vf) {
+            if ($dep == $vf["id_valor_flexible"]) {
+                echo $vf["descripcion_valor"];
+            }
+        }
+        echo '</td>';
+        echo '<td>';
+        foreach ($this->valflex as $vf) {
+            if ($tablae["id_rol"] == $vf["id_valor_flexible"]) {
+                echo $vf["descripcion_valor"];
+            }
+        }
+        echo '</td>';
+        echo '<td>';
+        foreach ($this->valflex as $vf) {
+            if ($tipv == $vf["id_valor_flexible"]) {
+                echo $vf["descripcion_valor"];
+            }
+        }
+        echo '</td>';
+        echo '<td>';
+        foreach ($this->valflex as $vf) {
+            if ($tablae["id_tipo_dedicacion"] == $vf["id_valor_flexible"]) {
+                echo $vf["descripcion_valor"];
+            }
+        }
+        
+        echo '</td>';
+        echo '<td>';
+        echo $tablae["horas_sol"];
+        echo '</td>';
+        
+        echo '<td>';
+        
+        if ($this->ver != 'ver') {
+            ?>
+					<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/editartablae/index/<?php echo $tablae["id_integrantes"];?>/<?php echo $tablae["id_aplicar"];?>">Editar
+							Integrante</a>
+
+				<?php
+            echo '</td>';
+            echo '<td>';
+            ?>
+					<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/tablaequipo/del/<?php echo $tablae["id_integrantes"];?>/<?php echo $tablae["id_aplicar"];?>">Eliminar
+							Integrante</a>
+
+				<?php
+        }
+        echo '</td>';
+        echo '</tr>';
+    }
+    
+    echo '</tr>';
+    echo '</table>';
+    ?>
+		<br>
+					</fieldset>
+					<fieldset>
+						<legend>Campos Adicionales</legend>
+
+				<?php
+    
+    echo '<table class="table">';
+    echo '<thead>';
+    echo '<th>Título Campo</th>';
+    echo '<th>Valor y/o Descripción del campo</th>';
+    echo '<th>Editar Campo</th>';
+    echo '</thead>';
+    echo '<tbody>';
+    
+    foreach ($this->Camposaddproy as $caproy) {
+        echo '<tr>';
+        echo '<td>';
+        echo $caproy["titulo"];
+        echo '</td>';
+        echo '<td>';
+        echo $caproy["valor"];
+        echo '</td>';
+        echo '<td>';
+        if ($this->ver != 'ver') {
+            ?>
+					<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/camposaddproy/index/<?php echo $caproy["id_campo_add"];?>/<?php echo $this->id; ?>">Editar
+							Campo</a>
+
+				<?php
+        }
+        echo '</td>';
+        echo '</tr>';
+    }
+    
+    echo '</tr>';
+    echo '</table>';
+    ?>
+<br>
+					</fieldset>
+					<fieldset>
+						<legend>Documentos Requeridos del Proyecto</legend>
+
+
+				<?php
+    
+    echo '<table class="table">';
+    echo '<thead>';
+    echo '<th>Título del documento</th>';
+    echo '<th>Archivo</th>';
+    echo '<th>Fecha Límite</th>';
+    echo '<th>Adjuntar/editar Achivo</th>';
+    echo '</thead>';
+    echo '<tbody>';
+    
+    foreach ($this->docreq as $dreq) {
+        echo '<tr>';
+        echo '<td>';
+        echo $dreq["descripcion"];
+        echo '</td>';
+        
+        echo '<td>';
+        if ($dreq["archivo"] != null) {
+            ?>
+				<a
+							href="<?php echo $this->basePath()?>/application/requisitosapdoc/bajar/<?php echo $dreq["id_requisitoap_doc"];?>">Bajar
+							archivo : </a><?php echo $dreq["archivo"]; ?> 
+				<?php
+        }
+        echo '</td>';
+        echo '<td>';
+        echo $dreq["fecha_limite"];
+        echo '</td>';
+        echo '<td>';
+        if ($this->ver != 'ver') {
+            $fecha = date("Y") . '-' . date("m") . '-' . date("d");
+            
+            if ($fecha <= $dreq["fecha_limite"] || $this->menu == 1) {
+                ?>
+					<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/requisitosapdoc/index/<?php echo $dreq["id_requisitoap_doc"];?>/<?php echo $dreq["id_aplicar"];?>">Adjuntar/Editar
+							archivo</a>
+
+				<?php
+            } else {
+                echo 'La fecha limite termino.';
+            }
+        }
+        echo '</td>';
+        echo '</tr>';
+    }
+    
+    echo '</tr>';
+    echo '</table>';
+    ?>
+</fieldset>
+					<br> <br>
+
+					<fieldset>
+						<legend>Adjuntar Propuesta de Investigación</legend>
+						<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/propuestainv/index/<?php echo id;?>">Agregar
+							Propuesta</a> <br> <br>
+                    <?php
+                    echo '<table class="table">';
+                    echo '<thead>';
+                    echo '<th>Nombre Archivo</th>';
+                    echo '<th>Eliminar Archivo</th>';
+                    echo '</thead>';
+                    echo '<tbody>';
+                    
+                    foreach ($this->arch as $arch) {
+                        echo '<tr>';
+                        echo '<td>';
+                        ?>
+                    <a
+							href="<?php echo $this->basePath()?>/application/propuestainv/bajar/<?php echo $arch["id_archivo"];?>">Bajar
+							archivo : </a><?php
+                        echo $arch["archivo"];
+                        echo '</td>';
+                        echo '<td>';
+                        ?>
+                    <a class="btn"
+							href="<?php echo $this->basePath() ?>/application/propuestainv/del/<?php echo $arch["id_archivo"];?>/<?php echo $arch["id_aplicar"];?>">Eliminar
+							Archivo</a>
+                    
+                    <?php
+                        echo '</td>';
+                        echo '</tr>';
+                    }
+                    
+                    echo '</tr>';
+                    echo '</table>';
+                    
+                    ?>
+                    </fieldset>
+                    <?php
+                    echo $this->form()->openTag($form);
+                    echo '</br>';
+                    echo '<p>';
+                    
+                    if ($this->ver != 'ver') {
+                        echo $this->formelement($form->get('submit'));
+                    }
+                    echo '<br>';
+                    echo $this->form()->closeTag($form);
+                    ?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,224 @@
+<style>
+    textarea {
+        height: 70px;
+        width: 100%;
+        max-width: 100%;
+
+    }
+    .tablefin th {
+        border-right: 1px solid white !important;
+    }
+    .filter-cons {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .filter-cons-left {float: left;}
+    .filter-cons-right {float:right;}
+    .filter-cons .btn {width: 275px;}
+    .filter-cons-right div.btn {max-width: 230px !important;width: 230px;}
+</style>
+<meta charset="UTF-8">
+<div class="edit-slide transition">
+    <div class="close-edit" id="titulo_top"><i class="fa fa-times" aria-hidden="true"></i></div>
+    <div class="content-edit-slide">
+        <div class="titulo_top"><h3><?php echo $this->titulo; ?></h3></div>
+        <a href="<?php echo $this->basePath() ?>/application/editarproyecto/index/<?php echo $this->id;?>"><i class="icon-arrow-left"></i> Regresar</a><br><br>
+        <?php
+        $form = $this->form;
+        $form->prepare();
+        $form->setAttributes ( array (
+            'action' => $this->url . '/application/tablafinp/index/' . $this->id,
+            'method' => 'post' 
+        ) );
+        echo $this->form ()->openTag ( $form );
+        echo '<h6>';
+        echo $this->flashMessenger ()->render ();
+        echo '</h6>';
+        echo $this->formlabel($form->get('id_rubro'));
+        echo $this->formelement($form->get('id_rubro'));
+        echo $this->formlabel($form->get('id_fuente'));
+        echo $this->formelement($form->get('id_fuente'));
+        echo $this->formlabel($form->get('valor'));
+        echo $this->formelement($form->get('valor'));
+        echo $this->formlabel($form->get('periodo'));
+        echo $this->formelement($form->get('periodo'));
+        echo $this->formlabel($form->get(strip_tags(htmlspecialchars_decode('descripcion'))));
+        echo $this->formelement($form->get(strip_tags(htmlspecialchars_decode('descripcion'))));
+        echo $this->formlabel($form->get(trim('observaciones')));
+        echo $this->formelement($form->get(Trim('observaciones')));
+        echo '<div class="content-edit-slide-button">';            
+        echo '<div class="col">';
+        echo $this->formelement ( $form->get ( 'submit' ) );
+        echo '</div>';
+        echo '<div class="col">';       
+        ?>
+        <div class="btn1 cancel-edit">Cancelar</div>
+        <?php
+        echo '</div>';
+        echo '</div>';
+        echo $this->form()->closeTag($form);       
+        ?>
+        <a href="#titulo_top">Ir arriba</a>
+    </div>
+</div>
+<?php
+include("public/menu.php");
+require_once("public/rutas.php");
+?>
+<link rel="stylesheet" href="<?php echo $GLOBALS["ruta_servidor"] . 'css/estilos_arriba/estilos_arriba.css'; ?>">
+<link rel="stylesheet" href="<?php echo $GLOBALS["ruta_servidor"] . 'js/ui/jquery-ui.min.css'; ?>">
+<link rel="stylesheet" href="<?php echo $GLOBALS["ruta_servidor"] . 'js/ui/jquery-ui.theme.min.css'; ?>">
+<link rel="stylesheet" href="<?php echo $GLOBALS["ruta_servidor"] . 'js/ui/jquery-ui.structure.min.css'; ?>">
+<div class="col col100">
+    <div class="filter-cons">
+        <div class="filter-cons-left"><a class="btn" href="<?php echo $this->basePath() ?>/application/editarproyecto/index/<?php echo $this->id;?>"><i class="icon-arrow-left"></i> Regresar</a></div>            
+        <div class="filter-cons-right">
+            <div class="btn transition pointer cons_edit"><i class="fa fa-plus" style="margin-right: 5px;"></i>Agregar financiación</div>
+        </div>
+    </div>    
+</div>
+<div class="col col100 noshadow">
+    <div style='overflow-y:auto; max-height:4000px; width: 100%;'>
+        <?php
+        echo '<table class="table tablefin" style="width: 100%; max-width: 100%;">';
+        echo '<thead>';
+        echo '<tr align="center" valign="middle">';
+        echo '<th rowspan="2">RUBROS</th>';
+        echo '<th colspan="3">FUENTES</th>';
+        echo '<th rowspan="2">TOTAL</th>';
+        echo '</tr>';
+        echo '<tr align="center" valign="middle">';
+        echo '<th>RECURSOS DE FUNCIONAMIENTO Y/O CONTRAPARTIDA EN ESPECIE</th>';
+        echo '<th>RECURSOS DE INVERSION Y/O RECURSOS ENTIDADES EXTERNAS</th>';
+        echo '<th>RECURSOS DE COOFINANCIACION Y/O FINANCIACION DE LA ENTIDAD EXTERNA</th>';
+        echo '</tr>';
+        echo '</thead>';
+        echo '<tbody>';
+
+        $sum_78 = 0;
+        $sum_79 = 0;
+        $sum_80 = 0;
+        $s = 0;
+        $r = 0;
+        $h = 0;
+        foreach ($this->Tablafinrubro as $tbrubro) {
+            
+            echo '<tr align="center" valign="middle">';
+            echo '<td>';
+            foreach ($this->valflex as $vf) {
+                if ($vf["id_valor_flexible"] == $tbrubro["id_rubro"]) {
+                    echo $vf["descripcion_valor"];
+                }
+            }
+            
+            echo '</td>';
+            foreach ($this->Tablafinproy as $tbproy) {
+                
+                if ($tbproy["id_rubro"] == $tbrubro["id_rubro"]) {
+                    if ($tbproy["id_fuente"] == 78) {
+                        $r = 1;
+                        echo '<td>';
+                        echo '<center>' . number_format($tbproy["valor"],2,",",".");
+                        echo '<br>';
+                        if ($this->ver != 'ver') {
+                            ?>
+                        <a class="btn"
+                                href="<?php echo $this->basePath() ?>/application/editartablafinp/index/<?php echo $tbproy["id_financiacion"];?>/<?php echo $id;?>">Editar
+                                Valor</a>
+
+                    <?php
+                        }
+                        echo '</td>';
+                        $sum_78 = $sum_78 + $tbproy["valor"];
+                    }
+                    
+                    if ($tbproy["id_fuente"] == 79) {
+                        if ($r != 1) {
+                            echo '<td>';
+                            echo '</td>';
+                        }
+                        $s = 1;
+                        echo '<td>';
+                        echo '<center>' . number_format($tbproy["valor"],2,",",".");
+                        echo '<br>';
+                        if ($this->ver != 'ver') {
+                            ?>
+                        <a class="btn"
+                                href="<?php echo $this->basePath() ?>/application/editartablafinp/index/<?php echo $tbproy["id_financiacion"];?>/<?php echo $id;?>">Editar
+                                Valor</a>
+
+                    <?php
+                            
+                            $sum_79 = $sum_79 + $tbproy["valor"];
+                            echo '</td>';
+                        }
+                    }
+                    
+                    if ($tbproy["id_fuente"] == 80) {
+                        $h = 1;
+                        if ($s != 1) {
+                            echo '<td>';
+                            echo '</td>';
+                        }
+                        if ($r != 1) {
+                            echo '<td>';
+                            echo '</td>';
+                        }
+                        echo '<td>';
+                        echo '<center>' . number_format($tbproy["valor"],2,",",".");
+                        echo '<br>';
+                        if ($this->ver != 'ver') {
+                            ?>
+                        <a class="btn"
+                                href="<?php echo $this->basePath() ?>/application/editartablafinp/index/<?php echo $tbproy["id_financiacion"];?>/<?php echo $id;?>">Editar
+                                Valor</a>
+
+                    <?php
+                        }
+                        echo '</td>';
+                        $sum_80 = $sum_80 + $tbproy["valor"];
+                    }
+                }
+            }
+            
+            if ($h != 1) {
+                echo '<td>';
+                
+                echo '</td>';
+            }
+            echo '<td>';
+            
+            echo '</td>';
+            echo '</tr>';
+            echo '</tbody>';
+        }
+        $sumTotal = number_format(($sum_78 + $sum_80 + $sum_79),2,",",".");
+        echo "<thead>";
+        echo '<tr align="center" valign="middle">';
+        echo '<th>TOTAL</th>';
+        echo '<th>';
+        echo number_format($sum_78,2,",",".");
+        echo '</th>';
+        echo '<th>';
+        echo number_format($sum_79,2,",",".");
+        echo '</th>';
+        echo '<th>';
+        echo number_format($sum_80,2,",",".");
+        echo '</th>';
+        echo '<th>';
+        echo $sumTotal;
+        echo '</th>';
+        echo '</tr>';
+        echo "</thead>";
+        echo '</table>';
+        ?>
+    </div>
+</div>
+<script>
+    $(".cons_edit").click(function() {
+        $(".edit-slide").css("left", "0%");
+    });
+    $(".close-edit").click(function() {
+        $(".edit-slide").css("left", "-100%");
+    });
+    $(".cancel-edit").click(function() {
+        $(".edit-slide").css("left", "-100%");
+    });
+</script>

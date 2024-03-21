@@ -1,0 +1,143 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+<div class="row2">
+	<div class="nine3 columns">
+		<div id="centersectiontitle">
+			<div class="twelve columns">
+				<div class="sidebartitle"><h3>
+				<?php
+					echo $this->titulo;
+				?>
+				</h3>
+			</div>
+		</div>
+	</div>
+
+<div class="twelve columns">
+				<?php $form = $this->form; $form->prepare();
+				echo $this->form()->openTag($form);
+				echo '<h6>';
+				echo $this->flashMessenger()->render();
+				echo '</h6>';
+				echo '<p>';
+				echo $this->formlabel($form->get('id_tipo_sol'));
+				echo $this->formelement($form->get('id_tipo_sol'));
+				echo '<p>';
+				echo $this->formlabel($form->get('codigo_proy'));
+				echo $this->formelement($form->get('codigo_proy'));
+
+				echo '<p>';
+				echo $this->formlabel($form->get('justificacion'));
+				echo $this->formelement($form->get('justificacion'));
+				echo '<p>';
+				echo $this->formlabel($form->get('image-file'));
+				echo $this->formelement($form->get('image-file'));
+				echo '<p>';
+				echo $this->formelement($form->get('submit'));
+				echo $this->form()->closeTag($form);
+echo '<br>';
+echo '<br>';
+echo '<table class="table" style="width: 100%; max-width: 2000px";>';
+
+echo '<thead>';
+
+echo '<th style="width:15%;">Tipo Solicitud</th>';
+echo '<th style="width:5%;">Fecha Solicitud</th>';
+echo '<th style="width:15%;">Código del Proyecto</th>';
+echo '<th style="width:25%;">Justificación</th>';
+echo '<th style="width:5%;">Archivo</th>';
+echo '<th style="width:10%;">Usuario creador</th>';
+echo '<th style="width:50%;">Observaciones</th>';
+echo '<th>Archivo Respuesta</th>';
+echo '<th>Usuario que gestionó la respuesta</th>';
+echo '<th>Estado</th>';
+
+echo '</thead>';
+echo '</tbody>';
+foreach ($this->datos as $dato){
+
+
+if(substr($dato["nueva_fecha"],0,4)==date("Y")){
+
+echo '<tr>';
+foreach ($this->valflex as $vf){
+if($dato["id_tipo_sol"]==$vf["id_valor_flexible"]){
+echo '<td>';
+echo $vf["descripcion_valor"];
+echo'</td>';
+}}
+echo '<td>';
+echo $dato["nueva_fecha"];
+echo'</td>';
+echo '<td>';
+echo $dato["codigo_proy"];
+echo'</td>';
+echo '<td>';
+echo $dato["justificacion"];
+echo'</td>';
+echo '<td>';
+if($dato["archivo"]!=null){
+?>
+
+<a href="<?php echo $this->basePath()?>/application/solicitudes/bajar/<?php echo $dato["id_sol"];?>">Bajar archivo : </a><?php echo $dato["archivo"]; ?> 
+<?php
+}
+echo'</td>';
+
+
+echo '<td>';
+foreach ($this->usuarios as $us){
+if($dato["usuario_crea"]==$us["id_usuario"]){
+echo $us["primer_nombre"].' '.$us["primer_apellido"];
+}}
+echo'</td>';
+
+echo '<td>';
+echo $dato["observaciones"];
+echo'</td>';
+echo '<td>';
+if($dato["archivo_res"]!=null){
+?>
+
+<a href="<?php echo $this->basePath()?>/application/solicitudes/bajar2/<?php echo $dato["id_sol"];?>">Bajar archivo : </a><?php echo $dato["archivo_res"]; ?> 
+<?php
+}
+echo'</td>';
+echo '<td>';
+foreach ($this->usuarios as $us){
+if($dato["usuario_mod"]==$us["id_usuario"]){
+echo $us["primer_nombre"].' '.$us["primer_apellido"];
+}}
+echo'</td>';
+
+echo '<td>';
+if($dato["id_estado"]!=null){
+	if($dato["id_estado"]==1){
+		echo "Enviado";
+	}
+	if($dato["id_estado"]==2){
+		echo "En gestion";
+	}
+	if($dato["id_estado"]==3){
+		echo "Tramitado";
+	}	
+}
+echo'</td>';
+
+
+echo '</tr>';
+}
+}
+echo '</tr>';
+echo '</tbody>';
+echo '</table>';
+
+
+				?>
+
+</div>
+	</div>
+</div>
+
+

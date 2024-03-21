@@ -1,0 +1,253 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+    echo $this->titulo;
+    ?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<div class="four columns">
+				<a
+					href="<?php echo $this->basePath() ?>/application/consultamonitor/index">
+					<i class="icon-arrow-left"></i> Regresar
+				</a>
+				<?php
+    $form = $this->form;
+    $form->prepare();
+    
+    $form->setAttributes(array(
+        'action' => $this->url . '/application/editarmonitor/index/' . $this->id,
+        'method' => 'post'
+    ));
+    echo $this->form()->openTag($form);
+    echo '<h6>';
+    echo $this->flashMessenger()->render();
+    echo '</h6>';
+    
+    echo '<p>';
+    echo $this->formlabel($form->get('id_usuario'));
+    echo $this->formelement($form->get('id_usuario'));
+    echo '<p>';
+    echo $this->formlabel($form->get('num_codigo'));
+    echo $this->formelement($form->get('num_codigo'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_programa_curricular'));
+    echo $this->formelement($form->get('id_programa_curricular'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_facultad'));
+    echo $this->formelement($form->get('id_facultad'));
+    echo '<p>';
+    echo $this->formlabel($form->get('id_proyecto'));
+    echo $this->formelement($form->get('id_proyecto'));
+    echo '<p>';
+    if ($this->menu == 1) {
+        echo $this->formlabel($form->get('observaciones'));
+        echo $this->formelement($form->get('observaciones'));
+        echo '<p>';
+        echo $this->formlabel($form->get('id_estado'));
+        echo $this->formelement($form->get('id_estado'));
+        
+        echo '<p>';
+        
+        if ($this->ver != 'ver') {
+            echo $this->formelement($form->get('submit'));
+        }
+    }
+    echo '<br>';
+    
+    echo $this->form()->closeTag($form);
+    ?>
+				<br>
+
+				<?php
+    
+    ?>
+<fieldset>
+						<legend>Informes y/o Productos del Proyecto/Monitorías</legend>
+<?php
+if ($this->menu == 1) {
+    
+    ?>
+				<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/informesm/index/<?php echo $id;?>">Agregar<br>
+							informe y/o Productos
+						</a>
+<?php
+}
+?>
+				<br>
+						<br>
+				<?php
+    
+    echo '<table class="table">';
+    echo '<thead>';
+    echo '<th>Nombre del Informe</th>';
+    echo '<th>Fecha Límite</th>';
+    echo '<th>Documento del Informe</th>';
+    echo '<th>Estado del Informe</th>';
+    echo '<th>Observaciones</th>';
+    echo '<th>Eliminar Informe</th>';
+    echo '<th>Estado Informe</th>';
+    echo '<th>Adjuntar Informe</th>';
+    echo '</thead>';
+    echo '<tbody>';
+    
+    foreach ($this->Informe as $crono) {
+        if ($crono["id_estado"] == 1) {
+            echo '<tr bgcolor="green">';
+        }
+        if ($crono["id_estado"] == 2) {
+            echo '<tr bgcolor="red">';
+        }
+        if ($crono["id_estado"] == 3) {
+            echo '<tr bgcolor="yellow">';
+        }
+        echo '<td>';
+        echo $crono["informe"];
+        echo '</td>';
+        echo '<td>';
+        echo $crono["fecha_limite"];
+        echo '</td>';
+        echo '<td>';
+        if ($crono["archivo"] != null) {
+            ?>
+				<a
+							href="<?php echo $this->basePath()?>/application/editarinformem/bajar/<?php echo $crono["id_informe"];?>">Bajar
+							archivo : </a><?php echo $crono["archivo"]; ?> 
+				<?php
+        
+}
+        
+        echo '</td>';
+        echo '<td>';
+        $estado = null;
+        if ($crono["id_estado"] == 1) {
+            $estado = 'Cumple';
+        }
+        if ($crono["id_estado"] == 2) {
+            $estado = 'No Cumple';
+        }
+        if ($crono["id_estado"] == 3) {
+            $estado = 'Pendiente';
+        }
+        
+        echo $estado;
+        echo '</td>';
+        echo '<td>';
+        echo $crono["observaciones"];
+        echo '</td>';
+        echo '<td>';
+        
+        if ($this->menu == 1) {
+            
+            ?>
+					<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/informesm/del/<?php echo $crono["id_informe"];?>/<?php echo $crono["id_proyecto"];?>">Eliminar
+							Informe</a>
+
+				<?php
+        }
+        echo '</td>';
+        echo '<td>';
+        
+        if ($this->menu == 1) {
+            
+            ?>
+					<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/editarinformem/index/<?php echo $crono["id_informe"];?>/<?php echo $crono["id_proyecto"];?>/n">Estado
+							Informe</a>
+
+				<?php
+        }
+        echo '</td>';
+        echo '<td>';
+        
+        if ($this->estado == 2 || $this->menu == 1) {
+            
+            ?>
+					<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/editarinformem/index/<?php echo $crono["id_informe"];?>/<?php echo $crono["id_proyecto"];?>/s">Adjuntar
+							Informe</a>
+
+				<?php
+        }
+        echo '</td>';
+        echo '</tr>';
+    }
+    
+    echo '</tr>';
+    echo '</table>';
+    ?>
+</fieldset>
+<?php  if($this->menu==1){?>
+<fieldset>
+						<legend>Adjuntar Avales del cierre de la Monitoría</legend>
+<?php  if($this->menu==1){?>
+				<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/actasm/index/<?php echo $id;?>">Agregar
+							Documento</a>
+<?php } ?>
+				<br>
+						<br>
+				<?php
+    echo '<table class="table">';
+    echo '<thead>';
+    echo '<th>Tipo Archivo</th>';
+    echo '<th>Archivo</th>';
+    echo '<th>Nombre Archivo</th>';
+    echo '<th>Eliminar Acta</th>';
+    echo '</thead>';
+    echo '<tbody>';
+    foreach ($this->arch as $arch) {
+        echo '<tr>';
+        echo '<td>';
+        foreach ($this->valflex as $vf) {
+            if ($vf["id_valor_flexible"] == $arch["id_tipo_archivo"]) {
+                echo $vf["descripcion_valor"];
+            }
+        }
+        echo '</td>';
+        echo '<td>';
+        echo $arch["nombre"];
+        echo '</td>';
+        
+        echo '<td>';
+        if ($this->menu == 1) {
+            ?>
+				<a
+							href="<?php echo $this->basePath()?>/application/actasm/bajar/<?php echo $arch["id_archivo"];?>">Bajar
+							archivo : </a><?php echo $arch["archivo"]; ?> 
+				<?php
+        }
+        echo '</td>';
+        echo '<td>';
+        if ($this->menu == 1) {
+            ?>
+					<a class="btn"
+							href="<?php echo $this->basePath() ?>/application/actasm/del/<?php echo $arch["id_archivo"];?>/<?php echo $arch["id_monitor"];?>">Eliminar
+							Archivo</a>
+
+<?php
+}
+	
+				echo'</td>';
+				echo '</tr>';
+				}
+				
+				echo '</tr>';
+				echo '</table>';}
+				?>
+</fieldset>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

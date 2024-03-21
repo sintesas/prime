@@ -1,0 +1,61 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+		<div class="row2">
+			<div class="nine3 columns">
+				<div id="centersectiontitle">
+					<div class="twelve columns">
+						<div class="sidebartitle">
+							<h3>
+				<?php
+    echo $this->titulo;
+    ?>
+				</h3>
+						</div>
+					</div>
+				</div>
+				<div class="six columns">
+				<a
+					href="<?php echo $this->basePath() ?>/application/evaluar/index/<?php echo $this->id2 ?>">
+					<i class="icon-arrow-left"></i> Regresar
+				</a>
+								<?php
+        print_r($this->datos);
+        $form = $this->form;
+        $form->prepare();
+        $form->setAttributes(array(
+            'action' => $this->url . '/application/editarevaluar/index/' . $this->id . '/' . $this->id2 . '/' . $this->id3,
+            'method' => 'post'
+        ));
+        echo $this->form()->openTag($form);
+        echo '<h6>';
+        echo $this->flashMessenger()->render();
+        echo '</h6>';
+        
+        if ($this->id3 == 1) {
+            echo $this->formlabel($form->get('estado'));
+            echo $this->formelement($form->get('estado'));
+            echo '<p>';
+        } else {
+            echo '<p>';
+            echo $this->formlabel($form->get('id_ponderacion2'));
+            echo $this->formelement($form->get('id_ponderacion2'));
+            echo '<p>';
+            echo $this->formlabel($form->get('observaciones'));
+            echo $this->formelement($form->get('observaciones'));
+        }
+        echo '<p>';
+        if ($this->ver != 'ver') {
+            echo $this->formelement($form->get('submit'));
+        }
+        echo '<br>';
+        
+        echo $this->form()->closeTag($form);
+        ?>
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

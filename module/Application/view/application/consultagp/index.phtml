@@ -1,0 +1,382 @@
+<style>
+    .filter-cons input[type="text"],select{
+        width: 100%;
+    }
+    .filter-cons {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .filter-cons-left {float: left;}
+    .filter-cons-right {float:right;}
+    .filter-cons .btn {width: 275px;}
+    .filter-cons .dropdown {display: inline;}
+    .filter-cons .dropdown-menu {width: 300px;top: 32px;padding: 10px;}
+    .dropdown-menu-inner {background: #E5E9F2;padding: 10px;display: inline-block; width: 100%;}
+    .dropdown-menu-right {left:-140px !important;}
+    .user-success { left:-140px !important; }
+</style>
+<?php include("public/menu.php"); ?>
+<div class="col col100">
+    <div class="filter-cons">
+        <div class="filter-cons-left"><h4><?php echo $this->titulo; ?></h4></div>
+        <div class="filter-cons-right">
+            <a class="btn" style="margin-right: 8px;" href="<?php echo $this->basePath() ?>/application/consultagp/index"><i class="fa fa-close" style="margin-right: 5px;"></i>Borrar filtro</a>
+            <div class="dropdown">
+                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="margin-right: 8px;"><i class="fa fa-filter" style="margin-right: 5px;"></i>Filtro</button>
+                <div class="dropdown-menu dropdown-menu-right" onclick="event.stopPropagation()">
+                    <div class="dropdown-menu-inner">
+                        <?php                               
+                        $form = $this->form;
+                        $form->prepare ();
+                        $form->setAttributes(array(
+                            'action' => $this->url.'/application/consultagp/index',
+                            'method' => 'post' 
+                        ));
+                        echo $this->form ()->openTag ( $form );
+                        echo '<h6>'.$this->flashMessenger ()->render ().'</h6>';
+                        echo $this->formlabel($form->get('codigo_proy'));
+                        echo $this->formelement($form->get('codigo_proy'));
+                        echo $this->formlabel($form->get('nombre_proy'));
+                        echo $this->formelement($form->get('nombre_proy'));
+                        echo $this->formlabel($form->get('tipo_proyecto'));
+                        echo $this->formelement($form->get('tipo_proyecto'));
+                        echo $this->formlabel($form->get('nombre_grupo'));
+                        echo $this->formelement($form->get('nombre_grupo'));
+                        echo $this->formlabel($form->get('cod_grupo'));
+                        echo $this->formelement($form->get('cod_grupo'));
+                        echo $this->formlabel($form->get('id_unidad_academica'));
+                        echo $this->formelement($form->get('id_unidad_academica'));
+                        echo $this->formlabel($form->get('id_dependencia_academica'));
+                        echo $this->formelement($form->get('id_dependencia_academica'));
+                        echo $this->formlabel($form->get('id_programa_academico'));
+                        echo $this->formelement($form->get('id_programa_academico'));
+                        echo $this->formelement ( $form->get ( 'submit' ) );
+                        echo $this->form ()->closeTag ( $form );
+                        ?>
+                    </div>                      
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col col100 noshadow">
+    <div style='overflow-y:auto; max-height:4000px; width: 100%;'>
+<?php
+    $band = false;  
+    if($this->consulta==0){
+        if($this->data["nombre_grupo"] || $this->data["cod_grupo"]){
+            //filtro grupos
+            foreach($this->datos as $dat){
+                foreach($this->gproy as $gp){
+                    if($dat["id_grupo_inv"]==$gp["id_grupo"]){
+                        foreach($this->proy as $p){
+                            if($p["id_proyecto"]==$gp["id_proyecto"]){
+                                //echo '<div style="overflow-x:auto;  width: 100%;" >';
+                                //echo '<table class="table " style="width: 100%; max-width: 100%;">';
+                                echo '<div style="overflow-y:auto; max-height:410px; width: 100%;" >';
+                                echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                                echo '<thead>';
+                                echo '<th style="width:10%;">Nombre proyecto</th>';
+                                echo '<th style="width:10%;">URL proyecto</th>';
+                                echo '<th style="width:10%;">Código proyecto</th>';
+                                echo '<th style="width:10%;">Duración</th>';
+                                echo '<th style="width:10%;">Objetivo general</th>';
+                                echo '<th style="width:10%;">Resumen ejecutivo</th>';
+                                echo '<th style="width:10%;">Estado proyecto</th>';
+                                echo '<th style="width:10%;">Nombre grupo / Categoría</th>';
+                                echo '<th style="width:10%;">Unidad académica</th>';
+                                echo '<th style="width:10%;">Dependencia académica</th>';
+                                echo '</tr>';
+                                echo '<tr>';
+                                echo '<td>';
+                                echo $p["nombre_proy"];
+                                echo'</td>';
+                                echo'<td>';
+?>
+                                <a class="btn" href="<?php echo $this->basePath() ?>/application/editarproyecto/index/<?php echo $p["id_proyecto"];?>/1">Abrir Proyecto</a>
+<?php
+                                echo'</td>';
+                                echo '<td>';
+                                echo $p["codigo_proy"];
+                                echo'</td>';
+                                echo '<td>';
+                                if($p["periodo"]=="M"){
+                                    $per="Meses";
+                                }else{
+                                    $per="Semestres";
+                                }
+                                echo $p["duracion"].' '.$per;
+                                echo'</td>';
+                                echo '<td>';
+                                echo $p["objetivo_general"];
+                                echo'</td>';
+                                echo '<td>';
+                                echo $p["resumen_ejecutivo"];
+                                echo'</td>';
+                                echo '<td>';
+                                    if($p["id_estado"] == 1){
+                                        echo "Creado"; 
+                                    }else if($p["id_estado"] == 2){
+                                        echo "Aprobado"; 
+                                    }else if($p["id_estado"] == 3){
+                                        echo "Cerrado"; 
+                                    }else if($p["id_estado"] == 4){
+                                        echo "Archivado"; 
+                                    }
+                                echo'</td>';
+                                echo '<td>';
+                                echo '<table style="border-style: hidden;">';
+                                echo '<tbody>';     
+                                echo "<tr><td>".$dat["nombre_grupo"]."</td><td>";
+                                foreach($this->vf as $fl){
+                                    if($fl["id_valor_flexible"]==$dat["id_clasificacion"]){
+                                        echo $fl["descripcion_valor"]."</td></tr>";
+                                    }
+                                }
+                                echo '</tbody>';
+                                echo '</table>';
+                                echo'</td>';
+                                echo '<td>';
+                                foreach($this->vf as $fl){
+                                    if($fl["id_valor_flexible"]==$p["id_unidad_academica"]){
+                                        echo $fl["descripcion_valor"];
+                                    }
+                                }
+                                echo'</td>';
+                                echo '<td>';
+                                foreach($this->vf as $fl){
+                                    if($fl["id_valor_flexible"]==$p["id_dependencia_academica"]){
+                                        echo $fl["descripcion_valor"];
+                                    }
+                                }
+                                echo'</td>';
+                                echo '</tr>';
+                                echo '</table>';
+                                echo '</div>';
+                                echo '<br>';
+                                $band = true;
+                            }                       
+                        }
+                    }
+                }
+            }
+        }else{
+            //filtro proyectos
+            echo "<fieldset>";
+            echo "</br>";
+            foreach($this->datos2 as $dat2){
+                echo '<div style="overflow-y:auto; max-height:410px; width: 100%;" >';
+                echo '<table class="table" style="width: 100%; max-width: 100%;">';
+                echo '<thead>';
+                echo '<th style="width:10%;">Nombre proyecto</th>';
+                echo '<th style="width:10%;">URL proyecto</th>';
+                echo '<th style="width:10%;">Código proyecto</th>';
+                echo '<th style="width:10%;">Duración</th>';
+                echo '<th style="width:10%;">Objetivo general</th>';
+                echo '<th style="width:10%;">Resumen ejecutivo</th>';
+                echo '<th style="width:10%;">Estado proyecto</th>';
+                echo '<th style="width:10%;">Nombre grupo / Categoría</th>';
+                echo '<th style="width:10%;">Unidad académica</th>';
+                echo '<th style="width:10%;">Dependencia académica</th>';
+                echo '</thead>';
+                echo '<tbody>';
+                echo '<tr>';
+                echo '<td>';
+                echo $dat2["nombre_proy"];
+                echo'</td>';
+                echo '<td>';
+?>
+                <a class="btn" href="<?php echo $this->basePath() ?>/application/editarproyecto/index/<?php echo $dat2["id_proyecto"];?>/1">Abrir proyecto</a>
+<?php
+                echo'</td>';
+                echo '<td>';
+                echo $dat2["codigo_proy"];
+                echo'</td>';
+                echo '<td>';
+                if($dat2["periodo"]=="M"){
+                    $per="Meses";
+                }else{
+                    $per="Semestres";
+                }
+                echo $dat2["duracion"].' '.$per;
+                echo'</td>';
+                echo '<td>';
+                echo $dat2["objetivo_general"];
+                echo'</td>';
+                echo '<td>';
+                echo $dat2["resumen_ejecutivo"];
+                echo'</td>';
+                echo '<td>';
+                    if($dat2["id_estado"] == 1){
+                        echo "Creado"; 
+                    }else if($dat2["id_estado"] == 2){
+                        echo "Aprobado"; 
+                    }else if($dat2["id_estado"] == 3){
+                        echo "Cerrado"; 
+                    }else if($dat2["id_estado"] == 4){
+                        echo "Archivado"; 
+                    }
+                echo'</td>';
+
+                echo '<td>';
+                echo '<table style="border-style: hidden;">';
+                echo '<tbody>';
+                foreach ($this->gproy as $grpy) {
+                    if($grpy["id_proyecto"]==$dat2["id_proyecto"]){
+                        foreach ($this->datos as $dat1) {
+                            if($grpy["id_grupo"]==$dat1["id_grupo_inv"]){
+                                echo "<tr><td>".$dat1["nombre_grupo"]."</td><td>";
+                                foreach($this->vf as $fl){
+                                    if($fl["id_valor_flexible"]==$dat1["id_clasificacion"]){
+                                        echo $fl["descripcion_valor"];
+                                    }
+                                }
+                                echo "</td></tr>";
+                            }
+                        }
+                    }
+                }
+                echo '</tbody>';
+                echo '</table>';
+                echo'</td>';
+                echo '<td>';
+                foreach($this->vf as $fl){
+                    if($fl["id_valor_flexible"]==$dat2["id_unidad_academica"]){
+                        echo $fl["descripcion_valor"];
+                    }
+                }
+                echo'</td>';
+                echo '<td>';
+                foreach($this->vf as $fl){
+                    if($fl["id_valor_flexible"]==$dat2["id_dependencia_academica"]){
+                        echo $fl["descripcion_valor"];
+                    }
+                }
+                echo'</td>';
+                echo '</tr>';
+                echo '</tbody>';
+                echo '</table>';
+                echo '</div>';
+                echo '</br>';
+                $band = true;
+            }
+            echo "</fieldset>";
+            echo '</br>';
+        }
+    }elseif($this->consulta==2){
+        echo "<fieldset>";
+        echo "</br>";
+        //otros proyectos
+        foreach ($this->proy as $proye1) {
+            echo '<div style="overflow-y:auto; max-height:410px; width: 100%;" >';
+            echo '<table class="table" style="width: 100%; max-width: 100%;">';
+            echo '<thead>';
+            echo '<th style="width:10%;">Nombre proyectos</th>';
+            echo '<th style="width:10%;">URL proyecto</th>';
+            echo '<th style="width:10%;">Código proyecto</th>';
+            echo '<th style="width:10%;">Duración</th>';
+            echo '<th style="width:10%;">Objetivo general</th>';
+            echo '<th style="width:10%;">Resumen ejecutivo</th>';
+            echo '<th style="width:10%;">Estado proyecto</th>';
+            echo '<th style="width:10%;">Nombre grupo / Categoría</th>';
+            echo '<th style="width:10%;">Unidad académica</th>';
+            echo '<th style="width:10%;">Dependencia académica</th>';
+            echo '</thead>';
+            echo '<tbody>';
+            echo '<tr>';
+            echo '<td>';
+            echo $proye1["nombre_proy"];
+            echo'</td>';
+            echo '<td>';
+?>
+            <a class="btn" href="<?php echo $this->basePath() ?>/application/editarproyecto/index/<?php echo $proye1["id_proyecto"];?>/1">Abrir proyecto</a>
+<?php
+            echo'</td>';
+            echo '<td>';
+            echo $proye1["codigo_proy"];
+            echo'</td>';
+            echo '<td>';
+            if($proye1["periodo"]=="M"){
+                $per="Meses";
+            }else{
+                $per="Semestres";
+            }
+            echo $proye1["duracion"].' '.$per;
+            echo'</td>';
+            echo '<td>';
+            echo $proye1["objetivo_general"];
+            echo'</td>';
+            echo '<td>';
+            echo $proye1["resumen_ejecutivo"];
+            echo'</td>';
+            echo '<td>';
+                if($proye1["id_estado"] == 1){
+                    echo "Creado"; 
+                }else if($proye1["id_estado"] == 2){
+                    echo "Aprobado"; 
+                }else if($proye1["id_estado"] == 3){
+                    echo "Cerrado"; 
+                }else if($proye1["id_estado"] == 4){
+                    echo "Archivado"; 
+                }
+            echo'</td>';
+
+            echo '<td>';
+            echo '<table style="border-style: hidden;">';
+            echo '<tbody>';
+            foreach ($this->gproy as $grpy) {
+                if($grpy["id_proyecto"]==$proye1["id_proyecto"]){
+                    foreach ($this->datos as $dat1) {
+                        if($grpy["id_grupo"]==$dat1["id_grupo_inv"]){
+                            echo "<tr><td>".$dat1["nombre_grupo"]."</td><td>";
+                            foreach($this->vf as $fl){
+                                if($fl["id_valor_flexible"]==$dat1["id_clasificacion"]){
+                                    echo $fl["descripcion_valor"];
+                                }
+                            }
+                            echo "</td></tr>";
+                        }
+                    }
+                }
+            }
+            echo '</tbody>';
+            echo '</table>';
+            echo'</td>';
+            echo '<td>';
+            foreach($this->vf as $fl){
+                if($fl["id_valor_flexible"]==$proye1["id_unidad_academica"]){
+                    echo $fl["descripcion_valor"];
+                }
+            }
+            echo'</td>';
+            echo '<td>';
+            foreach($this->vf as $fl){
+                if($fl["id_valor_flexible"]==$proye1["id_dependencia_academica"]){
+                    echo $fl["descripcion_valor"];
+                }
+            }
+            echo'</td>';
+            echo '</tr>';
+            echo '</tbody>';
+            echo '</table>';
+            echo '</div>';
+            echo '</br>';
+            $band = true;
+        }
+        echo "</fieldset>";
+        echo '</br>';
+    }
+
+    if(!$band){
+        if($this->data["codigo_proy"]){
+            echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos proyectos con este código</h3></div>';
+        }else if($this->data["nombre_proy"]){
+            echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos proyectos con este nombre</h3></div>';
+        }else if($this->data["nombre_grupo"]){
+            echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos proyectos con este nombre de grupo</h3></div>';
+        }else if($this->data["cod_grupo"]){
+            echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos proyectos con este código de grupo</h3></div>';
+        }else if($this->data["tipo_proyecto"] || $this->data["id_unidad_academica"] || $this->data["id_dependencia_academica"] || $this->data["id_programa_academico"]){
+            echo '<div style="text-align: center;display: inline-block; width: 100%;"><h3>No encontramos proyectos con estos parametros de búsqueda</h3></div>';
+        }
+    }
+?>        
+    </div>
+</div>

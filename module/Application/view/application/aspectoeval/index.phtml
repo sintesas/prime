@@ -1,0 +1,68 @@
+<?php include("public/menu.php"); ?>
+<div id="wrapper_1">
+	<div id="container_1">
+<div class="row2">
+	<div class="nine3 columns">
+		<div id="centersectiontitle">
+			<div class="twelve columns">
+				<div class="sidebartitle"><h3>
+				<?php
+					echo $this->titulo;
+				?>
+				</h3>
+			</div>
+		</div>
+	</div>
+<a href="<?php echo $this->basePath() ?>/application/editarconvocatoriai/index/<?php echo $this->id; ?>">
+	<i class="icon-arrow-left"></i>
+	 Regresar</a>
+<br><br>
+<div class="twelve columns">
+<?php
+$suma_total=0;
+$pond=100;
+foreach ($this->datos as $dt){
+$suma_total=$suma_total+$dt["ponderacion1"];
+}
+$sub=$pond-$suma_total;
+
+echo "Total de la ponderacion : ".$suma_total.", le quedan por asignar ".$sub.".";
+?>
+<br><br><br>
+
+				<?php
+				$form = $this->form;
+				$form->prepare();
+
+				$form->setAttributes(array('action'=> $this->url.'/application/aspectoeval/index/'.$this->id,
+										'method'=>'post'));
+				echo $this->form()->openTag($form);
+				echo '<p>';
+				echo $this->formlabel($form->get('id_tipo_aspecto'));
+				echo $this->formelement($form->get('id_tipo_aspecto'));
+				?>
+				<a href="<?php echo $this->basePath()?>/application/agregarvalflex/index/27" target="_blank">Insertar nuevo aspecto</a>
+				<?php
+				echo '<p>';
+				echo $this->formlabel($form->get('ponderacion1'));
+				echo $this->formelement($form->get('ponderacion1'));
+				echo '<p>';
+				echo $this->formlabel($form->get('descripcion'));
+				echo $this->formelement($form->get('descripcion'));
+				echo '<p>';
+				echo $this->formlabel($form->get('objetivo'));
+				echo $this->formelement($form->get('objetivo'));
+				echo '<p>';
+				
+				echo $this->formelement($form->get('submit'));
+				echo '<br>';
+				
+				echo $this->form()->closeTag($form);
+				?>
+				<br>
+
+				<?php
+				
+
+				?>
+</div></div></div>

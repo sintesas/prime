@@ -1,0 +1,99 @@
+<div class="rowmenu">
+	<div class="twelve columns">
+			<?php if($this->menu==1){ ?>
+		<ul class="ca-menu">
+			<li>
+			<a href="#">
+			<span class="ca-icon"><img src="<?php echo $this->url?>/img/settings.png "/></span>
+			<div class="ca-content">
+				<h2 class="ca-main">APS</h2>
+				<h3 class="ca-sub">Administracion y Procesos de Soporte</h3>
+			</div>
+			</a>
+						<ul>
+						<li><a href="portofolio2.html">2 Columns</a></li>
+						<li><a href="portofolio3.html">3 Columns</a></li>
+						<li><a href="portofolio4.html">4 Columns</a></li>						
+						<li><a href="portofoliodetail.html">Project Details</a></li>
+						</ul>
+			</li>
+			<li>
+			<a href="#">
+			
+			<span class="ca-icon"><img src="<?php echo $this->url?>/img/settings.png "/></span>
+			<div class="ca-content">
+				<h2 class="ca-main">HSI</h2>
+				<h3 class="ca-sub">Herramientas de Socializacion de la Informacion</h3>
+			</div>
+			</a>
+			</li>
+			<li>
+			<a href="#">
+			<span class="ca-icon"><img src="<?php echo $this->url?>/img/settings.png "/></span>
+			<div class="ca-content">
+				<h2 class="ca-main">MGI</h2>
+				<h3 class="ca-sub">Grupos de Investigacion</h3>
+			</div>
+			</a>
+			</li>
+			<li>
+			<a href="#">
+			<span class="ca-icon"><img src="<?php echo $this->url?>/img/settings.png "/></span>
+			<div class="ca-content">
+				<h2 class="ca-main">MGP</h2>
+				<h3 class="ca-sub">Gestion Proyectos</h3>
+			</div>
+			</a>
+			</li>
+			<li>
+			<a href="#">
+			<span class="ca-icon"><img src="<?php echo $this->url?>/img/settings.png "/></span>
+			<div class="ca-content">
+				<h2 class="ca-main">MGC</h2>
+				<h3 class="ca-sub">Gestion Convocatorias</h3>
+			</div>
+			</a>
+			</li>
+		</ul>
+		<?php } ?>
+	</div>
+</div>
+<div class="row">
+	<div class="nine columns">
+		<div id="centersectiontitle">
+			<div class="twelve columns">
+				<div class="sidebartitle"><h3>
+				<?php
+					echo $this->titulo;
+				?>
+				</h3>
+			</div>
+		</div>
+	</div>
+<div class="four columns">
+				<?php
+				$form = $this->form;
+				$form->prepare();
+				echo $this->form()->openTag($form);
+				
+				echo '<p>';
+				echo '<br>';
+				echo $this->formlabel($form->get('valor'));
+				echo $this->formelement($form->get('valor'));
+				echo '<p>';
+				echo '<br>';
+				echo $this->formlabel($form->get('justificacion'));
+				echo $this->formelement($form->get('justificacion'));
+				echo '<br>';
+				echo '<br>';
+				echo '<br>';
+				echo $this->formelement($form->get('submit'));
+				echo '<br>';
+				echo '<br>';
+				echo $this->form()->closeTag($form);
+				?>
+<br>
+				<br>
+				<a href="<?php echo $this->basePath() ?>/application/solicitudes/index">Regresar </a>
+				<br>
+</div>
