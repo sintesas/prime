@@ -353,7 +353,8 @@ return array(
             'Application\Controller\Pdfsiafi' => 'Application\Controller\PdfsiafiController',
             'Application\Controller\Gruposproy' => 'Application\Controller\GruposproyController',
             'Application\Controller\Actasm' => 'Application\Controller\ActasmController',
-            'Application\Controller\Excelmonitores' => 'Application\Controller\ExcelmonitoresController'
+            'Application\Controller\Excelmonitores' => 'Application\Controller\ExcelmonitoresController',
+            'Application\Controller\Excelusuariostodo' => 'Application\Controller\ExcelusuariostodoController'
         )
     ),
     'view_manager' => array(
