@@ -92,5 +92,11 @@ class Lineashv extends TableGateway{
             'id_linea_inv' => $id
         ));
     }
+
+	public function getReportesbyLineashv($id) {
+		$sql = "select u.id_usuario, concat(u.nombres, ' ', u.apellidos) nombre_completo, u.documento, l.id_linea_inv, l.nombre_linea, l.objetivo, l.efectos, l.logros, case when l.id_estado = 1 then 'Activa' when l.id_estado = 0 then 'Inactiva' else NULL end estado, l.archivo from aps_hv_lineas l left join vw_usuarios_personal u on l.id_usuario = u.id_usuario where u.id_usuario is not null and l.id_usuario = " . $id . ";";
+		$statement = $this->adapter->query($sql, Adapter::QUERY_MODE_EXECUTE);
+        return  $statement->toArray();
+	}
 }
 ?>

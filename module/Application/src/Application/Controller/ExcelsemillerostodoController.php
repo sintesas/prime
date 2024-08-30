@@ -34,6 +34,9 @@ use Application\Modelo\Entity\Proyectosintsemi;
 use Application\Modelo\Entity\Proyectos;
 use Application\Modelo\Entity\Reconocimientossemillero;
 use Application\Modelo\Entity\Archivossemillero;
+use Application\Modelo\Entity\Identificadoressemi;
+use Application\Modelo\Entity\Eventossemi;
+use Application\Modelo\Entity\Trabajogradosemi;
 
 class ExcelsemillerostodoController extends AbstractActionController
 {
@@ -65,6 +68,8 @@ class ExcelsemillerostodoController extends AbstractActionController
         if($this->getRequest()->isPost()){
             $data = $this->request->getPost();
             $ExcelsemillerostodoForm = new ExcelsemillerostodoForm();
+            $dat = $datos->getSemilleroFiltro($data);
+            $id = $dat[0]["id"];
             $intSemi = new Integrantesemillero($this->dbAdapter);   
             $gruposSemi = new Grupossemillero($this->dbAdapter);
             $grupoinv = new Grupoinvestigacion($this->dbAdapter);
@@ -78,7 +83,10 @@ class ExcelsemillerostodoController extends AbstractActionController
             $proyectosint = new Proyectosintsemi($this->dbAdapter); 
             $proyectos = new Proyectos($this->dbAdapter);
             $reconocimientos = new Reconocimientossemillero($this->dbAdapter);
-            $Archivossemillero = new Archivossemillero($this->dbAdapter);
+            $archivossemillero = new Archivossemillero($this->dbAdapter);
+            $identificadores = new Identificadoressemi($this->dbAdapter);
+            $divulgaciones = new Eventossemi($this->dbAdapter);
+            $formaciones = new Trabajogradosemi($this->dbAdapter);
             
             $view = new ViewModel(array(
                 'form' => $ExcelsemillerostodoForm,
@@ -99,7 +107,10 @@ class ExcelsemillerostodoController extends AbstractActionController
                 'proyectosint' =>  $proyectosint->getProyectosi(),
                 'proyectos' =>  $proyectos->getProyectoh(),
                 'reconocimientos' => $reconocimientos->getReconocimientossemillerot(),
-                'archivossemillero' => $Archivossemillero->getArchivossemillerot(),
+                'archivossemillero' => $archivossemillero->getArchivossemillerot(),
+                'identificadores' => $identificadores->getReportesbyIdentificadores($id),
+                'divulgaciones' => $divulgaciones->getReportesbyDivulgacion($id),
+                'formaciones' => $formaciones->getReportesbyFormacion($id),
                 'consulta' => true,
             ));
             $view->setTerminal(true);

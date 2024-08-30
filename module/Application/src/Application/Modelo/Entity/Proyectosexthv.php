@@ -128,5 +128,11 @@ class Proyectosexthv extends TableGateway{
         ));
         return 1;
     }
+
+	public function getReportesbyProyectosexthv($id) {
+		$sql = "select u.id_usuario, fn_get_nombres(u.id_usuario) nombre_completo, u.documento, p.id_proyecto_ext, p.codigo_proyecto, p.tipo_proyecto, p.fecha_inicio, p.fecha_fin, p.resumen_ejecutivo, p.objetivo_general, p.equipo_trabajo, p.productos_derivados, p.nombre_proyecto, p.id_rol, p.archivo from aps_hv_proyectos_ext p left join aps_usuarios u on p.id_usuario = u.id_usuario where u.id_usuario is not null and p.id_usuario = " . $id . ";";
+		$statement = $this->adapter->query($sql, Adapter::QUERY_MODE_EXECUTE);
+        return  $statement->toArray();
+	}
 }
 ?>

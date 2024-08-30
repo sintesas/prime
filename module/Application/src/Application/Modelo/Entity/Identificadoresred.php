@@ -87,5 +87,11 @@ class Identificadoresred extends TableGateway{
         ));
         return 1;
     }
+
+    public function getReportesbyIdentificadores($id) {
+        $sql = "select r.id id_red, r.nombre nombre_red, r.codigo codigo_red, i.id_identificador, (select v.descripcion_valor from aps_valores_flexibles v where v.id_valor_flexible = i.id_tipoidentificador) tipo_identificador, (select v.descripcion_valor from aps_valores_flexibles v where v.id_valor_flexible = i.id_tipocategoria) tipo_categoria, i.id_field, i.fecha_registro, i.nombre, i.web, i.ciudad, i.descripcion, i.otra_informacion, i.archivo from mri_identificadoresred i left join mgi_red_inv r on i.id_red = r.id where i.id_red = " . $id . ";";
+        $statement = $this->adapter->query($sql, Adapter::QUERY_MODE_EXECUTE);
+        return  $statement->toArray();
+    }
 }
 ?>

@@ -39,6 +39,9 @@ use Application\Modelo\Entity\Proyectosintred;
 use Application\Modelo\Entity\Participacioneventosred;
 use Application\Modelo\Entity\Tablaequipop;
 use Application\Modelo\Entity\Proyectos;
+use Application\Modelo\Entity\Identificadoresred;
+use Application\Modelo\Entity\Eventosred;
+use Application\Modelo\Entity\Trabajogradored;
 
 class ExcelredestodoController extends AbstractActionController
 {
@@ -71,6 +74,8 @@ class ExcelredestodoController extends AbstractActionController
             $data = $this->request->getPost();
 
             $ExcelredestodoForm = new ExcelredestodoForm();
+            $dat = $datos->getRedesFiltro($data);
+            $id = $dat[0]["id"];
             $equipodirectivo = new Equipodirectivo($this->dbAdapter);
             $grupoinv = new Grupoinvestigacion($this->dbAdapter);
             $proyectos = new Proyectos($this->dbAdapter);
@@ -87,6 +92,9 @@ class ExcelredestodoController extends AbstractActionController
             $proyectored = new Proyectored($this->dbAdapter);
             $proyectosint = new Proyectosintred($this->dbAdapter);
             $archivosred = new Archivosred($this->dbAdapter);
+            $identificadores = new Identificadoresred($this->dbAdapter);
+            $divulgaciones = new Eventosred($this->dbAdapter);
+            $formaciones = new Trabajogradored($this->dbAdapter);
 
             $view = new ViewModel(array(
                 'form' => $ExcelredestodoForm,
@@ -95,8 +103,7 @@ class ExcelredestodoController extends AbstractActionController
                 'usuarios' => $usuario->getArrayusuarios(),
                 'valflex' => $pt->getValoresf(),
                 'proyectos' =>  $proyectos->getProyectoh(),
-                'grupoinv' => $grupoinv->getGrupoinvestigacion(),
-                
+                'grupoinv' => $grupoinv->getGrupoinvestigacion(),                
                 'equipodirectivo' => $equipodirectivo->getEquipodirectivot(),
                 'contactored' => $contactored->getContactoredt(),
                 'integrantesred' => $integrantesred->getIntegrantesredi(),
@@ -110,7 +117,10 @@ class ExcelredestodoController extends AbstractActionController
                 'documentosbliograficos' => $documentosbliograficos->getDocumentosbibliograficosredt(),    
                 'proyectored' => $proyectored->getProyectoredt(),
                 'proyectosint' =>  $proyectosint->getProyectosi(),  
-                'archivosred' => $archivosred->getArchivosredt(),  
+                'archivosred' => $archivosred->getArchivosredt(),
+                'identificadores' => $identificadores->getReportesbyIdentificadores($id),
+                'divulgaciones' => $divulgaciones->getReportesbyDivulgacion($id),
+                'formaciones' => $formaciones->getReportesbyFormacion($id),
                 'consulta' => true,
             ));
             $view->setTerminal(true);

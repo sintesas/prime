@@ -129,5 +129,11 @@ class Otrasproduccioneshv extends TableGateway{
         ));
         return 1;
     }
+
+	public function getReportesbyOtrasProduccioneshv($id) {
+		$sql = "select u.id_usuario, fn_get_nombres(u.id_usuario) nombre_completo, u.documento, p.id_otra_prod, p.nombre_producto, p.descripcion_producto, p.tipo_producto, p.fecha, p.id_pais, p.id_ciudad, p.instituciones, p.registro, p.autores, p.otra_info, fn_get_valores_flexibles(p.id_departamento) departamento, fn_get_meses(p.mes) mes, p.ano, fn_get_nombres(p.id_autor) autor, p.archivo from aps_hv_otra_prod p left join aps_usuarios u on p.id_usuario = u.id_usuario where u.id_usuario is not null and p.id_usuario = " . $id . ";";
+		$statement = $this->adapter->query($sql, Adapter::QUERY_MODE_EXECUTE);
+        return  $statement->toArray();
+	}
 }
 ?>

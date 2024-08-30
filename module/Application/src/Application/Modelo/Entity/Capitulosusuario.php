@@ -143,6 +143,12 @@ class Capitulosusuario extends TableGateway{
         ));
         return 1;
     }
+
+	public function getReportesbyCapitulosusu($id) {
+		$sql = "select u.id_usuario, fn_get_nombres(u.id_usuario) nombre_completo, u.documento, c.id, c.titulo, c.paginas, c.ano, fn_get_meses(c.mes) mes, c.pais, c.ciudad, c.serie, c.editorial, c.edicion, c.isbn, c.lugar_publicacion, c.medio_divulgacion, c.titulo_capitulo, c.numero_capitulo, c.paginas_capitulo, c.pagina_inicio, c.pagina_fin, fn_get_nombres(c.id_autor) autor, c.archivo from aps_hv_capitulosusuario c left join aps_usuarios u on c.id_usuario = u.id_usuario where u.id_usuario is not null and c.id_usuario = " . $id . ";";
+		$statement = $this->adapter->query($sql, Adapter::QUERY_MODE_EXECUTE);
+        return  $statement->toArray();
+	}
 }
 
 

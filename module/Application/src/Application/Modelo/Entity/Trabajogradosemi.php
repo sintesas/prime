@@ -151,5 +151,11 @@ class Trabajogradosemi extends TableGateway{
         ));
         return 1;
     }
+
+    public function getReportesbyFormacion($id) {
+        $sql = "select s.id id_semillero, s.nombre nombre_semillero, s.codigo codigo_semillero, t.id_trabajogrado, t.nombre_trabajo, (select v.descripcion_valor from aps_valores_flexibles v where v.id_valor_flexible = t.id_tipotrabajo) tipo_trabajo, (select v.descripcion_valor from aps_valores_flexibles v where v.id_valor_flexible = t.id_estadotipotrabajo) estado_tipo_trabajo, (select v.descripcion_valor from aps_valores_flexibles v where v.id_valor_flexible = t.id_tipoparticipacion) tipo_participacion, (select concat(u.nombres, ' ', u.apellidos) from vw_usuarios_personal u where u.id_usuario = t.id_autor) autor, (select v.descripcion_valor from aps_valores_flexibles v where v.id_valor_flexible = t.id_institucion) institucion, t.ciudad_trabajo, (select v.descripcion_valor from aps_valores_flexibles v where v.id_valor_flexible = t.id_unidad) unidad, (select v.descripcion_valor from aps_valores_flexibles v where v.id_valor_flexible = t.id_dependencia) dependencia, (select v.descripcion_valor from aps_valores_flexibles v where v.id_valor_flexible = t.id_programa) programa, t.fecha_inicio, t.fecha_fin, t.descripcion, t.otra_informacion, (select v.descripcion_valor from aps_valores_flexibles v where v.id_valor_flexible = t.id_formacioninvestigador) tipo_formacion, t.ciudad_proyecto, t.nombre_proyecto, (select v.descripcion_valor from aps_valores_flexibles v where v.id_valor_flexible = t.id_institucion_proyecto) institucion_proyecto, t.personas_formadas, t.fecha_inicio_proyecto, t.fecha_fin_proyecto, t.descripcion_proyecto, t.descripcion_formacion, t.otra_informacion_proyecto, (select concat(si.codigo, ' ', si.nombre) from msi_semillerosinv si where si.id = t.id_semillero) semillero, (select v.descripcion_valor from aps_valores_flexibles v where v.id_valor_flexible = t.id_rolparticipacion) rol_participacion, t.fecha_inicio_semillero, t.fecha_fin_semillero, t.tematica, t.descripcion_semillero, t.archivo from msi_trabajogradosemi t left join msi_semillerosinv s on t.id_red = s.id where t.id_red = " . $id . ";";
+        $statement = $this->adapter->query($sql, Adapter::QUERY_MODE_EXECUTE);
+        return  $statement->toArray();
+    }
 }
 ?>

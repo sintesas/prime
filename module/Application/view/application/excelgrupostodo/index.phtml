@@ -1048,7 +1048,114 @@ if(!$this->consulta){
                     $celda++;
                 }
             }
-        }  
+        }
+
+        $objPHPExcel->createSheet(16);
+        $objPHPExcel->setActiveSheetIndex(16);
+        $objPHPExcel->getActiveSheet()->setTitle('Identificadores Investigación');
+
+        $objPHPExcel->getActiveSheet()
+        ->setCellValue('A1', 'ID Grupo')
+        ->setCellValue('B1', 'Nombre')
+        ->setCellValue('C1', 'Código')
+        ->setCellValue('D1', 'Nombre registrado')
+        ->setCellValue('E1', 'Tipo de Identificador')
+        ->setCellValue('F1', 'Tipo de Categoría')
+        ->setCellValue('G1', 'Fecha de Registro')
+        ->setCellValue('H1', 'Dirección Web')
+        ->setCellValue('I1', 'Ciudad')
+        ->setCellValue('J1', 'Descripción')
+        ->setCellValue('K1', 'Archivo');
+
+        $celda = 2;
+        foreach($this->identificadores as $dato) {
+            $objPHPExcel->getActiveSheet()
+            ->setCellValue('A'. $celda, trim($dato["id_grupo_inv"]))
+            ->setCellValue('B'. $celda, trim($dato["nombre_grupo"]))
+            ->setCellValue('C'. $celda, trim($dato["cod_grupo"]))
+            ->setCellValue('D'. $celda, trim($dato["nombre"]))
+            ->setCellValue('E'. $celda, trim($dato["tipo_identificador"]))
+            ->setCellValue('F'. $celda, trim($dato["tipo_categoria"]))            
+            ->setCellValue('G'. $celda, trim($dato["fecha_registro"]))
+            ->setCellValue('H'. $celda, trim($dato["web"]))
+            ->setCellValue('I'. $celda, trim($dato["ciudad"]))
+            ->setCellValue('J'. $celda, trim($dato["descripcion"]))
+            ->setCellValue('K'. $celda, trim($dato["archivo"]));
+
+            $celda++;
+        }
+
+        $objPHPExcel->createSheet(17);
+        $objPHPExcel->setActiveSheetIndex(17);
+        $objPHPExcel->getActiveSheet()->setTitle('Divulgación');
+
+        $objPHPExcel->getActiveSheet()
+        ->setCellValue('A1', 'ID Grupo')
+        ->setCellValue('B1', 'Nombre')
+        ->setCellValue('C1', 'Código')
+        ->setCellValue('D1', 'Nombre de trabajo')
+        ->setCellValue('E1', 'Tipo de Evento')
+        ->setCellValue('F1', 'Evento')
+        ->setCellValue('G1', 'Tipo de Participación')
+        ->setCellValue('H1', 'Nombre de trabajo medio')
+        ->setCellValue('I1', 'Tipo de Medio')
+        ->setCellValue('J1', 'Medio de divulgación')
+        ->setCellValue('K1', 'Archivo');
+
+        $celda = 2;
+        foreach($this->divulgaciones as $dato) {
+            $objPHPExcel->getActiveSheet()
+            ->setCellValue('A'. $celda, trim($dato["id_grupo_inv"]))
+            ->setCellValue('B'. $celda, trim($dato["nombre_grupo"]))
+            ->setCellValue('C'. $celda, trim($dato["cod_grupo"]))
+            ->setCellValue('D'. $celda, trim($dato["nombre_trabajo"]))
+            ->setCellValue('E'. $celda, trim($dato["tipo_evento"]))
+            ->setCellValue('F'. $celda, trim($dato["nombre_evento"]))            
+            ->setCellValue('G'. $celda, trim($dato["tipo_participacion"]))
+            ->setCellValue('H'. $celda, trim($dato["nombre_trabajo_medio"]))
+            ->setCellValue('I'. $celda, trim($dato["tipo_medio"]))
+            ->setCellValue('J'. $celda, trim($dato["medio_divulgacion"]))
+            ->setCellValue('K'. $celda, trim($dato["archivo"]));
+
+            $celda++;
+        }
+
+        $objPHPExcel->createSheet(18);
+        $objPHPExcel->setActiveSheetIndex(18);
+        $objPHPExcel->getActiveSheet()->setTitle('Formación');
+
+        $objPHPExcel->getActiveSheet()
+        ->setCellValue('A1', 'ID Grupo')
+        ->setCellValue('B1', 'Nombre')
+        ->setCellValue('C1', 'Código')
+        ->setCellValue('D1', 'Trabajo de Grado')
+        ->setCellValue('E1', 'Tipo de Trabajo')
+        ->setCellValue('F1', 'Tipo de Participación')
+        ->setCellValue('G1', 'Estado')
+        ->setCellValue('H1', 'Proyecto de Investigación')
+        ->setCellValue('I1', 'Tipo de Formación')
+        ->setCellValue('J1', 'Semillero')
+        ->setCellValue('K1', 'Tipo de Participación')
+        ->setCellValue('L1', 'Archivo');
+
+        $celda = 2;
+        foreach($this->formaciones as $dato) {
+            $objPHPExcel->getActiveSheet()
+            ->setCellValue('A'. $celda, trim($dato["id_grupo_inv"]))
+            ->setCellValue('B'. $celda, trim($dato["nombre_grupo"]))
+            ->setCellValue('C'. $celda, trim($dato["cod_grupo"]))
+            ->setCellValue('D'. $celda, trim($dato["nombre_trabajo"]))
+            ->setCellValue('E'. $celda, trim($dato["tipo_trabajo"]))
+            ->setCellValue('F'. $celda, trim($dato["tipo_participacion"]))            
+            ->setCellValue('G'. $celda, trim($dato["estado_tipo_trabajo"]))
+            ->setCellValue('H'. $celda, trim($dato["nombre_proyecto"]))
+            ->setCellValue('I'. $celda, trim($dato["tipo_formacion"]))
+            ->setCellValue('J'. $celda, trim($dato["semillero"]))
+            ->setCellValue('K'. $celda, trim($dato["rol_participacion"]))
+            ->setCellValue('L'. $celda, trim($dato["archivo"]));
+
+            $celda++;
+        }
     }
 
     $objPHPExcel->setActiveSheetIndex(0);

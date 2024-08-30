@@ -79,5 +79,11 @@ class Areashv extends TableGateway{
             'id_area' => $id
         ));
     }
+
+	public function getReportesbyAreashv($id) {
+		$sql = "select u.id_usuario, fn_get_nombres(a.id_usuario) nombre_completo, u.documento, a.objeto, fn_get_valores_flexibles(a.nombre_area) nombre_area, a.archivo  from aps_hv_areas a left join aps_usuarios u on a.id_usuario = u.id_usuario where u.id_usuario is not null and a.id_usuario = " . $id . ";";
+		$statement = $this->adapter->query($sql, Adapter::QUERY_MODE_EXECUTE);
+        return  $statement->toArray();
+	}
 }
 ?>

@@ -137,5 +137,11 @@ class Libroshv extends TableGateway{
         ));
         return 1;
     }
+
+	public function getReportesbyLibroshv($id) {
+		$sql = "select u.id_usuario, concat(u.nombres, ' ', u.apellidos) nombre_completo, u.documento, l.id_gi_libro, l.titulo_libro, l.paginas, l.num_paginas, l.fecha, l.serie, l.editorial, l.edicion, l.isbn, l.lugar_publicacion, l.medio_divulgacion, l.autores, l.instituciones, l.capitulo_libro, l.mes, l.ano, l.pais, l.ciudad, (select concat(t.nombres, ' ', t.apellidos) from vw_usuarios_personal t where t.id_usuario = l.id_autor) autor, l.archivo, (select v.descripcion_valor from aps_valores_flexibles v where v.id_valor_flexible = cast(l.tipo_libro as integer)) tipo_libro from aps_hv_libros l left join vw_usuarios_personal u on l.id_usuario = u.id_usuario where u.id_usuario is not null and l.id_usuario = " . $id . ";";
+		$statement = $this->adapter->query($sql, Adapter::QUERY_MODE_EXECUTE);
+        return  $statement->toArray();
+	}
 }
 ?>

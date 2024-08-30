@@ -38,6 +38,9 @@ use Application\Modelo\Entity\Proyectosext;
 use Application\Modelo\Entity\Proyectosint;
 use Application\Modelo\Entity\Proyectos;
 use Application\Modelo\Entity\Archivos;
+use Application\Modelo\Entity\Identificadoresgru;
+use Application\Modelo\Entity\Eventosgru;
+use Application\Modelo\Entity\Trabajogradogru;
 
 class ExcelgrupostodoController extends AbstractActionController
 {
@@ -70,6 +73,8 @@ class ExcelgrupostodoController extends AbstractActionController
             $data = $this->request->getPost();
 
             $ExcelgrupostodoForm = new ExcelgrupostodoForm();
+            $dat = $datos->getGruposFiltro($data);
+            $id = $dat[0]["id_grupo_inv"];
             $usuario = new Usuarios($this->dbAdapter);
             $lineas = new Lineas($this->dbAdapter);
             $gruposrelacionados = new Gruposrel($this->dbAdapter);
@@ -89,6 +94,9 @@ class ExcelgrupostodoController extends AbstractActionController
             $proyectosint = new Proyectosint($this->dbAdapter);
             $proyectos = new Proyectos($this->dbAdapter);
             $archivos = new Archivos($this->dbAdapter);
+            $identificadores = new Identificadoresgru($this->dbAdapter);
+            $divulgaciones = new Eventosgru($this->dbAdapter);
+            $formaciones = new Trabajogradogru($this->dbAdapter);
 
             $view = new ViewModel(array(
                 'form' => $ExcelgrupostodoForm,
@@ -114,7 +122,9 @@ class ExcelgrupostodoController extends AbstractActionController
                 'proyectosint' =>  $proyectosint->getProyectosi(),
                 'proyectos' =>  $proyectos->getProyectoh(),
                 'archivos' => $archivos->getArchivost(),
-
+                'identificadores' => $identificadores->getReportesbyIdentificadores($id),
+                'divulgaciones' => $divulgaciones->getReportesbyDivulgacion($id),
+                'formaciones' => $formaciones->getReportesbyFormacion($id),
                 'consulta' => true,
             ));
             $view->setTerminal(true);

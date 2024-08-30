@@ -103,5 +103,11 @@ class Experiencialabhv extends TableGateway{
             'id_experiencia_prof' => $id
         ));
     }
+
+	public function getReportesbyExperiencialabhv($id) {
+		$sql = "select u.id_usuario, fn_get_nombres(e.id_usuario) nombre_completo, u.documento, e.id_experiencia_prof, e.empresa, e.tipo_vinculacion, e.dedicacion_horaria, e.periodo_vinculacion, e.cargo, e.descripcion_actividades, e.otra_info, e.fecha_inicio, e.fecha_fin, e.archivo from aps_experiencia_prof e left join aps_usuarios u on e.id_usuario = u.id_usuario where u.id_usuario is not null and e.id_usuario = " . $id . ";";
+		$statement = $this->adapter->query($sql, Adapter::QUERY_MODE_EXECUTE);
+        return  $statement->toArray();
+	}
 }
 ?>

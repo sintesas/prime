@@ -105,5 +105,11 @@ class Eventosred extends TableGateway{
         ));
         return 1;
     }
+
+    public function getReportesbyDivulgacion($id) {
+        $sql = "select r.id id_red, r.nombre nombre_red, r.codigo codigo_red, e.id_evento, (select v.descripcion_valor from aps_valores_flexibles v where v.id_valor_flexible = e.id_tipoevento) tipo_evento, (select v.descripcion_valor from aps_valores_flexibles v where v.id_valor_flexible = e.id_tipoparticipacion) tipo_participacion, e.nombre_evento, e.nombre_trabajo, (select v.descripcion_valor from aps_valores_flexibles v where v.id_valor_flexible = e.id_institucion) institucion, e.ciudad_trabajo, e.fecha_inicio, e.fecha_fin, e.otra_informacion, (select v.descripcion_valor from aps_valores_flexibles v where v.id_valor_flexible = e.id_tipomedio) tipo_medio, e.nombre_trabajo_medio, (select concat(u.nombres, ' ', u.apellidos) from vw_usuarios_personal u where u.id_usuario = e.id_autor) autor, (select v.descripcion_valor from aps_valores_flexibles v where v.id_valor_flexible = e.id_institucion_medio) institucion_medio, e.ciudad_medio, e.medio_divulgacion, e.fecha_medio, e.descripcion_medio, e.otra_informacion_medio from mri_eventosred e left join mgi_red_inv r on e.id_red = r.id where e.id_red = " . $id . ";";
+        $statement = $this->adapter->query($sql, Adapter::QUERY_MODE_EXECUTE);
+        return  $statement->toArray();
+    }
 }
 ?>

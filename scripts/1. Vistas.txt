@@ -1,0 +1,76 @@
+CREATE VIEW vw_usuarios_personal
+ AS
+ SELECT u.*,
+        CASE
+            WHEN u.segundo_nombre IS NOT NULL THEN upper(concat(u.primer_nombre, ' ', u.segundo_nombre))
+            ELSE upper(u.primer_nombre)
+        END AS nombres,
+        CASE
+            WHEN u.segundo_apellido IS NOT NULL THEN upper(concat(u.primer_apellido, ' ', u.segundo_apellido))
+            ELSE upper(u.primer_apellido)
+        END AS apellidos
+   FROM aps_usuarios u;
+
+CREATE VIEW vw_resultado_evaluacion
+ AS
+ SELECT e.id_aplicar,
+    round(sum(e.evaluacion_cuantitativa) / count(e.id_aplicar), 2) AS resultado_eval
+   FROM mgc_evaluarcriterio e
+     INNER JOIN mgc_aplicarm m ON e.id_aplicar = m.id_aplicar
+  GROUP BY e.id_aplicar;
+
+create view vw_proyectos_investigacion as
+select
+pi.id_proyecto_inv,
+pi.id_convocatoria,
+pi.nombre_proyecto,
+substr(pi.nombre_proyecto, 1, strpos(pi.nombre_proyecto, '-/-') - 1) codigo_proy,
+pi.cantidad_plazas,
+pi.fecha_lim_soporte,
+pi.plazas_disponibles
+from mgc_proyectos_investigacion pi;
+
+CREATE OR REPLACE VIEW vw_consulta_proceso_monitoria
+ AS
+ SELECT m.id_aplicar,
+    c.id_convocatoria,
+    pi.id_proyecto_inv,
+    p.codigo_proy AS codigo_proyecto,
+    p.nombre_proy AS nombre_proyecto,
+    p.id_investigador,
+    ( SELECT (u.nombres || ' ') || u.apellidos
+           FROM vw_usuarios_personal u
+          WHERE u.id_usuario = p.id_investigador) AS investigador,
+    pi.plazas_disponibles,
+    pi.cantidad_plazas,
+    ( SELECT (sum(pi2.plazas_disponibles) || ' de ') || sum(pi2.cantidad_plazas)
+           FROM mgc_proyectos_investigacion pi2
+          WHERE pi2.id_convocatoria = c.id_convocatoria) AS total_plazas_disponibles,
+    m.id_usuario,
+    ( SELECT (u.nombres || ' ') || u.apellidos
+           FROM vw_usuarios_personal u
+          WHERE u.id_usuario = m.id_usuario) AS monitor_inscrito,
+    m.estado_aprobacionm,
+        CASE
+            WHEN m.estado_aprobacionm IS NULL THEN 'Pendiente'
+            WHEN m.estado_aprobacionm = 'Aprobado' THEN 'Cumple requisitos de inscripción'
+            ELSE 'No cumple requisitos de inscripción'
+        END AS estado_entrevista,
+    round(COALESCE(( SELECT re.resultado_eval
+           FROM vw_resultado_evaluacion re
+          WHERE re.id_aplicar = m.id_aplicar), 0), 2) AS resultado_evaluacion,
+    c.id_estado,
+    c.fecha_cierre,
+    c.hora_cierre,
+    m.fecha_entrevista,
+    m.estado_seleccionado,
+        CASE
+            WHEN pi.plazas_disponibles = 0 AND m.estado_seleccionado IS NULL THEN 'NO SELECCIONADO'
+            ELSE upper(m.estado_seleccionado)
+        END AS resultado_proceso
+   FROM mgc_aplicarm m
+     JOIN vw_proyectos_investigacion pi ON m.id_proyecto = pi.id_proyecto_inv
+     JOIN mgp_proyectos p ON pi.codigo_proy = p.codigo_proy
+     JOIN mgc_convocatoria c ON pi.id_convocatoria = c.id_convocatoria
+  GROUP BY m.id_aplicar, c.id_convocatoria, pi.id_proyecto_inv, p.codigo_proy, p.nombre_proy, p.id_investigador, m.id_usuario, pi.cantidad_plazas, pi.plazas_disponibles, m.estado_aprobacionm, m.estado_seleccionado, m.fecha_entrevista, m.evaluacion_cuantitativa
+  ORDER BY m.evaluacion_cuantitativa DESC;

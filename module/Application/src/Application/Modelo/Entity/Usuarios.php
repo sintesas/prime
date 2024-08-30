@@ -723,7 +723,7 @@ class Usuarios extends TableGateway
         if($row != ""){
             $filter = new StringTrim();
             $message = new \Zend\Mail\Message();
-            $message->setBody('su clave es :' . trim($row["contrasena"]) . ' "Si desea puede cambiar la contraseña en el sistema."');
+            $message->setBody('su clave es :' . trim($row["contrasena"]) . ' "Si desea puede cambiar la contraseÃ±a en el sistema."');
             $message->setFrom($filter->filter($this->usuario));
             $message->setSubject('Recuperacion clave usuario :' . $this->usuario);
             $message->addTo($filter->filter($row["email"]));
@@ -1237,6 +1237,61 @@ class Usuarios extends TableGateway
             'id_usuario' => $id
         ));
         return 1;
+    }
+
+    public function getReportesbyUsuario($datos = array())
+    {
+        $primer_nombre = $datos->primer_nombre;
+        $segundo_nombre = $datos->segundo_nombre;
+        $primer_apellido =  $datos->primer_apellido;
+        $segundo_apellido = $datos->segundo_apellido;
+        $email = $datos->email;
+        $documento = $datos->documento;
+
+        $where="";
+        $sql="";
+
+        if($primer_nombre=='' && $segundo_nombre=='' && $primer_apellido=='' && $segundo_apellido=='' && $email=='' && $documento==null) {
+            $sql = "select u.id_usuario, u.primer_nombre, u.segundo_nombre, u.primer_apellido, u.segundo_apellido, u.email, u.documento, r.descripcion rol, gi.nombre_grupo, case when u.id_estado = 'S' then 'Activo' when u.id_estado = 'N' then 'Inactivo' when u.id_estado = 'B' then 'Bloqueado' else '-' end estado from aps_usuarios u left join aps_roles_usuario ru on u.id_usuario = ru.id_usuario left join aps_roles r on ru.id_rol = r.id_rol left join mgi_gi_integrantes i on u.id_usuario = i.id_integrante left join mgi_grupo_inv gi on i.id_grupo_inv = gi.id_grupo_inv order by u.id_usuario;";
+
+            $statement = $this->adapter->query($sql, Adapter::QUERY_MODE_EXECUTE);
+            return  $statement->toArray();
+        }
+        else {            
+            if($primer_nombre!=""){
+                $where.= "UPPER(primer_nombre)='".mb_strtoupper($primer_nombre)."'";
+            }
+
+            if($segundo_nombre!=""){
+                if($where!=""){ $where.= " OR ";}
+                $where.= "UPPER(segundo_nombre)='".mb_strtoupper($segundo_nombre)."'";
+            }
+
+            if($primer_apellido!=""){
+                if($where!=""){ $where.= " OR ";}
+                $where.= "UPPER(primer_apellido)='".mb_strtoupper($primer_apellido)."'";
+            }
+
+            if($segundo_apellido!=""){
+                if($where!=""){ $where.= " OR ";}
+                $where.= "UPPER(segundo_apellido)='".mb_strtoupper($segundo_apellido)."'";
+            }
+
+            if($email!=""){
+                if($where!=""){ $where.= " OR ";}
+                $where.= "email='".$email."'";
+            }
+
+            if($documento!=""){
+                if($where!=""){ $where.= " OR ";}
+                $where.= "documento='".$documento."'";
+            }
+
+            $sql = "select u.id_usuario, u.primer_nombre, u.segundo_nombre, u.primer_apellido, u.segundo_apellido, u.email, u.documento, r.descripcion rol, gi.nombre_grupo, case when u.id_estado = 'S' then 'Activo' when u.id_estado = 'N' then 'Inactivo' when u.id_estado = 'B' then 'Bloqueado' else '-' end estado from aps_usuarios u left join aps_roles_usuario ru on u.id_usuario = ru.id_usuario left join aps_roles r on ru.id_rol = r.id_rol left join mgi_gi_integrantes i on u.id_usuario = i.id_integrante left join mgi_grupo_inv gi on i.id_grupo_inv = gi.id_grupo_inv WHERE ".$where.";";
+
+            $statement = $this->adapter->query($sql, Adapter::QUERY_MODE_EXECUTE);
+            return  $statement->toArray();
+        }
     }
 }
 ?>

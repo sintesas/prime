@@ -93,5 +93,11 @@ class Idiomashv extends TableGateway{
             'id_idioma' => $id
         ));
     }
+
+	public function getReportesbyIdiomashv($id) {
+		$sql = "select u.id_usuario, fn_get_nombres(i.id_usuario) nombre_completo, u.documento, i.nombre, i.oir, i.hablar, i.escribir, i.leer, fn_get_valores_flexibles(cast(i.modalidad as integer)) modalidad, i.archivo from aps_hv_idiomas i left join aps_usuarios u on i.id_usuario = u.id_usuario where u.id_usuario is not null and i.id_usuario = " . $id . ";";
+		$statement = $this->adapter->query($sql, Adapter::QUERY_MODE_EXECUTE);
+        return  $statement->toArray();
+	}
 }
 ?>

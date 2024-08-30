@@ -1,0 +1,84 @@
+-- FUNCTION: public.fn_get_meses(character varying)
+
+-- DROP FUNCTION IF EXISTS public.fn_get_meses(character varying);
+
+CREATE OR REPLACE FUNCTION public.fn_get_meses(
+	mes character varying)
+    RETURNS character varying
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+BEGIN
+    CASE mes
+        WHEN '1' THEN RETURN 'Enero';
+        WHEN '2' THEN RETURN 'Febrero';
+        WHEN '3' THEN RETURN 'Marzo';
+        WHEN '4' THEN RETURN 'Abril';
+        WHEN '5' THEN RETURN 'Mayo';
+        WHEN '6' THEN RETURN 'Junio';
+        WHEN '7' THEN RETURN 'Julio';
+        WHEN '8' THEN RETURN 'Agosto';
+        WHEN '9' THEN RETURN 'Septiembre';
+        WHEN '10' THEN RETURN 'Octubre';
+        WHEN '11' THEN RETURN 'Noviembre';
+        WHEN '12' THEN RETURN 'Diciembre';
+        ELSE RETURN NULL;
+    END CASE;
+END;
+$BODY$;
+
+ALTER FUNCTION public.fn_get_meses(character varying)
+    OWNER TO primeuser;
+
+-- FUNCTION: public.fn_get_nombres(integer)
+
+-- DROP FUNCTION IF EXISTS public.fn_get_nombres(integer);
+
+CREATE OR REPLACE FUNCTION public.fn_get_nombres(
+	id integer)
+    RETURNS character varying
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+declare
+	v_nombre_completo varchar;
+begin
+	select concat(nombres, ' ', apellidos)
+	into v_nombre_completo
+	from vw_usuarios_personal
+	where id_usuario = id;
+
+	return v_nombre_completo;
+end;
+$BODY$;
+
+ALTER FUNCTION public.fn_get_nombres(integer)
+    OWNER TO primeuser;
+
+-- FUNCTION: public.fn_get_valores_flexibles(integer)
+
+-- DROP FUNCTION IF EXISTS public.fn_get_valores_flexibles(integer);
+
+CREATE OR REPLACE FUNCTION public.fn_get_valores_flexibles(
+	id integer)
+    RETURNS character varying
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+declare
+   descripcion varchar;
+begin
+   select descripcion_valor
+   into descripcion
+   from aps_valores_flexibles
+   where id_valor_flexible = id;
+   
+   return descripcion;
+end;
+$BODY$;
+
+ALTER FUNCTION public.fn_get_valores_flexibles(integer)
+    OWNER TO primeuser;

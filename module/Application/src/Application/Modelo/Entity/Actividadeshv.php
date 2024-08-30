@@ -138,5 +138,11 @@ class Actividadeshv extends TableGateway{
             'id_actividades' => $id
         ));
     }
+
+	public function getReportesbyActividadeshv($id) {
+		$sql = "select u.id_usuario, fn_get_nombres(a.id_usuario) nombre_completo, u.documento, a.id_actividades, a.tipo, a.descripcion, a.fecha, a.id_pais pais, a.dedicacion, fn_get_valores_flexibles(a.tema) tema, fn_get_valores_flexibles(a.instituciones), a.valor, a.archivo from aps_hv_actividades a left join aps_usuarios u on a.id_usuario = u.id_usuario where u.id_usuario is not null and a.id_usuario = " . $id . ";";
+		$statement = $this->adapter->query($sql, Adapter::QUERY_MODE_EXECUTE);
+        return  $statement->toArray();
+	}
 }
 ?>

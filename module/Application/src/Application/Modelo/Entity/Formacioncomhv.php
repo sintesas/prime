@@ -112,5 +112,11 @@ class Formacioncomhv extends TableGateway{
             'id_formacion_com' => $id
         ));
     }
+
+	public function getReportesbyFormacionComhv($id) {
+		$sql = "select u.id_usuario, fn_get_nombres(a.id_usuario) nombre_completo, u.documento, a.id_formacion_com, a.tipo_formacion, a.nombre_formacion, a.titulo_formacion, a.fecha_inicio, a.fecha_grado, a.horas, a.fecha_fin, a.pais, a.ciudad, fn_get_valores_flexibles(a.institucion) departamento, a.fecha_fin, a.nombre_formacion, fn_get_valores_flexibles(a.institucion) institucion, a.archivo from aps_hv_formacion_com a left join aps_usuarios u on a.id_usuario = u.id_usuario where u.id_usuario is not null and a.id_usuario = " . $id . ";";
+		$statement = $this->adapter->query($sql, Adapter::QUERY_MODE_EXECUTE);
+        return  $statement->toArray();
+	}
 }
 ?>

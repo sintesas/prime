@@ -87,5 +87,11 @@ class Identificadoresusu extends TableGateway{
         ));
         return 1;
     }
+
+    public function getReportesbyIdentificadores($id) {
+        $sql = "select u.id_usuario, fn_get_nombres(u.id_usuario) nombre_completo, u.documento, i.id_identificador, (select v.descripcion_valor from aps_valores_flexibles v where v.id_valor_flexible = i.id_tipoidentificador) tipo_identificador, (select v.descripcion_valor from aps_valores_flexibles v where v.id_valor_flexible = i.id_tipocategoria) tipo_categoria, i.id_field, i.fecha_registro, i.nombre, i.web, i.ciudad, i.descripcion, i.otra_informacion, i.archivo from aps_identificadoresusu i left join vw_usuarios_personal u on i.id_red = u.id_usuario where u.id_usuario is not null and i.id_red = " . $id . ";";
+        $statement = $this->adapter->query($sql, Adapter::QUERY_MODE_EXECUTE);
+        return  $statement->toArray();
+    }
 }
 ?>

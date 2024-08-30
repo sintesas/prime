@@ -202,5 +202,11 @@ class Articuloshv extends TableGateway{
         ));
         return 1;
     }
+
+	public function getReportesbyArticuloshv($id) {
+		$sql = "select u.id_usuario, concat(u.nombres, ' ', u.apellidos) nombre_completo, u.documento, a.id_gi_articulo, a.nombre_revista, a.nombre_articulo, a.id_pais pais, a.fecha, a.issn, a.paginas, a.num_paginas, a.volumen, a.serie, fn_get_nombres(a.id_autor) autor, a.coautor, a.pagina_inicio, a.pagina_fin, a.fasciculo, fn_get_valores_flexibles(a.id_departamento) departamento, a.id_ciudad ciudad, fn_get_meses(a.mes) mes, a.ano, fn_get_valores_flexibles(cast(a.categoria as integer)) categoria, a.archivo from aps_hv_articulos a left join vw_usuarios_personal u on a.id_usuario = u.id_usuario where u.id_usuario is not null and a.id_usuario = " . $id . ";";
+		$statement = $this->adapter->query($sql, Adapter::QUERY_MODE_EXECUTE);
+        return  $statement->toArray();
+	}
 }
 ?>

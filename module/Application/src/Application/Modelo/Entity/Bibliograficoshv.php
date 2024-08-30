@@ -135,5 +135,11 @@ class Bibliograficoshv extends TableGateway{
         ));
         return 1;
     }
+
+	public function getReportesbyBibliograficoshv($id) {
+		$sql = "select u.id_usuario, fn_get_nombres(u.id_usuario) nombre_completo, u.documento, b.nombre_documento, b.numero_paginas, b.instituciones, b.ano, fn_get_meses(b.mes), b.num_indexacion, b.url, b.medio_divulgacion, b.descripcion, b.autores, b.pais, b.ciudad, fn_get_nombres(b.id_autor) autor, b.archivo from aps_hv_bibliograficos b left join aps_usuarios u on b.id_usuario = u.id_usuario where u.id_usuario is not null and b.id_usuario = " . $id . ";";
+		$statement = $this->adapter->query($sql, Adapter::QUERY_MODE_EXECUTE);
+        return  $statement->toArray();
+	}
 }
 ?>
